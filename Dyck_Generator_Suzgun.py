@@ -4,7 +4,7 @@ import torch
 from collections import defaultdict
 import random
 
-# sys.setrecursionlimit(5000)
+sys.setrecursionlimit(5000)
 
 all_pairs = ['()', '[]', '{}', '<>', '+-', 'ab', 'xo']
 all_letters = ''
