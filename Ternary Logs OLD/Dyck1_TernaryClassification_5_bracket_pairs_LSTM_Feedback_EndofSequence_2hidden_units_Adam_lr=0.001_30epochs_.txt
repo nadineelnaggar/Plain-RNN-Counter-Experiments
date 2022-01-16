@@ -1,0 +1,43 @@
+Output activation = Softmax
+Optimiser used = Adam
+Learning rate = 0.001
+Number of runs = 10
+Number of epochs in each run = 30
+Saved model name = Dyck1_TernaryClassification_5_bracket_pairs_LSTM_Feedback_EndofSequence_2hidden_units_Adam_lr=0.001_30epochs__MODEL.pth
+Saved optimiser name = Dyck1_TernaryClassification_5_bracket_pairs_LSTM_Feedback_EndofSequence_2hidden_units_Adam_lr=0.001_30epochs__OPTIMISER.pth
+Excel name = Dyck1_TernaryClassification_5_bracket_pairs_LSTM_Feedback_EndofSequence_2hidden_units_Adam_lr=0.001_30epochs_.xlsx
+Train log name = Dyck1_TernaryClassification_5_bracket_pairs_LSTM_Feedback_EndofSequence_2hidden_units_Adam_lr=0.001_30epochs__TRAIN_LOG.txt
+Test log name = Dyck1_TernaryClassification_5_bracket_pairs_LSTM_Feedback_EndofSequence_2hidden_units_Adam_lr=0.001_30epochs__TEST_LOG.txt
+Long test log name = Dyck1_TernaryClassification_5_bracket_pairs_LSTM_Feedback_EndofSequence_2hidden_units_Adam_lr=0.001_30epochs__LONG_TEST_LOG.txt
+///////////////////////////////////////////////////////////////
+
+train accuracy for run 0 = 100.0%
+test accuracy for run 0 = 100.0%
+train accuracy for run 1 = 98.1211836542978%
+test accuracy for run 1 = 100.0%
+train accuracy for run 2 = 98.82573978393611%
+test accuracy for run 2 = 99.45235487404163%
+train accuracy for run 3 = 100.0%
+test accuracy for run 3 = 100.0%
+train accuracy for run 4 = 100.0%
+test accuracy for run 4 = 100.0%
+train accuracy for run 5 = 100.0%
+test accuracy for run 5 = 100.0%
+train accuracy for run 6 = 100.0%
+test accuracy for run 6 = 100.0%
+train accuracy for run 7 = 100.0%
+test accuracy for run 7 = 100.0%
+train accuracy for run 8 = 100.0%
+test accuracy for run 8 = 100.0%
+train accuracy for run 9 = 98.77876937529356%
+test accuracy for run 9 = 99.12376779846659%
+/////////////////////////////////////////////////////////////////
+Maximum train accuracy = 100.0%
+Minimum train accuracy = 98.1211836542978%
+Average train accuracy = 99.57256928135274%
+Standard Deviation for train accuracy = 0.6762597106286898
+/////////////////////////////////////////////////////////////////
+Maximum test accuracy = 100.0%
+Minimum test accuracy = 99.12376779846659%
+Average test accuracy = 99.85761226725083%
+Standard Deviation for test accuracy = 0.2941012394763976

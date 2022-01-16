@@ -1,0 +1,13 @@
+Output activation = Softmax
+Optimiser used = Adam
+Learning rate = 0.001
+Number of runs = 10
+Number of epochs in each run = 30
+Saved model name = Dyck1_TernaryClassification_25_bracket_pairs_LSTM_Feedback_EveryTimeStep_2hidden_units_Adam_lr=0.001_30epochs__MODEL.pth
+Saved optimiser name = Dyck1_TernaryClassification_25_bracket_pairs_LSTM_Feedback_EveryTimeStep_2hidden_units_Adam_lr=0.001_30epochs__OPTIMISER.pth
+Excel name = Dyck1_TernaryClassification_25_bracket_pairs_LSTM_Feedback_EveryTimeStep_2hidden_units_Adam_lr=0.001_30epochs_.xlsx
+Train log name = Dyck1_TernaryClassification_25_bracket_pairs_LSTM_Feedback_EveryTimeStep_2hidden_units_Adam_lr=0.001_30epochs__TRAIN_LOG.txt
+Test log name = Dyck1_TernaryClassification_25_bracket_pairs_LSTM_Feedback_EveryTimeStep_2hidden_units_Adam_lr=0.001_30epochs__TEST_LOG.txt
+Long test log name = Dyck1_TernaryClassification_25_bracket_pairs_LSTM_Feedback_EveryTimeStep_2hidden_units_Adam_lr=0.001_30epochs__LONG_TEST_LOG.txt
+///////////////////////////////////////////////////////////////
+
