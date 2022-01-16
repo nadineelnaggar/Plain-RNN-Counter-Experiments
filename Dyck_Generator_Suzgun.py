@@ -153,8 +153,8 @@ class DyckLanguage():
         return tensor
 
 NUM_PAR = 1
-MIN_SIZE = 1
-MAX_SIZE = 2
+MIN_SIZE = 2
+MAX_SIZE = 4
 P_VAL = 0.5
 Q_VAL = 0.25
 
