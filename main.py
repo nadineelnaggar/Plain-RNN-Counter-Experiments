@@ -79,33 +79,40 @@ X_long=[]
 y_long = []
 data_long = []
 
+# if task=='TernaryClassification':
+#     if num_bracket_pairs==5:
+#         with open("datasets/Dyck1_Ternary_Dataset_1to5pairs_balanced.txt", 'r') as f:
+#             for line in f:
+#                 line = line.split(",")
+#                 sentence = line[0].strip()
+#                 label = line[1].strip()
+#                 X.append(sentence)
+#                 y.append(label)
+#                 data.append((sentence, label))
+#     elif num_bracket_pairs==25:
+#         with open("datasets/Dyck1_TernaryDataset_1to25pairs_12000elements_balanced.txt", 'r') as f:
+#             for line in f:
+#                 line = line.split(",")
+#                 sentence = line[0].strip()
+#                 label = line[1].strip()
+#                 X.append(sentence)
+#                 y.append(label)
+#                 data.append((sentence, label))
+#         with open("datasets/Dyck1_TernaryDataset_26to50pairs_6000elements_balanced.txt", 'r') as f:
+#             for line in f:
+#                 line = line.split(",")
+#                 sentence = line[0].strip()
+#                 label = line[1].strip()
+#                 X_long.append(sentence)
+#                 y_long.append(label)
+#                 data_long.append((sentence, label))
+
+
 if task=='TernaryClassification':
-    if num_bracket_pairs==5:
-        with open("datasets/Dyck1_Ternary_Dataset_1to5pairs_balanced.txt", 'r') as f:
-            for line in f:
-                line = line.split(",")
-                sentence = line[0].strip()
-                label = line[1].strip()
-                X.append(sentence)
-                y.append(label)
-                data.append((sentence, label))
-    elif num_bracket_pairs==25:
-        with open("datasets/Dyck1_TernaryDataset_1to25pairs_12000elements_balanced.txt", 'r') as f:
-            for line in f:
-                line = line.split(",")
-                sentence = line[0].strip()
-                label = line[1].strip()
-                X.append(sentence)
-                y.append(label)
-                data.append((sentence, label))
-        with open("datasets/Dyck1_TernaryDataset_26to50pairs_6000elements_balanced.txt", 'r') as f:
-            for line in f:
-                line = line.split(",")
-                sentence = line[0].strip()
-                label = line[1].strip()
-                X_long.append(sentence)
-                y_long.append(label)
-                data_long.append((sentence, label))
+    with open('Dyck1_Dataset_Ternary_train__.txt', 'r') as f:
+        for line in f:
+            print('hello')
+
 
 
 def encode_sentence(sentence, dataset='short'):
