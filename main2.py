@@ -389,7 +389,7 @@ def train_model(model, task='TernaryClassification'):
                     output, hidden = model(input_tensor[j], hidden)
                     if feedback=='EveryTimeStep':
                         # output_vals[0][j]=output
-                        output_vals[j] = output
+                        output_vals[0][j] = output
 
             if feedback=='EndofSequence':
                 loss = criterion(output, class_tensor)
