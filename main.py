@@ -22,12 +22,12 @@ hidden_size=2
 # hidden_size=5
 # hidden_size=6
 
-task = 'TernaryClassification'
+# task = 'TernaryClassification'
 # task='BinaryClassification'
-# task='NextTokenPrediction'
+task='NextTokenPrediction'
 
-feedback='EndofSequence'
-# feedback='EveryTimeStep'
+# feedback='EndofSequence'
+feedback='EveryTimeStep'
 
 # num_bracket_pairs = 2
 short_num_bracket_pairs_start = 1
@@ -44,6 +44,10 @@ num_epochs=20
 num_runs=10
 
 output_activation='Softmax'
+
+if task=='NextTokenPrediction':
+    feedback='EveryTimeStep'
+    output_activation='Sigmoid'
 
 
 file_name = 'Dyck1_'+task+'_'+str(num_bracket_pairs)+'_bracket_pairs_'+model_name+'_Feedback_'+feedback+'_'+str(hidden_size)+'hidden_units_'+use_optimiser+'_lr='+str(learning_rate)+'_'+str(num_epochs)+'epochs_'+'.txt'
@@ -113,6 +117,22 @@ if task=='TernaryClassification':
         for line in f:
             print('hello')
 
+elif task=='NextTokenPrediction':
+    with open('Dyck1_Dataset_Suzgun_train.txt', 'r') as f:
+        for line in f:
+            line = line.split(",")
+            sentence = line[0].strip()
+            label = line[1].strip()
+            X.append(sentence)
+            y.append(label)
+    with open('Dyck1_Dataset_Suzgun_test.txt', 'r') as f:
+        for line in f:
+            line = line.split(",")
+            sentence = line[0].strip()
+            label = line[1].strip()
+            X_long.append(sentence)
+            y_long.append(label)
+
 
 
 def encode_sentence(sentence, dataset='short'):
@@ -134,7 +154,7 @@ def encode_sentence(sentence, dataset='short'):
     rep.requires_grad_(True)
     return rep
 
-def encode_labels(label):
+def encode_labels(label, dataset='short'):
 
     # if output_activation=='Sigmoid' or output_activation=='Clipping':
     #     # return torch.tensor([labels.index(label)], dtype=torch.float32)
@@ -150,6 +170,26 @@ def encode_labels(label):
             return torch.tensor([0,1,0],dtype=torch.float32)
         elif label == 'invalid':
             return torch.tensor([0,0,1],dtype=torch.float32)
+    elif task=='NextTokenPrediction':
+        if dataset == 'short':
+            max_length = 2 * num_bracket_pairs
+        elif dataset == 'long':
+            max_length = 2 * length_bracket_pairs
+        rep = torch.zeros(max_length, 1, n_letters)
+
+        # output_vals = torch.zeros(1, 1, max_length)
+        # for index, char in enumerate(label):
+        #     if char == '1':
+        #         output_vals[0][0][index] = 1
+        #     elif char == '0':
+        #         output_vals[0][0][index] = 0
+        # return output_vals
+        output_vals = torch.zeros(1, max_length, num_classes)
+        for index, char in enumerate(label):
+            if char == '1':
+                output_vals[0][index][1] = 1
+            elif char == '0':
+                output_vals[0][index][0] = 1
     # elif output_activation == 'Softmax' and task == 'TernaryClassification' and feedback == 'EveryTimeStep':
 
 
