@@ -26,7 +26,7 @@ class VanillaRNN(nn.Module):
             x = self.softmax(x)
         elif self.output_activation=='Sigmoid':
             x = self.sigmoid(x)
-            x = x.squeeze()
+            # x = x.squeeze()
         return x, h0
 
 class VanillaLSTM(nn.Module):
