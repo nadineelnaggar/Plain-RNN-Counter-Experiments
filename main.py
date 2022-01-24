@@ -266,10 +266,10 @@ y_long = []
 if task!='NextTokenPrediction':
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, shuffle=True, stratify=y)
 elif task=='NextTokenPrediction':
-    X_train = X[:0.7*len(X)]
-    y_train = y[:0.7*len(X)]
-    X_test = X[0.7*len(X):]
-    y_test = y[0.7*len(X):]
+    X_train = X[:int(0.7*len(X))]
+    y_train = y[:int(0.7*len(X))]
+    X_test = X[int(0.7*len(X)):]
+    y_test = y[int(0.7*len(X)):]
 
 print('length of training set = ',len(X_train))
 print('length of test set = ',len(X_test))
