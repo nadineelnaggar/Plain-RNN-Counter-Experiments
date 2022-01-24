@@ -193,9 +193,11 @@ def encode_labels(label, dataset='short'):
         output_vals = torch.zeros(1, max_length)
         for index, char in enumerate(sentence):
             if char == '1':
-                output_vals[0][index] = 1
+                # output_vals[0][index] = 1
+                output_vals[index] = 1
             elif char == '0':
-                output_vals[0][index] = 0
+                # output_vals[0][index] = 0
+                output_vals[index]=0
     # elif output_activation == 'Softmax' and task == 'TernaryClassification' and feedback == 'EveryTimeStep':
 
 
