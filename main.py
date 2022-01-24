@@ -190,14 +190,22 @@ def encode_labels(label, dataset='short'):
         #         output_vals[0][index][1] = 1
         #     elif char == '0':
         #         output_vals[0][index][0] = 1
-        output_vals = torch.zeros(1, max_length)
+        # output_vals = torch.zeros(1, max_length)
+        # for index, char in enumerate(sentence):
+        #     if char == '1':
+        #         # output_vals[0][index] = 1
+        #         output_vals[index] = 1
+        #     elif char == '0':
+        #         # output_vals[0][index] = 0
+        #         output_vals[index]=0
+        output_vals = torch.zeros(1, max_length,1)
         for index, char in enumerate(sentence):
             if char == '1':
                 # output_vals[0][index] = 1
-                output_vals[index] = 1
+                output_vals[0][index][0] = 1
             elif char == '0':
                 # output_vals[0][index] = 0
-                output_vals[index]=0
+                output_vals[0][index][0] = 0
     # elif output_activation == 'Softmax' and task == 'TernaryClassification' and feedback == 'EveryTimeStep':
 
 
@@ -366,7 +374,7 @@ def train_model(model, task='TernaryClassification'):
             if feedback=='EveryTimeStep':
                 max_length = 2 * num_bracket_pairs
                 # output_vals = torch.zeros(1, max_length, num_classes)
-                output_vals = torch.zeros(1, max_length)
+                output_vals = torch.zeros(1, max_length,1)
 
             if print_flag == True:
                 with open(train_log, 'a') as f:
@@ -391,7 +399,7 @@ def train_model(model, task='TernaryClassification'):
                     output, hidden = model(input_tensor[j], hidden)
                     if feedback=='EveryTimeStep':
                         # output_vals[0][j]=output
-                        output_vals[0][j]=output
+                        output_vals[0][j][0]=output.item()
 
             if feedback=='EndofSequence':
                 loss = criterion(output, class_tensor)
