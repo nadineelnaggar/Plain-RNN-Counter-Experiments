@@ -205,7 +205,7 @@ def encode_labels(label, dataset='short'):
                 output_vals[0][index][0] = 1
             elif char == '0':
                 # output_vals[0][index] = 0
-                output_vals[0][index] = torch.tensor([0],dtype=torch.float32)
+                output_vals[0][index] = torch.tensor(0,dtype=torch.float32)
     # elif output_activation == 'Softmax' and task == 'TernaryClassification' and feedback == 'EveryTimeStep':
 
 
