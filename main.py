@@ -615,7 +615,7 @@ with open(file_name,'a') as f:
     f.write('\n')
 
 for i in range(num_runs):
-    model = VanillaLSTM(input_size, hidden_size, num_layers, num_classes)
+    model = VanillaLSTM(input_size, hidden_size, num_layers, num_classes,output_activation)
 
     # train_accuracy = train_model(model)
     train_accuracy, df = train_model(model)
