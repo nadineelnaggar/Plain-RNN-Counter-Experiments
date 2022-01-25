@@ -198,13 +198,15 @@ def encode_labels(label, dataset='short'):
         #     elif char == '0':
         #         # output_vals[0][index] = 0
         #         output_vals[index]=0
-        output_vals = torch.zeros(1, max_length,1)
+        output_vals = torch.zeros(1, max_length, n_letters)
+        # output_vals = torch.zeros(1, max_length,1)
         for index, char in enumerate(sentence):
             if char == '1':
                 # output_vals[0][index] = 1
-                output_vals[0][index][0] = 1
+                output_vals[0][index][1] = 1
             elif char == '0':
                 # output_vals[0][index] = 0
+                output_vals[0][index][0] = 0
                 output_vals[0][index] = torch.tensor(0,dtype=torch.float32)
     # elif output_activation == 'Softmax' and task == 'TernaryClassification' and feedback == 'EveryTimeStep':
 
@@ -374,7 +376,7 @@ def train_model(model, task='TernaryClassification'):
             if feedback=='EveryTimeStep':
                 max_length = 2 * num_bracket_pairs
                 # output_vals = torch.zeros(1, max_length, num_classes)
-                output_vals = torch.zeros(1, max_length,1)
+                output_vals = torch.zeros(1, max_length,num_classes)
 
             if print_flag == True:
                 with open(train_log, 'a') as f:
