@@ -444,10 +444,10 @@ def train_model(model, task='NextTokenPrediction'):
                 with open(train_log, 'a') as f:
                     # f.write('predicted class = ' + guess + '\n')
                     # f.write('actual class = ' + class_category + '\n')
-                    f.write('sentence = '+X_train[i]+'\n')
-                    f.write('predicted output = '+output_vals+'\n')
-                    f.write('binarised predicted output = '+output_vals_np+'\n')
-                    f.write('actual output = '+y_train[i]+'\n')
+                    f.write('sentence = '+str(X_train[i].detach().numpy())+'\n')
+                    f.write('predicted output = '+str(output_vals.detach().numpy())+'\n')
+                    f.write('binarised predicted output = '+str(output_vals_np)+'\n')
+                    f.write('actual output = '+str(y_train[i].detach().numpy())+'\n')
                     f.write(guess+'\n')
 
 
@@ -639,16 +639,16 @@ def test_model(model, dataset='short'):
                 # f.write('predicted class = '+guess+'\n')
                 # f.write('actual class = '+class_category+'\n')
                 if dataset=='short':
-                    f.write('sentence = ' + X_test[i] + '\n')
-                    f.write('predicted output = ' + output_vals + '\n')
-                    f.write('binarised predicted output = ' + output_vals_np + '\n')
-                    f.write('actual output = ' + y_test[i] + '\n')
+                    f.write('sentence = ' + str(X_test[i].detach().numpy()) + '\n')
+                    f.write('predicted output = ' + str(output_vals.detach().numpy()) + '\n')
+                    f.write('binarised predicted output = ' + str(output_vals_np) + '\n')
+                    f.write('actual output = ' + str(y_test[i].detach().numpy()) + '\n')
                     f.write(guess + '\n')
                 elif dataset=='long':
-                    f.write('sentence = ' + X_long[i] + '\n')
-                    f.write('predicted output = ' + output_vals + '\n')
-                    f.write('binarised predicted output = ' + output_vals_np + '\n')
-                    f.write('actual output = ' + y_long[i] + '\n')
+                    f.write('sentence = ' + str(X_long[i].detach().numpy()) + '\n')
+                    f.write('predicted output = ' + str(output_vals.detach().numpy()) + '\n')
+                    f.write('binarised predicted output = ' + str(output_vals_np) + '\n')
+                    f.write('actual output = ' + str(y_long[i].detach().numpy()) + '\n')
                     f.write(guess + '\n')
 
             # confusion[class_i][guess_i] += 1
