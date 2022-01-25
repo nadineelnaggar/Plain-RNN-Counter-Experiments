@@ -711,7 +711,7 @@ for i in range(num_runs):
     test_accuracy = test_model(model)
     test_accuracies.append(test_accuracy)
 
-    long_test_accuracy = test_model(model, 'long')
+    long_test_accuracy = test_model(model, dataset='long')
     long_test_accuracies.append(long_test_accuracy)
 
 
