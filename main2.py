@@ -317,11 +317,11 @@ for i in range(len(X_long_notencoded)):
 print('len X train = ', len(X_train))
 print('len X train not encoded = ', len(X_train_notencoded))
 print('len y train = ', len(y_train))
-print('y train [0] = ', y_train[0])
+# print('y train [0] = ', y_train[0])
 print('len y train notencoded = ', len(y_train_notencoded))
 
 print('len X_long = ',len(X_long))
-print('X long [0] = ',X_long[0])
+# print('X long [0] = ',X_long[0])
 print('len X_long_notencoded = ',len(X_long_notencoded))
 print('len y_long = ',len(y_long))
 print('len y_long_notencoded = ',len(y_long_notencoded))
