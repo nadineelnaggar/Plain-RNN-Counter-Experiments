@@ -285,6 +285,7 @@ elif task=='NextTokenPrediction':
 
 print('length of training set = ',len(X_train))
 print('length of test set = ',len(X_test))
+print('length of long test set = ',len(X_long))
 
 X_notencoded = X
 y_notencoded = y
