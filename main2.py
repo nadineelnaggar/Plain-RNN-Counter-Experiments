@@ -405,12 +405,19 @@ def train_model(model, task='NextTokenPrediction'):
             # predicted_classes.append(guess_i)
 
             for index, elem in enumerate(output_vals):
-                if elem <= 0.5:
-                    elem = 0
-                    output_vals[index] = 0
-                elif elem > 0.5:
-                    elem = 1
-                    output_vals[index] = 1
+                # if elem <= 0.5:
+                #     elem = 0
+                #     output_vals[index] = 0
+                # elif elem > 0.5:
+                #     elem = 1
+                #     output_vals[index] = 1
+                for idx, val in enumerate(elem):
+                    if val <= 0.5:
+                        val = 0
+
+                    elif val > 0.5:
+                        val = 1
+                    elem[idx] = val
 
             if output_vals == y_train[i]:
                 num_correct+=1
@@ -571,12 +578,19 @@ def test_model(model, dataset='short'):
             # guess, guess_i = classFromOutput(output)
             # class_i = labels.index(class_category)
             for index, elem in enumerate(output_vals):
-                if elem <= 0.5:
-                    elem = 0
-                    output_vals[index] = 0
-                elif elem > 0.5:
-                    elem = 1
-                    output_vals[index] = 1
+                # if elem <= 0.5:
+                #     elem = 0
+                #     output_vals[index] = 0
+                # elif elem > 0.5:
+                #     elem = 1
+                #     output_vals[index] = 1
+                for idx, val in enumerate(elem):
+                    if val <= 0.5:
+                        val = 0
+
+                    elif val > 0.5:
+                        val = 1
+                    elem[idx] = val
 
             if output_vals == y_train[i]:
                 num_correct += 1
