@@ -488,10 +488,10 @@ def train_model(model, task='NextTokenPrediction'):
             # print('confusion matrix for training set\n', confusion)
             print('Final training accuracy = ', num_correct / len(X_train) * 100, '%')
 
-            if i == len(X_train) - 1:
-                print('input tensor = ', input_tensor)
-
-                print('final input sentence = ', input_sentence)
+            # if i == len(X_train) - 1:
+            #     print('input tensor = ', input_tensor)
+            #
+            #     print('final input sentence = ', input_sentence)
 
 
     df1['epoch'] = epochs
