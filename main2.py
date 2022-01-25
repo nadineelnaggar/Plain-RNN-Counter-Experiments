@@ -502,7 +502,7 @@ def train_model(model, task='NextTokenPrediction'):
     # df1['output biases'] = biases_output
     df1['accuracies'] = accuracies
     df1['average epoch losses'] = all_losses
-    df1['confusion matrices'] = confusion_matrices
+    # df1['confusion matrices'] = confusion_matrices
     df1['epoch incorrect guesses'] = all_epoch_incorrect_guesses
 
     torch.save(model.state_dict(), modelname)
