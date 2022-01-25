@@ -47,7 +47,7 @@ output_activation='Softmax'
 
 if task=='NextTokenPrediction':
     feedback='EveryTimeStep'
-    output_activation='Sigmoid'
+    # output_activation='Sigmoid'
 
 
 file_name = 'Dyck1_'+task+'_'+str(num_bracket_pairs)+'_bracket_pairs_'+model_name+'_Feedback_'+feedback+'_'+str(hidden_size)+'hidden_units_'+use_optimiser+'_lr='+str(learning_rate)+'_'+str(num_epochs)+'epochs_'+'.txt'
