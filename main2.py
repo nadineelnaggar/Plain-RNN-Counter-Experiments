@@ -427,10 +427,12 @@ def train_model(model, task='NextTokenPrediction'):
                     #     val = 1
                     # elem[idx] = val
 
-            if output_vals_np == y_train[i].detach().numpy():
+            # if output_vals_np == y_train[i].detach().numpy():
+            if np.array_equal(output_vals_np, y_train[i].detach().numpy()):
                 num_correct+=1
                 guess='correct'
-            elif output_vals!=y_train[i].detach().numpy():
+            # elif output_vals!=y_train[i].detach().numpy():
+            elif np.array_equal(output_vals_np, y_train[i].detach().numpy())==False:
                 guess = 'incorrect'
                 epoch_incorrect_guesses.append(input_sentence)
             # if guess == class_category:
@@ -612,17 +614,21 @@ def test_model(model, dataset='short'):
                     # elem[idx] = val
 
             if dataset=='short':
-                if output_vals_np == y_test[i].detach.numpy():
+                # if output_vals_np == y_test[i].detach.numpy():
+                if np.array_equal(output_vals_np,y_test[i].detach().numpy()):
                     num_correct += 1
                     guess = 'correct'
-                elif output_vals_np != y_test[i].detach().numpy():
+                # elif output_vals_np != y_test[i].detach().numpy():
+                elif np.array_equal(output_vals_np, y_test[i].detach().numpy())==False:
                     guess = 'incorrect'
                     # epoch_incorrect_guesses.append(input_sentence)
             elif dataset=='long':
-                if output_vals_np == y_long[i].detach.numpy():
+                # if output_vals_np == y_long[i].detach.numpy():
+                if np.array_equal(output_vals_np, y_long[i].detach.numpy()):
                     num_correct += 1
                     guess = 'correct'
-                elif output_vals_np != y_long[i].detach().numpy():
+                # elif output_vals_np != y_long[i].detach().numpy():
+                elif np.array_equal(output_vals_np, y_long[i].detach().numpy()):
                     guess = 'incorrect'
                     # epoch_incorrect_guesses.append(input_sentence)
 
