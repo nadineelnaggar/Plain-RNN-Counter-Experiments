@@ -541,7 +541,10 @@ def test_model(model, dataset='short'):
         f.write('////////////////////////////////////////\n')
         f.write('TEST '+dataset+'\n')
     with torch.no_grad():
-
+        if dataset=='short':
+            num_samples=len(X_test)
+        elif dataset=='long':
+            num_samples=len(X_long)
         for i in range(num_samples):
             if dataset=='short':
                 class_category = y_test_notencoded[i]
