@@ -412,12 +412,18 @@ def train_model(model, task='NextTokenPrediction'):
                 #     elem = 1
                 #     output_vals[index] = 1
                 for idx, val in enumerate(elem):
-                    if val <= 0.5:
-                        val = 0
-
-                    elif val > 0.5:
-                        val = 1
-                    elem[idx] = val
+                    for id, v in enumerate(val):
+                        if v<=0.5:
+                            v=0
+                        elif v>0.5:
+                            v=1
+                        val[id] = v
+                    # if val <= 0.5:
+                    #     val = 0
+                    #
+                    # elif val > 0.5:
+                    #     val = 1
+                    # elem[idx] = val
 
             if output_vals == y_train[i]:
                 num_correct+=1
@@ -585,12 +591,18 @@ def test_model(model, dataset='short'):
                 #     elem = 1
                 #     output_vals[index] = 1
                 for idx, val in enumerate(elem):
-                    if val <= 0.5:
-                        val = 0
-
-                    elif val > 0.5:
-                        val = 1
-                    elem[idx] = val
+                    for id, v in enumerate(val):
+                        if v<=0.5:
+                            v=0
+                        elif v>0.5:
+                            v=1
+                        val[id] = v
+                    # if val <= 0.5:
+                    #     val = 0
+                    #
+                    # elif val > 0.5:
+                    #     val = 1
+                    # elem[idx] = val
 
             if output_vals == y_train[i]:
                 num_correct += 1
