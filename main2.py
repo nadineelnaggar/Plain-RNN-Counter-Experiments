@@ -429,7 +429,7 @@ def train_model(model, task='NextTokenPrediction'):
                     # elem[idx] = val
 
             # if output_vals_np == y_train[i].detach().numpy():
-            if np.array_equal(output_vals_np, y_train[i].detach().numpy()):
+            if np.array_equal(output_vals_np, y_train[i].detach().numpy())==True:
                 num_correct+=1
                 guess='correct'
             # elif output_vals!=y_train[i].detach().numpy():
