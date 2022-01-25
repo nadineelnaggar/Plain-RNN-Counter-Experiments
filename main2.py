@@ -133,9 +133,11 @@ elif task=='NextTokenPrediction':
             X_long.append(sentence)
             y_long.append(label)
 
+print('len X long == ', len(X_long))
+print('len y long == ', len(y_long))
 
 
-def encode_sentence(sentence, dataset='short'):
+def encode_sentence(sentence, dataset):
     # max_length=1
     # if dataset=='short' and model_name!='FFStack' and task=='BinaryClassification':
     if dataset == 'short':
@@ -173,8 +175,10 @@ def encode_labels(label, dataset='short'):
     elif task=='NextTokenPrediction':
         if dataset == 'short':
             max_length = 2 * num_bracket_pairs
+            output_vals = torch.zeros(1, max_length, n_letters)
         elif dataset == 'long':
             max_length = 2 * length_bracket_pairs
+            output_vals = torch.zeros(1, max_length, n_letters)
         rep = torch.zeros(max_length, 1, n_letters)
 
         # output_vals = torch.zeros(1, 1, max_length)
@@ -198,7 +202,7 @@ def encode_labels(label, dataset='short'):
         #     elif char == '0':
         #         # output_vals[0][index] = 0
         #         output_vals[index]=0
-        output_vals = torch.zeros(1, max_length, n_letters)
+        # output_vals = torch.zeros(1, max_length, n_letters)
         # output_vals = torch.zeros(1, max_length,1)
         for index, char in enumerate(sentence):
             if char == '1':
@@ -206,8 +210,9 @@ def encode_labels(label, dataset='short'):
                 output_vals[0][index][1] = 1
             elif char == '0':
                 # output_vals[0][index] = 0
-                output_vals[0][index][0] = 0
-                output_vals[0][index] = torch.tensor(0,dtype=torch.float32)
+                output_vals[0][index][0] = 1
+                # output_vals[0][index] = torch.tensor(0,dtype=torch.float32)
+        return(output_vals)
     # elif output_activation == 'Softmax' and task == 'TernaryClassification' and feedback == 'EveryTimeStep':
 
 
@@ -299,9 +304,27 @@ X_encoded, y_encoded = encode_dataset(X,y)
 
 
 X_long_notencoded = X_long
-y_long_notencoded = y
-X_long, y_long=encode_dataset(X_long,y_long,'long')
+y_long_notencoded = y_long
+# X_long, y_long = encode_dataset(X_long,y_long,dataset='long')
+X_long = []
+y_long = []
+for i in range(len(X_long_notencoded)):
+    X_long.append(encode_sentence(X_long_notencoded[i], dataset='long'))
+    y_long.append(encode_labels(y_long_notencoded[i], dataset='long'))
 
+
+
+print('len X train = ', len(X_train))
+print('len X train not encoded = ', len(X_train_notencoded))
+print('len y train = ', len(y_train))
+print('y train [0] = ', y_train[0])
+print('len y train notencoded = ', len(y_train_notencoded))
+
+print('len X_long = ',len(X_long))
+print('X long [0] = ',X_long[0])
+print('len X_long_notencoded = ',len(X_long_notencoded))
+print('len y_long = ',len(y_long))
+print('len y_long_notencoded = ',len(y_long_notencoded))
 
 
 train_accuracies = []
@@ -564,7 +587,10 @@ def test_model(model, dataset='short'):
 
 
             if feedback=='EveryTimeStep':
-                max_length = 2 * num_bracket_pairs
+                if dataset=='short':
+                    max_length = 2 * num_bracket_pairs
+                elif dataset=='long':
+                    max_length=2*length_bracket_pairs
                 output_vals = torch.zeros(1, max_length, num_classes)
 
             with open(filename,'a') as f:
@@ -595,7 +621,7 @@ def test_model(model, dataset='short'):
 
             output_vals_np = output_vals.detach().numpy()
 
-
+            guess = ''
             for index, elem in enumerate(output_vals_np):
                 # if elem <= 0.5:
                 #     elem = 0
@@ -628,7 +654,7 @@ def test_model(model, dataset='short'):
                     # epoch_incorrect_guesses.append(input_sentence)
             elif dataset=='long':
                 # if output_vals_np == y_long[i].detach.numpy():
-                if np.array_equal(output_vals_np, y_long[i].detach.numpy()):
+                if np.array_equal(output_vals_np, y_long[i].detach().numpy()):
                     num_correct += 1
                     guess = 'correct'
                 # elif output_vals_np != y_long[i].detach().numpy():
@@ -653,7 +679,7 @@ def test_model(model, dataset='short'):
                     f.write('predicted output = ' + str(output_vals.detach().numpy()) + '\n')
                     f.write('binarised predicted output = ' + str(output_vals_np) + '\n')
                     f.write('actual output = ' + str(y_long[i].detach().numpy()) + '\n')
-                    f.write(guess + '\n')
+                    f.write(''+guess + '\n')
 
             # confusion[class_i][guess_i] += 1
             # predicted_classes.append(guess_i)
@@ -680,6 +706,11 @@ def test_model(model, dataset='short'):
     return accuracy
 
 
+
+# model1 = VanillaLSTM(input_size,hidden_size, num_layers,num_classes,output_activation)
+#
+# long_test_acc_dummy = test_model(model1, dataset='long')
+# print('long test acc dummy = ',long_test_acc_dummy)
 
 with open(file_name,'a') as f:
     f.write('Output activation = '+output_activation+'\n')
