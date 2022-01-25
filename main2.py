@@ -404,7 +404,9 @@ def train_model(model, task='NextTokenPrediction'):
             # expected_classes.append(class_i)
             # predicted_classes.append(guess_i)
 
-            for index, elem in enumerate(output_vals):
+            output_vals_np = output_vals.detach().numpy()
+
+            for index, elem in enumerate(output_vals_np):
                 # if elem <= 0.5:
                 #     elem = 0
                 #     output_vals[index] = 0
@@ -425,10 +427,10 @@ def train_model(model, task='NextTokenPrediction'):
                     #     val = 1
                     # elem[idx] = val
 
-            if output_vals == y_train[i]:
+            if output_vals_np == y_train[i].detach().numpy():
                 num_correct+=1
                 guess='correct'
-            elif output_vals!=y_train[i]:
+            elif output_vals!=y_train[i].detach().numpy():
                 guess = 'incorrect'
                 epoch_incorrect_guesses.append(input_sentence)
             # if guess == class_category:
@@ -442,6 +444,7 @@ def train_model(model, task='NextTokenPrediction'):
                     # f.write('actual class = ' + class_category + '\n')
                     f.write('sentence = '+X_train[i]+'\n')
                     f.write('predicted output = '+output_vals+'\n')
+                    f.write('binarised predicted output = '+output_vals_np+'\n')
                     f.write('actual output = '+y_train[i]+'\n')
                     f.write(guess+'\n')
 
@@ -583,7 +586,11 @@ def test_model(model, dataset='short'):
                     output_vals[0][j] = output
             # guess, guess_i = classFromOutput(output)
             # class_i = labels.index(class_category)
-            for index, elem in enumerate(output_vals):
+
+            output_vals_np = output_vals.detach().numpy()
+
+
+            for index, elem in enumerate(output_vals_np):
                 # if elem <= 0.5:
                 #     elem = 0
                 #     output_vals[index] = 0
@@ -604,12 +611,20 @@ def test_model(model, dataset='short'):
                     #     val = 1
                     # elem[idx] = val
 
-            if output_vals == y_train[i]:
-                num_correct += 1
-                guess = 'correct'
-            elif output_vals != y_train[i]:
-                guess = 'incorrect'
-                # epoch_incorrect_guesses.append(input_sentence)
+            if dataset=='short':
+                if output_vals_np == y_test[i].detach.numpy():
+                    num_correct += 1
+                    guess = 'correct'
+                elif output_vals_np != y_test[i].detach().numpy():
+                    guess = 'incorrect'
+                    # epoch_incorrect_guesses.append(input_sentence)
+            elif dataset=='long':
+                if output_vals_np == y_long[i].detach.numpy():
+                    num_correct += 1
+                    guess = 'correct'
+                elif output_vals_np != y_long[i].detach().numpy():
+                    guess = 'incorrect'
+                    # epoch_incorrect_guesses.append(input_sentence)
 
 
             # print('predicted class = ',guess)
@@ -620,11 +635,13 @@ def test_model(model, dataset='short'):
                 if dataset=='short':
                     f.write('sentence = ' + X_test[i] + '\n')
                     f.write('predicted output = ' + output_vals + '\n')
+                    f.write('binarised predicted output = ' + output_vals_np + '\n')
                     f.write('actual output = ' + y_test[i] + '\n')
                     f.write(guess + '\n')
                 elif dataset=='long':
                     f.write('sentence = ' + X_long[i] + '\n')
                     f.write('predicted output = ' + output_vals + '\n')
+                    f.write('binarised predicted output = ' + output_vals_np + '\n')
                     f.write('actual output = ' + y_long[i] + '\n')
                     f.write(guess + '\n')
 
