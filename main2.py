@@ -437,7 +437,7 @@ def train(model, X, y):
 
             for j in range(len_seq):
 
-                out, hidden = model(input_seq[j], hidden)
+                out, hidden = model(input_seq[j].to(device), hidden)
                 output_seq[j]=out
 
             if print_flag == True:
@@ -532,7 +532,7 @@ def test_model(model, X, y):
             hidden = torch.zeros(1, 1, model.hidden_size).to(device)
 
         for j in range(len_seq):
-            out, hidden = model(input_seq[j], hidden)
+            out, hidden = model(input_seq[j].to(device), hidden)
             output_seq[j] = out
 
         with open(log_file, 'a') as f:
