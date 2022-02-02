@@ -455,8 +455,8 @@ def train(model, X, y):
                 with open(train_log, 'a') as f:
                     f.write('actual output in train function = ' + str(output_seq) + '\n')
 
-            out_np = np.int_(output_seq.detach().numpy() >= epsilon)
-            target_np = np.int_(target_seq.detach().numpy())
+            out_np = np.int_(output_seq.detach().cpu().numpy() >= epsilon)
+            target_np = np.int_(target_seq.detach().cpu().numpy())
 
             if print_flag == True:
                 with open(train_log, 'a') as f:
