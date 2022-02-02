@@ -39,7 +39,7 @@ parser.add_argument('num_layers', type=int, help='number of layers', default=1)
 parser.add_argument('learning_rate', type=float, help='learning rate')
 parser.add_argument('num_epochs', type=int, help='number of training epochs')
 parser.add_argument('num_runs', type=int, help='number of training runs')
-parser.add_argument('load_model', dtype=bool, help='load previous model (True), train model from scratch (False)', default=False)
+parser.add_argument('load_model', type=bool, help='load previous model (True), train model from scratch (False)', default=False)
 
 
 args = parser.parse_args()
