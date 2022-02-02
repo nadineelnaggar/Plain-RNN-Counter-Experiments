@@ -412,6 +412,8 @@ def train(model, X, y):
     df1 = pd.DataFrame()
     print_flag = False
 
+    model.zero_grad()
+
     for epoch in range(num_epochs):
         num_correct = 0
         total_loss = 0
