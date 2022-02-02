@@ -15,6 +15,21 @@ from Dyck_Generator_Suzgun import DyckLanguage
 
 device = torch.cuda if torch.cuda.is_available() else 'cpu'
 
+NUM_PAR = 1
+MIN_SIZE = 2
+MAX_SIZE = 50
+P_VAL = 0.5
+Q_VAL = 0.25
+
+
+epsilon=0.5
+
+train_size = 10000
+test_size = 5000
+long_size = 5000
+
+Dyck = DyckLanguage(NUM_PAR, P_VAL, Q_VAL)
+
 parser = argparse.ArgumentParser()
 parser.add_argument('model_name', type=str, help='input model name (VanillaLSTM, VanillaRNN, VanillaGRU)')
 parser.add_argument('task', type=str, help='NextTokenPrediction, BinaryClassification, TernaryClassification')
@@ -24,6 +39,7 @@ parser.add_argument('num_layers', type=int, help='number of layers', default=1)
 parser.add_argument('learning_rate', type=float, help='learning rate')
 parser.add_argument('num_epochs', type=int, help='number of training epochs')
 parser.add_argument('num_runs', type=int, help='number of training runs')
+parser.add_argument('load_model', dtype=bool, help='load previous model (True), train model from scratch (False)', default=False)
 
 
 args = parser.parse_args()
@@ -36,121 +52,91 @@ num_layers = args.num_layers
 learning_rate = args.learning_rate
 num_epochs = args.num_epochs
 num_runs = args.num_runs
-
-
-epsilon=0.5
-output_activation='Sigmoid'
-
-if task=='TernaryClassification':
-    num_classes = 3
-    output_activation = 'Softmax'
-elif task=='BinaryClassification' or task=='NextTokenPrediction':
-    num_classes = 2
-    output_activation='Sigmoid'
-
-
-
-short_num_bracket_pairs_start = 1
-num_bracket_pairs=25
-
-length_bracket_pairs=50
+load_model = args.load_model
 
 use_optimiser='Adam'
 
+num_bracket_pairs = 25
 
-vocab = ['(',')']
-n_letters = len(vocab)
-input_size=n_letters
-
-X=[]
-y=[]
-data=[]
-
-X_long=[]
-y_long = []
-data_long = []
-
-
-file_name = 'Dyck1_'+task+'_'+str(num_bracket_pairs)+'_bracket_pairs_'+model_name+'_Feedback_'+feedback+'_'+str(hidden_size)+'hidden_units_'+use_optimiser+'_lr='+str(learning_rate)+'_'+str(num_epochs)+'epochs_'+'.txt'
-excel_name = 'Dyck1_'+task+'_'+str(num_bracket_pairs)+'_bracket_pairs_'+model_name+'_Feedback_'+feedback+'_'+str(hidden_size)+'hidden_units_'+use_optimiser+'_lr='+str(learning_rate)+'_'+str(num_epochs)+'epochs_'+'.xlsx'
-modelname = 'Dyck1_'+task+'_'+str(num_bracket_pairs)+'_bracket_pairs_'+model_name+'_Feedback_'+feedback+'_'+str(hidden_size)+'hidden_units_'+use_optimiser+'_lr='+str(learning_rate)+'_'+str(num_epochs)+'epochs_'+'_MODEL.pth'
-optimname = 'Dyck1_'+task+'_'+str(num_bracket_pairs)+'_bracket_pairs_'+model_name+'_Feedback_'+feedback+'_'+str(hidden_size)+'hidden_units_'+use_optimiser+'_lr='+str(learning_rate)+'_'+str(num_epochs)+'epochs_'+'_OPTIMISER.pth'
-train_log= 'Dyck1_'+task+'_'+str(num_bracket_pairs)+'_bracket_pairs_'+model_name+'_Feedback_'+feedback+'_'+str(hidden_size)+'hidden_units_'+use_optimiser+'_lr='+str(learning_rate)+'_'+str(num_epochs)+'epochs_'+'_TRAIN_LOG.txt'
-test_log = 'Dyck1_'+task+'_'+str(num_bracket_pairs)+'_bracket_pairs_'+model_name+'_Feedback_'+feedback+'_'+str(hidden_size)+'hidden_units_'+use_optimiser+'_lr='+str(learning_rate)+'_'+str(num_epochs)+'epochs_'+'_TEST_LOG.txt'
-long_test_log = 'Dyck1_'+task+'_'+str(num_bracket_pairs)+'_bracket_pairs_'+model_name+'_Feedback_'+feedback+'_'+str(hidden_size)+'hidden_units_'+use_optimiser+'_lr='+str(learning_rate)+'_'+str(num_epochs)+'epochs_'+'_LONG_TEST_LOG.txt'
-plot_name = 'Dyck1_'+task+'_'+str(num_bracket_pairs)+'_bracket_pairs_'+model_name+'_Feedback_'+feedback+'_'+str(hidden_size)+'hidden_units_'+use_optimiser+'_lr='+str(learning_rate)+'_'+str(num_epochs)+'epochs_'+'_PLOT.png'
-
-
-NUM_PAR = 1
-MIN_SIZE = 2
-MAX_SIZE = 4
-P_VAL = 0.5
-Q_VAL = 0.25
-
-Dyck = DyckLanguage(NUM_PAR,P_VAL,Q_VAL)
+length_bracket_pairs = 50
 
 
 
-if task=='NextTokenPrediction':
-    with open('Dyck1_Dataset_Suzgun_train.txt', 'r') as f:
-        for line in f:
-            line = line.split(",")
-            sentence = line[0].strip()
-            label = line[1].strip()
-            X.append(sentence)
-            y.append(label)
-    with open('Dyck1_Dataset_Suzgun_test.txt', 'r') as f:
-        for line in f:
-            line = line.split(",")
-            sentence = line[0].strip()
-            label = line[1].strip()
-            X_long.append(sentence)
-            y_long.append(label)
-
-print('len X long == ', len(X_long))
-print('len y long == ', len(y_long))
-
-
-def encode_sentence(sentence):
-    # max_length=1
-    # if dataset=='short' and model_name!='FFStack' and task=='BinaryClassification':
-
-    # if dataset == 'short':
-    #     max_length=2*num_bracket_pairs
-    # elif dataset=='long':
-    #     max_length=2*length_bracket_pairs
-    max_length = len(sentence)
-    rep = torch.zeros(max_length,1,n_letters)
-    if len(sentence)<max_length:
-        for index, char in enumerate(sentence):
-            pos = vocab.index(char)
-            rep[index+(max_length-len(sentence))][0][pos] = 1
-    else:
-        for index, char in enumerate(sentence):
-            pos = vocab.index(char)
-            rep[index][0][pos]=1
-    rep.requires_grad_(True)
-    return rep
+file_name = 'Dyck1_' + task + '_' + str(
+        num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' + str(
+        hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
+        num_epochs) + 'epochs_' + '.txt'
+excel_name = 'Dyck1_' + task + '_' + str(
+        num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' + str(
+        hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
+        num_epochs) + 'epochs_' + '.xlsx'
+modelname = 'Dyck1_' + task + '_' + str(
+        num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' + str(
+        hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
+        num_epochs) + 'epochs_' + '_MODEL.pth'
+optimname = 'Dyck1_' + task + '_' + str(
+        num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' + str(
+        hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
+        num_epochs) + 'epochs_' + '_OPTIMISER.pth'
+train_log = 'Dyck1_' + task + '_' + str(
+        num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' + str(
+        hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
+        num_epochs) + 'epochs_' + '_TRAIN_LOG.txt'
+test_log = 'Dyck1_' + task + '_' + str(
+        num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' + str(
+        hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
+        num_epochs) + 'epochs_' + '_TEST_LOG.txt'
+long_test_log = 'Dyck1_' + task + '_' + str(
+        num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' + str(
+        hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
+        num_epochs) + 'epochs_' + '_LONG_TEST_LOG.txt'
+plot_name = 'Dyck1_' + task + '_' + str(
+        num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' + str(
+        hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
+        num_epochs) + 'epochs_' + '_PLOT.png'
 
 
-# print(encode_sentence('(())'))
+def read_dataset(task):
 
-# print(encode_sentence('(((()()())))'))
+    X = []
+    y = []
+    data = []
 
-print(Dyck.lineToTensorSigmoid('(())'))
+    X_long = []
+    y_long = []
+    data_long = []
 
-print(Dyck.lineToTensorSigmoid('()()()'))
-print(Dyck.lineToTensorSigmoid('11101010'))
+    if task == 'NextTokenPrediction':
+        with open('Dyck1_Dataset_Suzgun_train_.txt', 'r') as f:
+            for line in f:
+                line = line.split(",")
+                sentence = line[0].strip()
+                label = line[1].strip()
+                X.append(sentence)
+                y.append(label)
+        with open('Dyck1_Dataset_Suzgun_test_.txt', 'r') as f:
+            for line in f:
+                line = line.split(",")
+                sentence = line[0].strip()
+                label = line[1].strip()
+                X_long.append(sentence)
+                y_long.append(label)
 
-print(Dyck.lineToTensor('(())'))
+    # print('len X long == ', len(X_long))
+    # print('len y long == ', len(y_long))
 
-print(X[0])
-print(Dyck.lineToTensor(X[0]))
-print(Dyck.lineToTensorSigmoid(y[0]))
+    X_train = X[:train_size]
+    y_train = y[:train_size]
+    X_test = X[train_size:train_size+test_size]
+    y_test = y[train_size:train_size+test_size]
+    X_long = X_long[:long_size]
+    y_long=y_long[:long_size]
+
+    return X_train, y_train, X_test, y_test, X_long, y_long
 
 
 
-def select_model():
+def select_model(model_name, input_size, hidden_size, num_layers, num_classes, output_activation):
     if model_name=='VanillaLSTM':
         model = VanillaLSTM(input_size,hidden_size, num_layers, num_classes, output_activation=output_activation)
     elif model_name=='VanillaRNN':
@@ -159,55 +145,628 @@ def select_model():
         model = VanillaGRU(input_size,hidden_size, num_layers, num_classes, output_activation=output_activation)
     return model
 
-model = select_model()
-print(model.model_name)
 
-model.to(device)
-print(device)
+def main():
+    # args = parser.parse_args()
+    #
+    # model_name = args.model_name
+    # task = args.task
+    # feedback = args.feedback
+    # hidden_size = args.hidden_size
+    # num_layers = args.num_layers
+    # learning_rate = args.learning_rate
+    # num_epochs = args.num_epochs
+    # num_runs = args.num_runs
 
-input_seq = X[0]
-output_seq = y[0]
-input_rep = Dyck.lineToTensor(input_seq)
-output_rep = Dyck.lineToTensorSigmoid(output_seq)
+    output_activation = 'Sigmoid'
 
-op = torch.zeros(output_rep.shape)
-hidden = (torch.zeros(1,1,hidden_size).to(device), torch.zeros(1,1,hidden_size).to(device))
+    if task == 'TernaryClassification':
+        num_classes = 3
+        output_activation = 'Softmax'
+    elif task == 'BinaryClassification' or task == 'NextTokenPrediction':
+        num_classes = 2
+        output_activation = 'Sigmoid'
 
-input_rep.to(device)
-output_rep.to(device)
-op.to(device)
+    # short_num_bracket_pairs_start = 1
+    # num_bracket_pairs = 25
+    #
+    # length_bracket_pairs = 50
+    #
+    # use_optimiser = 'Adam'
+
+    vocab = ['(', ')']
+    n_letters = len(vocab)
+    input_size = n_letters
+
+    X_train, y_train, X_test, y_test, X_long, y_long = read_dataset('NextTokenPrediction')
+
+    # X = []
+    # y = []
+    # data = []
+    #
+    # X_long = []
+    # y_long = []
+    # data_long = []
+
+    # file_name = 'Dyck1_' + task + '_' + str(
+    #     num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' + str(
+    #     hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
+    #     num_epochs) + 'epochs_' + '.txt'
+    # excel_name = 'Dyck1_' + task + '_' + str(
+    #     num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' + str(
+    #     hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
+    #     num_epochs) + 'epochs_' + '.xlsx'
+    # modelname = 'Dyck1_' + task + '_' + str(
+    #     num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' + str(
+    #     hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
+    #     num_epochs) + 'epochs_' + '_MODEL.pth'
+    # optimname = 'Dyck1_' + task + '_' + str(
+    #     num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' + str(
+    #     hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
+    #     num_epochs) + 'epochs_' + '_OPTIMISER.pth'
+    # train_log = 'Dyck1_' + task + '_' + str(
+    #     num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' + str(
+    #     hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
+    #     num_epochs) + 'epochs_' + '_TRAIN_LOG.txt'
+    # test_log = 'Dyck1_' + task + '_' + str(
+    #     num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' + str(
+    #     hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
+    #     num_epochs) + 'epochs_' + '_TEST_LOG.txt'
+    # long_test_log = 'Dyck1_' + task + '_' + str(
+    #     num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' + str(
+    #     hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
+    #     num_epochs) + 'epochs_' + '_LONG_TEST_LOG.txt'
+    # plot_name = 'Dyck1_' + task + '_' + str(
+    #     num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' + str(
+    #     hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
+    #     num_epochs) + 'epochs_' + '_PLOT.png'
+
+    # NUM_PAR = 1
+    # MIN_SIZE = 2
+    # MAX_SIZE = 4
+    # P_VAL = 0.5
+    # Q_VAL = 0.25
+    #
+    # Dyck = DyckLanguage(NUM_PAR, P_VAL, Q_VAL)
+
+    # if task == 'NextTokenPrediction':
+    #     with open('Dyck1_Dataset_Suzgun_train_.txt', 'r') as f:
+    #         for line in f:
+    #             line = line.split(",")
+    #             sentence = line[0].strip()
+    #             label = line[1].strip()
+    #             X.append(sentence)
+    #             y.append(label)
+    #     with open('Dyck1_Dataset_Suzgun_test_.txt', 'r') as f:
+    #         for line in f:
+    #             line = line.split(",")
+    #             sentence = line[0].strip()
+    #             label = line[1].strip()
+    #             X_long.append(sentence)
+    #             y_long.append(label)
+    #
+    # print('len X long == ', len(X_long))
+    # print('len y long == ', len(y_long))
+
+    # model = select_model(model_name,input_size, hidden_size, num_layers, num_classes, output_activation)
+    # print(model.model_name)
+    #
+    # model.to(device)
+
+    # X_train, y_train, X_test, y_test, X_long, y_long = read_dataset('NextTokenPrediction')
+    # print(len(X_train))
+    # print(len(y_train))
+    # print(len(X_test))
+    # print(len(y_test))
+    # print(len(X_long))
+    # print(len(y_long))
+    # print(X_train[9999])
+    # print(X_test[0])
+
+    # print(train(model, X_train, y_train))
+
+    if load_model==False:
+
+        with open(file_name, 'a') as f:
+            f.write('Output activation = ' + output_activation + '\n')
+            f.write('Optimiser used = ' + use_optimiser + '\n')
+            f.write('Learning rate = ' + str(learning_rate) + '\n')
+            f.write('Number of runs = ' + str(num_runs) + '\n')
+            f.write('Number of epochs in each run = ' + str(num_epochs) + '\n')
+            f.write('Saved model name = ' + modelname + '\n')
+            f.write('Saved optimiser name = ' + optimname + '\n')
+            f.write('Excel name = ' + excel_name + '\n')
+            f.write('Train log name = ' + train_log + '\n')
+            f.write('Test log name = ' + test_log + '\n')
+            f.write('Long test log name = ' + long_test_log + '\n')
+            f.write('///////////////////////////////////////////////////////////////\n')
+            f.write('\n')
+
+        train_accuracies = []
+        test_accuracies = []
+        long_test_accuracies = []
+        train_dataframes = []
+        runs = []
+        for i in range(num_runs):
+            model = select_model(model_name, input_size, hidden_size, num_layers, num_classes, output_activation)
+            # print(model.model_name)
+
+            model.to(device)
+
+            runs.append(i)
+            train_accuracy, df = train(model, X_train, y_train)
+            train_accuracies.append(train_accuracy)
+            train_dataframes.append(df)
+            test_accuracy = test_model(model, X_test, y_test)
+            test_accuracies.append(test_accuracy)
+            long_test_accuracy = test_model(model, X_long, y_long)
+            long_test_accuracies.append(long_test_accuracy)
+
+            with open(file_name, "a") as f:
+                f.write('train accuracy for run ' + str(i) + ' = ' + str(train_accuracy) + '%\n')
+                f.write('test accuracy for run ' + str(i) + ' = ' + str(test_accuracy) + '%\n')
+                f.write('long test accuracy for run '+str(i)+' = '+str(long_test_accuracy)+'%\n')
+
+        dfs = dict(zip(runs, train_dataframes))
+        writer = pd.ExcelWriter(excel_name, engine='xlsxwriter')
+
+        for sheet_name in dfs.keys():
+            dfs[sheet_name].to_excel(writer, sheet_name=sheet_name, index=False)
+
+        writer.save()
+
+        max_train_accuracy = max(train_accuracies)
+        min_train_accuracy = min(train_accuracies)
+        avg_train_accuracy = sum(train_accuracies) / len(train_accuracies)
+        std_train_accuracy = np.std(train_accuracies)
+
+        max_test_accuracy = max(test_accuracies)
+        min_test_accuracy = min(test_accuracies)
+        avg_test_accuracy = sum(test_accuracies) / len(test_accuracies)
+        std_test_accuracy = np.std(test_accuracies)
+
+        max_long_test_accuracy = max(long_test_accuracies)
+        min_long_test_accuracy = min(long_test_accuracies)
+        avg_long_test_accuracy = sum(long_test_accuracies) / len(test_accuracies)
+        std_long_test_accuracy = np.std(long_test_accuracies)
+
+        with open(file_name, "a") as f:
+            f.write('/////////////////////////////////////////////////////////////////\n')
+            f.write('Maximum train accuracy = ' + str(max_train_accuracy) + '%\n')
+            f.write('Minimum train accuracy = ' + str(min_train_accuracy) + '%\n')
+            f.write('Average train accuracy = ' + str(avg_train_accuracy) + '%\n')
+            f.write('Standard Deviation for train accuracy = ' + str(std_train_accuracy) + '\n')
+            f.write('/////////////////////////////////////////////////////////////////\n')
+            f.write('Maximum test accuracy = ' + str(max_test_accuracy) + '%\n')
+            f.write('Minimum test accuracy = ' + str(min_test_accuracy) + '%\n')
+            f.write('Average test accuracy = ' + str(avg_test_accuracy) + '%\n')
+            f.write('Standard Deviation for test accuracy = ' + str(std_test_accuracy) + '\n')
+
+            f.write('/////////////////////////////////////////////////////////////////\n')
+            f.write('Maximum long test accuracy = ' + str(max_long_test_accuracy) + '%\n')
+            f.write('Minimum long test accuracy = ' + str(min_long_test_accuracy) + '%\n')
+            f.write('Average long test accuracy = ' + str(avg_long_test_accuracy) + '%\n')
+            f.write('Standard Deviation for long test accuracy = ' + str(std_long_test_accuracy) + '\n')
+
+    elif load_model==True:
+        model = select_model(model_name, input_size, hidden_size, num_layers, num_classes, output_activation)
+        model.load_state_dict(torch.load(modelname))
+        test_accuracy = test_model(model, X_test, y_test)
+        print('short test accuracy = ',test_accuracy)
+        long_accuracy = test_model(model, X_long, y_long)
+        print('long test accuracy = ',long_accuracy)
 
 
-for i in range(len(input_rep)):
-
-    outp, hidden = model(input_rep[i],hidden)
-
-    op[i] = outp
 
 
-print(op)
-out_np = np.int_(op.detach().numpy() >= epsilon)
-# if out_np == output_rep.detach().numpy():
-#     print('correct')
 
 
-out_np = np.int_(op.detach().numpy() >= epsilon)
-target_np = np.int_(output_rep.detach().numpy())
 
-# print(out_np)
-# print(target_np)
 
-if np.all(np.equal(out_np, target_np)) and (out_np.flatten() == target_np.flatten()).all():
-    print('correct')
-else:
-    print('incorrect')
 
-# if np.all(np.equal(out_np, output_rep.detach().numpy()) and out_np.flatten()==output_rep.detach().numpy().flatten()).all():
-#     print('correct')
+def train(model, X, y):
 
+
+
+    # file_name = 'Dyck1_' + task + '_' + str(
+    #     num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' + str(
+    #     hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
+    #     num_epochs) + 'epochs_' + '.txt'
+    # excel_name = 'Dyck1_' + task + '_' + str(
+    #     num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' + str(
+    #     hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
+    #     num_epochs) + 'epochs_' + '.xlsx'
+    # modelname = 'Dyck1_' + task + '_' + str(
+    #     num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' + str(
+    #     hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
+    #     num_epochs) + 'epochs_' + '_MODEL.pth'
+    # optimname = 'Dyck1_' + task + '_' + str(
+    #     num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' + str(
+    #     hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
+    #     num_epochs) + 'epochs_' + '_OPTIMISER.pth'
+    # train_log = 'Dyck1_' + task + '_' + str(
+    #     num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' + str(
+    #     hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
+    #     num_epochs) + 'epochs_' + '_TRAIN_LOG.txt'
+    # test_log = 'Dyck1_' + task + '_' + str(
+    #     num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' + str(
+    #     hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
+    #     num_epochs) + 'epochs_' + '_TEST_LOG.txt'
+    # long_test_log = 'Dyck1_' + task + '_' + str(
+    #     num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' + str(
+    #     hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
+    #     num_epochs) + 'epochs_' + '_LONG_TEST_LOG.txt'
+    # plot_name = 'Dyck1_' + task + '_' + str(
+    #     num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' + str(
+    #     hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
+    #     num_epochs) + 'epochs_' + '_PLOT.png'
+
+    criterion = nn.MSELoss()
+    optimiser = optim.Adam(model.parameters(), lr=learning_rate)
+    losses = []
+    correct_arr = []
+    accuracies = []
+    epochs = []
+    all_epoch_incorrect_guesses = []
+    df1 = pd.DataFrame()
+    print_flag = False
+
+    for epoch in range(num_epochs):
+        num_correct = 0
+        total_loss = 0
+        epoch_incorrect_guesses = []
+        epoch_correct_guesses = []
+        if epoch==num_epochs-1:
+            print_flag=True
+        if print_flag == True:
+            with open(train_log, 'a') as f:
+                f.write('\nEPOCH ' + str(epoch) + '\n')
+        for i in range(len(X)):
+            input_seq = Dyck.lineToTensor(X[i])
+            target_seq = Dyck.lineToTensorSigmoid(y[i])
+            len_seq = len(input_seq)
+            output_seq = torch.zeros(target_seq.shape)
+
+            input_seq.to(device)
+            target_seq.to(device)
+            output_seq.to(device)
+
+            if model.model_name=='VanillaLSTM':
+                hidden = (torch.zeros(1,1, model.hidden_size).to(device), torch.zeros(1,1,model.hidden_size).to(device))
+            elif model.model_name=='VanillaRNN' or model.model_name=='VanillaGRU':
+                hidden = torch.zeros(1,1,model.hidden_size).to(device)
+
+            for j in range(len_seq):
+
+                out, hidden = model(input_seq[j], hidden)
+                output_seq[j]=out
+
+            if print_flag == True:
+                with open(train_log, 'a') as f:
+                    f.write('////////////////////////////////////////\n')
+                    f.write('input sentence = ' + str(X[i]) + '\n')
+                    f.write('encoded sentence = '+str(input_seq)+'\n')
+            loss = criterion(output_seq, target_seq)
+            total_loss+=loss.item()
+            loss.backward()
+            optimiser.step()
+
+            if print_flag == True:
+                with open(train_log, 'a') as f:
+                    f.write('actual output in train function = ' + str(output_seq) + '\n')
+
+            out_np = np.int_(output_seq.detach().numpy() >= epsilon)
+            target_np = np.int_(target_seq.detach().numpy())
+
+            if print_flag == True:
+                with open(train_log, 'a') as f:
+                    f.write('rounded output in train function = ' + str(out_np) + '\n')
+                    f.write('target in train function = ' + str(target_np) + '\n')
+
+
+            if np.all(np.equal(out_np, target_np)) and (out_np.flatten() == target_np.flatten()).all():
+                num_correct += 1
+                # correct_arr.append(X[i])
+                epoch_correct_guesses.append(X[i])
+                if print_flag == True:
+                    with open(train_log, 'a') as f:
+                        f.write('CORRECT' + '\n')
+            else:
+                epoch_incorrect_guesses.append(X[i])
+                if print_flag == True:
+                    with open(train_log, 'a') as f:
+                        f.write('INCORRECT' + '\n')
+
+
+
+        accuracy = num_correct/len(X)*100
+        print('Accuracy for epoch ', epoch, '=', accuracy, '%')
+        accuracies.append(accuracy)
+        losses.append(total_loss)
+        all_epoch_incorrect_guesses.append(epoch_incorrect_guesses)
+        correct_arr.append(epoch_correct_guesses)
+        if epoch == num_epochs - 1:
+            print('\n////////////////////////////////////////////////////////////////////////////////////////\n')
+            print('Final training accuracy = ', num_correct / len(X) * 100, '%')
+        df1['epoch'] = epochs
+        df1['accuracies'] = accuracies
+        df1['Total epoch losses'] = losses
+        df1['epoch correct guesses'] = correct_arr
+        df1['epoch incorrect guesses'] = all_epoch_incorrect_guesses
+
+        torch.save(model.state_dict(), modelname)
+        torch.save(optimiser.state_dict(), optimname)
+
+        # print(accuracies)
+        # print(accuracy)
+    return accuracy, df1
+
+def test_model(model, X, y):
+    model.eval()
+    num_correct = 0
+    dataset = ''
+    log_file=''
+    if len(X[0])>num_bracket_pairs*2:
+        dataset = 'long'
+        log_file =long_test_log
+    else:
+        dataset='short'
+        log_file = test_log
+
+    with open(log_file,'a') as f:
+        f.write('////////////////////////////////////////\n')
+        f.write('TEST '+dataset+'\n')
+
+    for i in range(len(X)):
+        input_seq = Dyck.lineToTensor(X[i])
+        target_seq = Dyck.lineToTensorSigmoid(y[i])
+        len_seq = len(input_seq)
+        output_seq = torch.zeros(target_seq.shape)
+
+        input_seq.to(device)
+        target_seq.to(device)
+        output_seq.to(device)
+
+        if model.model_name == 'VanillaLSTM':
+            hidden = (torch.zeros(1, 1, model.hidden_size).to(device), torch.zeros(1, 1, model.hidden_size).to(device))
+        elif model.model_name == 'VanillaRNN' or model.model_name == 'VanillaGRU':
+            hidden = torch.zeros(1, 1, model.hidden_size).to(device)
+
+        for j in range(len_seq):
+            out, hidden = model(input_seq[j], hidden)
+            output_seq[j] = out
+
+        with open(log_file, 'a') as f:
+            f.write('////////////////////////////////////////\n')
+            f.write('input sentence = ' + X[i] + '\n')
+            f.write('encoded sentence = ' + input_seq + '\n')
+
+        with open(log_file, 'a') as f:
+            f.write('actual output in test function = ' + str(output_seq) + '\n')
+
+        out_np = np.int_(output_seq.detach().cpu().numpy() >= epsilon)
+        target_np = np.int_(target_seq.detach().cpu().numpy())
+
+        with open(log_file, 'a') as f:
+            f.write('rounded output in test function = ' + str(out_np) + '\n')
+            f.write('target in test function = ' + str(target_np) + '\n')
+
+        if np.all(np.equal(out_np, target_np)) and (out_np.flatten() == target_np.flatten()).all():
+            num_correct += 1
+            with open(log_file, 'a') as f:
+                f.write('CORRECT' + '\n')
+        else:
+            with open(log_file, 'a') as f:
+                f.write('INCORRECT' + '\n')
+
+
+    accuracy = num_correct / len(X) * 100
+    with open(log_file, 'a') as f:
+        f.write('accuracy = ' + str(accuracy)+'%' + '\n')
+
+
+    return accuracy
+
+
+
+
+
+
+
+if __name__=='__main__':
+    main()
+
+#
+# args = parser.parse_args()
+#
+# model_name = args.model_name
+# task = args.task
+# feedback = args.feedback
+# hidden_size = args.hidden_size
+# num_layers = args.num_layers
+# learning_rate = args.learning_rate
+# num_epochs = args.num_epochs
+# num_runs = args.num_runs
+#
+#
+# epsilon=0.5
+# output_activation='Sigmoid'
+#
+# if task=='TernaryClassification':
+#     num_classes = 3
+#     output_activation = 'Softmax'
+# elif task=='BinaryClassification' or task=='NextTokenPrediction':
+#     num_classes = 2
+#     output_activation='Sigmoid'
+#
+#
+#
+# short_num_bracket_pairs_start = 1
+# num_bracket_pairs=25
+#
+# length_bracket_pairs=50
+#
+# use_optimiser='Adam'
+#
+#
+# vocab = ['(',')']
+# n_letters = len(vocab)
+# input_size=n_letters
+#
+# X=[]
+# y=[]
+# data=[]
+#
+# X_long=[]
+# y_long = []
+# data_long = []
+#
+#
+# file_name = 'Dyck1_'+task+'_'+str(num_bracket_pairs)+'_bracket_pairs_'+model_name+'_Feedback_'+feedback+'_'+str(hidden_size)+'hidden_units_'+use_optimiser+'_lr='+str(learning_rate)+'_'+str(num_epochs)+'epochs_'+'.txt'
+# excel_name = 'Dyck1_'+task+'_'+str(num_bracket_pairs)+'_bracket_pairs_'+model_name+'_Feedback_'+feedback+'_'+str(hidden_size)+'hidden_units_'+use_optimiser+'_lr='+str(learning_rate)+'_'+str(num_epochs)+'epochs_'+'.xlsx'
+# modelname = 'Dyck1_'+task+'_'+str(num_bracket_pairs)+'_bracket_pairs_'+model_name+'_Feedback_'+feedback+'_'+str(hidden_size)+'hidden_units_'+use_optimiser+'_lr='+str(learning_rate)+'_'+str(num_epochs)+'epochs_'+'_MODEL.pth'
+# optimname = 'Dyck1_'+task+'_'+str(num_bracket_pairs)+'_bracket_pairs_'+model_name+'_Feedback_'+feedback+'_'+str(hidden_size)+'hidden_units_'+use_optimiser+'_lr='+str(learning_rate)+'_'+str(num_epochs)+'epochs_'+'_OPTIMISER.pth'
+# train_log= 'Dyck1_'+task+'_'+str(num_bracket_pairs)+'_bracket_pairs_'+model_name+'_Feedback_'+feedback+'_'+str(hidden_size)+'hidden_units_'+use_optimiser+'_lr='+str(learning_rate)+'_'+str(num_epochs)+'epochs_'+'_TRAIN_LOG.txt'
+# test_log = 'Dyck1_'+task+'_'+str(num_bracket_pairs)+'_bracket_pairs_'+model_name+'_Feedback_'+feedback+'_'+str(hidden_size)+'hidden_units_'+use_optimiser+'_lr='+str(learning_rate)+'_'+str(num_epochs)+'epochs_'+'_TEST_LOG.txt'
+# long_test_log = 'Dyck1_'+task+'_'+str(num_bracket_pairs)+'_bracket_pairs_'+model_name+'_Feedback_'+feedback+'_'+str(hidden_size)+'hidden_units_'+use_optimiser+'_lr='+str(learning_rate)+'_'+str(num_epochs)+'epochs_'+'_LONG_TEST_LOG.txt'
+# plot_name = 'Dyck1_'+task+'_'+str(num_bracket_pairs)+'_bracket_pairs_'+model_name+'_Feedback_'+feedback+'_'+str(hidden_size)+'hidden_units_'+use_optimiser+'_lr='+str(learning_rate)+'_'+str(num_epochs)+'epochs_'+'_PLOT.png'
+#
+#
+# NUM_PAR = 1
+# MIN_SIZE = 2
+# MAX_SIZE = 4
+# P_VAL = 0.5
+# Q_VAL = 0.25
+#
+# Dyck = DyckLanguage(NUM_PAR,P_VAL,Q_VAL)
+#
+#
+#
+# if task=='NextTokenPrediction':
+#     with open('Dyck1_Dataset_Suzgun_train_.txt', 'r') as f:
+#         for line in f:
+#             line = line.split(",")
+#             sentence = line[0].strip()
+#             label = line[1].strip()
+#             X.append(sentence)
+#             y.append(label)
+#     with open('Dyck1_Dataset_Suzgun_test_.txt', 'r') as f:
+#         for line in f:
+#             line = line.split(",")
+#             sentence = line[0].strip()
+#             label = line[1].strip()
+#             X_long.append(sentence)
+#             y_long.append(label)
+#
+# print('len X long == ', len(X_long))
+# print('len y long == ', len(y_long))
+#
+#
+# # def encode_sentence(sentence):
+# #     # max_length=1
+# #     # if dataset=='short' and model_name!='FFStack' and task=='BinaryClassification':
+# #
+# #     # if dataset == 'short':
+# #     #     max_length=2*num_bracket_pairs
+# #     # elif dataset=='long':
+# #     #     max_length=2*length_bracket_pairs
+# #     max_length = len(sentence)
+# #     rep = torch.zeros(max_length,1,n_letters)
+# #     if len(sentence)<max_length:
+# #         for index, char in enumerate(sentence):
+# #             pos = vocab.index(char)
+# #             rep[index+(max_length-len(sentence))][0][pos] = 1
+# #     else:
+# #         for index, char in enumerate(sentence):
+# #             pos = vocab.index(char)
+# #             rep[index][0][pos]=1
+# #     rep.requires_grad_(True)
+# #     return rep
+#
+#
+# # print(encode_sentence('(())'))
+#
+# # print(encode_sentence('(((()()())))'))
+#
+# # print(Dyck.lineToTensorSigmoid('(())'))
+# #
+# # print(Dyck.lineToTensorSigmoid('()()()'))
+# # print(Dyck.lineToTensorSigmoid('11101010'))
+# #
+# # print(Dyck.lineToTensor('(())'))
+# #
+# # print(X[0])
+# # print(Dyck.lineToTensor(X[0]))
+# # print(Dyck.lineToTensorSigmoid(y[0]))
+#
+#
+#
+# def select_model():
+#     if model_name=='VanillaLSTM':
+#         model = VanillaLSTM(input_size,hidden_size, num_layers, num_classes, output_activation=output_activation)
+#     elif model_name=='VanillaRNN':
+#         model = VanillaRNN(input_size, hidden_size, num_layers, num_classes, output_activation=output_activation)
+#     elif model_name=='VanillaGRU':
+#         model = VanillaGRU(input_size,hidden_size, num_layers, num_classes, output_activation=output_activation)
+#     return model
+#
+# model = select_model()
+# print(model.model_name)
+#
+# model.to(device)
+# print(device)
+#
+# input_seq = X[0]
+# output_seq = y[0]
+# input_rep = Dyck.lineToTensor(input_seq)
+# output_rep = Dyck.lineToTensorSigmoid(output_seq)
+#
+# op = torch.zeros(output_rep.shape)
+# hidden = (torch.zeros(1,1,hidden_size).to(device), torch.zeros(1,1,hidden_size).to(device))
+#
+# input_rep.to(device)
+# output_rep.to(device)
+# op.to(device)
+#
+# def train(model):
+#     for i in range(10):
+#         print(i)
+#
+#
+# for i in range(len(input_rep)):
+#
+#     outp, hidden = model(input_rep[i],hidden)
+#
+#     op[i] = outp
+#
+#
+# print(op)
+# out_np = np.int_(op.detach().numpy() >= epsilon)
+# # if out_np == output_rep.detach().numpy():
+# #     print('correct')
+#
+#
+# out_np = np.int_(op.detach().numpy() >= epsilon)
+# target_np = np.int_(output_rep.detach().numpy())
+#
+#
+# # print(out_np)
+# # print(target_np)
+#
 # if np.all(np.equal(out_np, target_np)) and (out_np.flatten() == target_np.flatten()).all():
-# 					counter += 1
+#     print('correct')
+# else:
+#     print('incorrect')
+#
+# # if np.all(np.equal(out_np, output_rep.detach().numpy()) and out_np.flatten()==output_rep.detach().numpy().flatten()).all():
+# #     print('correct')
+#
+# # if np.all(np.equal(out_np, target_np)) and (out_np.flatten() == target_np.flatten()).all():
+# # 					counter += 1
+#
+#
 
+#########################################################################################
 # ###############################################################################
 #
 # model_name = 'LSTM'
