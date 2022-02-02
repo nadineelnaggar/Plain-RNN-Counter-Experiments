@@ -48,7 +48,7 @@ parser.add_argument('num_layers', type=int, help='number of layers', default=1)
 parser.add_argument('learning_rate', type=float, help='learning rate')
 parser.add_argument('num_epochs', type=int, help='number of training epochs')
 parser.add_argument('num_runs', type=int, help='number of training runs')
-parser.add_argument('load_model', type=int, help='load previous model (1), train model from scratch (0)', default=0)
+# parser.add_argument('load_model', type=int, help='load previous model (1), train model from scratch (0)', default=0)
 
 
 args = parser.parse_args()
@@ -61,7 +61,7 @@ num_layers = args.num_layers
 learning_rate = args.learning_rate
 num_epochs = args.num_epochs
 num_runs = args.num_runs
-load_model = args.load_model
+# load_model = args.load_model
 
 use_optimiser='Adam'
 
@@ -284,96 +284,96 @@ def main():
 
     # print(train(model, X_train, y_train))
 
-    if load_model==0:
+    # if load_model==0:
 
-        with open(file_name, 'a') as f:
-            f.write('Output activation = ' + output_activation + '\n')
-            f.write('Optimiser used = ' + use_optimiser + '\n')
-            f.write('Learning rate = ' + str(learning_rate) + '\n')
-            f.write('Number of runs = ' + str(num_runs) + '\n')
-            f.write('Number of epochs in each run = ' + str(num_epochs) + '\n')
-            f.write('Saved model name = ' + modelname + '\n')
-            f.write('Saved optimiser name = ' + optimname + '\n')
-            f.write('Excel name = ' + excel_name + '\n')
-            f.write('Train log name = ' + train_log + '\n')
-            f.write('Test log name = ' + test_log + '\n')
-            f.write('Long test log name = ' + long_test_log + '\n')
-            f.write('///////////////////////////////////////////////////////////////\n')
-            f.write('\n')
+    with open(file_name, 'a') as f:
+        f.write('Output activation = ' + output_activation + '\n')
+        f.write('Optimiser used = ' + use_optimiser + '\n')
+        f.write('Learning rate = ' + str(learning_rate) + '\n')
+        f.write('Number of runs = ' + str(num_runs) + '\n')
+        f.write('Number of epochs in each run = ' + str(num_epochs) + '\n')
+        f.write('Saved model name = ' + modelname + '\n')
+        f.write('Saved optimiser name = ' + optimname + '\n')
+        f.write('Excel name = ' + excel_name + '\n')
+        f.write('Train log name = ' + train_log + '\n')
+        f.write('Test log name = ' + test_log + '\n')
+        f.write('Long test log name = ' + long_test_log + '\n')
+        f.write('///////////////////////////////////////////////////////////////\n')
+        f.write('\n')
 
-        train_accuracies = []
-        test_accuracies = []
-        long_test_accuracies = []
-        train_dataframes = []
-        runs = []
-        for i in range(num_runs):
-            model = select_model(model_name, input_size, hidden_size, num_layers, num_classes, output_activation='Sigmoid')
-            # print(model.model_name)
-            model.to(device)
+    train_accuracies = []
+    test_accuracies = []
+    long_test_accuracies = []
+    train_dataframes = []
+    runs = []
+    for i in range(num_runs):
+        model = select_model(model_name, input_size, hidden_size, num_layers, num_classes, output_activation='Sigmoid')
+        # print(model.model_name)
+        model.to(device)
 
-            runs.append('run'+str(i))
-            print('****************************************************************************\n')
-            train_accuracy, df = train(model, X_train, y_train)
-            train_accuracies.append(train_accuracy)
-            train_dataframes.append(df)
-            test_accuracy = test_model(model, X_test, y_test)
-            test_accuracies.append(test_accuracy)
-            long_test_accuracy = test_model(model, X_long, y_long)
-            long_test_accuracies.append(long_test_accuracy)
-
-            with open(file_name, "a") as f:
-                f.write('train accuracy for run ' + str(i) + ' = ' + str(train_accuracy) + '%\n')
-                f.write('test accuracy for run ' + str(i) + ' = ' + str(test_accuracy) + '%\n')
-                f.write('long test accuracy for run '+str(i)+' = '+str(long_test_accuracy)+'%\n')
-
-        dfs = dict(zip(runs, train_dataframes))
-        writer = pd.ExcelWriter(excel_name, engine='xlsxwriter')
-
-        for sheet_name in dfs.keys():
-            dfs[sheet_name].to_excel(writer, sheet_name=sheet_name, index=False)
-
-        writer.save()
-
-        max_train_accuracy = max(train_accuracies)
-        min_train_accuracy = min(train_accuracies)
-        avg_train_accuracy = sum(train_accuracies) / len(train_accuracies)
-        std_train_accuracy = np.std(train_accuracies)
-
-        max_test_accuracy = max(test_accuracies)
-        min_test_accuracy = min(test_accuracies)
-        avg_test_accuracy = sum(test_accuracies) / len(test_accuracies)
-        std_test_accuracy = np.std(test_accuracies)
-
-        max_long_test_accuracy = max(long_test_accuracies)
-        min_long_test_accuracy = min(long_test_accuracies)
-        avg_long_test_accuracy = sum(long_test_accuracies) / len(test_accuracies)
-        std_long_test_accuracy = np.std(long_test_accuracies)
+        runs.append('run'+str(i))
+        print('****************************************************************************\n')
+        train_accuracy, df = train(model, X_train, y_train)
+        train_accuracies.append(train_accuracy)
+        train_dataframes.append(df)
+        test_accuracy = test_model(model, X_test, y_test)
+        test_accuracies.append(test_accuracy)
+        long_test_accuracy = test_model(model, X_long, y_long)
+        long_test_accuracies.append(long_test_accuracy)
 
         with open(file_name, "a") as f:
-            f.write('/////////////////////////////////////////////////////////////////\n')
-            f.write('Maximum train accuracy = ' + str(max_train_accuracy) + '%\n')
-            f.write('Minimum train accuracy = ' + str(min_train_accuracy) + '%\n')
-            f.write('Average train accuracy = ' + str(avg_train_accuracy) + '%\n')
-            f.write('Standard Deviation for train accuracy = ' + str(std_train_accuracy) + '\n')
-            f.write('/////////////////////////////////////////////////////////////////\n')
-            f.write('Maximum test accuracy = ' + str(max_test_accuracy) + '%\n')
-            f.write('Minimum test accuracy = ' + str(min_test_accuracy) + '%\n')
-            f.write('Average test accuracy = ' + str(avg_test_accuracy) + '%\n')
-            f.write('Standard Deviation for test accuracy = ' + str(std_test_accuracy) + '\n')
+            f.write('train accuracy for run ' + str(i) + ' = ' + str(train_accuracy) + '%\n')
+            f.write('test accuracy for run ' + str(i) + ' = ' + str(test_accuracy) + '%\n')
+            f.write('long test accuracy for run '+str(i)+' = '+str(long_test_accuracy)+'%\n')
 
-            f.write('/////////////////////////////////////////////////////////////////\n')
-            f.write('Maximum long test accuracy = ' + str(max_long_test_accuracy) + '%\n')
-            f.write('Minimum long test accuracy = ' + str(min_long_test_accuracy) + '%\n')
-            f.write('Average long test accuracy = ' + str(avg_long_test_accuracy) + '%\n')
-            f.write('Standard Deviation for long test accuracy = ' + str(std_long_test_accuracy) + '\n')
+    dfs = dict(zip(runs, train_dataframes))
+    writer = pd.ExcelWriter(excel_name, engine='xlsxwriter')
 
-    elif load_model==1:
-        model = select_model(model_name, input_size, hidden_size, num_layers, num_classes, output_activation)
-        model.load_state_dict(torch.load(modelname))
-        test_accuracy = test_model(model, X_test, y_test)
-        print('short test accuracy = ',test_accuracy)
-        long_accuracy = test_model(model, X_long, y_long)
-        print('long test accuracy = ',long_accuracy)
+    for sheet_name in dfs.keys():
+        dfs[sheet_name].to_excel(writer, sheet_name=sheet_name, index=False)
+
+    writer.save()
+
+    max_train_accuracy = max(train_accuracies)
+    min_train_accuracy = min(train_accuracies)
+    avg_train_accuracy = sum(train_accuracies) / len(train_accuracies)
+    std_train_accuracy = np.std(train_accuracies)
+
+    max_test_accuracy = max(test_accuracies)
+    min_test_accuracy = min(test_accuracies)
+    avg_test_accuracy = sum(test_accuracies) / len(test_accuracies)
+    std_test_accuracy = np.std(test_accuracies)
+
+    max_long_test_accuracy = max(long_test_accuracies)
+    min_long_test_accuracy = min(long_test_accuracies)
+    avg_long_test_accuracy = sum(long_test_accuracies) / len(test_accuracies)
+    std_long_test_accuracy = np.std(long_test_accuracies)
+
+    with open(file_name, "a") as f:
+        f.write('/////////////////////////////////////////////////////////////////\n')
+        f.write('Maximum train accuracy = ' + str(max_train_accuracy) + '%\n')
+        f.write('Minimum train accuracy = ' + str(min_train_accuracy) + '%\n')
+        f.write('Average train accuracy = ' + str(avg_train_accuracy) + '%\n')
+        f.write('Standard Deviation for train accuracy = ' + str(std_train_accuracy) + '\n')
+        f.write('/////////////////////////////////////////////////////////////////\n')
+        f.write('Maximum test accuracy = ' + str(max_test_accuracy) + '%\n')
+        f.write('Minimum test accuracy = ' + str(min_test_accuracy) + '%\n')
+        f.write('Average test accuracy = ' + str(avg_test_accuracy) + '%\n')
+        f.write('Standard Deviation for test accuracy = ' + str(std_test_accuracy) + '\n')
+
+        f.write('/////////////////////////////////////////////////////////////////\n')
+        f.write('Maximum long test accuracy = ' + str(max_long_test_accuracy) + '%\n')
+        f.write('Minimum long test accuracy = ' + str(min_long_test_accuracy) + '%\n')
+        f.write('Average long test accuracy = ' + str(avg_long_test_accuracy) + '%\n')
+        f.write('Standard Deviation for long test accuracy = ' + str(std_long_test_accuracy) + '\n')
+
+    # elif load_model==1:
+    #     model = select_model(model_name, input_size, hidden_size, num_layers, num_classes, output_activation)
+    #     model.load_state_dict(torch.load(modelname))
+    #     test_accuracy = test_model(model, X_test, y_test)
+    #     print('short test accuracy = ',test_accuracy)
+    #     long_accuracy = test_model(model, X_long, y_long)
+    #     print('long test accuracy = ',long_accuracy)
 
 
 
