@@ -13,7 +13,7 @@ from Dyck_Generator_Suzgun import DyckLanguage
 
 # SUZUGUN EXPERIMENT RUN HERE
 
-device = torch.cuda if torch.cuda.is_available() else 'cpu'
+device = torch.device(torch.cuda if torch.cuda.is_available() else 'cpu')
 
 NUM_PAR = 1
 MIN_SIZE = 2
