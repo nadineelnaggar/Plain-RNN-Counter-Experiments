@@ -539,7 +539,7 @@ def test_model(model, X, y):
         with open(log_file, 'a') as f:
             f.write('////////////////////////////////////////\n')
             f.write('input sentence = ' + X[i] + '\n')
-            f.write('encoded sentence = ' + input_seq + '\n')
+            f.write('encoded sentence = ' + str(input_seq) + '\n')
 
         with open(log_file, 'a') as f:
             f.write('actual output in test function = ' + str(output_seq) + '\n')
