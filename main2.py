@@ -490,6 +490,7 @@ def train(model, X, y):
         if epoch == num_epochs - 1:
             print('\n////////////////////////////////////////////////////////////////////////////////////////\n')
             print('Final training accuracy = ', num_correct / len(X) * 100, '%')
+            print('**************************************************************************\n')
     df1['epoch'] = epochs
     df1['accuracies'] = accuracies
     df1['Total epoch losses'] = losses
