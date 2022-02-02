@@ -488,14 +488,14 @@ def train(model, X, y):
         if epoch == num_epochs - 1:
             print('\n////////////////////////////////////////////////////////////////////////////////////////\n')
             print('Final training accuracy = ', num_correct / len(X) * 100, '%')
-        df1['epoch'] = epochs
-        df1['accuracies'] = accuracies
-        df1['Total epoch losses'] = losses
-        df1['epoch correct guesses'] = correct_arr
-        df1['epoch incorrect guesses'] = all_epoch_incorrect_guesses
+    df1['epoch'] = epochs
+    df1['accuracies'] = accuracies
+    df1['Total epoch losses'] = losses
+    df1['epoch correct guesses'] = correct_arr
+    df1['epoch incorrect guesses'] = all_epoch_incorrect_guesses
 
-        torch.save(model.state_dict(), modelname)
-        torch.save(optimiser.state_dict(), optimname)
+    torch.save(model.state_dict(), modelname)
+    torch.save(optimiser.state_dict(), optimname)
 
         # print(accuracies)
         # print(accuracy)
