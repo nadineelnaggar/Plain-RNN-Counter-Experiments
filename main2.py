@@ -143,7 +143,7 @@ def select_model(model_name, input_size, hidden_size, num_layers, num_classes, o
         model = VanillaRNN(input_size, hidden_size, num_layers, num_classes, output_activation=output_activation)
     elif model_name=='VanillaGRU':
         model = VanillaGRU(input_size,hidden_size, num_layers, num_classes, output_activation=output_activation)
-    return model
+    return model.to(device)
 
 
 def main():
@@ -290,7 +290,6 @@ def main():
         for i in range(num_runs):
             model = select_model(model_name, input_size, hidden_size, num_layers, num_classes, output_activation)
             # print(model.model_name)
-
             model.to(device)
 
             runs.append(i)
