@@ -9,12 +9,20 @@ import argparse
 import matplotlib.pyplot as plt
 from models import VanillaRNN, VanillaLSTM, VanillaGRU
 from Dyck_Generator_Suzgun import DyckLanguage
+import random
 
 
 # SUZUGUN EXPERIMENT RUN HERE
 
 device = torch.device("cuda" if torch.cuda.is_available() else 'cpu')
 print('device = ',device)
+
+
+# randomseed_num = 1729
+# # print ('RANDOM SEED: {}'.format(randomseed_num))
+# random.seed (randomseed_num)
+# np.random.seed (randomseed_num)
+# torch.manual_seed(randomseed_num)
 
 NUM_PAR = 1
 MIN_SIZE = 2
@@ -62,6 +70,16 @@ num_bracket_pairs = 25
 length_bracket_pairs = 50
 
 
+
+print('model_name = ',model_name)
+print('task = ',task)
+print('feedback = ',feedback)
+print('hidden_size = ',hidden_size)
+print('num_layers = ',num_layers)
+print('learning_rate = ',learning_rate)
+print('num_epochs = ',num_epochs)
+print('num_runs = ',num_runs)
+print('load_model = ',load_model)
 
 file_name = 'Dyck1_' + task + '_' + str(
         num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' + str(
@@ -404,6 +422,7 @@ def train(model, X, y):
 
     criterion = nn.MSELoss()
     optimiser = optim.Adam(model.parameters(), lr=learning_rate)
+    optimiser.zero_grad()
     losses = []
     correct_arr = []
     accuracies = []
@@ -452,7 +471,7 @@ def train(model, X, y):
                     f.write('encoded sentence = '+str(input_seq)+'\n')
 
             loss = criterion(output_seq, target_seq)
-            total_loss+=loss.item()
+            total_loss += loss.item()
             loss.backward()
             optimiser.step()
 
@@ -460,8 +479,8 @@ def train(model, X, y):
                 with open(train_log, 'a') as f:
                     f.write('actual output in train function = ' + str(output_seq) + '\n')
 
-            out_np = np.int_(output_seq.detach().cpu().numpy() >= epsilon)
-            target_np = np.int_(target_seq.detach().cpu().numpy())
+            out_np = np.int_(output_seq.detach().numpy() >= epsilon)
+            target_np = np.int_(target_seq.detach().numpy())
 
             if print_flag == True:
                 with open(train_log, 'a') as f:
@@ -487,11 +506,12 @@ def train(model, X, y):
         accuracy = num_correct/len(X)*100
         print('Accuracy for epoch ', epoch, '=', accuracy, '%')
         accuracies.append(accuracy)
-        losses.append(total_loss)
+        losses.append(total_loss/len(X))
         all_epoch_incorrect_guesses.append(epoch_incorrect_guesses)
         correct_arr.append(epoch_correct_guesses)
         if epoch == num_epochs - 1:
             # print('\n////////////////////////////////////////////////////////////////////////////////////////\n')
+            print('num_correct = ',num_correct)
             print('Final training accuracy = ', num_correct / len(X) * 100, '%')
             # print('**************************************************************************\n')
     df1['epoch'] = epochs
