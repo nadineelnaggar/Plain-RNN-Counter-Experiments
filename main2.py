@@ -294,6 +294,7 @@ def main():
             model.to(device)
 
             runs.append('run'+str(i))
+            print('****************************************************************************\n')
             train_accuracy, df = train(model, X_train, y_train)
             train_accuracies.append(train_accuracy)
             train_dataframes.append(df)
@@ -488,9 +489,9 @@ def train(model, X, y):
         all_epoch_incorrect_guesses.append(epoch_incorrect_guesses)
         correct_arr.append(epoch_correct_guesses)
         if epoch == num_epochs - 1:
-            print('\n////////////////////////////////////////////////////////////////////////////////////////\n')
+            # print('\n////////////////////////////////////////////////////////////////////////////////////////\n')
             print('Final training accuracy = ', num_correct / len(X) * 100, '%')
-            print('**************************************************************************\n')
+            # print('**************************************************************************\n')
     df1['epoch'] = epochs
     df1['accuracies'] = accuracies
     df1['Total epoch losses'] = losses
@@ -566,6 +567,7 @@ def test_model(model, X, y):
     accuracy = num_correct / len(X) * 100
     with open(log_file, 'a') as f:
         f.write('accuracy = ' + str(accuracy)+'%' + '\n')
+    print(''+dataset+' test accuracy = '+ accuracy+'%\n')
 
 
     return accuracy
