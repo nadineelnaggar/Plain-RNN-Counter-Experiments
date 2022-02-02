@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 
 class VanillaRNN(nn.Module):
-    def __init__(self, input_size, hidden_size, num_layers, num_classes, output_activation='Softmax'):
+    def __init__(self, input_size, hidden_size, num_layers, num_classes, output_activation='Sigmoid'):
         super(VanillaRNN, self).__init__()
         self.model_name='VanillaRNN'
         self.hidden_size=hidden_size
@@ -30,7 +30,7 @@ class VanillaRNN(nn.Module):
         return x, h0
 
 class VanillaLSTM(nn.Module):
-    def __init__(self, input_size, hidden_size, num_layers, num_classes, output_activation='Softmax'):
+    def __init__(self, input_size, hidden_size, num_layers, num_classes, output_activation='Sigmoid'):
         super(VanillaLSTM, self).__init__()
         self.model_name='VanillaLSTM'
         self.hidden_size=hidden_size
@@ -65,7 +65,7 @@ class VanillaLSTM(nn.Module):
         return x, h0
 
 class VanillaGRU(nn.Module):
-    def __init__(self, input_size, hidden_size, num_layers, num_classes, output_activation='Softmax'):
+    def __init__(self, input_size, hidden_size, num_layers, num_classes, output_activation='Sigmoid'):
         super(VanillaGRU, self).__init__()
         self.model_name='VanillaLSTM'
         self.hidden_size=hidden_size

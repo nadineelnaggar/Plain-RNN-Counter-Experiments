@@ -289,18 +289,18 @@ def main():
         train_dataframes = []
         runs = []
         for i in range(num_runs):
-            model = select_model(model_name, input_size, hidden_size, num_layers, num_classes, output_activation)
+            model = select_model(model_name, input_size, hidden_size, num_layers, num_classes, output_activation='Sigmoid')
             # print(model.model_name)
             model.to(device)
 
             runs.append('run'+str(i))
             print('****************************************************************************\n')
-            train_accuracy, df = train(model, X_train, y_train)
+            train_accuracy, df = train(model, X_train[:100], y_train[:100])
             train_accuracies.append(train_accuracy)
             train_dataframes.append(df)
-            test_accuracy = test_model(model, X_test, y_test)
+            test_accuracy = test_model(model, X_test[:50], y_test[:50])
             test_accuracies.append(test_accuracy)
-            long_test_accuracy = test_model(model, X_long, y_long)
+            long_test_accuracy = test_model(model, X_long[:50], y_long[:50])
             long_test_accuracies.append(long_test_accuracy)
 
             with open(file_name, "a") as f:
