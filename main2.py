@@ -39,7 +39,7 @@ parser.add_argument('num_layers', type=int, help='number of layers', default=1)
 parser.add_argument('learning_rate', type=float, help='learning rate')
 parser.add_argument('num_epochs', type=int, help='number of training epochs')
 parser.add_argument('num_runs', type=int, help='number of training runs')
-parser.add_argument('load_model', type=bool, help='load previous model (True), train model from scratch (False)', default=False)
+parser.add_argument('load_model', type=int, help='load previous model (1), train model from scratch (0)', default=0)
 
 
 args = parser.parse_args()
@@ -265,7 +265,7 @@ def main():
 
     # print(train(model, X_train, y_train))
 
-    if load_model==False:
+    if load_model==0:
 
         with open(file_name, 'a') as f:
             f.write('Output activation = ' + output_activation + '\n')
@@ -348,7 +348,7 @@ def main():
             f.write('Average long test accuracy = ' + str(avg_long_test_accuracy) + '%\n')
             f.write('Standard Deviation for long test accuracy = ' + str(std_long_test_accuracy) + '\n')
 
-    elif load_model==True:
+    elif load_model==1:
         model = select_model(model_name, input_size, hidden_size, num_layers, num_classes, output_activation)
         model.load_state_dict(torch.load(modelname))
         test_accuracy = test_model(model, X_test, y_test)
