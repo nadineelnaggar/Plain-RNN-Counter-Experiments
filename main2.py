@@ -14,6 +14,7 @@ from Dyck_Generator_Suzgun import DyckLanguage
 # SUZUGUN EXPERIMENT RUN HERE
 
 device = torch.device("cuda" if torch.cuda.is_available() else 'cpu')
+print('device = ',device)
 
 NUM_PAR = 1
 MIN_SIZE = 2
@@ -292,13 +293,13 @@ def main():
             # print(model.model_name)
             model.to(device)
 
-            runs.append(i)
-            train_accuracy, df = train(model, X_train[:100], y_train[:100])
+            runs.append('run'+str(i))
+            train_accuracy, df = train(model, X_train, y_train)
             train_accuracies.append(train_accuracy)
             train_dataframes.append(df)
-            test_accuracy = test_model(model, X_test[:50], y_test[:50])
+            test_accuracy = test_model(model, X_test, y_test)
             test_accuracies.append(test_accuracy)
-            long_test_accuracy = test_model(model, X_long[:50], y_long[:50])
+            long_test_accuracy = test_model(model, X_long, y_long)
             long_test_accuracies.append(long_test_accuracy)
 
             with open(file_name, "a") as f:
@@ -446,6 +447,7 @@ def train(model, X, y):
                     f.write('////////////////////////////////////////\n')
                     f.write('input sentence = ' + str(X[i]) + '\n')
                     f.write('encoded sentence = '+str(input_seq)+'\n')
+
             loss = criterion(output_seq, target_seq)
             total_loss+=loss.item()
             loss.backward()
