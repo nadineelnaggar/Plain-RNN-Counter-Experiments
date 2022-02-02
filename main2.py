@@ -415,6 +415,7 @@ def train(model, X, y):
         total_loss = 0
         epoch_incorrect_guesses = []
         epoch_correct_guesses = []
+        epochs.append(epoch)
         if epoch==num_epochs-1:
             print_flag=True
         if print_flag == True:
