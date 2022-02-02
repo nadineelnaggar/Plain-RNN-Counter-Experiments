@@ -293,12 +293,12 @@ def main():
             model.to(device)
 
             runs.append(i)
-            train_accuracy, df = train(model, X_train, y_train)
+            train_accuracy, df = train(model, X_train[:100], y_train[:100])
             train_accuracies.append(train_accuracy)
             train_dataframes.append(df)
-            test_accuracy = test_model(model, X_test, y_test)
+            test_accuracy = test_model(model, X_test[:50], y_test[:50])
             test_accuracies.append(test_accuracy)
-            long_test_accuracy = test_model(model, X_long, y_long)
+            long_test_accuracy = test_model(model, X_long[:50], y_long[:50])
             long_test_accuracies.append(long_test_accuracy)
 
             with open(file_name, "a") as f:
