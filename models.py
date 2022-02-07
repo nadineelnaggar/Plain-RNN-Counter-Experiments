@@ -68,12 +68,13 @@ class VanillaRNN(nn.Module):
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 class VanillaLSTM(nn.Module):
-    def __init__(self, input_size, hidden_size, num_layers, output_size):
+    def __init__(self, input_size, hidden_size, num_layers, output_size, output_activation='Sigmoid'):
         super(VanillaLSTM, self).__init__()
         self.input_size = input_size
         self.hidden_size = hidden_size
         self.num_layers=num_layers
         self.output_size=output_size
+        self.output_activation=output_activation
         self.lstm = nn.LSTM(input_size, hidden_size, num_layers=num_layers)
         self.fc2 = nn.Linear(hidden_size, output_size)
         self.sigmoid = nn.Sigmoid()
