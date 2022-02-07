@@ -75,6 +75,7 @@ class VanillaLSTM(nn.Module):
         self.num_layers=num_layers
         self.output_size=output_size
         self.output_activation=output_activation
+        self.model_name='VanillaLSTM'
         self.lstm = nn.LSTM(input_size, hidden_size, num_layers=num_layers)
         self.fc2 = nn.Linear(hidden_size, output_size)
         self.sigmoid = nn.Sigmoid()
