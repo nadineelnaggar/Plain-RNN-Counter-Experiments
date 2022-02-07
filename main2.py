@@ -40,14 +40,14 @@ long_size = 5000
 Dyck = DyckLanguage(NUM_PAR, P_VAL, Q_VAL)
 
 parser = argparse.ArgumentParser()
-parser.add_argument('model_name', type=str, help='input model name (VanillaLSTM, VanillaRNN, VanillaGRU)')
-parser.add_argument('task', type=str, help='NextTokenPrediction, BinaryClassification, TernaryClassification')
-parser.add_argument('feedback', type=str, help='EveryTimeStep, EndofSequence')
-parser.add_argument('hidden_size', type=int, help='hidden size')
-parser.add_argument('num_layers', type=int, help='number of layers', default=1)
-parser.add_argument('learning_rate', type=float, help='learning rate')
-parser.add_argument('num_epochs', type=int, help='number of training epochs')
-parser.add_argument('num_runs', type=int, help='number of training runs')
+parser.add_argument('--model_name', type=str, help='input model name (VanillaLSTM, VanillaRNN, VanillaGRU)')
+parser.add_argument('--task', type=str, help='NextTokenPrediction, BinaryClassification, TernaryClassification')
+parser.add_argument('--feedback', type=str, help='EveryTimeStep, EndofSequence')
+parser.add_argument('--hidden_size', type=int, help='hidden size')
+parser.add_argument('--num_layers', type=int, help='number of layers', default=1)
+parser.add_argument('--learning_rate', type=float, help='learning rate')
+parser.add_argument('--num_epochs', type=int, help='number of training epochs')
+parser.add_argument('--num_runs', type=int, help='number of training runs')
 # parser.add_argument('load_model', type=int, help='load previous model (1), train model from scratch (0)', default=0)
 
 
@@ -433,10 +433,21 @@ def train(model, X, y):
     df1 = pd.DataFrame()
     print_flag = False
 
+    num_timesteps = 0
+
+    for elem in X:
+        num_timesteps+=len(elem)
+    print('num_timesteps = ',num_timesteps)
+
+
+
+
+
     model.zero_grad()
 
     for epoch in range(num_epochs):
         num_correct = 0
+        num_correct_timesteps = 0
         total_loss = 0
         epoch_incorrect_guesses = []
         epoch_correct_guesses = []
