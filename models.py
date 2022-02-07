@@ -77,6 +77,7 @@ class VanillaLSTM(nn.Module):
         self.output_activation=output_activation
         self.model_name='VanillaLSTM'
         self.lstm = nn.LSTM(input_size, hidden_size, num_layers=num_layers)
+        # self.lstm = nn.LSTM(input_size, hidden_size)
         self.fc2 = nn.Linear(hidden_size, output_size)
         self.sigmoid = nn.Sigmoid()
 
@@ -85,11 +86,11 @@ class VanillaLSTM(nn.Module):
         x, h0 = self.lstm(x, h0)
         x = self.fc2(x)
         x = self.sigmoid(x).view(-1, self.output_size)
-        return x
+        return x, h0
 
     def init_hidden(self):
-        return (torch.zeros(self.n_layers, 1, self.hidden_dim).to(device),
-                torch.zeros(self.n_layers, 1, self.hidden_dim).to(device))
+        return (torch.zeros(self.num_layers, 1, self.hidden_size).to(device),
+                torch.zeros(self.num_layers, 1, self.hidden_size).to(device))
 
 class VanillaGRU(nn.Module):
     def __init__(self, input_size, hidden_size, num_layers, num_classes, output_activation='Sigmoid'):

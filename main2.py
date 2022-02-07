@@ -315,12 +315,12 @@ def main():
 
         runs.append('run'+str(i))
         print('****************************************************************************\n')
-        train_accuracy, df = train(model, X_train, y_train)
+        train_accuracy, df = train(model, X_train[:100], y_train[:100])
         train_accuracies.append(train_accuracy)
         train_dataframes.append(df)
-        test_accuracy = test_model(model, X_test, y_test)
+        test_accuracy = test_model(model, X_test[:10], y_test[:10])
         test_accuracies.append(test_accuracy)
-        long_test_accuracy = test_model(model, X_long, y_long)
+        long_test_accuracy = test_model(model, X_long[:10], y_long[:10])
         long_test_accuracies.append(long_test_accuracy)
 
         with open(file_name, "a") as f:
@@ -423,6 +423,7 @@ def train(model, X, y):
     #     num_epochs) + 'epochs_' + '_PLOT.png'
 
     criterion = nn.MSELoss()
+    # learning_rate = args.learning_rate
     optimiser = optim.Adam(model.parameters(), lr=learning_rate)
     optimiser.zero_grad()
     losses = []
@@ -433,6 +434,8 @@ def train(model, X, y):
     df1 = pd.DataFrame()
     print_flag = False
 
+
+    print(model)
     num_timesteps = 0
 
     for elem in X:
@@ -443,7 +446,7 @@ def train(model, X, y):
 
 
 
-    model.zero_grad()
+    # model.zero_grad()
 
     for epoch in range(num_epochs):
         num_correct = 0
@@ -458,23 +461,37 @@ def train(model, X, y):
             with open(train_log, 'a') as f:
                 f.write('\nEPOCH ' + str(epoch) + '\n')
         for i in range(len(X)):
+            model.zero_grad()
             input_seq = Dyck.lineToTensor(X[i])
             target_seq = Dyck.lineToTensorSigmoid(y[i])
             len_seq = len(input_seq)
+            # len_seq = len(X[i])
+            # print(Dyck.lineToTensor(X[i][0]).shape)
             output_seq = torch.zeros(target_seq.shape)
 
             input_seq.to(device)
             target_seq.to(device)
             output_seq.to(device)
 
-            if model.model_name=='VanillaLSTM':
-                hidden = (torch.zeros(1,1, model.hidden_size).to(device), torch.zeros(1,1,model.hidden_size).to(device))
-            elif model.model_name=='VanillaRNN' or model.model_name=='VanillaGRU':
-                hidden = torch.zeros(1,1,model.hidden_size).to(device)
+            # if model.model_name=='VanillaLSTM':
+            #     hidden = (torch.zeros(1,1, model.hidden_size).to(device), torch.zeros(1,1,model.hidden_size).to(device))
+            # elif model.model_name=='VanillaRNN' or model.model_name=='VanillaGRU':
+            #     hidden = torch.zeros(1,1,model.hidden_size).to(device)
+
+            hidden = model.init_hidden()
+            # print(hidden.shape)
+            # print(input_seq.shape)
 
             for j in range(len_seq):
 
-                out, hidden = model(input_seq[j].to(device), hidden)
+                # out, hidden = model(input_seq[j].to(device), hidden)
+                # out, hidden = model(Dyck.lineToTensor(X[i][j]).to(device), hidden)
+
+                # inp = Dyck.lineToTensor(X[i][0][j])
+                # print(inp.shape)
+                # out, hidden = model(inp.to(device), hidden)
+                out, hidden = model(Dyck.lineToTensor(X[i][j]).to(device), hidden)
+
                 output_seq[j]=out
 
             if print_flag == True:
@@ -492,8 +509,8 @@ def train(model, X, y):
                 with open(train_log, 'a') as f:
                     f.write('actual output in train function = ' + str(output_seq) + '\n')
 
-            out_np = np.int_(output_seq.detach().numpy() >= epsilon)
-            target_np = np.int_(target_seq.detach().numpy())
+            out_np = np.int_(output_seq.detach().cpu().numpy() >= epsilon)
+            target_np = np.int_(target_seq.detach().cpu().numpy())
 
             if print_flag == True:
                 with open(train_log, 'a') as f:
@@ -501,6 +518,10 @@ def train(model, X, y):
                     f.write('target in train function = ' + str(target_np) + '\n')
 
 
+            # print('out_np = ',out_np)
+            # print('target_np = ',target_np)
+            # print('flattened output np = ',out_np.flatten())
+            # print('flattened target np = ', target_np.flatten())
             if np.all(np.equal(out_np, target_np)) and (out_np.flatten() == target_np.flatten()).all():
                 num_correct += 1
                 # correct_arr.append(X[i])
@@ -566,13 +587,16 @@ def test_model(model, X, y):
         target_seq.to(device)
         output_seq.to(device)
 
-        if model.model_name == 'VanillaLSTM':
-            hidden = (torch.zeros(1, 1, model.hidden_size).to(device), torch.zeros(1, 1, model.hidden_size).to(device))
-        elif model.model_name == 'VanillaRNN' or model.model_name == 'VanillaGRU':
-            hidden = torch.zeros(1, 1, model.hidden_size).to(device)
+        # if model.model_name == 'VanillaLSTM':
+        #     hidden = (torch.zeros(1, 1, model.hidden_size).to(device), torch.zeros(1, 1, model.hidden_size).to(device))
+        # elif model.model_name == 'VanillaRNN' or model.model_name == 'VanillaGRU':
+        #     hidden = torch.zeros(1, 1, model.hidden_size).to(device)
+
+        hidden = model.init_hidden()
 
         for j in range(len_seq):
-            out, hidden = model(input_seq[j].to(device), hidden)
+            # out, hidden = model(input_seq[j].to(device), hidden)
+            out, hidden = model(Dyck.lineToTensor(X[i][j]).to(device), hidden)
             output_seq[j] = out
 
         with open(log_file, 'a') as f:
