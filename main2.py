@@ -315,12 +315,12 @@ def main():
 
         runs.append('run'+str(i))
         print('****************************************************************************\n')
-        train_accuracy, df = train(model, X_train[:100], y_train[:100])
+        train_accuracy, df = train(model, X_train, y_train)
         train_accuracies.append(train_accuracy)
         train_dataframes.append(df)
-        test_accuracy = test_model(model, X_test[:10], y_test[:10])
+        test_accuracy = test_model(model, X_test, y_test)
         test_accuracies.append(test_accuracy)
-        long_test_accuracy = test_model(model, X_long[:10], y_long[:10])
+        long_test_accuracy = test_model(model, X_long, y_long)
         long_test_accuracies.append(long_test_accuracy)
 
         with open(file_name, "a") as f:
