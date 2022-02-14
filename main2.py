@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 from models import VanillaRNN, VanillaLSTM, VanillaGRU
 from Dyck_Generator_Suzgun import DyckLanguage
 import random
+from torch.utils.tensorboard import SummaryWriter
 
 import xlsxwriter
 
