@@ -11,11 +11,17 @@ from models import VanillaRNN, VanillaLSTM, VanillaGRU
 from Dyck_Generator_Suzgun import DyckLanguage
 import random
 from torch.utils.tensorboard import SummaryWriter
+# from tensorboardX import SummaryWriter
+
+import tensorflow as tf
+from tensorflow import summary
 
 import xlsxwriter
 
+# print(torch.__version__)
 
-log_dir='logs'
+
+log_dir="logs"
 sum_writer = SummaryWriter(log_dir)
 
 # SUZUGUN EXPERIMENT RUN HERE
@@ -440,6 +446,7 @@ def train(model, X, y):
     df1 = pd.DataFrame()
     print_flag = False
 
+    # global_step=0
 
     print(model)
     num_timesteps = 0
@@ -447,6 +454,8 @@ def train(model, X, y):
     for elem in X:
         num_timesteps+=len(elem)
     print('num_timesteps = ',num_timesteps)
+
+
 
 
 
@@ -489,7 +498,8 @@ def train(model, X, y):
             # print(input_seq.shape)
 
             for j in range(len_seq):
-
+                # sum_writer.add_graph(model, (Dyck.lineToTensor(X[i][j]),hidden))
+                # sum_writer.close()
                 # out, hidden = model(input_seq[j].to(device), hidden)
                 # out, hidden = model(Dyck.lineToTensor(X[i][j]).to(device), hidden)
 
@@ -547,8 +557,9 @@ def train(model, X, y):
         print('Accuracy for epoch ', epoch, '=', accuracy, '%')
         accuracies.append(accuracy)
         losses.append(total_loss/len(X))
-        sum_writer.add_scalar('epoch_losses', total_loss/len(X),0)
-        sum_writer.add_scalar('accuracy', accuracy, 0)
+        sum_writer.add_scalar('epoch_losses', total_loss/len(X),global_step=epoch)
+        sum_writer.add_scalar('accuracy', accuracy, global_step=epoch)
+        # global_step+=1
         sum_writer.close()
         all_epoch_incorrect_guesses.append(epoch_incorrect_guesses)
         correct_arr.append(epoch_correct_guesses)
