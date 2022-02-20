@@ -21,9 +21,9 @@ import xlsxwriter
 # print(torch.__version__)
 
 
-# log_dir="logs"
-log_dir = "/content/drive/MyDrive/PhD/EXPT_LOGS"
-sum_writer = SummaryWriter(log_dir)
+# # log_dir="logs"
+# log_dir = "/content/drive/MyDrive/PhD/EXPT_LOGS"
+# sum_writer = SummaryWriter(log_dir)
 
 # SUZUGUN EXPERIMENT RUN HERE
 
@@ -83,6 +83,11 @@ num_bracket_pairs = 25
 length_bracket_pairs = 50
 
 
+# log_dir="logs"
+log_dir = "/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_"+str(task)+"/"+model_name+"/logs"
+sum_writer = SummaryWriter(log_dir)
+
+path = "/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_"+str(task)+"/"+model_name+"/"
 
 print('model_name = ',model_name)
 print('task = ',task)
@@ -94,38 +99,38 @@ print('num_epochs = ',num_epochs)
 print('num_runs = ',num_runs)
 # print('load_model = ',load_model)
 
-file_name = 'Dyck1_' + task + '_' + str(
+file_name = path+ 'Dyck1_' + task + '_' + str(
         num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' + str(
         hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
-        num_epochs) + 'epochs_' + '.txt'
-excel_name = 'Dyck1_' + task + '_' + str(
+        num_epochs) + 'epochs_'+ str(num_runs)+'runs' + '.txt'
+excel_name = path+ 'Dyck1_' + task + '_' + str(
         num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' + str(
         hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
-        num_epochs) + 'epochs_' + '.xlsx'
-modelname = 'Dyck1_' + task + '_' + str(
+        num_epochs) + 'epochs_'+ str(num_runs)+'runs' + '.xlsx'
+modelname = path+ 'Dyck1_' + task + '_' + str(
         num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' + str(
         hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
-        num_epochs) + 'epochs_' + '_MODEL.pth'
-optimname = 'Dyck1_' + task + '_' + str(
+        num_epochs) + 'epochs_'+ str(num_runs)+'runs' + '_MODEL.pth'
+optimname = path+ 'Dyck1_' + task + '_' + str(
         num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' + str(
         hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
-        num_epochs) + 'epochs_' + '_OPTIMISER.pth'
-train_log = 'Dyck1_' + task + '_' + str(
+        num_epochs) + 'epochs_'+ str(num_runs)+'runs' + '_OPTIMISER.pth'
+train_log = path+ 'Dyck1_' + task + '_' + str(
         num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' + str(
         hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
-        num_epochs) + 'epochs_' + '_TRAIN_LOG.txt'
-test_log = 'Dyck1_' + task + '_' + str(
+        num_epochs) + 'epochs_'+ str(num_runs)+'runs' + '_TRAIN_LOG.txt'
+test_log = path+'Dyck1_' + task + '_' + str(
         num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' + str(
         hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
-        num_epochs) + 'epochs_' + '_TEST_LOG.txt'
-long_test_log = 'Dyck1_' + task + '_' + str(
+        num_epochs) + 'epochs_'+ str(num_runs)+'runs' + '_TEST_LOG.txt'
+long_test_log = path+'Dyck1_' + task + '_' + str(
         num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' + str(
         hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
-        num_epochs) + 'epochs_' + '_LONG_TEST_LOG.txt'
-plot_name = 'Dyck1_' + task + '_' + str(
+        num_epochs) + 'epochs_'+ str(num_runs)+'runs' + '_LONG_TEST_LOG.txt'
+plot_name = path+'Dyck1_' + task + '_' + str(
         num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' + str(
         hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
-        num_epochs) + 'epochs_' + '_PLOT.png'
+        num_epochs) + 'epochs_'+ str(num_runs)+'runs' + '_PLOT.png'
 
 
 def read_dataset(task):
