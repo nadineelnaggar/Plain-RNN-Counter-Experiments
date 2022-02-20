@@ -21,7 +21,8 @@ import xlsxwriter
 # print(torch.__version__)
 
 
-log_dir="logs"
+# log_dir="logs"
+log_dir = "../content/drive/MyDrive/EXPT_LOGS"
 sum_writer = SummaryWriter(log_dir)
 
 # SUZUGUN EXPERIMENT RUN HERE
