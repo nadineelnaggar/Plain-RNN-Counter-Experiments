@@ -327,12 +327,12 @@ def main():
 
         runs.append('run'+str(i))
         print('****************************************************************************\n')
-        train_accuracy, df = train(model, X_train, y_train)
+        train_accuracy, df = train(model, X_train[:200], y_train[:200])
         train_accuracies.append(train_accuracy)
         train_dataframes.append(df)
-        test_accuracy = test_model(model, X_test, y_test)
+        test_accuracy = test_model(model, X_test[:20], y_test[:20])
         test_accuracies.append(test_accuracy)
-        long_test_accuracy = test_model(model, X_long, y_long)
+        long_test_accuracy = test_model(model, X_long[:20], y_long[:20])
         long_test_accuracies.append(long_test_accuracy)
 
         with open(file_name, "a") as f:
