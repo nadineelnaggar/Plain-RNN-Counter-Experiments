@@ -474,6 +474,9 @@ def train(model, X, y, sum_writer):
 
     # model.zero_grad()
 
+    sum_writer.add_graph(model, Dyck.lineToTensor(X[0][0]))
+    sum_writer.close()
+
     for epoch in range(num_epochs):
         num_correct = 0
         num_correct_timesteps = 0
@@ -584,6 +587,11 @@ def train(model, X, y, sum_writer):
     df1['Total epoch losses'] = losses
     df1['epoch correct guesses'] = correct_arr
     df1['epoch incorrect guesses'] = all_epoch_incorrect_guesses
+
+    sum_writer.add_hparams({'dataset_size': len(X), 'num_epochs': epochs, 'learning_rate': learning_rate,
+                            'optimiser': optimiser, 'accuracies': accuracies, 'losses': losses,
+                            'epoch_correct_guesses':correct_arr, 'epoch_incorrect_guesses':all_epoch_incorrect_guesses})
+    sum_writer.close()
 
     torch.save(model.state_dict(), modelname)
     torch.save(optimiser.state_dict(), optimname)
