@@ -589,8 +589,7 @@ def train(model, X, y, sum_writer):
     df1['epoch incorrect guesses'] = all_epoch_incorrect_guesses
 
     sum_writer.add_hparams({'dataset_size': len(X), 'num_epochs': epochs, 'learning_rate': learning_rate,
-                            'optimiser': optimiser, 'accuracies': accuracies, 'losses': losses,
-                            'epoch_correct_guesses':correct_arr, 'epoch_incorrect_guesses':all_epoch_incorrect_guesses})
+                            'optimiser': optimiser, 'accuracies': accuracies, 'losses': losses})
     sum_writer.add_graph(model, (Dyck.lineToTensor(X[0][0], model.init_hidden())))
     sum_writer.close()
 
