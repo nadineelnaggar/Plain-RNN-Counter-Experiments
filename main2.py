@@ -590,7 +590,7 @@ def train(model, X, y, sum_writer):
 
     sum_writer.add_hparams({'model_name':model.model_name,'dataset_size': len(X), 'num_epochs': num_epochs, 'learning_rate': learning_rate,
                             'optimiser': use_optimiser}, {'accuracy': accuracy, 'loss': total_loss/len(X)})
-    sum_writer.add_graph(model, (Dyck.lineToTensor(X[0][0], model.init_hidden())))
+    sum_writer.add_graph(model, (Dyck.lineToTensor(X[0][0]), model.init_hidden()))
     sum_writer.close()
 
     torch.save(model.state_dict(), modelname)
