@@ -474,8 +474,8 @@ def train(model, X, y, sum_writer):
 
     # model.zero_grad()
 
-    sum_writer.add_graph(model, Dyck.lineToTensor(X[0][0]))
-    sum_writer.close()
+    # sum_writer.add_graph(model, Dyck.lineToTensor(X[0][0]))
+    # sum_writer.close()
 
     for epoch in range(num_epochs):
         num_correct = 0
