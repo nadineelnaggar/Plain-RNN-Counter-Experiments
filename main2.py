@@ -338,7 +338,7 @@ def main():
 
         runs.append('run'+str(i))
         print('****************************************************************************\n')
-        train_accuracy, df = train(model, X_train[:200], y_train[:200])
+        train_accuracy, df = train(model, X_train[:200], y_train[:200], sum_writer)
         train_accuracies.append(train_accuracy)
         train_dataframes.append(df)
         test_accuracy = test_model(model, X_test[:20], y_test[:20])
@@ -408,7 +408,7 @@ def main():
 
 
 
-def train(model, X, y):
+def train(model, X, y, sum_writer):
 
 
 
