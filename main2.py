@@ -83,9 +83,9 @@ num_bracket_pairs = 25
 length_bracket_pairs = 50
 
 
-# log_dir="logs"
-log_dir = "/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_"+str(task)+"/"+model_name+"/logs"
-sum_writer = SummaryWriter(log_dir)
+# # log_dir="logs"
+# log_dir = "/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_"+str(task)+"/"+model_name+"/logs"
+# sum_writer = SummaryWriter(log_dir)
 
 path = "/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_"+str(task)+"/"+model_name+"/"
 
@@ -330,6 +330,11 @@ def main():
         model = select_model(model_name, input_size, hidden_size, num_layers, num_classes, output_activation='Sigmoid')
         # print(model.model_name)
         model.to(device)
+
+        # log_dir="logs"
+        log_dir = "/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_" + str(task) + "/" + model_name + "/logs/run"+str(i)
+        sum_writer = SummaryWriter(log_dir)
+
 
         runs.append('run'+str(i))
         print('****************************************************************************\n')
