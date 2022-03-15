@@ -554,7 +554,7 @@ def test_model(model, loader, dataset):
         with open(log_file, 'a') as f:
             f.write('////////////////////////////////////////\n')
             f.write('input batch = ' + str(ds[i * batch_size:i * batch_size + batch_size]['x']) + '\n')
-            f.write('encoded batch = ' + str(loader[i]) + '\n')
+            f.write('encoded batch = ' + str(input_seq) + '\n')
 
         output_seq = model.mask(output_seq, target_seq, length)
 
