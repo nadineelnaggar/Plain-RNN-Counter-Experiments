@@ -8,7 +8,7 @@ import numpy as np
 import argparse
 import matplotlib.pyplot as plt
 from models_batch import VanillaLSTM, VanillaRNN, VanillaGRU
-from Dyck_Generator_Suzgun import DyckLanguage
+from Dyck_Generator_Suzgun_Batch import DyckLanguage
 import random
 from torch.utils.tensorboard import SummaryWriter
 # from tensorboardX import SummaryWriter
