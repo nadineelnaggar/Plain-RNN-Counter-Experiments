@@ -294,6 +294,8 @@ def main():
     for i in range(num_runs):
         torch.manual_seed(i)
         np.random.seed(i)
+        with open(train_log, 'a') as f:
+            f.write('random seed for run '+str(i)+' = '+str(i)+'\n')
         model = select_model(model_name, input_size, hidden_size, num_layers, batch_size, num_classes, output_activation='Sigmoid')
         # print(model.model_name)
         model.to(device)
