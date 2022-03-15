@@ -43,7 +43,7 @@ class VanillaLSTM(nn.Module):
 
         x = self.sigmoid(x).view(-1, self.output_size)
 
-        return x, h0
+        return x
 
     def init_hidden(self):
         return (torch.zeros(self.num_layers, self.batch_size, self.hidden_size).to(device),
@@ -118,7 +118,7 @@ class VanillaRNN(nn.Module):
 
         x = self.sigmoid(x).view(-1, self.output_size)
 
-        return x, h0
+        return x
 
     def init_hidden(self):
         return torch.zeros(self.num_layers, self.batch_size, self.hidden_size).to(device)
@@ -192,7 +192,7 @@ class VanillaGRU(nn.Module):
 
         x = self.sigmoid(x).view(-1, self.output_size)
 
-        return x, h0
+        return x
 
     def init_hidden(self):
         return torch.zeros(self.num_layers, self.batch_size, self.hidden_size).to(device)
