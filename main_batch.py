@@ -139,7 +139,7 @@ with open(long_test_log, 'w') as f:
 def encode_batch(sentences, labels, lengths, batch_size):
 
     max_length = max(lengths)
-    print(max_length)
+    # print(max_length)
     sentence_tensor = torch.zeros(batch_size,max_length,len(vocab))
 
     labels_tensor = torch.tensor([])
@@ -157,7 +157,7 @@ def encode_batch(sentences, labels, lengths, batch_size):
                 sentence_tensor[i][index][pos]=1
     sentence_tensor.requires_grad_(True)
     lengths_tensor = torch.tensor(lengths, dtype=torch.long)
-    print('labels tensor = ',labels_tensor)
+    # print('labels tensor = ',labels_tensor)
     return sentence_tensor, labels_tensor, lengths_tensor
 
 
@@ -165,7 +165,7 @@ def collate_fn(batch):
 
     sentences = [batch[i]['x'] for i in range(len(batch))]
     labels = [batch[i]['y'] for i in range(len(batch))]
-    print('labels in collate function  = ',labels)
+    # print('labels in collate function  = ',labels)
     lengths = [len(sentence) for sentence in sentences]
 
     sentences.sort(key=len, reverse=True)
