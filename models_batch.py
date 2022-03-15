@@ -65,7 +65,7 @@ class VanillaLSTM(nn.Module):
         # create a mask by filtering out all tokens that ARE NOT the padding token
         tag_pad_token = self.tags['<PAD>']
         mask = (Y > tag_pad_token).float()
-
+        print(mask.shape)
 
 
         # count how many tokens we have
