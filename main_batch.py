@@ -173,7 +173,8 @@ def collate_fn(batch):
     lengths.sort(reverse=True)
 
 
-    seq_tensor, labels_tensor, lengths_tensor = encode_batch(sentences, labels,lengths, batch_size=len(sentences))
+    # seq_tensor, labels_tensor, lengths_tensor = encode_batch(sentences, labels,lengths, batch_size=len(sentences))
+    seq_tensor, labels_tensor, lengths_tensor = encode_batch(sentences, labels, lengths, batch_size=batch_size)
 
 
     return seq_tensor.to(device), labels_tensor.to(device), lengths_tensor.to(device)

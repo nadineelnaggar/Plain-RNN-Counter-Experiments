@@ -473,8 +473,15 @@ for i, (seq, target_seq, length) in enumerate(train_loader2):
     print('seq = ',seq)
     print('label = ', target_seq)
     print('length = ',length)
+    print('seq length = ',seq.shape)
+    # out, _ = model(seq,model.init_hidden(), length)
+    # print('out = ',out)
+    # print('out.shape = ', out.shape)
+    print('target seq length = ', target_seq.shape)
     # output_seq = model(seq, model.init_hidden(), length)
-    break
+    # break
+    if i == 5:
+        break
 
 #
 # epsilon=0.5
