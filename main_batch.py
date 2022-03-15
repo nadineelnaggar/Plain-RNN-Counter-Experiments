@@ -43,15 +43,15 @@ batch_size = args.batch_size
 # load_model = args.load_model
 
 
-model_name = 'VanillaLSTM'
-task = 'NextTokenPrediction'
-feedback='EveryTimeStep'
-hidden_size = 3
-num_layers = 1
-learning_rate = 0.01
-num_epochs = 5
-num_runs = 10
-batch_size = 100
+# model_name = 'VanillaLSTM'
+# task = 'NextTokenPrediction'
+# feedback='EveryTimeStep'
+# hidden_size = 3
+# num_layers = 1
+# learning_rate = 0.01
+# num_epochs = 5
+# num_runs = 10
+# batch_size = 100
 
 
 use_optimiser='Adam'
@@ -299,7 +299,7 @@ def main():
         model.to(device)
 
         # log_dir="logs"
-        log_dir = "/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_" + str(task) + "/" + model_name + "/logs/run"+str(i)
+        log_dir = "/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_" + str(task) + "/Minibatch_Training/" + model_name + "/logs/run"+str(i)
         sum_writer = SummaryWriter(log_dir)
 
 
