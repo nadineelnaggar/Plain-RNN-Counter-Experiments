@@ -419,7 +419,7 @@ def train(model, loader, sum_writer):
                 with open(train_log, 'a') as f:
                     f.write('////////////////////////////////////////\n')
                     f.write('input batch = ' + str(train_dataset[i*batch_size:i*batch_size+batch_size]['x']) + '\n')
-                    f.write('encoded batch = '+str(loader[i])+'\n')
+                    f.write('encoded batch = '+str(input_seq)+'\n')
 
             # print(output_seq.shape)
             output_seq=model.mask(output_seq, target_seq, length)
