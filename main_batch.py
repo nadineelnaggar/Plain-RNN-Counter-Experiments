@@ -185,12 +185,12 @@ train_dataset = NextTokenPredictionTrainDataset()
 test_dataset = NextTokenPredictionShortTestDataset()
 long_dataset = NextTokenPredictionLongTestDataset()
 
-# train_loader = DataLoader(train_dataset,batch_size=batch_size, shuffle=False, collate_fn=collate_fn)
-# test_loader = DataLoader(test_dataset,batch_size=batch_size, shuffle=False, collate_fn=collate_fn)
-# long_loader = DataLoader(long_dataset, batch_size=batch_size, shuffle=False, collate_fn=collate_fn)
+train_loader = DataLoader(train_dataset,batch_size=batch_size, shuffle=False, collate_fn=collate_fn)
+test_loader = DataLoader(test_dataset,batch_size=batch_size, shuffle=False, collate_fn=collate_fn)
+long_loader = DataLoader(long_dataset, batch_size=batch_size, shuffle=False, collate_fn=collate_fn)
 
 
-train_loader = DataLoader(train_dataset,batch_size=batch_size, shuffle=False)
+# train_loader = DataLoader(train_dataset,batch_size=batch_size, shuffle=False)
 
 
 def select_model(model_name, input_size, hidden_size, num_layers,batch_size, num_classes, output_activation):
