@@ -189,9 +189,8 @@ long_dataset = NextTokenPredictionLongTestDataset()
 # test_loader = DataLoader(test_dataset,batch_size=batch_size, shuffle=False, collate_fn=collate_fn)
 # long_loader = DataLoader(long_dataset, batch_size=batch_size, shuffle=False, collate_fn=collate_fn)
 
+
 train_loader = DataLoader(train_dataset,batch_size=batch_size, shuffle=False)
-test_loader = DataLoader(test_dataset,batch_size=batch_size, shuffle=False)
-long_loader = DataLoader(long_dataset, batch_size=batch_size, shuffle=False)
 
 
 def select_model(model_name, input_size, hidden_size, num_layers,batch_size, num_classes, output_activation):
@@ -375,7 +374,7 @@ def train(model, loader, sum_writer):
         for i, (input_seq, target_seq, length) in enumerate(loader):
             model.zero_grad()
             # output_seq = torch.zeros(target_seq.shape)
-            output_seq = model(input_seq, length)
+            output_seq = model(input_seq.to(device), length)
             # output_seq[i] = out
             print('output seq = ',output_seq)
             print('output seq shape = ',output_seq.shape)
