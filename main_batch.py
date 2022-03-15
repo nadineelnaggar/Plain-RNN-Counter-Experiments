@@ -379,7 +379,7 @@ def train(model, loader, sum_writer):
                     f.write('input batch = ' + str(train_dataset[i*batch_size:i*batch_size+batch_size]['x']) + '\n')
                     f.write('encoded batch = '+str(loader[i])+'\n')
 
-
+            print(output_seq.shape)
             output_seq=model.mask(output_seq, target_seq, length)
             loss = criterion(output_seq, target_seq)
             total_loss += loss.item()
