@@ -60,7 +60,7 @@ class VanillaLSTM(nn.Module):
 
         # flatten all predictions
 
-        print('Y_hat = ,',Y_hat)
+        # print('Y_hat = ,',Y_hat)
 
         # create a mask by filtering out all tokens that ARE NOT the padding token
         tag_pad_token = self.tags['<PAD>']
@@ -134,7 +134,7 @@ class VanillaRNN(nn.Module):
 
         # flatten all predictions
 
-        print('Y_hat = ,',Y_hat)
+        # print('Y_hat = ,',Y_hat)
 
         # create a mask by filtering out all tokens that ARE NOT the padding token
         tag_pad_token = self.tags['<PAD>']
@@ -208,7 +208,7 @@ class VanillaGRU(nn.Module):
 
         # flatten all predictions
 
-        print('Y_hat = ,',Y_hat)
+        # print('Y_hat = ,',Y_hat)
 
         # create a mask by filtering out all tokens that ARE NOT the padding token
         tag_pad_token = self.tags['<PAD>']
