@@ -42,6 +42,18 @@ num_runs = args.num_runs
 batch_size = args.batch_size
 # load_model = args.load_model
 
+
+model_name = 'VanillaLSTM'
+task = 'NextTokenPrediction'
+feedback='EveryTimeStep'
+hidden_size = 3
+num_layers = 1
+learning_rate = 0.01
+num_epochs = 5
+num_runs = 10
+batch_size = 100
+
+
 use_optimiser='Adam'
 
 num_bracket_pairs = 25
@@ -146,7 +158,8 @@ def encode_batch(sentences, labels, lengths, batch_size):
     for i in range(batch_size):
 
         sentence = sentences[i]
-        labels_tensor = torch.cat((labels_tensor,Dyck.batchToTensorSigmoid(labels,lengths,batch_size,max_length)))
+        labels_tensor = torch.cat((labels_tensor, Dyck.lineToTensorSigmoid(labels[i],max_len=max_length)))
+        # labels_tensor = torch.cat((labels_tensor,Dyck.batchToTensorSigmoid(labels,lengths,batch_size,max_length)))
         if len(sentence)<max_length:
             for index, char in enumerate(sentence):
                 pos = vocab.index(char)
@@ -201,6 +214,28 @@ def select_model(model_name, input_size, hidden_size, num_layers,batch_size, num
     elif model_name=='VanillaGRU':
         model = VanillaGRU(input_size,hidden_size, num_layers, batch_size, num_classes, output_activation=output_activation)
     return model.to(device)
+
+
+# print(Dyck.lineToTensorSigmoid('1110'))
+# model = select_model(model_name, input_size=n_letters, hidden_size=hidden_size, num_layers=num_layers,
+#                      batch_size=batch_size, num_classes=n_letters, output_activation='Sigmoid')
+#
+# for i, (input_seq, target_seq, length) in enumerate(train_loader):
+#     print('input_seq = ', input_seq)
+#     print('target seq = ',target_seq)
+#     print('lengths = ', length)
+#     print('input seq shape = ', input_seq.shape)
+#     print('target seq shape = ', target_seq.shape)
+#     print('length shape = ', length.shape)
+#     out = model(input_seq.to(device), length)
+#     print(out)
+#     print('out.shape = ',out.shape)
+#     out = model.mask(out, target_seq, length)
+#     print(out)
+#     break
+
+
+
 
 
 
