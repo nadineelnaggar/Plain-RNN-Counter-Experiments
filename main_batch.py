@@ -409,7 +409,7 @@ def train(model, loader, sum_writer):
         for i, (input_seq, target_seq, length) in enumerate(loader):
             model.zero_grad()
             # output_seq = torch.zeros(target_seq.shape)
-            output_seq = model(torch.tensor(input_seq).to(device), int(length))
+            output_seq = model(input_seq.to(device), length)
             # output_seq[i] = out
             print('output seq = ',output_seq)
             print('output seq shape = ',output_seq.shape)
