@@ -2,7 +2,29 @@ import torch
 import torch.nn as nn
 import numpy as np
 from torch.utils.data import Dataset,DataLoader
+from Dyck_Generator_Suzgun_Batch import DyckLanguage
 
+vocab2 = ['(',')']
+
+def encode_sentence_onehot(sentence, dataset='short'):
+    max_length = 50
+    # seq_lengths = [len(sentence) for sentence in sentences]
+    # print(seq_lengths)
+    # max_length = max(seq_lengths)
+    # print(max_length)
+    rep = torch.zeros(1,max_length,len(vocab2))
+    lengths = []
+
+
+    for index, char in enumerate(sentence):
+        pos = vocab2.index(char)
+        rep[0][index][pos] = 1
+
+    rep.requires_grad_(True)
+    return rep
+
+
+Dyck = DyckLanguage(1,0.5, 0.25)
 
 class NextTokenPredictionTrainDataset(Dataset):
     def __init__(self):
@@ -24,6 +46,13 @@ class NextTokenPredictionTrainDataset(Dataset):
 
         self.x = self.x[:10000]
         self.y = self.y[:10000]
+
+        self.x_tensor = []
+        self.y_tensor = []
+        for i in range(len(self.x)):
+            self.x_tensor.append(encode_sentence_onehot(self.x[i]))
+            self.y_tensor.append(Dyck.lineToTensorSigmoid(self.y[i], max_len=50))
+
         self.lengths = self.lengths[:10000]
         self.n_samples = len(self.x)
 
@@ -31,7 +60,7 @@ class NextTokenPredictionTrainDataset(Dataset):
 
     def __getitem__(self, index):
         # return self.x[index], self.y[index]
-        return {'x': self.x[index], 'y': self.y[index], 'length': self.lengths[index]}
+        return {'x': self.x_tensor[index], 'y': self.y_tensor[index], 'length': self.lengths[index]}
         # return {'x':self.x[index], 'y':self.y[index]}
 
     def __len__(self):
