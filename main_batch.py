@@ -125,6 +125,16 @@ plot_name = path+'Dyck1_' + task + '_' + str(
         hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
         num_epochs) + 'epochs_'+ str(num_runs)+'runs' + '_PLOT.png'
 
+with open(file_name, 'w') as f:
+    f.write('\n')
+
+with open(train_log, 'w') as f:
+    f.write('\n')
+
+with open(test_log, 'w') as f:
+    f.write('\n')
+with open(long_test_log, 'w') as f:
+    f.write('\n')
 
 def encode_batch(sentences, labels, lengths, batch_size):
 
