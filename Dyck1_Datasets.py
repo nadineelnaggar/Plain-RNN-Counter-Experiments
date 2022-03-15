@@ -60,7 +60,7 @@ class NextTokenPredictionTrainDataset(Dataset):
 
     def __getitem__(self, index):
         # return self.x[index], self.y[index]
-        return {'x': torch.tensor(self.x_tensor[index],dtype=torch.float32), 'y': torch.tensor(self.y_tensor[index], dtype=torch.float32), 'length': self.lengths[index]}
+        return {'x': torch.tensor(self.x_tensor[index],dtype=torch.float32), 'y': torch.tensor(self.y_tensor[index], dtype=torch.float32), 'length': torch.tensor(self.lengths[index])}
         # return {'x':self.x[index], 'y':self.y[index]}
 
     def __len__(self):
