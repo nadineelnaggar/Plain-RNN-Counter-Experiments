@@ -411,10 +411,10 @@ def train(model, loader, sum_writer):
             # output_seq = torch.zeros(target_seq.shape)
             output_seq = model(input_seq.to(device), length)
             # output_seq[i] = out
-            print('output seq = ',output_seq)
-            print('output seq shape = ',output_seq.shape)
-            print('target seq = ',target_seq)
-            print('target seq shape = ',target_seq.shape)
+            # print('output seq = ',output_seq)
+            # print('output seq shape = ',output_seq.shape)
+            # print('target seq = ',target_seq)
+            # print('target seq shape = ',target_seq.shape)
             if print_flag == True:
                 with open(train_log, 'a') as f:
                     f.write('////////////////////////////////////////\n')
