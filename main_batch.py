@@ -492,7 +492,8 @@ def train(model, loader, sum_writer):
                             'learning_rate': learning_rate, 'batch_size':batch_size,
                             'optimiser': use_optimiser}, {'accuracy': accuracy, 'loss': total_loss/len(train_dataset)})
     # sum_writer.add_graph(model, (Dyck.lineToTensor(X[0][0]), model.init_hidden()))
-    sum_writer.add_graph(model, loader[0])
+    # sum_writer.add_graph(model, loader[0])
+    sum_writer.add_graph(model, input_seq)
     sum_writer.close()
 
     torch.save(model.state_dict(), modelname)
