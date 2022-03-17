@@ -451,7 +451,7 @@ def main():
     # runs = []
 
     model = select_model(model_name, input_size,hidden_size,num_layers,batch_size,num_classes,output_activation)
-    model.load_state_dict(modelname)
+    model.load_state_dict(torch.load(modelname))
     model.to(device)
 
     test_accuracy = test_model(model, test_loader, 'short')
