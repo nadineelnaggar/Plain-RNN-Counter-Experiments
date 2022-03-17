@@ -450,7 +450,7 @@ def main():
     # train_dataframes = []
     # runs = []
 
-    model = torch.load(modelname)
+    model = torch.load_state_dict(modelname)
     model.to(device)
 
     test_accuracy = test_model(model, test_loader, 'short')
