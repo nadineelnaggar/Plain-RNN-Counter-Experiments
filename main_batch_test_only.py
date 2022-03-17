@@ -69,8 +69,8 @@ vocab = ['(', ')']
 tags = {'':0, '0':1, '1':2}
 n_letters= len(vocab)
 n_tags = len(tags)-1
-num_bracket_pairs = 250
-length_bracket_pairs = 500
+num_bracket_pairs = 25
+length_bracket_pairs = 50
 
 # batch_size = 4
 
@@ -85,9 +85,9 @@ Q_VAL = 0.25
 
 epsilon=0.5
 
-train_size = 10000
-test_size = 5000
-long_size = 5000
+# train_size = 10000
+test_size = 10000
+long_size = 10000
 
 Dyck = DyckLanguage(NUM_PAR, P_VAL, Q_VAL)
 
