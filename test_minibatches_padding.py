@@ -270,6 +270,7 @@ class VanillaLSTM(nn.Module):
         # create a mask by filtering out all tokens that ARE NOT the padding token
         tag_pad_token = self.tags['<PAD>']
         mask = (Y > tag_pad_token).float()
+
         print(mask)
 
 
@@ -297,6 +298,66 @@ class VanillaLSTM(nn.Module):
         #
         # return ce_loss
         return Y_hat
+        # return torch.tensor([Y_hat2])
+
+    def mask2(self, Y_hat, Y, X_lengths):
+        # TRICK 3 ********************************
+        # before we calculate the negative log likelihood, we need to mask out the activations
+        # this means we don't want to take into account padded items in the output vector
+        # simplest way to think about this is to flatten ALL sequences into a REALLY long sequence
+        # and calculate the loss on that.
+
+        # flatten all the labels
+        # Y = Y.view(-1)
+        # print('Y = ',Y)
+        # print(len(Y))
+
+        # flatten all predictions
+        # Y_hat = Y_hat.view(-1, self.nb_tags)
+        print('Y_hat = ,',Y_hat)
+        Y_hat_out = torch.zeros(Y_hat.shape)
+        print('Y_hat_out = ',Y_hat_out)
+        max_batch_length = max(X_lengths)
+
+        # for i in range(Y_hat.shape[0]):
+        #     for j in range(self.batch_size):
+
+        for i in range(self.batch_size):
+            # for j in range(Y_hat.shape[0]):
+            Y_hat_out[i*max_batch_length:(i*max_batch_length+X_lengths[i])] = Y_hat[i*max_batch_length:(i*max_batch_length+X_lengths[i])]
+
+
+        # create a mask by filtering out all tokens that ARE NOT the padding token
+        # tag_pad_token = self.tags['<PAD>']
+        # mask = (Y > tag_pad_token).float()
+        #
+        # print(mask)
+
+
+        # count how many tokens we have
+        # nb_tokens = int(torch.sum(mask).data[0])
+        # nb_tokens = int(torch.sum(mask).item())
+        # nb_tokens = int(torch.sum(mask))
+        # print(nb_tokens)
+
+        # pick the values for the label and zero out the rest with the mask
+        print(Y_hat.shape[0])
+        # Y_hat2 = torch.tensor([])
+        Y_hat2=[]
+        # for i in range(Y_hat.shape[0]):
+        #     # Y_hat[i] = Y_hat[i]*mask[i]
+        #     Y_hat2.append(Y_hat[i]*mask[i])
+
+        # print(Y_hat)
+
+        # Y_hat = Y_hat[range(Y_hat.shape[0]), Y] * mask
+        # Y_hat = Y_hat[range(Y_hat.shape[0])] * mask
+
+        # compute cross entropy loss which ignores all <PAD> tokens
+        # ce_loss = -torch.sum(Y_hat) / nb_tokens
+        #
+        # return ce_loss
+        return Y_hat_out
         # return torch.tensor([Y_hat2])
 
 
@@ -355,13 +416,20 @@ print('targets_enc = ',targets_enc)
 
 # print(model.mask(out, targets_enc,lengths2))
 
-out = model.mask(out, targets_enc, lengths2)
-print(out)
+out2 = model.mask(out, targets_enc, lengths2)
+print(out2)
 
-criterion = nn.MSELoss()
-loss = criterion(out, targets_enc)
-print(loss)
-loss.backward()
+# criterion = nn.MSELoss()
+# loss = criterion(out2, targets_enc)
+# print(loss)
+# loss.backward()
+
+out3 = model.mask2(out, targets_enc, lengths2)
+print('out3 = ',out3)
+criterion2 = nn.MSELoss()
+loss2 = criterion2(out3,targets_enc)
+print('loss2 = ',loss2)
+loss2.backward()
 
 
 def encode_batch(sentences, labels, lengths, batch_size, dataset='short'):
