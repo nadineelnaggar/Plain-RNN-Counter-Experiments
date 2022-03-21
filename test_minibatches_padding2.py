@@ -231,21 +231,21 @@ class BieberLSTM(nn.Module):
         # create a mask by filtering out all tokens that ARE NOT the padding token
         tag_pad_token = self.tags['<PAD>']
         mask = (Y > tag_pad_token).float()
-        print(mask)
+        print('mask = ',mask)
 
 
         # count how many tokens we have
         # nb_tokens = int(torch.sum(mask).data[0])
         nb_tokens = int(torch.sum(mask).item())
         # nb_tokens = int(torch.sum(mask))
-        print(nb_tokens)
+        print('nb_tokens = ',nb_tokens)
 
         # pick the values for the label and zero out the rest with the mask
-        print(Y_hat.shape[0])
+        print('Y_hat.shape[0] = ',Y_hat.shape[0])
 
         for i in range(Y_hat.shape[0]):
             Y_hat[i] = Y_hat[i]*mask[i]
-        # print(Y_hat)
+        print(Y_hat)
 
         # Y_hat = Y_hat[range(Y_hat.shape[0]), Y] * mask
 
@@ -261,8 +261,16 @@ model = BieberLSTM(nb_layers=1)
 model_input = torch.tensor(padded_X, dtype=torch.long)
 out = model(model_input, X_lengths)
 # out = model(X, X_lengths)
+print('out = ')
 print(out)
+print('padded_Y = ')
 print(torch.tensor(padded_Y))
 tensor_padded_Y = torch.tensor(padded_Y, dtype=torch.long)
-print(model.loss(out, tensor_padded_Y, X_lengths))
+print('tensor_padded_Y = ',tensor_padded_Y)
+# print(model.loss(out, tensor_padded_Y, X_lengths))
 # print(model.loss(out, torch.tensor(padded_Y,dtype=torch.float32), X_lengths))
+masked_out = model.loss(out, tensor_padded_Y, X_lengths)
+criterion = nn.MSELoss()
+# loss = criterion(out, tensor_padded_Y)
+# print(loss)
+# loss.backward()
