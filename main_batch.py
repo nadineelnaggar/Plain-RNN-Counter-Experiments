@@ -426,6 +426,7 @@ def train(model, loader, sum_writer):
             # print(output_seq.shape)
             output_seq=model.mask(output_seq, target_seq, length)
             loss = criterion(output_seq, target_seq)
+            print('loss = ',loss)
             total_loss += loss.item()
             loss.backward()
             optimiser.step()
