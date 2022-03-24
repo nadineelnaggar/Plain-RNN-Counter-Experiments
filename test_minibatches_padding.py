@@ -439,7 +439,37 @@ criterion2 = nn.MSELoss()
 loss2 = criterion2(out3,targets_enc)
 print('loss2 = ',loss2)
 loss2.backward()
+out3 = out3.view(batch_size, length[0], n_letters)
+targets_enc = targets_enc.view(batch_size, length[0], n_letters)
 
+
+out3_np = np.int_(out3.detach().cpu().numpy() >= 0.5)
+target_np = np.int_(targets_enc.detach().cpu().numpy())
+
+print('out3_np = ',out3_np)
+print('target_np = ',target_np)
+
+num_correct = 0
+for j in range(batch_size):
+    # print('out_np[j] = ',out_np[j])
+    # print('out_np[j].shape = ',out_np[j].shape)
+    # print('target_np[j] = ',target_np[j])
+    # print('target_np[j].shape = ',target_np[j].shape)
+
+
+
+    # if np.equal(out_np[j].all(), target_np[j].all()).all():
+    if np.array_equal(out3_np[j], target_np[j]):
+        # print('output_np[j] = target_np[j]')
+        print('out3_np[',j,'] = target_np[',j,']')
+        #     count+=1
+        #     print('count correct = ',count)
+        # print('np.all(np.equal(out_np[j], target_np[j])) = ',np.all(np.equal(out_np[j],target_np[j])))
+        # if np.all(np.equal(out_np[j], target_np[j])):
+        # if np.all(np.equal(out_np[j], target_np[j])):
+        # if np.all(np.equal(out_np[j], target_np[j])) and (out_np[j].flatten() == target_np[j].flatten()).all():
+        num_correct += 1
+print('num_correct = ',num_correct)
 
 def encode_batch(sentences, labels, lengths, batch_size, dataset='short'):
     # max_length = 50

@@ -469,9 +469,9 @@ def train(model, loader, sum_writer):
                 # print('target_np[j] = ',target_np[j])
                 # print('target_np[j].shape = ',target_np[j].shape)
 
-
+                if np.array_equal(out_np[j],target_np[j]):
                 # if np.equal(out_np[j].all(), target_np[j].all()).all():
-                if out_np[j].all()==target_np[j].all():
+                # if out_np[j].all()==target_np[j].all():
                     # print('output_np[j] = target_np[j]')
                 #     count+=1
                 #     print('count correct = ',count)
@@ -612,7 +612,8 @@ def test_model(model, loader, dataset):
 
         for j in range(batch_size):
 
-            if out_np[j].all() == target_np[j].all():
+            if np.array_equal(out_np[j],target_np[j]):
+            # if out_np[j].all() == target_np[j].all():
             # if np.all(np.equal(out_np[j], target_np[j])) and (out_np[j].flatten() == target_np[j].flatten()).all():
                 num_correct += 1
 
