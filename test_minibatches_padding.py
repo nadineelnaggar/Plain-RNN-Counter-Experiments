@@ -442,20 +442,31 @@ loss2.backward()
 out3 = out3.view(batch_size, length[0], n_letters)
 targets_enc = targets_enc.view(batch_size, length[0], n_letters)
 
+print('out3 = ',out3)
+print('targets_enc = ',targets_enc)
 
 out3_np = np.int_(out3.detach().cpu().numpy() >= 0.5)
 target_np = np.int_(targets_enc.detach().cpu().numpy())
 
 print('out3_np = ',out3_np)
 print('target_np = ',target_np)
+out4_np = np.copy(target_np)
+out4_np[0,0]=0
+print('out4_np = ',out4_np)
+
 
 num_correct = 0
+num_correct2 = 0
 for j in range(batch_size):
     # print('out_np[j] = ',out_np[j])
     # print('out_np[j].shape = ',out_np[j].shape)
     # print('target_np[j] = ',target_np[j])
     # print('target_np[j].shape = ',target_np[j].shape)
-
+    if np.array_equal(out4_np[j], target_np[j]):
+        print('out4_np[', j, '] = target_np[', j, ']')
+        print('out4_np[j] = ',out4_np[j])
+        print('target_np[j] = ',target_np[j])
+        num_correct2+=1
 
 
     # if np.equal(out_np[j].all(), target_np[j].all()).all():
@@ -470,6 +481,7 @@ for j in range(batch_size):
         # if np.all(np.equal(out_np[j], target_np[j])) and (out_np[j].flatten() == target_np[j].flatten()).all():
         num_correct += 1
 print('num_correct = ',num_correct)
+print('num_correct2 = ',num_correct2)
 
 def encode_batch(sentences, labels, lengths, batch_size, dataset='short'):
     # max_length = 50
@@ -580,9 +592,9 @@ epsilon=0.5
 model_ = VanillaLSTM(input_size=2, hidden_size=3, batch_size=2, num_layers=1, output_size=2, output_activation='Sigmoid')
 for i, (seq, target_seq, length) in enumerate(train_loader2):
     num_correct = 0
-    print('seq = ',seq)
+    # print('seq = ',seq)
     print('input_seq shape = ',seq.shape)
-    print('label = ', target_seq)
+    # print('label = ', target_seq)
     print('label shape = ',target_seq.shape)
     print('length = ',length)
     print('seq length = ',seq.shape)
@@ -591,34 +603,34 @@ for i, (seq, target_seq, length) in enumerate(train_loader2):
     # print('out.shape = ', out.shape)
     print('target seq length = ', target_seq.shape)
 
-    # print('length = ',length)
-
-    # output_seq = model(seq, model.init_hidden(), length)
-    # break
-    output_seq, _ = model_(seq, model_.init_hidden(), length)
-    print('output_seq.shape before mask = ',output_seq.shape)
-    output_seq = model_.mask2(output_seq,target_seq,length)
-    print('output_seq.shape after mask = ',output_seq.shape)
-    # output_seq = output_seq.view(batch_size, length[0], n_letters)
-    # target_seq = target_seq.view(batch_size, length[0], n_letters)
-
-    print('output_seq.shape = ',output_seq.shape)
-    print('target_seq.shape = ',target_seq.shape)
-
-    out_np = np.int_(output_seq.detach().cpu().numpy() >= epsilon)
-    target_np = np.int_(target_seq.detach().cpu().numpy())
-
-    print('out_np = ',out_np)
-    print('target_np = ',target_np)
-    print('out_np.shape = ', out_np.shape)
-    print('target_np.shape = ',target_np.shape)
-
+    # # print('length = ',length)
+    #
+    # # output_seq = model(seq, model.init_hidden(), length)
+    # # break
+    # output_seq, _ = model_(seq, model_.init_hidden(), length)
+    # print('output_seq.shape before mask = ',output_seq.shape)
+    # output_seq = model_.mask2(output_seq,target_seq,length)
+    # print('output_seq.shape after mask = ',output_seq.shape)
+    # # output_seq = output_seq.view(batch_size, length[0], n_letters)
+    # # target_seq = target_seq.view(batch_size, length[0], n_letters)
+    #
+    # print('output_seq.shape = ',output_seq.shape)
+    # print('target_seq.shape = ',target_seq.shape)
+    #
+    # out_np = np.int_(output_seq.detach().cpu().numpy() >= epsilon)
+    # target_np = np.int_(target_seq.detach().cpu().numpy())
+    #
     # print('out_np = ',out_np)
     # print('target_np = ',target_np)
-    # print('flattened output np = ',out_np.flatten())
-    # print('flattened target np = ', target_np.flatten())
-    max_len = max(length)
-    print('max_len = ',max_len)
+    # print('out_np.shape = ', out_np.shape)
+    # print('target_np.shape = ',target_np.shape)
+    #
+    # # print('out_np = ',out_np)
+    # # print('target_np = ',target_np)
+    # # print('flattened output np = ',out_np.flatten())
+    # # print('flattened target np = ', target_np.flatten())
+    # max_len = max(length)
+    # print('max_len = ',max_len)
     # for j in range(batch_size):
     #
     #     print('out_np[j*max_len:J*max_len+max_len] = ',out_np[(j*max_len):(j*max_len)+max_len])
