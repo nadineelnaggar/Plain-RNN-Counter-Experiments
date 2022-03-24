@@ -465,9 +465,9 @@ def train(model, loader, sum_writer):
             # count = 0
             for j in range(batch_size):
                 print('out_np[j] = ',out_np[j])
-                print('out_np[j].shape = ',out_np[j].shape)
+                # print('out_np[j].shape = ',out_np[j].shape)
                 print('target_np[j] = ',target_np[j])
-                print('target_np[j].shape = ',target_np[j].shape)
+                # print('target_np[j].shape = ',target_np[j].shape)
 
 
                 # if np.equal(out_np[j].all(), target_np[j].all()).all():
@@ -492,13 +492,15 @@ def train(model, loader, sum_writer):
                             f.write('INCORRECT' + '\n')
             # print('num_correct = ',num_correct)
             break
+        break
+
 
 
 
         accuracy = num_correct/len(train_dataset)*100
         # print('\n')
         print('Accuracy for epoch ', epoch, '=', accuracy, '%, total loss for epoch ', epoch,' = ',total_loss)
-        break
+        # break
         accuracies.append(accuracy)
         losses.append(total_loss/len(train_dataset))
         sum_writer.add_scalar('epoch_losses', total_loss/len(train_dataset),global_step=epoch)
