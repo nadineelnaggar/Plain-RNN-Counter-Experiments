@@ -463,8 +463,9 @@ def train(model, loader, sum_writer):
                 # print('out_np[j].shape = ',out_np[j].shape)
                 # print('target_np[j] = ',target_np[j])
                 # print('target_np[j].shape = ',target_np[j].shape)
-
+                print('np.all(np.equal(out_np[j], target_np[j])) = ',np.all(np.equal(out_np[j],target_np[j])))
                 if np.all(np.equal(out_np[j], target_np[j])):
+                # if np.all(np.equal(out_np[j], target_np[j])):
                 # if np.all(np.equal(out_np[j], target_np[j])) and (out_np[j].flatten() == target_np[j].flatten()).all():
                     num_correct += 1
                     # epoch_correct_guesses.append(X[i])
