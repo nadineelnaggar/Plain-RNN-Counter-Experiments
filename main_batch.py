@@ -444,8 +444,8 @@ def train(model, loader, sum_writer):
 
             out_np = np.int_(output_seq.detach().cpu().numpy() >= epsilon)
             target_np = np.int_(target_seq.detach().cpu().numpy())
-            print('out_np.shape = ', out_np.shape)
-            print('target_np.shape = ', target_np.shape)
+            # print('out_np.shape = ', out_np.shape)
+            # print('target_np.shape = ', target_np.shape)
 
             if print_flag == True:
                 with open(train_log, 'a') as f:
@@ -459,6 +459,10 @@ def train(model, loader, sum_writer):
             # print('flattened output np = ',out_np.flatten())
             # print('flattened target np = ', target_np.flatten())
             for j in range(batch_size):
+                print('out_np[j] = ',out_np[j])
+                print('out_np[j].shape = ',out_np[j].shape)
+                print('target_np[j] = ',target_np[j])
+                print('target_np[j].shape = ',target_np[j].shape)
 
                 if np.all(np.equal(out_np[j], target_np[j])):
                 # if np.all(np.equal(out_np[j], target_np[j])) and (out_np[j].flatten() == target_np[j].flatten()).all():
