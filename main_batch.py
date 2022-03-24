@@ -435,11 +435,17 @@ def train(model, loader, sum_writer):
                 with open(train_log, 'a') as f:
                     f.write('actual output in train function = ' + str(output_seq) + '\n')
 
+            print('output_seq.shape before reshape = ', output_seq.shape)
+            print('target_seq.shape before reshape = ', target_seq.shape)
             output_seq = output_seq.view(batch_size, length[0], n_letters)
             target_seq = target_seq.view(batch_size, length[0], n_letters)
+            print('output_seq.shape = ',output_seq.shape)
+            print('target_seq.shape = ',target_seq.shape)
 
             out_np = np.int_(output_seq.detach().cpu().numpy() >= epsilon)
             target_np = np.int_(target_seq.detach().cpu().numpy())
+            print('out_np.shape = ', out_np.shape)
+            print('target_np.shape = ', target_np.shape)
 
             if print_flag == True:
                 with open(train_log, 'a') as f:

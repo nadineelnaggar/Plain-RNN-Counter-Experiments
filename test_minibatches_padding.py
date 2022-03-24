@@ -194,6 +194,7 @@ class VanillaLSTM(nn.Module):
         self.sigmoid = nn.Sigmoid()
 
     def forward(self, x, h0, length):
+        print('input x shape = ',x.shape)
         x = pack_padded_sequence(x, length, batch_first=True)
         h0 = self.init_hidden()
         print('packed sequence = ',x)
@@ -203,6 +204,7 @@ class VanillaLSTM(nn.Module):
         x, _ = pad_packed_sequence(x, batch_first=True)
         print('padded packed sequence = ',x)
         print('len(x) = ',len(x))
+        print('x.shape after lstm = ',x.shape)
         print(_)
         print(h0)
         # x = x.contiguous()
@@ -210,10 +212,12 @@ class VanillaLSTM(nn.Module):
         # x = x.view(batch_size, length)
         x = x.contiguous()
         print('x after contiguous = ',x)
+        print('x.shape after contiguous = ',x.shape)
         x = x.view(-1, x.shape[2])
         print('x before linear layer = ',x)
         x = self.fc2(x)
         print('x after linear layer = ',x)
+        print('x.shape after linear layer',x.shape)
         x = self.sigmoid(x).view(-1, self.output_size)
         print('x after sigmoid = ',x)
         # x = x.view(batch_size, length[0], self.input_size)
@@ -314,8 +318,11 @@ class VanillaLSTM(nn.Module):
 
         # flatten all predictions
         # Y_hat = Y_hat.view(-1, self.nb_tags)
+        print('Y.shape = ',Y.shape)
         print('Y_hat = ,',Y_hat)
+        print('Y_hat.shape = ',Y_hat.shape)
         Y_hat_out = torch.zeros(Y_hat.shape)
+        # Y_hat_out = torch.zeros(Y.shape)
         print('Y_hat_out = ',Y_hat_out)
         max_batch_length = max(X_lengths)
 
@@ -357,6 +364,7 @@ class VanillaLSTM(nn.Module):
         # ce_loss = -torch.sum(Y_hat) / nb_tokens
         #
         # return ce_loss
+        print('Y_hat_out.shape = ',Y_hat_out.shape)
         return Y_hat_out
         # return torch.tensor([Y_hat2])
 
@@ -426,6 +434,7 @@ print(out2)
 
 out3 = model.mask2(out, targets_enc, lengths2)
 print('out3 = ',out3)
+print('out3.shape = ',out3.shape)
 criterion2 = nn.MSELoss()
 loss2 = criterion2(out3,targets_enc)
 print('loss2 = ',loss2)
@@ -536,18 +545,64 @@ train_loader2 = DataLoader(train_dataset2,batch_size=2, shuffle=False, collate_f
 # print('test collate function = ')
 
 # print(collate_fn(train_dataset2))
+epsilon=0.5
 
+model_ = VanillaLSTM(input_size=2, hidden_size=3, batch_size=2, num_layers=1, output_size=2, output_activation='Sigmoid')
 for i, (seq, target_seq, length) in enumerate(train_loader2):
+    num_correct = 0
     print('seq = ',seq)
+    print('input_seq shape = ',seq.shape)
     print('label = ', target_seq)
+    print('label shape = ',target_seq.shape)
     print('length = ',length)
     print('seq length = ',seq.shape)
     # out, _ = model(seq,model.init_hidden(), length)
     # print('out = ',out)
     # print('out.shape = ', out.shape)
     print('target seq length = ', target_seq.shape)
+
+    # print('length = ',length)
+
     # output_seq = model(seq, model.init_hidden(), length)
     # break
+    output_seq, _ = model_(seq, model_.init_hidden(), length)
+    print('output_seq.shape before mask = ',output_seq.shape)
+    output_seq = model_.mask2(output_seq,target_seq,length)
+    print('output_seq.shape after mask = ',output_seq.shape)
+    # output_seq = output_seq.view(batch_size, length[0], n_letters)
+    # target_seq = target_seq.view(batch_size, length[0], n_letters)
+
+    print('output_seq.shape = ',output_seq.shape)
+    print('target_seq.shape = ',target_seq.shape)
+
+    out_np = np.int_(output_seq.detach().cpu().numpy() >= epsilon)
+    target_np = np.int_(target_seq.detach().cpu().numpy())
+
+    print('out_np = ',out_np)
+    print('target_np = ',target_np)
+    print('out_np.shape = ', out_np.shape)
+    print('target_np.shape = ',target_np.shape)
+
+    # print('out_np = ',out_np)
+    # print('target_np = ',target_np)
+    # print('flattened output np = ',out_np.flatten())
+    # print('flattened target np = ', target_np.flatten())
+    max_len = max(length)
+    print('max_len = ',max_len)
+    # for j in range(batch_size):
+    #
+    #     print('out_np[j*max_len:J*max_len+max_len] = ',out_np[(j*max_len):(j*max_len)+max_len])
+    #     print('target_np[j*max_len:J*max_len+max_len] = ',target_np[j*max_len:(j*max_len)+max_len])
+    #
+    #     if np.all(np.equal(out_np[j*max_len:(j*max_len)+max_len], target_np[j*max_len:(j*max_len)+max_len])):
+    #         num_correct += 1
+    #         print('TRUE')
+    #     print('num_correct = ',num_correct)
+
+        # if np.all(np.equal(out_np[j*max_len:(j*max_len)+max_len], target_np[j*max_len:(j*max_len)+max_len])) and (out_np[j*max_len:(j*max_len)+max_len].flatten() == target_np[j*max_len:(j*max_len)+max_len].flatten()).all():
+        #     num_correct += 1
+        #     print('TRUE')
+        # print('num_correct = ',num_correct)
     if i == 5:
         break
 
