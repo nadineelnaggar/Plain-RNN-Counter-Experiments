@@ -464,9 +464,9 @@ def train(model, loader, sum_writer):
 
             # count = 0
             for j in range(batch_size):
-                print('out_np[j] = ',out_np[j])
+                # print('out_np[j] = ',out_np[j])
                 # print('out_np[j].shape = ',out_np[j].shape)
-                print('target_np[j] = ',target_np[j])
+                # print('target_np[j] = ',target_np[j])
                 # print('target_np[j].shape = ',target_np[j].shape)
 
 
