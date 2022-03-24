@@ -292,10 +292,12 @@ def main():
     train_dataframes = []
     runs = []
     for i in range(num_runs):
-        torch.manual_seed(i)
-        np.random.seed(i)
+        seed = num_runs+i
+        # seed = i
+        torch.manual_seed(seed)
+        np.random.seed(seed)
         with open(train_log, 'a') as f:
-            f.write('random seed for run '+str(i)+' = '+str(i)+'\n')
+            f.write('random seed for run '+str(i)+' = '+str(seed)+'\n')
         model = select_model(model_name, input_size, hidden_size, num_layers, batch_size, num_classes, output_activation='Sigmoid')
         # print(model.model_name)
         model.to(device)
