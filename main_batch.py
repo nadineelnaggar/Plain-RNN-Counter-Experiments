@@ -468,8 +468,8 @@ def train(model, loader, sum_writer):
                 # print('target_np[j].shape = ',target_np[j].shape)
 
 
-                if np.equal(out_np[j].all(), target_np[j].all()).all():
-                # if out_np[j].all()==target_np[j].all():
+                # if np.equal(out_np[j].all(), target_np[j].all()).all():
+                if out_np[j].all()==target_np[j].all():
                 #     print('output_np[j] = target_np[j]')
                 #     count+=1
                 #     print('count correct = ',count)
