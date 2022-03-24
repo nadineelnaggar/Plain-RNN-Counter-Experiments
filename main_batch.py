@@ -499,7 +499,7 @@ def train(model, loader, sum_writer):
 
         accuracy = num_correct/len(train_dataset)*100
         # print('\n')
-        print('Accuracy for epoch ', epoch, '=', accuracy, '%, total loss for epoch ', epoch,' = ',total_loss)
+        print('Accuracy for epoch ', epoch, '=', accuracy, '%, total loss for epoch ', epoch,' = ',total_loss,' num_correct = ',num_correct)
         # break
         accuracies.append(accuracy)
         losses.append(total_loss/len(train_dataset))
