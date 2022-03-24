@@ -459,10 +459,10 @@ def train(model, loader, sum_writer):
             # print('flattened output np = ',out_np.flatten())
             # print('flattened target np = ', target_np.flatten())
             for j in range(batch_size):
-                print('out_np[j] = ',out_np[j])
-                print('out_np[j].shape = ',out_np[j].shape)
-                print('target_np[j] = ',target_np[j])
-                print('target_np[j].shape = ',target_np[j].shape)
+                # print('out_np[j] = ',out_np[j])
+                # print('out_np[j].shape = ',out_np[j].shape)
+                # print('target_np[j] = ',target_np[j])
+                # print('target_np[j].shape = ',target_np[j].shape)
 
                 if np.all(np.equal(out_np[j], target_np[j])):
                 # if np.all(np.equal(out_np[j], target_np[j])) and (out_np[j].flatten() == target_np[j].flatten()).all():
