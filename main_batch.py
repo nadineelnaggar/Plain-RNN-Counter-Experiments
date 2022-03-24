@@ -435,12 +435,12 @@ def train(model, loader, sum_writer):
                 with open(train_log, 'a') as f:
                     f.write('actual output in train function = ' + str(output_seq) + '\n')
 
-            print('output_seq.shape before reshape = ', output_seq.shape)
-            print('target_seq.shape before reshape = ', target_seq.shape)
+            # print('output_seq.shape before reshape = ', output_seq.shape)
+            # print('target_seq.shape before reshape = ', target_seq.shape)
             output_seq = output_seq.view(batch_size, length[0], n_letters)
             target_seq = target_seq.view(batch_size, length[0], n_letters)
-            print('output_seq.shape = ',output_seq.shape)
-            print('target_seq.shape = ',target_seq.shape)
+            # print('output_seq.shape = ',output_seq.shape)
+            # print('target_seq.shape = ',target_seq.shape)
 
             out_np = np.int_(output_seq.detach().cpu().numpy() >= epsilon)
             target_np = np.int_(target_seq.detach().cpu().numpy())
@@ -460,7 +460,8 @@ def train(model, loader, sum_writer):
             # print('flattened target np = ', target_np.flatten())
             for j in range(batch_size):
 
-                if np.all(np.equal(out_np[j], target_np[j])) and (out_np[j].flatten() == target_np[j].flatten()).all():
+                if np.all(np.equal(out_np[j], target_np[j])):
+                # if np.all(np.equal(out_np[j], target_np[j])) and (out_np[j].flatten() == target_np[j].flatten()).all():
                     num_correct += 1
                     # epoch_correct_guesses.append(X[i])
                     epoch_correct_guesses.append(train_dataset[(i*batch_size)+j]['x'])
