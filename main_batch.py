@@ -472,7 +472,7 @@ def train(model, loader, sum_writer):
 
                 # if np.equal(out_np[j].all(), target_np[j].all()).all():
                 if out_np[j].all()==target_np[j].all():
-                    print('output_np[j] = target_np[j]')
+                    # print('output_np[j] = target_np[j]')
                 #     count+=1
                 #     print('count correct = ',count)
                 # print('np.all(np.equal(out_np[j], target_np[j])) = ',np.all(np.equal(out_np[j],target_np[j])))
@@ -491,8 +491,8 @@ def train(model, loader, sum_writer):
                         with open(train_log, 'a') as f:
                             f.write('INCORRECT' + '\n')
             # print('num_correct = ',num_correct)
-            break
-        break
+            # break
+        # break
 
 
 
