@@ -463,6 +463,8 @@ def train(model, loader, sum_writer):
                 # print('out_np[j].shape = ',out_np[j].shape)
                 # print('target_np[j] = ',target_np[j])
                 # print('target_np[j].shape = ',target_np[j].shape)
+                if out_np[j]==target_np[j]:
+                    print('output_np[j] = target_np[j]')
                 print('np.all(np.equal(out_np[j], target_np[j])) = ',np.all(np.equal(out_np[j],target_np[j])))
                 if np.all(np.equal(out_np[j], target_np[j])):
                 # if np.all(np.equal(out_np[j], target_np[j])):
