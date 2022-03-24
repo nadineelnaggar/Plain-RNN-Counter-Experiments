@@ -392,6 +392,7 @@ def train(model, loader, sum_writer):
     # global_step=0
 
     print(model)
+    print('num_train_samples = ',len(loader.dataset))
 
     for epoch in range(num_epochs):
         num_correct = 0
