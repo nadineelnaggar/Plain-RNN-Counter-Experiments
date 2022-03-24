@@ -488,6 +488,7 @@ def train(model, loader, sum_writer):
                     if print_flag == True:
                         with open(train_log, 'a') as f:
                             f.write('INCORRECT' + '\n')
+            print('num_correct = ',num_correct)
 
 
 
