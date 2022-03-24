@@ -426,7 +426,7 @@ def train(model, loader, sum_writer):
             # print(output_seq.shape)
             output_seq=model.mask(output_seq, target_seq, length)
             loss = criterion(output_seq, target_seq)
-            print('loss = ',loss)
+            # print('loss = ',loss)
             total_loss += loss.item()
             loss.backward()
             optimiser.step()
@@ -485,7 +485,7 @@ def train(model, loader, sum_writer):
 
         accuracy = num_correct/len(train_dataset)*100
         # print('\n')
-        print('Accuracy for epoch ', epoch, '=', accuracy, '%')
+        print('Accuracy for epoch ', epoch, '=', accuracy, '%, total loss for epoch ', epoch,' = ',total_loss)
         accuracies.append(accuracy)
         losses.append(total_loss/len(train_dataset))
         sum_writer.add_scalar('epoch_losses', total_loss/len(train_dataset),global_step=epoch)
