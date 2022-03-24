@@ -753,7 +753,8 @@ def test_model(model, loader, dataset):
 
         for j in range(batch_size):
 
-            if np.all(np.equal(out_np[j], target_np[j])) and (out_np[j].flatten() == target_np[j].flatten()).all():
+            if out_np[j].all() == target_np[j].all():
+            # if np.all(np.equal(out_np[j], target_np[j])) and (out_np[j].flatten() == target_np[j].flatten()).all():
                 num_correct += 1
 
 
