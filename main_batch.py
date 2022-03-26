@@ -304,7 +304,8 @@ def main():
         model.to(device)
 
         # log_dir="logs"
-        log_dir = "/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_" + str(task) + "/Minibatch_Training/" + model_name + "/logs/run"+str(i)
+        # log_dir = "/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_" + str(task) + "/Minibatch_Training/" + model_name + "/logs/run"+str(i)
+        log_dir = path + "logs/run" + str(i)
         sum_writer = SummaryWriter(log_dir)
 
 
