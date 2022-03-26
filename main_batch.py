@@ -92,7 +92,8 @@ Dyck = DyckLanguage(NUM_PAR, P_VAL, Q_VAL)
 
 
 
-path = "/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_"+str(task)+"/Minibatch_Training/"+model_name+"/"+str(batch_size)+"batch_size/"+str(learning_rate)+"learning_rate"
+path = "/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_"+str(task)+"/Minibatch_Training/"+model_name+"/"\
+       +str(batch_size)+"batch_size/"+str(learning_rate)+"learning_rate/"+str(num_epochs)+"epochs"
 
 print('model_name = ',model_name)
 print('task = ',task)
