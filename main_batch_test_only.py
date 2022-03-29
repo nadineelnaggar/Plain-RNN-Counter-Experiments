@@ -541,140 +541,140 @@ def main():
 
 
 
-
-def train(model, loader, sum_writer):
-
-
-
-
-
-    criterion = nn.MSELoss()
-    # learning_rate = args.learning_rate
-    optimiser = optim.Adam(model.parameters(), lr=learning_rate)
-    optimiser.zero_grad()
-    losses = []
-    correct_arr = []
-    accuracies = []
-    epochs = []
-    all_epoch_incorrect_guesses = []
-    df1 = pd.DataFrame()
-    print_flag = False
-
-    # global_step=0
-
-    print(model)
-
-    for epoch in range(num_epochs):
-        num_correct = 0
-        num_correct_timesteps = 0
-        total_loss = 0
-        epoch_incorrect_guesses = []
-        epoch_correct_guesses = []
-        epochs.append(epoch)
-
-        if epoch==num_epochs-1:
-            print_flag=True
-        if print_flag == True:
-            with open(train_log, 'a') as f:
-                f.write('\nEPOCH ' + str(epoch) + '\n')
-
-
-        for i, (input_seq, target_seq, length) in enumerate(loader):
-            model.zero_grad()
-            # output_seq = torch.zeros(target_seq.shape)
-            output_seq = model(input_seq.to(device), length)
-            # output_seq[i] = out
-            # print('output seq = ',output_seq)
-            # print('output seq shape = ',output_seq.shape)
-            # print('target seq = ',target_seq)
-            # print('target seq shape = ',target_seq.shape)
-            if print_flag == True:
-                with open(train_log, 'a') as f:
-                    f.write('////////////////////////////////////////\n')
-                    f.write('input batch = ' + str(train_dataset[i*batch_size:i*batch_size+batch_size]['x']) + '\n')
-                    f.write('encoded batch = '+str(input_seq)+'\n')
-
-            # print(output_seq.shape)
-            output_seq=model.mask(output_seq, target_seq, length)
-            loss = criterion(output_seq, target_seq)
-            total_loss += loss.item()
-            loss.backward()
-            optimiser.step()
-
-            if print_flag == True:
-                with open(train_log, 'a') as f:
-                    f.write('actual output in train function = ' + str(output_seq) + '\n')
-
-            output_seq = output_seq.view(batch_size, length[0], n_letters)
-            target_seq = target_seq.view(batch_size, length[0], n_letters)
-
-            out_np = np.int_(output_seq.detach().cpu().numpy() >= epsilon)
-            target_np = np.int_(target_seq.detach().cpu().numpy())
-
-            if print_flag == True:
-                with open(train_log, 'a') as f:
-                    f.write('rounded output in train function = ' + str(out_np) + '\n')
-                    f.write('target in train function = ' + str(target_np) + '\n')
-
-
-
-            # print('out_np = ',out_np)
-            # print('target_np = ',target_np)
-            # print('flattened output np = ',out_np.flatten())
-            # print('flattened target np = ', target_np.flatten())
-            for j in range(batch_size):
-
-                if np.all(np.equal(out_np[j], target_np[j])) and (out_np[j].flatten() == target_np[j].flatten()).all():
-                    num_correct += 1
-                    # epoch_correct_guesses.append(X[i])
-                    epoch_correct_guesses.append(train_dataset[(i*batch_size)+j]['x'])
-                    if print_flag == True:
-                        with open(train_log, 'a') as f:
-                            f.write('CORRECT' + '\n')
-                else:
-                    epoch_incorrect_guesses.append(train_dataset[(i*batch_size)+j]['x'])
-                    if print_flag == True:
-                        with open(train_log, 'a') as f:
-                            f.write('INCORRECT' + '\n')
-
-
-
-        accuracy = num_correct/len(train_dataset)*100
-        # print('\n')
-        print('Accuracy for epoch ', epoch, '=', accuracy, '%')
-        accuracies.append(accuracy)
-        losses.append(total_loss/len(train_dataset))
-        sum_writer.add_scalar('epoch_losses', total_loss/len(train_dataset),global_step=epoch)
-        sum_writer.add_scalar('accuracy', accuracy, global_step=epoch)
-        # global_step+=1
-        sum_writer.close()
-        all_epoch_incorrect_guesses.append(epoch_incorrect_guesses)
-        correct_arr.append(epoch_correct_guesses)
-        if epoch == num_epochs - 1:
-            # print('\n////////////////////////////////////////////////////////////////////////////////////////\n')
-            print('num_correct = ',num_correct)
-            print('Final training accuracy = ', num_correct / len(train_dataset) * 100, '%')
-            # print('**************************************************************************\n')
-    df1['epoch'] = epochs
-    df1['accuracies'] = accuracies
-    df1['Total epoch losses'] = losses
-    df1['epoch correct guesses'] = correct_arr
-    df1['epoch incorrect guesses'] = all_epoch_incorrect_guesses
-
-    sum_writer.add_hparams({'model_name':model.model_name,'dataset_size': len(train_dataset), 'num_epochs': num_epochs,
-                            'learning_rate': learning_rate, 'batch_size':batch_size,
-                            'optimiser': use_optimiser}, {'accuracy': accuracy, 'loss': total_loss/len(train_dataset)})
-    # sum_writer.add_graph(model, (Dyck.lineToTensor(X[0][0]), model.init_hidden()))
-    # sum_writer.add_graph(model, loader[0])
-    # sum_writer.add_graph(model, input_seq, length)
-    sum_writer.close()
-
-    torch.save(model.state_dict(), modelname)
-    torch.save(optimiser.state_dict(), optimname)
-
-        # print(accuracies)
-        # print(accuracy)
-    return accuracy, df1
+#
+# def train(model, loader, sum_writer):
+#
+#
+#
+#
+#
+#     criterion = nn.MSELoss()
+#     # learning_rate = args.learning_rate
+#     optimiser = optim.Adam(model.parameters(), lr=learning_rate)
+#     optimiser.zero_grad()
+#     losses = []
+#     correct_arr = []
+#     accuracies = []
+#     epochs = []
+#     all_epoch_incorrect_guesses = []
+#     df1 = pd.DataFrame()
+#     print_flag = False
+#
+#     # global_step=0
+#
+#     print(model)
+#
+#     for epoch in range(num_epochs):
+#         num_correct = 0
+#         num_correct_timesteps = 0
+#         total_loss = 0
+#         epoch_incorrect_guesses = []
+#         epoch_correct_guesses = []
+#         epochs.append(epoch)
+#
+#         if epoch==num_epochs-1:
+#             print_flag=True
+#         if print_flag == True:
+#             with open(train_log, 'a') as f:
+#                 f.write('\nEPOCH ' + str(epoch) + '\n')
+#
+#
+#         for i, (input_seq, target_seq, length) in enumerate(loader):
+#             model.zero_grad()
+#             # output_seq = torch.zeros(target_seq.shape)
+#             output_seq = model(input_seq.to(device), length)
+#             # output_seq[i] = out
+#             # print('output seq = ',output_seq)
+#             # print('output seq shape = ',output_seq.shape)
+#             # print('target seq = ',target_seq)
+#             # print('target seq shape = ',target_seq.shape)
+#             if print_flag == True:
+#                 with open(train_log, 'a') as f:
+#                     f.write('////////////////////////////////////////\n')
+#                     f.write('input batch = ' + str(train_dataset[i*batch_size:i*batch_size+batch_size]['x']) + '\n')
+#                     f.write('encoded batch = '+str(input_seq)+'\n')
+#
+#             # print(output_seq.shape)
+#             output_seq=model.mask(output_seq, target_seq, length)
+#             loss = criterion(output_seq, target_seq)
+#             total_loss += loss.item()
+#             loss.backward()
+#             optimiser.step()
+#
+#             if print_flag == True:
+#                 with open(train_log, 'a') as f:
+#                     f.write('actual output in train function = ' + str(output_seq) + '\n')
+#
+#             output_seq = output_seq.view(batch_size, length[0], n_letters)
+#             target_seq = target_seq.view(batch_size, length[0], n_letters)
+#
+#             out_np = np.int_(output_seq.detach().cpu().numpy() >= epsilon)
+#             target_np = np.int_(target_seq.detach().cpu().numpy())
+#
+#             if print_flag == True:
+#                 with open(train_log, 'a') as f:
+#                     f.write('rounded output in train function = ' + str(out_np) + '\n')
+#                     f.write('target in train function = ' + str(target_np) + '\n')
+#
+#
+#
+#             # print('out_np = ',out_np)
+#             # print('target_np = ',target_np)
+#             # print('flattened output np = ',out_np.flatten())
+#             # print('flattened target np = ', target_np.flatten())
+#             for j in range(batch_size):
+#
+#                 if np.all(np.equal(out_np[j], target_np[j])) and (out_np[j].flatten() == target_np[j].flatten()).all():
+#                     num_correct += 1
+#                     # epoch_correct_guesses.append(X[i])
+#                     epoch_correct_guesses.append(train_dataset[(i*batch_size)+j]['x'])
+#                     if print_flag == True:
+#                         with open(train_log, 'a') as f:
+#                             f.write('CORRECT' + '\n')
+#                 else:
+#                     epoch_incorrect_guesses.append(train_dataset[(i*batch_size)+j]['x'])
+#                     if print_flag == True:
+#                         with open(train_log, 'a') as f:
+#                             f.write('INCORRECT' + '\n')
+#
+#
+#
+#         accuracy = num_correct/len(train_dataset)*100
+#         # print('\n')
+#         print('Accuracy for epoch ', epoch, '=', accuracy, '%')
+#         accuracies.append(accuracy)
+#         losses.append(total_loss/len(train_dataset))
+#         sum_writer.add_scalar('epoch_losses', total_loss/len(train_dataset),global_step=epoch)
+#         sum_writer.add_scalar('accuracy', accuracy, global_step=epoch)
+#         # global_step+=1
+#         sum_writer.close()
+#         all_epoch_incorrect_guesses.append(epoch_incorrect_guesses)
+#         correct_arr.append(epoch_correct_guesses)
+#         if epoch == num_epochs - 1:
+#             # print('\n////////////////////////////////////////////////////////////////////////////////////////\n')
+#             print('num_correct = ',num_correct)
+#             print('Final training accuracy = ', num_correct / len(train_dataset) * 100, '%')
+#             # print('**************************************************************************\n')
+#     df1['epoch'] = epochs
+#     df1['accuracies'] = accuracies
+#     df1['Total epoch losses'] = losses
+#     df1['epoch correct guesses'] = correct_arr
+#     df1['epoch incorrect guesses'] = all_epoch_incorrect_guesses
+#
+#     sum_writer.add_hparams({'model_name':model.model_name,'dataset_size': len(train_dataset), 'num_epochs': num_epochs,
+#                             'learning_rate': learning_rate, 'batch_size':batch_size,
+#                             'optimiser': use_optimiser}, {'accuracy': accuracy, 'loss': total_loss/len(train_dataset)})
+#     # sum_writer.add_graph(model, (Dyck.lineToTensor(X[0][0]), model.init_hidden()))
+#     # sum_writer.add_graph(model, loader[0])
+#     # sum_writer.add_graph(model, input_seq, length)
+#     sum_writer.close()
+#
+#     torch.save(model.state_dict(), modelname)
+#     torch.save(optimiser.state_dict(), optimname)
+#
+#         # print(accuracies)
+#         # print(accuracy)
+#     return accuracy, df1
 
 def test_model(model, loader, dataset):
     model.eval()
