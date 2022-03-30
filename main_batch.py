@@ -113,14 +113,14 @@ excel_name = path+ 'Dyck1_' + task + '_' + str(
         num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' +str(batch_size) +'_batch_size_'+'_' + str(
         hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
         num_epochs) + 'epochs_'+ str(num_runs)+'runs' + '.xlsx'
-# modelname = path+ 'Dyck1_' + task + '_' + str(
-#         num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' +str(batch_size) +'_batch_size_'+'_' + str(
-#         hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
-#         num_epochs) + 'epochs_'+ str(num_runs)+'runs' + '_MODEL.pth'
 modelname = path+ 'Dyck1_' + task + '_' + str(
         num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' +str(batch_size) +'_batch_size_'+'_' + str(
         hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
-        num_epochs) + 'epochs_'+ str(num_runs)+'runs' + '_MODEL_'
+        num_epochs) + 'epochs_'+ str(num_runs)+'runs' + '_MODEL.pth'
+# modelname = path+ 'Dyck1_' + task + '_' + str(
+#         num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' +str(batch_size) +'_batch_size_'+'_' + str(
+#         hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
+#         num_epochs) + 'epochs_'+ str(num_runs)+'runs' + '_MODEL_'
 optimname = path+ 'Dyck1_' + task + '_' + str(
         num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' +str(batch_size) +'_batch_size_'+'_' + str(
         hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
@@ -282,7 +282,7 @@ def main():
         f.write('Learning rate = ' + str(learning_rate) + '\n')
         f.write('Number of runs = ' + str(num_runs) + '\n')
         f.write('Number of epochs in each run = ' + str(num_epochs) + '\n')
-        # f.write('Saved model name = ' + modelname + '\n')
+        f.write('Saved model name = ' + modelname + '\n')
         f.write('Saved optimiser name = ' + optimname + '\n')
         f.write('Excel name = ' + excel_name + '\n')
         f.write('Train log name = ' + train_log + '\n')
@@ -311,7 +311,7 @@ def main():
         # log_dir = "/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_" + str(task) + "/Minibatch_Training/" + model_name + "/logs/run"+str(i)
         log_dir = path + "logs/run" + str(i)
         sum_writer = SummaryWriter(log_dir)
-        modelname = modelname+"run"+str(i)+".pth"
+        # modelname = modelname+"run"+str(i)+".pth"
 
 
         runs.append('run'+str(i))
@@ -325,7 +325,7 @@ def main():
         long_test_accuracies.append(long_test_accuracy)
 
         with open(file_name, "a") as f:
-            f.write('Saved model name for run '+str(i)+' = ' + modelname + '\n')
+            # f.write('Saved model name for run '+str(i)+' = ' + modelname + '\n')
             f.write('train accuracy for run ' + str(i) + ' = ' + str(train_accuracy) + '%\n')
             f.write('test accuracy for run ' + str(i) + ' = ' + str(test_accuracy) + '%\n')
             f.write('long test accuracy for run '+str(i)+' = '+str(long_test_accuracy)+'%\n')
