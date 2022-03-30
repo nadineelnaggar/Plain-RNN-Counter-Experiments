@@ -282,7 +282,7 @@ def main():
         f.write('Learning rate = ' + str(learning_rate) + '\n')
         f.write('Number of runs = ' + str(num_runs) + '\n')
         f.write('Number of epochs in each run = ' + str(num_epochs) + '\n')
-        f.write('Saved model name = ' + modelname + '\n')
+        # f.write('Saved model name = ' + modelname + '\n')
         f.write('Saved optimiser name = ' + optimname + '\n')
         f.write('Excel name = ' + excel_name + '\n')
         f.write('Train log name = ' + train_log + '\n')
@@ -325,6 +325,7 @@ def main():
         long_test_accuracies.append(long_test_accuracy)
 
         with open(file_name, "a") as f:
+            f.write('Saved model name for run '+str(i)+' = ' + modelname + '\n')
             f.write('train accuracy for run ' + str(i) + ' = ' + str(train_accuracy) + '%\n')
             f.write('test accuracy for run ' + str(i) + ' = ' + str(test_accuracy) + '%\n')
             f.write('long test accuracy for run '+str(i)+' = '+str(long_test_accuracy)+'%\n')
