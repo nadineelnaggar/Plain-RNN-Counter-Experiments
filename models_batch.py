@@ -140,7 +140,7 @@ class VanillaLSTM(nn.Module):
         # ce_loss = -torch.sum(Y_hat) / nb_tokens
         #
         # return ce_loss
-        return Y_hat_out
+        return Y_hat_out.to(device)
         # return torch.tensor([Y_hat2])
 
 
@@ -275,7 +275,7 @@ class VanillaRNN(nn.Module):
         # ce_loss = -torch.sum(Y_hat) / nb_tokens
         #
         # return ce_loss
-        return Y_hat_out
+        return Y_hat_out.to(device)
         # return torch.tensor([Y_hat2])
 
 
@@ -409,7 +409,7 @@ class VanillaGRU(nn.Module):
         # ce_loss = -torch.sum(Y_hat) / nb_tokens
         #
         # return ce_loss
-        return Y_hat_out
+        return Y_hat_out.to(device)
         # return torch.tensor([Y_hat2])
 
 
