@@ -196,8 +196,8 @@ def collate_fn(batch):
     seq_tensor, labels_tensor, lengths_tensor = encode_batch(sentences, labels, lengths, batch_size=batch_size)
 
 
-    return seq_tensor.to(device), labels_tensor.to(device), lengths_tensor.to(device)
-
+    # return seq_tensor.to(device), labels_tensor.to(device), lengths_tensor.to(device)
+    return seq_tensor.to(device), labels_tensor.to(device), lengths_tensor
 
 
 train_dataset = NextTokenPredictionTrainDataset()
