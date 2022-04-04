@@ -14,7 +14,12 @@ from torch.utils.tensorboard import SummaryWriter
 # from tensorboardX import SummaryWriter
 from torch.utils.data import Dataset, DataLoader
 from Dyck1_Datasets import NextTokenPredictionLongTestDataset, NextTokenPredictionShortTestDataset, NextTokenPredictionTrainDataset
+from torch.optim.lr_scheduler import StepLR
 
+"""
+PLOT THE LOSS FOR EACH TRAINING RUN
+PLOT THE LEARNING RATE FROM THE SCHEDULER THROUGHOUT TRAINING
+"""
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--model_name', type=str, help='input model name (VanillaLSTM, VanillaRNN, VanillaGRU)')
@@ -99,6 +104,7 @@ print('model_name = ',model_name)
 print('task = ',task)
 print('feedback = ',feedback)
 print('hidden_size = ',hidden_size)
+print('batch_size = ',batch_size)
 print('num_layers = ',num_layers)
 print('learning_rate = ',learning_rate)
 print('num_epochs = ',num_epochs)
@@ -281,6 +287,7 @@ def main():
         f.write('Output activation = ' + output_activation + '\n')
         f.write('Optimiser used = ' + use_optimiser + '\n')
         f.write('Learning rate = ' + str(learning_rate) + '\n')
+        f.write('Batch size = '+str(batch_size)+'\n')
         f.write('Number of runs = ' + str(num_runs) + '\n')
         f.write('Number of epochs in each run = ' + str(num_epochs) + '\n')
         f.write('Saved model name = ' + modelname + '\n')
@@ -405,6 +412,8 @@ def train(model, loader, sum_writer):
     print(model)
     print('num_train_samples = ',len(loader.dataset))
 
+    scheduler = StepLR(optimiser,step_size=40,gamma=0.3)
+
     for epoch in range(num_epochs):
         num_correct = 0
         num_correct_timesteps = 0
@@ -441,7 +450,8 @@ def train(model, loader, sum_writer):
             # print('loss = ',loss)
             total_loss += loss.item()
             loss.backward()
-            optimiser.step()
+            # optimiser.step()
+            scheduler.step()
 
             if print_flag == True:
                 with open(train_log, 'a') as f:
