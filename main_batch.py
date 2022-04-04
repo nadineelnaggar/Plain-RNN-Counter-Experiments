@@ -174,7 +174,8 @@ def encode_batch(sentences, labels, lengths, batch_size):
                 pos = vocab.index(char)
                 sentence_tensor[i][index][pos]=1
     sentence_tensor.requires_grad_(True)
-    lengths_tensor = torch.tensor(lengths, dtype=torch.long)
+    # lengths_tensor = torch.tensor(lengths, dtype=torch.long)
+    lengths_tensor = torch.tensor(lengths, dtype=torch.int64).cpu()
     # print('labels tensor = ',labels_tensor)
     return sentence_tensor, labels_tensor, lengths_tensor
 
