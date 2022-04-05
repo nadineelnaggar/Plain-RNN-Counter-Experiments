@@ -552,12 +552,15 @@ def train(model, loader, sum_writer):
         accuracy = num_correct/len(train_dataset)*100
         # print('\n')
         # print('Accuracy for epoch ', epoch, '=', accuracy, '%, total loss for epoch ', epoch,' = ',total_loss,' num_correct = ',num_correct)
-        print('Accuracy for epoch ', epoch, '=', accuracy, '%, avg loss for epoch ', epoch, ' = ', total_loss/len(train_dataset),
-              ' num_correct = ', num_correct)
+        # print('Accuracy for epoch ', epoch, '=', accuracy, '%, avg loss for epoch ', epoch, ' = ', total_loss/len(train_dataset),
+        #       ' num_correct = ', num_correct)
         # break
         accuracies.append(accuracy)
         losses.append(total_loss/len(train_dataset))
         validation_acc, validation_loss = validate_model(model, validation_loader,validation_dataset)
+        print('Accuracy for epoch ', epoch, '=', accuracy, '%, avg train loss = ',
+              total_loss / len(train_dataset),
+              ' num_correct = ', num_correct, 'val accuracy = ', validation_acc, '%, val loss = ',validation_loss)
         scheduler.step()
         validation_losses.append(validation_loss)
         validation_accuracies.append(validation_acc)
@@ -710,7 +713,7 @@ def validate_model(model, loader, dataset):
     accuracy = num_correct / len(ds) * 100
     with open(log_file, 'a') as f:
         f.write('accuracy = ' + str(accuracy)+'%' + '\n')
-    print(''+dataset+' accuracy = '+ str(accuracy)+'% '+ 'avg loss = '+str(loss.item()/len(ds)))
+    # print(''+dataset+' accuracy = '+ str(accuracy)+'% '+ 'avg loss = '+str(loss.item()/len(ds)))
 
 
     return accuracy, loss.item()/len(ds)
