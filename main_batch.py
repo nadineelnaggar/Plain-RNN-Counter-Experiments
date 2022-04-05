@@ -548,7 +548,7 @@ def train(model, loader, sum_writer):
             # break
         # break
 
-        lrs.append(np.float(optimiser.param_groups[0]["lr"]))
+        lrs.append(optimiser.param_groups[0]["lr"])
         accuracy = num_correct/len(train_dataset)*100
         # print('\n')
         # print('Accuracy for epoch ', epoch, '=', accuracy, '%, total loss for epoch ', epoch,' = ',total_loss,' num_correct = ',num_correct)
@@ -568,7 +568,7 @@ def train(model, loader, sum_writer):
         sum_writer.add_scalar('accuracy', accuracy, global_step=epoch)
         sum_writer.add_scalar('validation losses',validation_loss, global_step=epoch)
         sum_writer.add_scalar('validation_accuracy',validation_acc, global_step=epoch)
-        sum_writer.add_scalar('learning_rates', lrs, global_step=epoch)
+        sum_writer.add_scalar('learning_rates', optimiser.param_groups[0]["lr"], global_step=epoch)
         # global_step+=1
         sum_writer.close()
         all_epoch_incorrect_guesses.append(epoch_incorrect_guesses)
