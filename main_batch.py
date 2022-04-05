@@ -706,10 +706,10 @@ def validate_model(model, loader, dataset):
     accuracy = num_correct / len(ds) * 100
     with open(log_file, 'a') as f:
         f.write('accuracy = ' + str(accuracy)+'%' + '\n')
-    print(''+dataset+' accuracy = '+ str(accuracy)+'%'+ 'avg loss = '+str(loss/len(ds)))
+    print(''+dataset+' accuracy = '+ str(accuracy)+'%'+ 'avg loss = '+str(loss.item()/len(ds)))
 
 
-    return accuracy, loss/len(ds)
+    return accuracy, loss.item()/len(ds)
 
 def test_model(model, loader, dataset):
     model.eval()
