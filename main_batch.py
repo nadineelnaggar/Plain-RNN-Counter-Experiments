@@ -558,9 +558,14 @@ def train(model, loader, sum_writer):
         accuracies.append(accuracy)
         losses.append(total_loss/len(train_dataset))
         validation_acc, validation_loss = validate_model(model, validation_loader,validation_dataset)
+
         print('Accuracy for epoch ', epoch, '=', accuracy, '%, avg train loss = ',
-              total_loss / len(train_dataset),
-              ' num_correct = ', num_correct, 'val accuracy = ', validation_acc, '%, val loss = ',validation_loss)
+              round(total_loss / len(train_dataset),2),
+              ' num_correct = ', num_correct,', val loss = ', validation_loss, ', val accuracy = ', round(validation_acc,2), '%')
+
+        # print('Accuracy for epoch ', epoch, '=', accuracy, '%, avg train loss = ',
+        #       total_loss / len(train_dataset),
+        #       ' num_correct = ', num_correct, 'val accuracy = ', validation_acc, '%, val loss = ',validation_loss)
         scheduler.step()
         validation_losses.append(validation_loss)
         validation_accuracies.append(validation_acc)
