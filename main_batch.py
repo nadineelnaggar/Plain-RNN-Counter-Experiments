@@ -154,6 +154,11 @@ plot_name = path+'Dyck1_' + task + '_' + str(
         hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
         num_epochs) + 'epochs_'+ str(num_runs)+'runs' + '_PLOT.png'
 
+plt_name = path+'Dyck1_' + task + '_' + str(
+        num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' +str(batch_size) +'_batch_size_'+'_' + str(
+        hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
+        num_epochs) + 'epochs_'+ str(num_runs)+'runs'
+
 with open(file_name, 'w') as f:
     f.write('\n')
 
@@ -341,6 +346,13 @@ def main():
         test_accuracies.append(test_accuracy)
         long_test_accuracy = test_model(model, long_loader, 'long')
         long_test_accuracies.append(long_test_accuracy)
+
+        df.plot(x='epoch',y=['Average training losses', 'Average validation losses'])
+        plt.savefig(plt_name + 'losses_run'+str(i)+'.png')
+        df.plot(x='epoch', y=['Training accuracies', 'Validation accuracies'])
+        plt.savefig(plt_name + 'accuracies_run' + str(i) + '.png')
+
+        plt.savefig(plt_name+'_run')
 
         with open(file_name, "a") as f:
             # f.write('Saved model name for run '+str(i)+' = ' + modelname + '\n')
@@ -555,16 +567,16 @@ def train(model, loader, sum_writer):
             print('Final training accuracy = ', num_correct / len(train_dataset) * 100, '%')
             # print('**************************************************************************\n')
     df1['epoch'] = epochs
-    df1['accuracies'] = accuracies
-    df1['Average epoch losses'] = losses
+    df1['Training accuracies'] = accuracies
+    df1['Average training losses'] = losses
     df1['Average validation losses'] = validation_losses
-    df1['Validation Accuracies'] = validation_accuracies
+    df1['Validation accuracies'] = validation_accuracies
     df1['epoch correct guesses'] = correct_arr
     df1['epoch incorrect guesses'] = all_epoch_incorrect_guesses
 
     sum_writer.add_hparams({'model_name':model.model_name,'dataset_size': len(train_dataset), 'num_epochs': num_epochs,
                             'learning_rate': learning_rate, 'batch_size':batch_size,
-                            'optimiser': use_optimiser}, {'accuracy': accuracy, 'loss': total_loss/len(train_dataset)},
+                            'optimiser': use_optimiser}, {'Training accuracy': accuracy, 'Training loss': total_loss/len(train_dataset)},
                            {'Validation loss':validation_loss, 'Validation Accuracy':validation_acc})
     # sum_writer.add_graph(model, (Dyck.lineToTensor(X[0][0]), model.init_hidden()))
     # sum_writer.add_graph(model, loader[0])
