@@ -592,10 +592,15 @@ def train(model, loader, sum_writer):
     df1['epoch correct guesses'] = correct_arr
     df1['epoch incorrect guesses'] = all_epoch_incorrect_guesses
 
+    # sum_writer.add_hparams({'model_name':model.model_name,'dataset_size': len(train_dataset), 'num_epochs': num_epochs,
+    #                         'learning_rate': learning_rate, 'batch_size':batch_size,
+    #                         'optimiser': use_optimiser}, {'Training accuracy': accuracy, 'Training loss': total_loss/len(train_dataset)},
+    #                        {'Validation loss':validation_loss, 'Validation Accuracy':validation_acc})
+
     sum_writer.add_hparams({'model_name':model.model_name,'dataset_size': len(train_dataset), 'num_epochs': num_epochs,
                             'learning_rate': learning_rate, 'batch_size':batch_size,
-                            'optimiser': use_optimiser}, {'Training accuracy': accuracy, 'Training loss': total_loss/len(train_dataset)},
-                           {'Validation loss':validation_loss, 'Validation Accuracy':validation_acc})
+                            'optimiser': use_optimiser}, {'Training accuracy': accuracy, 'Training loss': total_loss/len(train_dataset)})
+
     # sum_writer.add_graph(model, (Dyck.lineToTensor(X[0][0]), model.init_hidden()))
     # sum_writer.add_graph(model, loader[0])
     # sum_writer.add_graph(model, input_seq, length)
