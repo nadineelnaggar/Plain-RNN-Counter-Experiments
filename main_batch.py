@@ -13,7 +13,7 @@ import random
 from torch.utils.tensorboard import SummaryWriter
 # from tensorboardX import SummaryWriter
 from torch.utils.data import Dataset, DataLoader
-from Dyck1_Datasets import NextTokenPredictionLongTestDataset, NextTokenPredictionShortTestDataset, NextTokenPredictionTrainDataset
+from Dyck1_Datasets import NextTokenPredictionLongTestDataset, NextTokenPredictionShortTestDataset, NextTokenPredictionTrainDataset, NextTokenPredictionValidationDataset
 from torch.optim.lr_scheduler import StepLR
 
 """
@@ -29,6 +29,8 @@ parser.add_argument('--hidden_size', type=int, help='hidden size')
 parser.add_argument('--num_layers', type=int, help='number of layers', default=1)
 parser.add_argument('--batch_size', type=int, help='batch size', default=1)
 parser.add_argument('--learning_rate', type=float, help='learning rate')
+parser.add_argument('--lr_scheduler_step',type=int, help='number of epochs before reducing')
+parser.add_argument('--lr_scheduler_gamma',type=float, help='multiplication factor for lr scheduler', default=1.0)
 parser.add_argument('--num_epochs', type=int, help='number of training epochs')
 parser.add_argument('--num_runs', type=int, help='number of training runs')
 
@@ -135,6 +137,10 @@ train_log = path+ 'Dyck1_' + task + '_' + str(
         num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' +str(batch_size) +'_batch_size_'+'_' + str(
         hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
         num_epochs) + 'epochs_'+ str(num_runs)+'runs' + '_TRAIN_LOG.txt'
+validation_log = path+ 'Dyck1_' + task + '_' + str(
+        num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' +str(batch_size) +'_batch_size_'+'_' + str(
+        hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
+        num_epochs) + 'epochs_'+ str(num_runs)+'runs' + '_VALIDATION_LOG.txt'
 test_log = path+'Dyck1_' + task + '_' + str(
         num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' +str(batch_size) +'_batch_size_'+'_' + str(
         hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
@@ -157,6 +163,8 @@ with open(train_log, 'w') as f:
 with open(test_log, 'w') as f:
     f.write('\n')
 with open(long_test_log, 'w') as f:
+    f.write('\n')
+with open(validation_log, 'w') as f:
     f.write('\n')
 
 def encode_batch(sentences, labels, lengths, batch_size):
@@ -209,10 +217,12 @@ def collate_fn(batch):
 train_dataset = NextTokenPredictionTrainDataset()
 test_dataset = NextTokenPredictionShortTestDataset()
 long_dataset = NextTokenPredictionLongTestDataset()
+validation_dataset = NextTokenPredictionValidationDataset()
 
 train_loader = DataLoader(train_dataset,batch_size=batch_size, shuffle=False, collate_fn=collate_fn)
 test_loader = DataLoader(test_dataset,batch_size=batch_size, shuffle=False, collate_fn=collate_fn)
 long_loader = DataLoader(long_dataset, batch_size=batch_size, shuffle=False, collate_fn=collate_fn)
+validation_loader = DataLoader(validation_dataset,batch_size=batch_size, shuffle=False, collate_fn=collate_fn)
 
 
 # train_loader = DataLoader(train_dataset,batch_size=batch_size, shuffle=False)
@@ -407,14 +417,18 @@ def train(model, loader, sum_writer):
     df1 = pd.DataFrame()
     print_flag = False
 
+    validation_losses = []
+    validation_accuracies = []
+
     # global_step=0
 
     print(model)
     print('num_train_samples = ',len(loader.dataset))
 
-    scheduler = StepLR(optimiser,step_size=40,gamma=0.3)
+    scheduler = StepLR(optimiser,step_size=30,gamma=0.3)
 
     for epoch in range(num_epochs):
+        model.train()
         num_correct = 0
         num_correct_timesteps = 0
         total_loss = 0
@@ -518,12 +532,19 @@ def train(model, loader, sum_writer):
 
         accuracy = num_correct/len(train_dataset)*100
         # print('\n')
-        print('Accuracy for epoch ', epoch, '=', accuracy, '%, total loss for epoch ', epoch,' = ',total_loss,' num_correct = ',num_correct)
+        # print('Accuracy for epoch ', epoch, '=', accuracy, '%, total loss for epoch ', epoch,' = ',total_loss,' num_correct = ',num_correct)
+        print('Accuracy for epoch ', epoch, '=', accuracy, '%, avg loss for epoch ', epoch, ' = ', total_loss/len(train_dataset),
+              ' num_correct = ', num_correct)
         # break
         accuracies.append(accuracy)
         losses.append(total_loss/len(train_dataset))
+        validation_acc, validation_loss = validate_model(model, validation_loader,validation_dataset)
+        validation_losses.append(validation_loss.item())
+        validation_accuracies.append(validation_acc)
         sum_writer.add_scalar('epoch_losses', total_loss/len(train_dataset),global_step=epoch)
         sum_writer.add_scalar('accuracy', accuracy, global_step=epoch)
+        sum_writer.add_scalar('validation losses',validation_loss, global_step=epoch)
+        sum_writer.add_scalar('validation_accuracy',validation_acc, global_step=epoch)
         # global_step+=1
         sum_writer.close()
         all_epoch_incorrect_guesses.append(epoch_incorrect_guesses)
@@ -535,13 +556,16 @@ def train(model, loader, sum_writer):
             # print('**************************************************************************\n')
     df1['epoch'] = epochs
     df1['accuracies'] = accuracies
-    df1['Total epoch losses'] = losses
+    df1['Average epoch losses'] = losses
+    df1['Average validation losses'] = validation_losses
+    df1['Validation Accuracies'] = validation_accuracies
     df1['epoch correct guesses'] = correct_arr
     df1['epoch incorrect guesses'] = all_epoch_incorrect_guesses
 
     sum_writer.add_hparams({'model_name':model.model_name,'dataset_size': len(train_dataset), 'num_epochs': num_epochs,
                             'learning_rate': learning_rate, 'batch_size':batch_size,
-                            'optimiser': use_optimiser}, {'accuracy': accuracy, 'loss': total_loss/len(train_dataset)})
+                            'optimiser': use_optimiser}, {'accuracy': accuracy, 'loss': total_loss/len(train_dataset)},
+                           {'Validation loss':validation_loss, 'Validation Accuracy':validation_acc})
     # sum_writer.add_graph(model, (Dyck.lineToTensor(X[0][0]), model.init_hidden()))
     # sum_writer.add_graph(model, loader[0])
     # sum_writer.add_graph(model, input_seq, length)
@@ -553,6 +577,123 @@ def train(model, loader, sum_writer):
         # print(accuracies)
         # print(accuracy)
     return accuracy, df1
+
+def validate_model(model, loader, dataset):
+    model.eval()
+    num_correct = 0
+    # dataset = ''
+    log_file=''
+    # if len(X[0])>num_bracket_pairs*2:
+    #     dataset = 'long'
+    #     log_file =long_test_log
+    # else:
+    #     dataset='short'
+    #     log_file = test_log
+    # if dataset=='short':
+    #     log_file=test_log
+    #     ds = test_dataset
+    # elif dataset=='long':
+    #     log_file=long_test_log
+    #     ds = long_dataset
+
+    log_file = validation_log
+    dataset='Validation Set'
+    ds = validation_dataset
+
+    criterion = nn.MSELoss()
+
+    total_loss = 0
+    # losses = []
+
+    with open(log_file,'a') as f:
+        f.write('////////////////////////////////////////\n')
+        f.write('TEST '+dataset+'\n')
+
+    # for i in range(len(X)):
+    #     input_seq = Dyck.lineToTensor(X[i])
+    #     target_seq = Dyck.lineToTensorSigmoid(y[i])
+    #     len_seq = len(input_seq)
+    #     output_seq = torch.zeros(target_seq.shape)
+    #
+    #     input_seq.to(device)
+    #     target_seq.to(device)
+    #     output_seq.to(device)
+    #
+    #     # if model.model_name == 'VanillaLSTM':
+    #     #     hidden = (torch.zeros(1, 1, model.hidden_size).to(device), torch.zeros(1, 1, model.hidden_size).to(device))
+    #     # elif model.model_name == 'VanillaRNN' or model.model_name == 'VanillaGRU':
+    #     #     hidden = torch.zeros(1, 1, model.hidden_size).to(device)
+    #
+    #     hidden = model.init_hidden()
+    #
+    #     for j in range(len_seq):
+    #         # out, hidden = model(input_seq[j].to(device), hidden)
+    #         out, hidden = model(Dyck.lineToTensor(X[i][j]).to(device), hidden)
+    #         output_seq[j] = out
+    for i, (input_seq, target_seq, length) in enumerate(loader):
+        output_seq = model(input_seq.to(device), length)
+        # output_seq[i] = out
+
+        with open(log_file, 'a') as f:
+            f.write('////////////////////////////////////////\n')
+            f.write('input batch = ' + str(ds[i * batch_size:i * batch_size + batch_size]['x']) + '\n')
+            f.write('encoded batch = ' + str(input_seq) + '\n')
+
+        output_seq = model.mask(output_seq, target_seq, length)
+        loss = criterion(output_seq,target_seq)
+        total_loss+=loss.item()
+
+        with open(log_file, 'a') as f:
+            f.write('////////////////////////////////////////\n')
+            f.write('input sentence = ' + ds[i]['x'] + '\n')
+            f.write('encoded sentence = ' + str(input_seq) + '\n')
+
+        with open(log_file, 'a') as f:
+            f.write('actual output in test function = ' + str(output_seq) + '\n')
+
+        output_seq = output_seq.view(batch_size, length[0], n_letters)
+        target_seq = target_seq.view(batch_size, length[0], n_letters)
+
+        out_np = np.int_(output_seq.detach().cpu().numpy() >= epsilon)
+        target_np = np.int_(target_seq.detach().cpu().numpy())
+
+
+
+        with open(log_file, 'a') as f:
+            f.write('rounded output in test function = ' + str(out_np) + '\n')
+            f.write('target in test function = ' + str(target_np) + '\n')
+
+        for j in range(batch_size):
+
+            if np.array_equal(out_np[j],target_np[j]):
+            # if out_np[j].all() == target_np[j].all():
+            # if np.all(np.equal(out_np[j], target_np[j])) and (out_np[j].flatten() == target_np[j].flatten()).all():
+                num_correct += 1
+
+
+                with open(log_file, 'a') as f:
+                    f.write('CORRECT' + '\n')
+            else:
+
+                with open(log_file, 'a') as f:
+                    f.write('INCORRECT' + '\n')
+
+        # if np.all(np.equal(out_np, target_np)) and (out_np.flatten() == target_np.flatten()).all():
+        #     num_correct += 1
+        #     with open(log_file, 'a') as f:
+        #         f.write('CORRECT' + '\n')
+        # else:
+        #     with open(log_file, 'a') as f:
+        #         f.write('INCORRECT' + '\n')
+
+
+    accuracy = num_correct / len(ds) * 100
+    with open(log_file, 'a') as f:
+        f.write('accuracy = ' + str(accuracy)+'%' + '\n')
+    print(''+dataset+' accuracy = '+ str(accuracy)+'%'+ 'avg loss = '+str(loss/len(ds)))
+
+
+    return accuracy, loss/len(ds)
 
 def test_model(model, loader, dataset):
     model.eval()
