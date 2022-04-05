@@ -434,6 +434,7 @@ def train(model, loader, sum_writer):
 
     validation_losses = []
     validation_accuracies = []
+    lrs = []
 
     # global_step=0
 
@@ -485,6 +486,7 @@ def train(model, loader, sum_writer):
             loss.backward()
             optimiser.step()
             # scheduler.step()
+            # lrs.append(optimiser.param_groups[0]["lr"])
 
             if print_flag == True:
                 with open(train_log, 'a') as f:
@@ -546,9 +548,7 @@ def train(model, loader, sum_writer):
             # break
         # break
 
-
-
-
+        lrs.append(optimiser.param_groups[0]["lr"])
         accuracy = num_correct/len(train_dataset)*100
         # print('\n')
         # print('Accuracy for epoch ', epoch, '=', accuracy, '%, total loss for epoch ', epoch,' = ',total_loss,' num_correct = ',num_correct)
@@ -568,6 +568,7 @@ def train(model, loader, sum_writer):
         sum_writer.add_scalar('accuracy', accuracy, global_step=epoch)
         sum_writer.add_scalar('validation losses',validation_loss, global_step=epoch)
         sum_writer.add_scalar('validation_accuracy',validation_acc, global_step=epoch)
+        sum_writer.add_scalar('learning_rates', lrs, global_step=epoch)
         # global_step+=1
         sum_writer.close()
         all_epoch_incorrect_guesses.append(epoch_incorrect_guesses)
@@ -582,6 +583,7 @@ def train(model, loader, sum_writer):
     df1['Average training losses'] = losses
     df1['Average validation losses'] = validation_losses
     df1['Validation accuracies'] = validation_accuracies
+    df1['learning rates'] = lrs
     df1['epoch correct guesses'] = correct_arr
     df1['epoch incorrect guesses'] = all_epoch_incorrect_guesses
 
