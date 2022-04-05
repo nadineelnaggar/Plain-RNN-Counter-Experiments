@@ -48,6 +48,9 @@ num_epochs = args.num_epochs
 num_runs = args.num_runs
 batch_size = args.batch_size
 # load_model = args.load_model
+lr_scheduler_step = args.lr_scheduler_step
+lr_scheduler_gamma = args.lr_scheduler_gamma
+
 
 
 # model_name = 'VanillaLSTM'
@@ -437,7 +440,8 @@ def train(model, loader, sum_writer):
     print(model)
     print('num_train_samples = ',len(loader.dataset))
 
-    scheduler = StepLR(optimiser,step_size=30,gamma=0.3)
+    # scheduler = StepLR(optimiser,step_size=30,gamma=0.3)
+    scheduler = StepLR(optimiser, step_size=lr_scheduler_step, gamma=lr_scheduler_gamma)
 
     for epoch in range(num_epochs):
         model.train()
