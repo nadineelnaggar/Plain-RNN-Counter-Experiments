@@ -480,7 +480,7 @@ def train(model, loader, sum_writer):
             # print('loss = ',loss)
             total_loss += loss.item()
             loss.backward()
-            # optimiser.step()
+            optimiser.step()
             scheduler.step()
 
             if print_flag == True:
