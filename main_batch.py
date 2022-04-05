@@ -441,7 +441,7 @@ def train(model, loader, sum_writer):
     print('num_train_samples = ',len(loader.dataset))
 
     # scheduler = StepLR(optimiser,step_size=30,gamma=0.3)
-    # scheduler = StepLR(optimiser, step_size=lr_scheduler_step, gamma=lr_scheduler_gamma)
+    scheduler = StepLR(optimiser, step_size=lr_scheduler_step, gamma=lr_scheduler_gamma)
 
     for epoch in range(num_epochs):
         # model.train()
@@ -558,6 +558,7 @@ def train(model, loader, sum_writer):
         accuracies.append(accuracy)
         losses.append(total_loss/len(train_dataset))
         validation_acc, validation_loss = validate_model(model, validation_loader,validation_dataset)
+        scheduler.step()
         validation_losses.append(validation_loss)
         validation_accuracies.append(validation_acc)
         sum_writer.add_scalar('epoch_losses', total_loss/len(train_dataset),global_step=epoch)
@@ -709,7 +710,7 @@ def validate_model(model, loader, dataset):
     accuracy = num_correct / len(ds) * 100
     with open(log_file, 'a') as f:
         f.write('accuracy = ' + str(accuracy)+'%' + '\n')
-    print(''+dataset+' accuracy = '+ str(accuracy)+'%'+ 'avg loss = '+str(loss.item()/len(ds)))
+    print(''+dataset+' accuracy = '+ str(accuracy)+'% '+ 'avg loss = '+str(loss.item()/len(ds)))
 
 
     return accuracy, loss.item()/len(ds)
