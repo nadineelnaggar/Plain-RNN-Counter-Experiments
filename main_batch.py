@@ -323,8 +323,8 @@ def main():
     train_dataframes = []
     runs = []
     for i in range(num_runs):
-        seed = num_runs+i
-        # seed = i
+        # seed = num_runs+i
+        seed = i
         torch.manual_seed(seed)
         np.random.seed(seed)
         with open(train_log, 'a') as f:
