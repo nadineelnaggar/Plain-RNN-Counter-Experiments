@@ -555,7 +555,7 @@ def train(model, loader, sum_writer):
         accuracies.append(accuracy)
         losses.append(total_loss/len(train_dataset))
         validation_acc, validation_loss = validate_model(model, validation_loader,validation_dataset)
-        validation_losses.append(validation_loss.item())
+        validation_losses.append(validation_loss)
         validation_accuracies.append(validation_acc)
         sum_writer.add_scalar('epoch_losses', total_loss/len(train_dataset),global_step=epoch)
         sum_writer.add_scalar('accuracy', accuracy, global_step=epoch)
