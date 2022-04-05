@@ -548,7 +548,7 @@ def train(model, loader, sum_writer):
             # break
         # break
 
-        lrs.append(optimiser.param_groups[0]["lr"])
+        lrs.append(np.float(optimiser.param_groups[0]["lr"]))
         accuracy = num_correct/len(train_dataset)*100
         # print('\n')
         # print('Accuracy for epoch ', epoch, '=', accuracy, '%, total loss for epoch ', epoch,' = ',total_loss,' num_correct = ',num_correct)
