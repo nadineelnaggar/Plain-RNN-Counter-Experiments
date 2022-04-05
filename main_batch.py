@@ -444,13 +444,16 @@ def train(model, loader, sum_writer):
     scheduler = StepLR(optimiser, step_size=lr_scheduler_step, gamma=lr_scheduler_gamma)
 
     for epoch in range(num_epochs):
-        model.train()
+        # model.train()
         num_correct = 0
         num_correct_timesteps = 0
         total_loss = 0
         epoch_incorrect_guesses = []
         epoch_correct_guesses = []
         epochs.append(epoch)
+
+        if epoch%5==0:
+            print('scheduler = ',scheduler)
 
         if epoch==num_epochs-1:
             print_flag=True
@@ -595,7 +598,7 @@ def train(model, loader, sum_writer):
     return accuracy, df1
 
 def validate_model(model, loader, dataset):
-    model.eval()
+    # model.eval()
     num_correct = 0
     # dataset = ''
     log_file=''
