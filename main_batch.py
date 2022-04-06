@@ -354,8 +354,9 @@ def main():
         plt.savefig(plt_name + 'losses_run'+str(i)+'.png')
         df.plot(x='epoch', y=['Training accuracies', 'Validation accuracies'])
         plt.savefig(plt_name + 'accuracies_run' + str(i) + '.png')
-
-        plt.savefig(plt_name+'_run')
+        df.plot(x='epoch', y = 'learning rates')
+        plt.savefig(plt_name + 'learning_rates_run' + str(i) + '.png')
+        # plt.savefig(plt_name+'_run')
 
         with open(file_name, "a") as f:
             # f.write('Saved model name for run '+str(i)+' = ' + modelname + '\n')
