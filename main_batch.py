@@ -351,11 +351,11 @@ def main():
         long_test_accuracies.append(long_test_accuracy)
 
         df.plot(x='epoch',y=['Average training losses', 'Average validation losses'])
-        plt.savefig(plt_name + 'losses_run'+str(i)+'.png')
+        plt.savefig(plt_name + '_losses_run'+str(i)+'.png')
         df.plot(x='epoch', y=['Training accuracies', 'Validation accuracies'])
-        plt.savefig(plt_name + 'accuracies_run' + str(i) + '.png')
+        plt.savefig(plt_name + '_accuracies_run' + str(i) + '.png')
         df.plot(x='epoch', y = 'learning rates')
-        plt.savefig(plt_name + 'learning_rates_run' + str(i) + '.png')
+        plt.savefig(plt_name + '_learning_rates_run' + str(i) + '.png')
         # plt.savefig(plt_name+'_run')
 
         with open(file_name, "a") as f:
