@@ -51,7 +51,7 @@ batch_size = args.batch_size
 lr_scheduler_step = args.lr_scheduler_step
 lr_scheduler_gamma = args.lr_scheduler_gamma
 
-checkpoint_step = num_epochs/4
+checkpoint_step = int(num_epochs/4)
 
 # model_name = 'VanillaLSTM'
 # task = 'NextTokenPrediction'
@@ -318,12 +318,19 @@ def main():
         f.write('Batch size = '+str(batch_size)+'\n')
         f.write('Number of runs = ' + str(num_runs) + '\n')
         f.write('Number of epochs in each run = ' + str(num_epochs) + '\n')
-        f.write('Saved model name = ' + modelname + '\n')
-        f.write('Saved optimiser name = ' + optimname + '\n')
+        f.write('LR scheduler step = '+str(lr_scheduler_step)+'\n')
+        f.write('LR Scheduler Gamma = '+str(lr_scheduler_gamma)+'\n')
+        f.write('Checkpoint step = '+str(checkpoint_step)+'\n')
+        f.write('Saved model name prefix = ' + modelname + '\n')
+        f.write('Saved optimiser name prefix = ' + optimname + '\n')
         f.write('Excel name = ' + excel_name + '\n')
         f.write('Train log name = ' + train_log + '\n')
+        f.write('Validation log name = '+validation_log+'\n')
         f.write('Test log name = ' + test_log + '\n')
         f.write('Long test log name = ' + long_test_log + '\n')
+        f.write('Plot name prefix = '+plt_name+'\n')
+        f.write('Checkpoint name prefix = '+checkpoint+'\n')
+
         f.write('///////////////////////////////////////////////////////////////\n')
         f.write('\n')
 
