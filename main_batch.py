@@ -616,6 +616,8 @@ def train(model, loader, sum_writer, run=0):
     # torch.save(optimiser.state_dict(), optimname)
     optm = optimname+'run'+str(run)+'.pth'
     mdl = modelname+'run'+str(run)+'.pth'
+    torch.save(model.state_dict(), mdl)
+    torch.save(optimiser.state_dict(), optm)
 
         # print(accuracies)
         # print(accuracy)
