@@ -51,7 +51,7 @@ batch_size = args.batch_size
 lr_scheduler_step = args.lr_scheduler_step
 lr_scheduler_gamma = args.lr_scheduler_gamma
 
-
+checkpoint_step = num_epochs/4
 
 # model_name = 'VanillaLSTM'
 # task = 'NextTokenPrediction'
@@ -166,6 +166,11 @@ plt_name = path+'Dyck1_' + task + '_' + str(
         num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' +str(batch_size) +'_batch_size_'+'_' + str(
         hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
         num_epochs) + 'epochs_'+str(lr_scheduler_step)+"lr_scheduler_step_"+str(lr_scheduler_gamma)+"lr_scheduler_gamma_"+ str(num_runs)+'runs'
+
+checkpoint = path+ 'Dyck1_' + task + '_' + str(
+        num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' +str(batch_size) +'_batch_size_'+'_' + str(
+        hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
+        num_epochs) + 'epochs_'+str(lr_scheduler_step)+"lr_scheduler_step_"+str(lr_scheduler_gamma)+"lr_scheduler_gamma_"+ str(num_runs)+'runs' + '_CHECKPOINT_'
 
 with open(file_name, 'w') as f:
     f.write('\n')
@@ -589,6 +594,15 @@ def train(model, loader, sum_writer, run=0):
             print('num_correct = ',num_correct)
             print('Final training accuracy = ', num_correct / len(train_dataset) * 100, '%')
             # print('**************************************************************************\n')
+
+        if epoch%checkpoint_step==0:
+            checkpoint_path = checkpoint+'run'+str(run)+"_epoch"+str(epoch)+".pth"
+            torch.save({'run':run,
+                        'epoch':epoch,
+                        'model_state_dict':model.state_dict(),
+                        'optimiser_state_dict':optimiser.state_dict(),
+                        'loss':loss},checkpoint_path)
+
     df1['epoch'] = epochs
     df1['Training accuracies'] = accuracies
     df1['Average training losses'] = losses
