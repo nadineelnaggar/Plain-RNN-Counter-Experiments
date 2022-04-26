@@ -652,6 +652,19 @@ def train(model, loader, sum_writer, run=0):
                         'model_state_dict':model.state_dict(),
                         'optimiser_state_dict':optimiser.state_dict(),
                         'loss':loss},checkpoint_path)
+            checkpoint_loss_plot = modelname+'run'+str(run)+'_epoch'+str(epoch)+'_losses.png'
+            checkpoint_accuracy_plot = modelname+'run'+str(run)+'_epoch'+str(epoch)+'_accuracies.png'
+            checkpoint_lr_plot = modelname+'run'+str(run)+'_epoch'+str(epoch)+'_lrs.png'
+            plt.plot(epochs,losses, label='avg train loss')
+            plt.plot(epochs,validation_losses, label='avg validation loss')
+            plt.plot(long_validation_losses, label='avg long validation loss')
+            plt.savefig(checkpoint_loss_plot)
+            plt.plot(epochs, accuracies, label='train accuracies')
+            plt.plot(epochs, validation_accuracies,label='validation accuracies')
+            plt.plot(epochs, long_validation_accuracies,label='long validation accuracies')
+            plt.savefig(checkpoint_accuracy_plot)
+            plt.plot(epochs, lrs, label='learning rate')
+            plt.savefig(checkpoint_lr_plot)
 
 
 
