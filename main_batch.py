@@ -655,6 +655,7 @@ def train(model, loader, sum_writer, run=0):
             checkpoint_loss_plot = modelname+'run'+str(run)+'_epoch'+str(epoch)+'_losses.png'
             checkpoint_accuracy_plot = modelname+'run'+str(run)+'_epoch'+str(epoch)+'_accuracies.png'
             checkpoint_lr_plot = modelname+'run'+str(run)+'_epoch'+str(epoch)+'_lrs.png'
+            fig_loss, ax_loss = plt.subplots()
             plt.plot(epochs,losses, label='avg train loss')
             plt.plot(epochs,validation_losses, label='avg validation loss')
             plt.plot(long_validation_losses, label='avg long validation loss')
@@ -662,6 +663,7 @@ def train(model, loader, sum_writer, run=0):
             plt.ylabel('Loss')
             plt.legend()
             plt.savefig(checkpoint_loss_plot)
+            fig_acc, ax_acc = plt.subplots()
             plt.plot(epochs, accuracies, label='train accuracies')
             plt.plot(epochs, validation_accuracies,label='validation accuracies')
             plt.plot(epochs, long_validation_accuracies,label='long validation accuracies')
@@ -669,6 +671,7 @@ def train(model, loader, sum_writer, run=0):
             plt.ylabel('Accuracy')
             plt.legend()
             plt.savefig(checkpoint_accuracy_plot)
+            fig_lr, ax_lr = plt.subplots()
             plt.plot(epochs, lrs, label='learning rate')
             plt.xlabel('Epoch')
             plt.ylabel('Learning rate')
