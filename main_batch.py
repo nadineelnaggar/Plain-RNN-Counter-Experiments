@@ -673,7 +673,7 @@ def train(model, loader, sum_writer, run=0):
 
     sum_writer.add_hparams({'model_name':model.model_name,'dataset_size': len(train_dataset), 'num_epochs': num_epochs,
                             'learning_rate': learning_rate, 'batch_size':batch_size,
-                            'optimiser': use_optimiser}, {'Training accuracy': accuracy, 'Training loss': total_loss/len(train_dataset)}, {'Validation accuracy':validation_acc, 'Validation loss':validation_loss, 'Long Validation accuracy':long_validation_acc, 'Long Validation loss':long_validation_loss})
+                            'optimiser': use_optimiser}, {'Training accuracy': accuracy, 'Training loss': total_loss/len(train_dataset)})
 
     # sum_writer.add_graph(model, (Dyck.lineToTensor(X[0][0]), model.init_hidden()))
     # sum_writer.add_graph(model, loader[0])
