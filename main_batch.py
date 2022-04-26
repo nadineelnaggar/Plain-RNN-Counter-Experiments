@@ -15,6 +15,10 @@ from torch.utils.tensorboard import SummaryWriter
 from torch.utils.data import Dataset, DataLoader
 from Dyck1_Datasets import NextTokenPredictionLongTestDataset, NextTokenPredictionShortTestDataset, NextTokenPredictionTrainDataset, NextTokenPredictionValidationDataset
 from torch.optim.lr_scheduler import StepLR
+import math
+import time
+
+
 
 """
 PLOT THE LOSS FOR EACH TRAINING RUN
@@ -33,6 +37,7 @@ parser.add_argument('--lr_scheduler_step',type=int, help='number of epochs befor
 parser.add_argument('--lr_scheduler_gamma',type=float, help='multiplication factor for lr scheduler', default=1.0)
 parser.add_argument('--num_epochs', type=int, help='number of training epochs')
 parser.add_argument('--num_runs', type=int, help='number of training runs')
+parser.add_argument('--checkpoint_step', type=int, help='checkpoint step', default=0)
 
 
 
@@ -52,6 +57,8 @@ lr_scheduler_step = args.lr_scheduler_step
 lr_scheduler_gamma = args.lr_scheduler_gamma
 
 checkpoint_step = int(num_epochs/4)
+if args.checkpoint_step!=0:
+    checkpoint_step = args.checkpoint_step
 
 # model_name = 'VanillaLSTM'
 # task = 'NextTokenPrediction'
@@ -149,6 +156,10 @@ validation_log = path+ 'Dyck1_' + task + '_' + str(
         num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' +str(batch_size) +'_batch_size_'+'_' + str(
         hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
         num_epochs) + 'epochs_'+str(lr_scheduler_step)+"lr_scheduler_step_"+str(lr_scheduler_gamma)+"lr_scheduler_gamma_"+ str(num_runs)+'runs' + '_VALIDATION_LOG.txt'
+long_validation_log = path+ 'Dyck1_' + task + '_' + str(
+        num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' +str(batch_size) +'_batch_size_'+'_' + str(
+        hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
+        num_epochs) + 'epochs_'+str(lr_scheduler_step)+"lr_scheduler_step_"+str(lr_scheduler_gamma)+"lr_scheduler_gamma_"+ str(num_runs)+'runs' + '_LONG_VALIDATION_LOG.txt'
 test_log = path+'Dyck1_' + task + '_' + str(
         num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' +str(batch_size) +'_batch_size_'+'_' + str(
         hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
@@ -326,10 +337,12 @@ def main():
         f.write('Excel name = ' + excel_name + '\n')
         f.write('Train log name = ' + train_log + '\n')
         f.write('Validation log name = '+validation_log+'\n')
+        f.write('Long Validation log name = ' + long_validation_log + '\n')
         f.write('Test log name = ' + test_log + '\n')
         f.write('Long test log name = ' + long_test_log + '\n')
         f.write('Plot name prefix = '+plt_name+'\n')
         f.write('Checkpoint name prefix = '+checkpoint+'\n')
+        f.write('Checkpoint step = '+str(checkpoint_step)+'\n')
 
         f.write('///////////////////////////////////////////////////////////////\n')
         f.write('\n')
@@ -430,12 +443,25 @@ def main():
 
 
 
+def asMinutes(s):
+    m = math.floor(s / 60)
+    s -= m * 60
+    # return '%dm %ds' % (m, s)
+    return m, s
 
+
+def timeSince(since, percent):
+    now = time.time()
+    s = now - since
+    es = s / (percent)
+    rs = es - s
+    # return '%s (- %s)' % (asMinutes(s), asMinutes(rs))
+    return asMinutes(s), asMinutes(rs)
 
 def train(model, loader, sum_writer, run=0):
 
 
-
+    start = time.time()
 
 
     criterion = nn.MSELoss()
@@ -454,10 +480,16 @@ def train(model, loader, sum_writer, run=0):
     validation_accuracies = []
     lrs = []
 
+    long_validation_losses = []
+    long_validation_accuracies = []
+
     # global_step=0
 
     print(model)
     print('num_train_samples = ',len(loader.dataset))
+    print('device = ',device)
+    with open(train_log, 'a') as f:
+        f.write('device = '+str(device)+'\n')
 
     # scheduler = StepLR(optimiser,step_size=30,gamma=0.3)
     scheduler = StepLR(optimiser, step_size=lr_scheduler_step, gamma=lr_scheduler_gamma)
@@ -474,8 +506,8 @@ def train(model, loader, sum_writer, run=0):
         # if epoch%5==0:
         #     print('scheduler = ',scheduler)
 
-        if epoch==num_epochs-1:
-            print_flag=True
+        # if epoch==num_epochs-1:
+        #     print_flag=True
         if print_flag == True:
             with open(train_log, 'a') as f:
                 f.write('\nEPOCH ' + str(epoch) + '\n')
@@ -575,11 +607,18 @@ def train(model, loader, sum_writer, run=0):
         # break
         accuracies.append(accuracy)
         losses.append(total_loss/len(train_dataset))
-        validation_acc, validation_loss = validate_model(model, validation_loader,validation_dataset)
+        validation_acc, validation_loss = validate_model(model, validation_loader,validation_dataset, run, epoch)
+        long_validation_acc, long_validation_loss = validate_model_long(model, long_loader, long_dataset, run, epoch)
+        time_mins, time_secs = timeSince(start, epoch+1/num_epochs*100)
+
+        with open(train_log,'a') as f:
+            f.write('Accuracy for epoch '+ str(epoch)+ '='+ str(round(accuracy,2))+ '%, avg train loss = '+
+              str(total_loss / len(train_dataset))+
+              ' num_correct = '+ str(num_correct)+', val loss = '+ str(validation_loss)+ ', val accuracy = '+ str(round(validation_acc,2))+ '%, long val loss = '+str(long_validation_loss)+', long val acc = '+str(round(long_validation_acc,4)+'%, time = '+str(time_mins)+'m '+str(round(time_secs,2))+'s \n'))
 
         print('Accuracy for epoch ', epoch, '=', round(accuracy,2), '%, avg train loss = ',
               total_loss / len(train_dataset),
-              ' num_correct = ', num_correct,', val loss = ', validation_loss, ', val accuracy = ', round(validation_acc,2), '%')
+              ' num_correct = ', num_correct,', val loss = ', validation_loss, ', val accuracy = ', round(validation_acc,2), '%, long val loss = ',long_validation_loss, ', long val acc = ',round(long_validation_acc,4), '%, time = ',time_mins,'m ',round(time_secs,2),'s \n')
 
         # print('Accuracy for epoch ', epoch, '=', accuracy, '%, avg train loss = ',
         #       total_loss / len(train_dataset),
@@ -587,10 +626,14 @@ def train(model, loader, sum_writer, run=0):
         scheduler.step()
         validation_losses.append(validation_loss)
         validation_accuracies.append(validation_acc)
+        long_validation_losses.append(long_validation_loss)
+        long_validation_accuracies.append(long_validation_acc)
         sum_writer.add_scalar('epoch_losses', total_loss/len(train_dataset),global_step=epoch)
         sum_writer.add_scalar('accuracy', accuracy, global_step=epoch)
         sum_writer.add_scalar('validation losses',validation_loss, global_step=epoch)
         sum_writer.add_scalar('validation_accuracy',validation_acc, global_step=epoch)
+        sum_writer.add_scalar('long validation losses',long_validation_loss, global_step=epoch)
+        sum_writer.add_scalar('long validation_accuracy',long_validation_acc, global_step=epoch)
         sum_writer.add_scalar('learning_rates', optimiser.param_groups[0]["lr"], global_step=epoch)
         # global_step+=1
         sum_writer.close()
@@ -610,11 +653,15 @@ def train(model, loader, sum_writer, run=0):
                         'optimiser_state_dict':optimiser.state_dict(),
                         'loss':loss},checkpoint_path)
 
+
+
     df1['epoch'] = epochs
     df1['Training accuracies'] = accuracies
     df1['Average training losses'] = losses
     df1['Average validation losses'] = validation_losses
     df1['Validation accuracies'] = validation_accuracies
+    df1['Average long validation losses'] = long_validation_losses
+    df1['Long validation accuracies'] = long_validation_accuracies
     df1['learning rates'] = lrs
     df1['epoch correct guesses'] = correct_arr
     df1['epoch incorrect guesses'] = all_epoch_incorrect_guesses
@@ -644,7 +691,7 @@ def train(model, loader, sum_writer, run=0):
         # print(accuracy)
     return accuracy, df1
 
-def validate_model(model, loader, dataset):
+def validate_model(model, loader, dataset, run, epoch):
     # model.eval()
     num_correct = 0
     # dataset = ''
@@ -700,22 +747,22 @@ def validate_model(model, loader, dataset):
         output_seq = model(input_seq.to(device), length)
         # output_seq[i] = out
 
-        with open(log_file, 'a') as f:
-            f.write('////////////////////////////////////////\n')
-            f.write('input batch = ' + str(ds[i * batch_size:i * batch_size + batch_size]['x']) + '\n')
-            f.write('encoded batch = ' + str(input_seq) + '\n')
+        # with open(log_file, 'a') as f:
+        #     f.write('////////////////////////////////////////\n')
+        #     f.write('input batch = ' + str(ds[i * batch_size:i * batch_size + batch_size]['x']) + '\n')
+        #     f.write('encoded batch = ' + str(input_seq) + '\n')
 
         output_seq = model.mask(output_seq, target_seq, length)
         loss = criterion(output_seq,target_seq)
         total_loss+=loss.item()
 
-        with open(log_file, 'a') as f:
-            f.write('////////////////////////////////////////\n')
-            f.write('input sentence = ' + ds[i]['x'] + '\n')
-            f.write('encoded sentence = ' + str(input_seq) + '\n')
+        # with open(log_file, 'a') as f:
+        #     f.write('////////////////////////////////////////\n')
+        #     f.write('input sentence = ' + ds[i]['x'] + '\n')
+        #     f.write('encoded sentence = ' + str(input_seq) + '\n')
 
-        with open(log_file, 'a') as f:
-            f.write('actual output in test function = ' + str(output_seq) + '\n')
+        # with open(log_file, 'a') as f:
+        #     f.write('actual output in test function = ' + str(output_seq) + '\n')
 
         output_seq = output_seq.view(batch_size, length[0], n_letters)
         target_seq = target_seq.view(batch_size, length[0], n_letters)
@@ -725,9 +772,9 @@ def validate_model(model, loader, dataset):
 
 
 
-        with open(log_file, 'a') as f:
-            f.write('rounded output in test function = ' + str(out_np) + '\n')
-            f.write('target in test function = ' + str(target_np) + '\n')
+        # with open(log_file, 'a') as f:
+        #     f.write('rounded output in test function = ' + str(out_np) + '\n')
+        #     f.write('target in test function = ' + str(target_np) + '\n')
 
         for j in range(batch_size):
 
@@ -737,12 +784,12 @@ def validate_model(model, loader, dataset):
                 num_correct += 1
 
 
-                with open(log_file, 'a') as f:
-                    f.write('CORRECT' + '\n')
-            else:
-
-                with open(log_file, 'a') as f:
-                    f.write('INCORRECT' + '\n')
+            #     with open(log_file, 'a') as f:
+            #         f.write('CORRECT' + '\n')
+            # else:
+            #
+            #     with open(log_file, 'a') as f:
+            #         f.write('INCORRECT' + '\n')
 
         # if np.all(np.equal(out_np, target_np)) and (out_np.flatten() == target_np.flatten()).all():
         #     num_correct += 1
@@ -755,7 +802,127 @@ def validate_model(model, loader, dataset):
 
     accuracy = num_correct / len(ds) * 100
     with open(log_file, 'a') as f:
-        f.write('accuracy = ' + str(accuracy)+'%' + '\n')
+        f.write('val accuracy for run'+str(run)+' epoch '+str(epoch)+' = ' + str(accuracy)+'%, val loss = '+str(loss.item()/len(ds)) + '\n')
+    # print(''+dataset+' accuracy = '+ str(accuracy)+'% '+ 'avg loss = '+str(loss.item()/len(ds)))
+
+
+    return accuracy, loss.item()/len(ds)
+
+
+def validate_model_long(model, loader, dataset, run, epoch):
+    # model.eval()
+    num_correct = 0
+    # dataset = ''
+    log_file=''
+    # if len(X[0])>num_bracket_pairs*2:
+    #     dataset = 'long'
+    #     log_file =long_test_log
+    # else:
+    #     dataset='short'
+    #     log_file = test_log
+    # if dataset=='short':
+    #     log_file=test_log
+    #     ds = test_dataset
+    # elif dataset=='long':
+    #     log_file=long_test_log
+    #     ds = long_dataset
+
+    log_file = long_validation_log
+    dataset='Long Validation Set'
+    ds = long_dataset
+
+    criterion = nn.MSELoss()
+
+    total_loss = 0
+    # losses = []
+
+    with open(log_file,'a') as f:
+        f.write('////////////////////////////////////////\n')
+        f.write('TEST '+dataset+'\n')
+
+    # for i in range(len(X)):
+    #     input_seq = Dyck.lineToTensor(X[i])
+    #     target_seq = Dyck.lineToTensorSigmoid(y[i])
+    #     len_seq = len(input_seq)
+    #     output_seq = torch.zeros(target_seq.shape)
+    #
+    #     input_seq.to(device)
+    #     target_seq.to(device)
+    #     output_seq.to(device)
+    #
+    #     # if model.model_name == 'VanillaLSTM':
+    #     #     hidden = (torch.zeros(1, 1, model.hidden_size).to(device), torch.zeros(1, 1, model.hidden_size).to(device))
+    #     # elif model.model_name == 'VanillaRNN' or model.model_name == 'VanillaGRU':
+    #     #     hidden = torch.zeros(1, 1, model.hidden_size).to(device)
+    #
+    #     hidden = model.init_hidden()
+    #
+    #     for j in range(len_seq):
+    #         # out, hidden = model(input_seq[j].to(device), hidden)
+    #         out, hidden = model(Dyck.lineToTensor(X[i][j]).to(device), hidden)
+    #         output_seq[j] = out
+    for i, (input_seq, target_seq, length) in enumerate(loader):
+        output_seq = model(input_seq.to(device), length)
+        # output_seq[i] = out
+
+        # with open(log_file, 'a') as f:
+        #     f.write('////////////////////////////////////////\n')
+        #     f.write('input batch = ' + str(ds[i * batch_size:i * batch_size + batch_size]['x']) + '\n')
+        #     f.write('encoded batch = ' + str(input_seq) + '\n')
+
+        output_seq = model.mask(output_seq, target_seq, length)
+        loss = criterion(output_seq,target_seq)
+        total_loss+=loss.item()
+
+        # with open(log_file, 'a') as f:
+        #     f.write('////////////////////////////////////////\n')
+        #     f.write('input sentence = ' + ds[i]['x'] + '\n')
+        #     f.write('encoded sentence = ' + str(input_seq) + '\n')
+        #
+        # with open(log_file, 'a') as f:
+        #     f.write('actual output in test function = ' + str(output_seq) + '\n')
+
+        output_seq = output_seq.view(batch_size, length[0], n_letters)
+        target_seq = target_seq.view(batch_size, length[0], n_letters)
+
+        out_np = np.int_(output_seq.detach().cpu().numpy() >= epsilon)
+        target_np = np.int_(target_seq.detach().cpu().numpy())
+
+
+        #
+        # with open(log_file, 'a') as f:
+        #     f.write('rounded output in test function = ' + str(out_np) + '\n')
+        #     f.write('target in test function = ' + str(target_np) + '\n')
+
+        for j in range(batch_size):
+
+            if np.array_equal(out_np[j],target_np[j]):
+            # if out_np[j].all() == target_np[j].all():
+            # if np.all(np.equal(out_np[j], target_np[j])) and (out_np[j].flatten() == target_np[j].flatten()).all():
+                num_correct += 1
+
+
+            #     with open(log_file, 'a') as f:
+            #         f.write('CORRECT' + '\n')
+            # else:
+            #
+            #     with open(log_file, 'a') as f:
+            #         f.write('INCORRECT' + '\n')
+
+        # if np.all(np.equal(out_np, target_np)) and (out_np.flatten() == target_np.flatten()).all():
+        #     num_correct += 1
+        #     with open(log_file, 'a') as f:
+        #         f.write('CORRECT' + '\n')
+        # else:
+        #     with open(log_file, 'a') as f:
+        #         f.write('INCORRECT' + '\n')
+
+
+    accuracy = num_correct / len(ds) * 100
+    # with open(log_file, 'a') as f:
+    #     f.write('accuracy = ' + str(accuracy)+'%' + '\n')
+    with open(log_file, 'a') as f:
+        f.write('val accuracy for run'+str(run)+' epoch '+str(epoch)+' = ' + str(accuracy)+'%, val loss = '+str(loss.item()/len(ds)) + '\n')
     # print(''+dataset+' accuracy = '+ str(accuracy)+'% '+ 'avg loss = '+str(loss.item()/len(ds)))
 
 
@@ -809,20 +976,20 @@ def test_model(model, loader, dataset):
         output_seq = model(input_seq.to(device), length)
         # output_seq[i] = out
 
-        with open(log_file, 'a') as f:
-            f.write('////////////////////////////////////////\n')
-            f.write('input batch = ' + str(ds[i * batch_size:i * batch_size + batch_size]['x']) + '\n')
-            f.write('encoded batch = ' + str(input_seq) + '\n')
+        # with open(log_file, 'a') as f:
+        #     f.write('////////////////////////////////////////\n')
+        #     f.write('input batch = ' + str(ds[i * batch_size:i * batch_size + batch_size]['x']) + '\n')
+        #     f.write('encoded batch = ' + str(input_seq) + '\n')
 
         output_seq = model.mask(output_seq, target_seq, length)
 
-        with open(log_file, 'a') as f:
-            f.write('////////////////////////////////////////\n')
-            f.write('input sentence = ' + ds[i]['x'] + '\n')
-            f.write('encoded sentence = ' + str(input_seq) + '\n')
+        # with open(log_file, 'a') as f:
+        #     f.write('////////////////////////////////////////\n')
+        #     f.write('input sentence = ' + ds[i]['x'] + '\n')
+        #     f.write('encoded sentence = ' + str(input_seq) + '\n')
 
-        with open(log_file, 'a') as f:
-            f.write('actual output in test function = ' + str(output_seq) + '\n')
+        # with open(log_file, 'a') as f:
+        #     f.write('actual output in test function = ' + str(output_seq) + '\n')
 
         output_seq = output_seq.view(batch_size, length[0], n_letters)
         target_seq = target_seq.view(batch_size, length[0], n_letters)
@@ -832,9 +999,9 @@ def test_model(model, loader, dataset):
 
 
 
-        with open(log_file, 'a') as f:
-            f.write('rounded output in test function = ' + str(out_np) + '\n')
-            f.write('target in test function = ' + str(target_np) + '\n')
+        # with open(log_file, 'a') as f:
+        #     f.write('rounded output in test function = ' + str(out_np) + '\n')
+        #     f.write('target in test function = ' + str(target_np) + '\n')
 
         for j in range(batch_size):
 
@@ -844,12 +1011,12 @@ def test_model(model, loader, dataset):
                 num_correct += 1
 
 
-                with open(log_file, 'a') as f:
-                    f.write('CORRECT' + '\n')
-            else:
-
-                with open(log_file, 'a') as f:
-                    f.write('INCORRECT' + '\n')
+            #     with open(log_file, 'a') as f:
+            #         f.write('CORRECT' + '\n')
+            # else:
+            #
+            #     with open(log_file, 'a') as f:
+            #         f.write('INCORRECT' + '\n')
 
         # if np.all(np.equal(out_np, target_np)) and (out_np.flatten() == target_np.flatten()).all():
         #     num_correct += 1
