@@ -614,7 +614,7 @@ def train(model, loader, sum_writer, run=0):
         with open(train_log,'a') as f:
             f.write('Accuracy for epoch '+ str(epoch)+ '='+ str(round(accuracy,2))+ '%, avg train loss = '+
               str(total_loss / len(train_dataset))+
-              ' num_correct = '+ str(num_correct)+', val loss = '+ str(validation_loss)+ ', val accuracy = '+ str(round(validation_acc,2))+ '%, long val loss = '+str(long_validation_loss)+', long val acc = '+str(round(long_validation_acc,4)+'%, time = '+str(time_mins)+'m '+str(round(time_secs,2))+'s \n'))
+              ' num_correct = '+ str(num_correct)+', val loss = '+ str(validation_loss) + ', val accuracy = '+ str(round(validation_acc,2))+ '%, long val loss = '+str(long_validation_loss)+', long val acc = '+str(round(long_validation_acc,4))+'%, time = '+str(time_mins)+'m '+str(round(time_secs,2))+'s \n')
 
         print('Accuracy for epoch ', epoch, '=', round(accuracy,2), '%, avg train loss = ',
               total_loss / len(train_dataset),
