@@ -372,6 +372,7 @@ def main():
 
         runs.append('run'+str(i))
         print('****************************************************************************\n')
+        print('random seed = ',seed)
         train_accuracy, df = train(model, train_loader, sum_writer, i)
         train_accuracies.append(train_accuracy)
         train_dataframes.append(df)
