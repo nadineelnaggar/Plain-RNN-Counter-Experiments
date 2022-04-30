@@ -664,6 +664,7 @@ def train(model, loader, sum_writer, run=0):
             plt.ylabel('Loss')
             plt.legend()
             plt.savefig(checkpoint_loss_plot)
+            plt.close()
             fig_acc, ax_acc = plt.subplots()
             plt.plot(epochs, accuracies, label='train accuracies')
             plt.plot(epochs, validation_accuracies,label='validation accuracies')
@@ -672,12 +673,14 @@ def train(model, loader, sum_writer, run=0):
             plt.ylabel('Accuracy')
             plt.legend()
             plt.savefig(checkpoint_accuracy_plot)
+            plt.close()
             fig_lr, ax_lr = plt.subplots()
             plt.plot(epochs, lrs, label='learning rate')
             plt.xlabel('Epoch')
             plt.ylabel('Learning rate')
             plt.legend()
             plt.savefig(checkpoint_lr_plot)
+            plt.close()
 
 
 
