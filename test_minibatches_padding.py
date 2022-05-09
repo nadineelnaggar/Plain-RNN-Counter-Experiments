@@ -450,6 +450,26 @@ target_np = np.int_(targets_enc.detach().cpu().numpy())
 
 print('out3_np = ',out3_np)
 print('target_np = ',target_np)
+
+out3_2 = out3.clone().detach()>=0.5
+print('out3_2 = ',out3_2)
+print('out3_2.float() = ',out3_2.float())
+out3_2 = out3_2.float()
+
+num_correct = 0
+for i in range(batch_size):
+    if out3_2[i].equal(targets_enc[i]):
+        num_correct+=1
+        print('out3_2[i] = ',out3_2[i])
+        print('target_enc[i] = ',targets_enc[i])
+        print('CORRECT')
+    else:
+        print('out3_2[i] = ', out3_2[i])
+        print('target_enc[i] = ', targets_enc[i])
+        print('INCORRECT')
+
+    print('num_correct = ',num_correct)
+
 out4_np = np.copy(target_np)
 out4_np[0,0]=0
 print('out4_np = ',out4_np)
