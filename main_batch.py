@@ -807,8 +807,10 @@ def validate_model(model, loader, dataset, run, epoch):
         output_seq = output_seq.view(batch_size, length[0], n_letters)
         target_seq = target_seq.view(batch_size, length[0], n_letters)
 
-        out_np = np.int_(output_seq.detach().cpu().numpy() >= epsilon)
-        target_np = np.int_(target_seq.detach().cpu().numpy())
+        # out_np = np.int_(output_seq.detach().cpu().numpy() >= epsilon)
+        # target_np = np.int_(target_seq.detach().cpu().numpy())
+        out_seq = output_seq.clone().detach() >= epsilon
+        out_seq = out_seq.float()
 
 
 
@@ -818,7 +820,8 @@ def validate_model(model, loader, dataset, run, epoch):
 
         for j in range(batch_size):
 
-            if np.array_equal(out_np[j],target_np[j]):
+            # if np.array_equal(out_np[j],target_np[j]):
+            if torch.equal(out_seq[j], target_seq[i]):
             # if out_np[j].all() == target_np[j].all():
             # if np.all(np.equal(out_np[j], target_np[j])) and (out_np[j].flatten() == target_np[j].flatten()).all():
                 num_correct += 1
@@ -925,9 +928,10 @@ def validate_model_long(model, loader, dataset, run, epoch):
         output_seq = output_seq.view(batch_size, length[0], n_letters)
         target_seq = target_seq.view(batch_size, length[0], n_letters)
 
-        out_np = np.int_(output_seq.detach().cpu().numpy() >= epsilon)
-        target_np = np.int_(target_seq.detach().cpu().numpy())
-
+        # out_np = np.int_(output_seq.detach().cpu().numpy() >= epsilon)
+        # target_np = np.int_(target_seq.detach().cpu().numpy())
+        out_seq = output_seq.clone().detach() >= epsilon
+        out_seq = out_seq.float()
 
         #
         # with open(log_file, 'a') as f:
@@ -936,7 +940,8 @@ def validate_model_long(model, loader, dataset, run, epoch):
 
         for j in range(batch_size):
 
-            if np.array_equal(out_np[j],target_np[j]):
+            # if np.array_equal(out_np[j],target_np[j]):
+            if torch.equal(out_seq[j], target_seq[i]):
             # if out_np[j].all() == target_np[j].all():
             # if np.all(np.equal(out_np[j], target_np[j])) and (out_np[j].flatten() == target_np[j].flatten()).all():
                 num_correct += 1
@@ -1034,9 +1039,10 @@ def test_model(model, loader, dataset):
         output_seq = output_seq.view(batch_size, length[0], n_letters)
         target_seq = target_seq.view(batch_size, length[0], n_letters)
 
-        out_np = np.int_(output_seq.detach().cpu().numpy() >= epsilon)
-        target_np = np.int_(target_seq.detach().cpu().numpy())
-
+        # out_np = np.int_(output_seq.detach().cpu().numpy() >= epsilon)
+        # target_np = np.int_(target_seq.detach().cpu().numpy())
+        out_seq = output_seq.clone().detach() >= epsilon
+        out_seq = out_seq.float()
 
 
         # with open(log_file, 'a') as f:
@@ -1045,7 +1051,8 @@ def test_model(model, loader, dataset):
 
         for j in range(batch_size):
 
-            if np.array_equal(out_np[j],target_np[j]):
+            # if np.array_equal(out_np[j],target_np[j]):
+            if torch.equal(out_seq[j], target_seq[i]):
             # if out_np[j].all() == target_np[j].all():
             # if np.all(np.equal(out_np[j], target_np[j])) and (out_np[j].flatten() == target_np[j].flatten()).all():
                 num_correct += 1
