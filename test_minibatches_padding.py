@@ -456,9 +456,13 @@ print('out3_2 = ',out3_2)
 print('out3_2.float() = ',out3_2.float())
 out3_2 = out3_2.float()
 
+out3_2[0] = targets_enc[0]
+out3_2[3] = targets_enc[3]
+
 num_correct = 0
 for i in range(batch_size):
-    if out3_2[i].equal(targets_enc[i]):
+    # if out3_2[i].equal(targets_enc[i]):
+    if torch.equal(out3_2[i],targets_enc[i]):
         num_correct+=1
         print('out3_2[i] = ',out3_2[i])
         print('target_enc[i] = ',targets_enc[i])
@@ -470,6 +474,7 @@ for i in range(batch_size):
 
     print('num_correct = ',num_correct)
 
+print('final num_correct = ',num_correct)
 out4_np = np.copy(target_np)
 out4_np[0,0]=0
 print('out4_np = ',out4_np)

@@ -550,15 +550,22 @@ def train(model, loader, sum_writer, run=0):
             # print('output_seq.shape = ',output_seq.shape)
             # print('target_seq.shape = ',target_seq.shape)
 
-            out_np = np.int_(output_seq.detach().cpu().numpy() >= epsilon)
-            target_np = np.int_(target_seq.detach().cpu().numpy())
+            # out_np = np.int_(output_seq.detach().cpu().numpy() >= epsilon)
+            # target_np = np.int_(target_seq.detach().cpu().numpy())
+
+            out_seq = output_seq.clone().detach()>=epsilon
+            out_seq = out_seq.float()
+
+
             # print('out_np.shape = ', out_np.shape)
             # print('target_np.shape = ', target_np.shape)
 
             if print_flag == True:
                 with open(train_log, 'a') as f:
-                    f.write('rounded output in train function = ' + str(out_np) + '\n')
-                    f.write('target in train function = ' + str(target_np) + '\n')
+                    # f.write('rounded output in train function = ' + str(out_np) + '\n')
+                    # f.write('target in train function = ' + str(target_np) + '\n')
+                    f.write('rounded output in train function = ' + str(out_seq) + '\n')
+                    f.write('target in train function = ' + str(target_seq) + '\n')
 
 
 
@@ -574,7 +581,11 @@ def train(model, loader, sum_writer, run=0):
                 # print('target_np[j] = ',target_np[j])
                 # print('target_np[j].shape = ',target_np[j].shape)
 
-                if np.array_equal(out_np[j],target_np[j]):
+                # if np.array_equal(out_np[j],target_np[j]):
+                # if out_seq[j].equal(target_seq[i]):
+                if torch.equal(out_seq[j],target_seq[i]):
+
+
                 # if np.equal(out_np[j].all(), target_np[j].all()).all():
                 # if out_np[j].all()==target_np[j].all():
                     # print('output_np[j] = target_np[j]')
