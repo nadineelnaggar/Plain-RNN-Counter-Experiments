@@ -197,6 +197,51 @@ with open(test_log, 'w') as f:
 with open(long_test_log, 'w') as f:
     f.write('\n')
 
+# def encode_batch(sentences, labels, lengths, batch_size):
+#
+#     max_length = max(lengths)
+#     # print(max_length)
+#     sentence_tensor = torch.zeros(batch_size,max_length,len(vocab))
+#
+#     labels_tensor = torch.tensor([])
+#     for i in range(batch_size):
+#
+#         sentence = sentences[i]
+#         labels_tensor = torch.cat((labels_tensor, Dyck.lineToTensorSigmoid(labels[i],max_len=max_length)))
+#         # labels_tensor = torch.cat((labels_tensor,Dyck.batchToTensorSigmoid(labels,lengths,batch_size,max_length)))
+#         if len(sentence)<max_length:
+#             for index, char in enumerate(sentence):
+#                 pos = vocab.index(char)
+#                 sentence_tensor[i][index][pos] = 1
+#         else:
+#             for index, char in enumerate(sentence):
+#                 pos = vocab.index(char)
+#                 sentence_tensor[i][index][pos]=1
+#     sentence_tensor.requires_grad_(True)
+#     lengths_tensor = torch.tensor(lengths, dtype=torch.long)
+#     # print('labels tensor = ',labels_tensor)
+#     return sentence_tensor, labels_tensor, lengths_tensor
+#
+#
+# def collate_fn(batch):
+#
+#     sentences = [batch[i]['x'] for i in range(len(batch))]
+#     labels = [batch[i]['y'] for i in range(len(batch))]
+#     # print('labels in collate function  = ',labels)
+#     lengths = [len(sentence) for sentence in sentences]
+#
+#     sentences.sort(key=len, reverse=True)
+#     labels.sort(key=len,reverse=True)
+#     lengths.sort(reverse=True)
+#
+#
+#     # seq_tensor, labels_tensor, lengths_tensor = encode_batch(sentences, labels,lengths, batch_size=len(sentences))
+#     seq_tensor, labels_tensor, lengths_tensor = encode_batch(sentences, labels, lengths, batch_size=batch_size)
+#
+#
+#     return seq_tensor.to(device), labels_tensor.to(device), lengths_tensor.to(device)
+
+
 def encode_batch(sentences, labels, lengths, batch_size):
 
     max_length = max(lengths)
@@ -218,7 +263,8 @@ def encode_batch(sentences, labels, lengths, batch_size):
                 pos = vocab.index(char)
                 sentence_tensor[i][index][pos]=1
     sentence_tensor.requires_grad_(True)
-    lengths_tensor = torch.tensor(lengths, dtype=torch.long)
+    # lengths_tensor = torch.tensor(lengths, dtype=torch.long)
+    lengths_tensor = torch.tensor(lengths, dtype=torch.int64).cpu()
     # print('labels tensor = ',labels_tensor)
     return sentence_tensor, labels_tensor, lengths_tensor
 
@@ -239,8 +285,8 @@ def collate_fn(batch):
     seq_tensor, labels_tensor, lengths_tensor = encode_batch(sentences, labels, lengths, batch_size=batch_size)
 
 
-    return seq_tensor.to(device), labels_tensor.to(device), lengths_tensor.to(device)
-
+    # return seq_tensor.to(device), labels_tensor.to(device), lengths_tensor.to(device)
+    return seq_tensor.to(device), labels_tensor.to(device), lengths_tensor
 
 
 # train_dataset = NextTokenPredictionTrainDataset()
