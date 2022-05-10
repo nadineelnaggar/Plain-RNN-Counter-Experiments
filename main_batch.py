@@ -583,7 +583,7 @@ def train(model, loader, sum_writer, run=0):
 
                 # if np.array_equal(out_np[j],target_np[j]):
                 # if out_seq[j].equal(target_seq[i]):
-                if torch.equal(out_seq[j],target_seq[i]):
+                if torch.equal(out_seq[j],target_seq[j]):
 
 
                 # if np.equal(out_np[j].all(), target_np[j].all()).all():
@@ -821,7 +821,7 @@ def validate_model(model, loader, dataset, run, epoch):
         for j in range(batch_size):
 
             # if np.array_equal(out_np[j],target_np[j]):
-            if torch.equal(out_seq[j], target_seq[i]):
+            if torch.equal(out_seq[j], target_seq[j]):
             # if out_np[j].all() == target_np[j].all():
             # if np.all(np.equal(out_np[j], target_np[j])) and (out_np[j].flatten() == target_np[j].flatten()).all():
                 num_correct += 1
@@ -941,7 +941,7 @@ def validate_model_long(model, loader, dataset, run, epoch):
         for j in range(batch_size):
 
             # if np.array_equal(out_np[j],target_np[j]):
-            if torch.equal(out_seq[j], target_seq[i]):
+            if torch.equal(out_seq[j], target_seq[j]):
             # if out_np[j].all() == target_np[j].all():
             # if np.all(np.equal(out_np[j], target_np[j])) and (out_np[j].flatten() == target_np[j].flatten()).all():
                 num_correct += 1
@@ -1052,7 +1052,7 @@ def test_model(model, loader, dataset):
         for j in range(batch_size):
 
             # if np.array_equal(out_np[j],target_np[j]):
-            if torch.equal(out_seq[j], target_seq[i]):
+            if torch.equal(out_seq[j], target_seq[j]):
             # if out_np[j].all() == target_np[j].all():
             # if np.all(np.equal(out_np[j], target_np[j])) and (out_np[j].flatten() == target_np[j].flatten()).all():
                 num_correct += 1

@@ -473,6 +473,11 @@ for i in range(batch_size):
         print('INCORRECT')
 
     print('num_correct = ',num_correct)
+print('out3_2[0] = ',out3_2[0])
+print('targets_enc[0] = ',targets_enc[0])
+print('out3_2[3] = ',out3_2[3])
+print('targets_end[3] = ',targets_enc[3])
+
 
 print('final num_correct = ',num_correct)
 out4_np = np.copy(target_np)
