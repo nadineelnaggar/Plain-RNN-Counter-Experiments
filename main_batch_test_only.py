@@ -25,9 +25,11 @@ parser.add_argument('--hidden_size', type=int, help='hidden size')
 parser.add_argument('--num_layers', type=int, help='number of layers', default=1)
 parser.add_argument('--batch_size', type=int, help='batch size', default=1)
 parser.add_argument('--learning_rate', type=float, help='learning rate')
+parser.add_argument('--lr_scheduler_step',type=int, help='number of epochs before reducing', default=100)
+parser.add_argument('--lr_scheduler_gamma',type=float, help='multiplication factor for lr scheduler', default=1.0)
 parser.add_argument('--num_epochs', type=int, help='number of training epochs')
 parser.add_argument('--num_runs', type=int, help='number of training runs')
-
+parser.add_argument('--best_run',type=int,help='run with the lowest loss and highest accuracy',default=-1)
 
 
 args = parser.parse_args()
@@ -42,6 +44,12 @@ num_epochs = args.num_epochs
 num_runs = args.num_runs
 batch_size = args.batch_size
 # load_model = args.load_model
+lr_scheduler_gamma = args.lr_scheduler_gamma
+lr_scheduler_step = args.lr_scheduler_step
+best_run = args.best_run
+
+if best_run==-1:
+    best_run = num_runs-1
 
 
 # model_name = 'VanillaLSTM'
@@ -95,8 +103,12 @@ Dyck = DyckLanguage(NUM_PAR, P_VAL, Q_VAL)
 
 # path = "/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_"+str(task)+"/Minibatch_Training/"+model_name+"/"
 
+# path = "/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_"+str(task)+"/Minibatch_Training/"+model_name+"/"\
+#        +str(batch_size)+"_batch_size/"+str(learning_rate)+"_learning_rate/"+str(num_epochs)+"_epochs/"
+
 path = "/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_"+str(task)+"/Minibatch_Training/"+model_name+"/"\
-       +str(batch_size)+"_batch_size/"+str(learning_rate)+"_learning_rate/"+str(num_epochs)+"_epochs/"
+       +str(batch_size)+"_batch_size/"+str(learning_rate)+"_learning_rate/"+str(num_epochs)+"_epochs/"\
+       +str(lr_scheduler_step)+"_lr_scheduler_step/"+str(lr_scheduler_gamma)+"_lr_scheduler_gamma/"
 
 print('model_name = ',model_name)
 print('task = ',task)
@@ -152,7 +164,7 @@ excel_name = path+ 'Dyck1_' + task + '_' + str(
 modelname = path+ 'Dyck1_' + task + '_' + str(
         num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' +str(batch_size) +'_batch_size_'+'_' + str(
         hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
-        num_epochs) + 'epochs_'+ str(num_runs)+'runs' + '_MODEL.pth'
+        num_epochs) + 'epochs_'+ str(num_runs)+'runs' + '_MODEL_run'+str(best_run)+'.pth'
 optimname = path+ 'Dyck1_' + task + '_' + str(
         num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' +str(batch_size) +'_batch_size_'+'_' + str(
         hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
