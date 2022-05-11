@@ -555,6 +555,7 @@ def train(model, loader, sum_writer, run=0):
 
             out_seq = output_seq.clone().detach()>=epsilon
             out_seq = out_seq.float()
+            # out_seq.to(device)
 
 
             # print('out_np.shape = ', out_np.shape)
