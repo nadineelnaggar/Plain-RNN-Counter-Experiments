@@ -117,7 +117,7 @@ Dyck = DyckLanguage(NUM_PAR, P_VAL, Q_VAL)
 path = "/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_"+str(task)+"/Minibatch_Training/"+model_name+"/"\
        +str(batch_size)+"_batch_size/"+str(learning_rate)+"_learning_rate/"+str(num_epochs)+"_epochs/"\
        +str(lr_scheduler_step)+"_lr_scheduler_step/"+str(lr_scheduler_gamma)+"_lr_scheduler_gamma/"\
-       +str(hidden_size)+"_hidden_size/"+str(num_runs)+"_runs/"
+       +str(hidden_size)+"_hidden_units/"+str(num_runs)+"_runs/"
 
 print('model_name = ',model_name)
 print('task = ',task)
@@ -499,6 +499,7 @@ def train(model, loader, sum_writer, run=0):
     long_validation_accuracies = []
 
     error_indices = []
+    error_seq_lengths = []
 
     # global_step=0
 
@@ -521,6 +522,7 @@ def train(model, loader, sum_writer, run=0):
         epochs.append(epoch)
 
         epoch_error_indices = []
+        epoch_error_seq_lengths = []
 
         # if epoch%5==0:
         #     print('scheduler = ',scheduler)
@@ -629,6 +631,7 @@ def train(model, loader, sum_writer, run=0):
                     for k in range(length[j]):
                         if torch.equal(out_seq[j][k], target_seq[j][k]) !=True:
                             epoch_error_indices.append(k)
+                            epoch_error_seq_lengths.append(length[k].item())
                             break
                     if print_flag == True:
                         with open(train_log_raw, 'a') as f:
@@ -637,6 +640,7 @@ def train(model, loader, sum_writer, run=0):
             # break
         # break
         error_indices.append(epoch_error_indices)
+        error_seq_lengths.append(epoch_error_seq_lengths)
         lrs.append(optimiser.param_groups[0]["lr"])
         accuracy = num_correct/len(train_dataset)*100
         # print('\n')
@@ -733,6 +737,7 @@ def train(model, loader, sum_writer, run=0):
     df1['epoch correct guesses'] = correct_arr
     df1['epoch incorrect guesses'] = all_epoch_incorrect_guesses
     df1['epoch error indices'] = error_indices
+    df1['epoch error seq lengths'] = error_seq_lengths
 
     # sum_writer.add_hparams({'model_name':model.model_name,'dataset_size': len(train_dataset), 'num_epochs': num_epochs,
     #                         'learning_rate': learning_rate, 'batch_size':batch_size,
@@ -811,7 +816,7 @@ def validate_model(model, loader, dataset, run, epoch):
     #         # out, hidden = model(input_seq[j].to(device), hidden)
     #         out, hidden = model(Dyck.lineToTensor(X[i][j]).to(device), hidden)
     #         output_seq[j] = out
-    for i, (input_seq, target_seq, length) in enumerate(loader):
+    for i, (sentences, labels, input_seq, target_seq, length) in enumerate(loader):
         output_seq = model(input_seq.to(device), length)
         # output_seq[i] = out
 
@@ -932,7 +937,7 @@ def validate_model_long(model, loader, dataset, run, epoch):
     #         # out, hidden = model(input_seq[j].to(device), hidden)
     #         out, hidden = model(Dyck.lineToTensor(X[i][j]).to(device), hidden)
     #         output_seq[j] = out
-    for i, (input_seq, target_seq, length) in enumerate(loader):
+    for i, (sentences, labels, input_seq, target_seq, length) in enumerate(loader):
         output_seq = model(input_seq.to(device), length)
         # output_seq[i] = out
 
@@ -1045,7 +1050,7 @@ def test_model(model, loader, dataset):
     #         # out, hidden = model(input_seq[j].to(device), hidden)
     #         out, hidden = model(Dyck.lineToTensor(X[i][j]).to(device), hidden)
     #         output_seq[j] = out
-    for i, (input_seq, target_seq, length) in enumerate(loader):
+    for i, (sentences, labels, input_seq, target_seq, length) in enumerate(loader):
         output_seq = model(input_seq.to(device), length)
         # output_seq[i] = out
 
