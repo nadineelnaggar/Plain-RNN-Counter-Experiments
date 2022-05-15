@@ -631,7 +631,7 @@ def train(model, loader, sum_writer, run=0):
                     for k in range(length[j]):
                         if torch.equal(out_seq[j][k], target_seq[j][k]) !=True:
                             epoch_error_indices.append(k)
-                            epoch_error_seq_lengths.append(length[j][k].item())
+                            epoch_error_seq_lengths.append(length[j])
                             break
                     if print_flag == True:
                         with open(train_log_raw, 'a') as f:
