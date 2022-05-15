@@ -7,7 +7,7 @@ from sklearn.model_selection import train_test_split
 import numpy as np
 import argparse
 import matplotlib.pyplot as plt
-from models_batch import VanillaLSTM, VanillaRNN, VanillaGRU
+from models_batch import VanillaLSTM, VanillaRNN, VanillaGRU, VanillaReLURNN
 from Dyck_Generator_Suzgun_Batch import DyckLanguage
 import random
 from torch.utils.tensorboard import SummaryWriter
@@ -24,6 +24,11 @@ import time
 PLOT THE LOSS FOR EACH TRAINING RUN
 PLOT THE LEARNING RATE FROM THE SCHEDULER THROUGHOUT TRAINING
 """
+
+seed = 10
+torch.manual_seed(seed)
+np.random.seed(seed)
+
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--model_name', type=str, help='input model name (VanillaLSTM, VanillaRNN, VanillaGRU)')
@@ -111,7 +116,8 @@ Dyck = DyckLanguage(NUM_PAR, P_VAL, Q_VAL)
 
 path = "/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_"+str(task)+"/Minibatch_Training/"+model_name+"/"\
        +str(batch_size)+"_batch_size/"+str(learning_rate)+"_learning_rate/"+str(num_epochs)+"_epochs/"\
-       +str(lr_scheduler_step)+"_lr_scheduler_step/"+str(lr_scheduler_gamma)+"_lr_scheduler_gamma/"
+       +str(lr_scheduler_step)+"_lr_scheduler_step/"+str(lr_scheduler_gamma)+"_lr_scheduler_gamma/"\
+       +str(hidden_size)+"_hidden_size/"+str(num_runs)+"_runs/"
 
 print('model_name = ',model_name)
 print('task = ',task)
@@ -152,6 +158,10 @@ train_log = path+ 'Dyck1_' + task + '_' + str(
         num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' +str(batch_size) +'_batch_size_'+'_' + str(
         hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
         num_epochs) + 'epochs_'+str(lr_scheduler_step)+"lr_scheduler_step_"+str(lr_scheduler_gamma)+"lr_scheduler_gamma_"+ str(num_runs)+'runs' + '_TRAIN_LOG.txt'
+train_log_raw = path+ 'Dyck1_' + task + '_' + str(
+        num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' +str(batch_size) +'_batch_size_'+'_' + str(
+        hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
+        num_epochs) + 'epochs_'+str(lr_scheduler_step)+"lr_scheduler_step_"+str(lr_scheduler_gamma)+"lr_scheduler_gamma_"+ str(num_runs)+'runs' + '_TRAIN_LOG_RAW.txt'
 validation_log = path+ 'Dyck1_' + task + '_' + str(
         num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' +str(batch_size) +'_batch_size_'+'_' + str(
         hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
@@ -240,7 +250,7 @@ def collate_fn(batch):
 
 
     # return seq_tensor.to(device), labels_tensor.to(device), lengths_tensor.to(device)
-    return seq_tensor.to(device), labels_tensor.to(device), lengths_tensor
+    return sentences, labels, seq_tensor.to(device), labels_tensor.to(device), lengths_tensor
 
 
 train_dataset = NextTokenPredictionTrainDataset()
@@ -264,6 +274,9 @@ def select_model(model_name, input_size, hidden_size, num_layers,batch_size, num
         model = VanillaRNN(input_size, hidden_size, num_layers, batch_size, num_classes, output_activation=output_activation)
     elif model_name=='VanillaGRU':
         model = VanillaGRU(input_size,hidden_size, num_layers, batch_size, num_classes, output_activation=output_activation)
+    elif model_name=='VanillaReLURNN':
+        model = VanillaReLURNN(input_size, hidden_size, num_layers, batch_size, num_classes,
+                           output_activation=output_activation)
     return model.to(device)
 
 
@@ -336,6 +349,7 @@ def main():
         f.write('Saved optimiser name prefix = ' + optimname + '\n')
         f.write('Excel name = ' + excel_name + '\n')
         f.write('Train log name = ' + train_log + '\n')
+        f.write('Raw train log name = '+train_log_raw+'\n')
         f.write('Validation log name = '+validation_log+'\n')
         f.write('Long Validation log name = ' + long_validation_log + '\n')
         f.write('Test log name = ' + test_log + '\n')
@@ -484,6 +498,8 @@ def train(model, loader, sum_writer, run=0):
     long_validation_losses = []
     long_validation_accuracies = []
 
+    error_indices = []
+
     # global_step=0
 
     print(model)
@@ -504,17 +520,19 @@ def train(model, loader, sum_writer, run=0):
         epoch_correct_guesses = []
         epochs.append(epoch)
 
+        epoch_error_indices = []
+
         # if epoch%5==0:
         #     print('scheduler = ',scheduler)
 
-        # if epoch==num_epochs-1:
-        #     print_flag=True
+        if epoch==num_epochs-1:
+            print_flag=True
         if print_flag == True:
-            with open(train_log, 'a') as f:
+            with open(train_log_raw, 'a') as f:
                 f.write('\nEPOCH ' + str(epoch) + '\n')
 
 
-        for i, (input_seq, target_seq, length) in enumerate(loader):
+        for i, (sentences, labels, input_seq, target_seq, length) in enumerate(loader):
             model.zero_grad()
             # output_seq = torch.zeros(target_seq.shape)
             output_seq = model(input_seq.to(device), length)
@@ -524,9 +542,10 @@ def train(model, loader, sum_writer, run=0):
             # print('target seq = ',target_seq)
             # print('target seq shape = ',target_seq.shape)
             if print_flag == True:
-                with open(train_log, 'a') as f:
+                with open(train_log_raw, 'a') as f:
                     f.write('////////////////////////////////////////\n')
-                    f.write('input batch = ' + str(train_dataset[i*batch_size:i*batch_size+batch_size]['x']) + '\n')
+                    # f.write('input batch = ' + str(train_dataset[i*batch_size:i*batch_size+batch_size]['x']) + '\n')
+                    f.write('input batch = ' + str(sentences) + '\n')
                     f.write('encoded batch = '+str(input_seq)+'\n')
 
             # print(output_seq.shape)
@@ -540,7 +559,7 @@ def train(model, loader, sum_writer, run=0):
             # lrs.append(optimiser.param_groups[0]["lr"])
 
             if print_flag == True:
-                with open(train_log, 'a') as f:
+                with open(train_log_raw, 'a') as f:
                     f.write('actual output in train function = ' + str(output_seq) + '\n')
 
             # print('output_seq.shape before reshape = ', output_seq.shape)
@@ -562,7 +581,7 @@ def train(model, loader, sum_writer, run=0):
             # print('target_np.shape = ', target_np.shape)
 
             if print_flag == True:
-                with open(train_log, 'a') as f:
+                with open(train_log_raw, 'a') as f:
                     # f.write('rounded output in train function = ' + str(out_np) + '\n')
                     # f.write('target in train function = ' + str(target_np) + '\n')
                     f.write('rounded output in train function = ' + str(out_seq) + '\n')
@@ -598,19 +617,26 @@ def train(model, loader, sum_writer, run=0):
                 # if np.all(np.equal(out_np[j], target_np[j])) and (out_np[j].flatten() == target_np[j].flatten()).all():
                     num_correct += 1
                     # epoch_correct_guesses.append(X[i])
-                    epoch_correct_guesses.append(train_dataset[(i*batch_size)+j]['x'])
+                    epoch_correct_guesses.append(sentences[j])
+                    # epoch_correct_guesses.append(train_dataset[(i*batch_size)+j]['x'])
                     if print_flag == True:
-                        with open(train_log, 'a') as f:
+                        with open(train_log_raw, 'a') as f:
                             f.write('CORRECT' + '\n')
                 else:
-                    epoch_incorrect_guesses.append(train_dataset[(i*batch_size)+j]['x'])
+                    epoch_incorrect_guesses.append(sentences[j])
+                    # epoch_incorrect_guesses.append(train_dataset[(i*batch_size)+j]['x'])
+
+                    for k in range(length[j]):
+                        if torch.equal(out_seq[j][k], target_seq[j][k]) !=True:
+                            epoch_error_indices.append(k)
+                            break
                     if print_flag == True:
-                        with open(train_log, 'a') as f:
+                        with open(train_log_raw, 'a') as f:
                             f.write('INCORRECT' + '\n')
             # print('num_correct = ',num_correct)
             # break
         # break
-
+        error_indices.append(epoch_error_indices)
         lrs.append(optimiser.param_groups[0]["lr"])
         accuracy = num_correct/len(train_dataset)*100
         # print('\n')
@@ -706,6 +732,7 @@ def train(model, loader, sum_writer, run=0):
     df1['learning rates'] = lrs
     df1['epoch correct guesses'] = correct_arr
     df1['epoch incorrect guesses'] = all_epoch_incorrect_guesses
+    df1['epoch error indices'] = error_indices
 
     # sum_writer.add_hparams({'model_name':model.model_name,'dataset_size': len(train_dataset), 'num_epochs': num_epochs,
     #                         'learning_rate': learning_rate, 'batch_size':batch_size,
