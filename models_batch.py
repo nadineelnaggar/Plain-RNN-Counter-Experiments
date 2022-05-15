@@ -288,7 +288,7 @@ class VanillaReLURNN(nn.Module):
         self.batch_size=batch_size
         self.output_size = output_size
         self.output_activation = output_activation
-        self.model_name = 'VanillaRNN'
+        self.model_name = 'VanillaReLURNN'
 
         self.vocab = {'<PAD>': 0, '(':1, ')':2}
         # self.tags = {'<PAD>': 0, 'VB': 1, 'PRP': 2, 'RB': 3, 'JJ': 4, 'NNP': 5}

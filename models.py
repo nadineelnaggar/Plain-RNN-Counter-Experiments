@@ -140,6 +140,30 @@ class VanillaRNN(nn.Module):
     def init_hidden(self):
         return torch.zeros(self.num_layers, 1, self.hidden_size).to(device)
 
+class VanillaReLURNN(nn.Module):
+    def __init__(self, input_size, hidden_size, num_layers, output_size, output_activation='Sigmoid'):
+        super(VanillaReLURNN, self).__init__()
+        self.input_size = input_size
+        self.hidden_size = hidden_size
+        self.num_layers=num_layers
+        self.output_size=output_size
+        self.output_activation=output_activation
+        self.model_name='VanillaReLURNN'
+        self.rnn = nn.RNN(input_size, hidden_size, num_layers=num_layers)
+        # self.lstm = nn.LSTM(input_size, hidden_size)
+        self.fc2 = nn.Linear(hidden_size, output_size)
+        self.sigmoid = nn.Sigmoid()
+
+    def forward(self, x, h0):
+
+        x, h0 = self.rnn(x, h0)
+        x = self.fc2(x)
+        x = self.sigmoid(x).view(-1, self.output_size)
+        return x, h0
+
+    def init_hidden(self):
+        return torch.zeros(self.num_layers, 1, self.hidden_size).to(device)
+
 # class VanillaGRU(nn.Module):
 #     def __init__(self, input_size, hidden_size, num_layers, num_classes, output_activation='Sigmoid'):
 #         super(VanillaGRU, self).__init__()
