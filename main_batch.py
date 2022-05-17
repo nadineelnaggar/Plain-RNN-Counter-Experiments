@@ -258,10 +258,10 @@ test_dataset = NextTokenPredictionShortTestDataset()
 long_dataset = NextTokenPredictionLongTestDataset()
 validation_dataset = NextTokenPredictionValidationDataset()
 
-train_loader = DataLoader(train_dataset,batch_size=batch_size, shuffle=False, collate_fn=collate_fn)
-test_loader = DataLoader(test_dataset,batch_size=batch_size, shuffle=False, collate_fn=collate_fn)
-long_loader = DataLoader(long_dataset, batch_size=batch_size, shuffle=False, collate_fn=collate_fn)
-validation_loader = DataLoader(validation_dataset,batch_size=batch_size, shuffle=False, collate_fn=collate_fn)
+train_loader = DataLoader(train_dataset,batch_size=batch_size, shuffle=True, collate_fn=collate_fn)
+test_loader = DataLoader(test_dataset,batch_size=batch_size, shuffle=True, collate_fn=collate_fn)
+long_loader = DataLoader(long_dataset, batch_size=batch_size, shuffle=True, collate_fn=collate_fn)
+validation_loader = DataLoader(validation_dataset,batch_size=batch_size, shuffle=True, collate_fn=collate_fn)
 
 
 # train_loader = DataLoader(train_dataset,batch_size=batch_size, shuffle=False)
