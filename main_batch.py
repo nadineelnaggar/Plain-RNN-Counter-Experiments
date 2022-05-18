@@ -43,6 +43,7 @@ parser.add_argument('--lr_scheduler_gamma',type=float, help='multiplication fact
 parser.add_argument('--num_epochs', type=int, help='number of training epochs')
 parser.add_argument('--num_runs', type=int, help='number of training runs')
 parser.add_argument('--checkpoint_step', type=int, help='checkpoint step', default=0)
+parser.add_argument('--shuffle_dataset',type=bool,default=False)
 
 
 
@@ -64,6 +65,8 @@ lr_scheduler_gamma = args.lr_scheduler_gamma
 checkpoint_step = int(num_epochs/4)
 if args.checkpoint_step!=0:
     checkpoint_step = args.checkpoint_step
+
+shuffle_dataset = args.shuffle_dataset
 
 # model_name = 'VanillaLSTM'
 # task = 'NextTokenPrediction'
@@ -117,7 +120,7 @@ Dyck = DyckLanguage(NUM_PAR, P_VAL, Q_VAL)
 path = "/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_"+str(task)+"/Minibatch_Training/"+model_name+"/"\
        +str(batch_size)+"_batch_size/"+str(learning_rate)+"_learning_rate/"+str(num_epochs)+"_epochs/"\
        +str(lr_scheduler_step)+"_lr_scheduler_step/"+str(lr_scheduler_gamma)+"_lr_scheduler_gamma/"\
-       +str(hidden_size)+"_hidden_units/"+str(num_runs)+"_runs/"
+       +str(hidden_size)+"_hidden_units/"+str(num_runs)+"_runs/shuffle_"+str(shuffle_dataset)+"/"
 
 print('model_name = ',model_name)
 print('task = ',task)
@@ -258,10 +261,10 @@ test_dataset = NextTokenPredictionShortTestDataset()
 long_dataset = NextTokenPredictionLongTestDataset()
 validation_dataset = NextTokenPredictionValidationDataset()
 
-train_loader = DataLoader(train_dataset,batch_size=batch_size, shuffle=True, collate_fn=collate_fn)
-test_loader = DataLoader(test_dataset,batch_size=batch_size, shuffle=True, collate_fn=collate_fn)
-long_loader = DataLoader(long_dataset, batch_size=batch_size, shuffle=True, collate_fn=collate_fn)
-validation_loader = DataLoader(validation_dataset,batch_size=batch_size, shuffle=True, collate_fn=collate_fn)
+train_loader = DataLoader(train_dataset,batch_size=batch_size, shuffle=shuffle_dataset, collate_fn=collate_fn)
+test_loader = DataLoader(test_dataset,batch_size=batch_size, shuffle=shuffle_dataset, collate_fn=collate_fn)
+long_loader = DataLoader(long_dataset, batch_size=batch_size, shuffle=shuffle_dataset, collate_fn=collate_fn)
+validation_loader = DataLoader(validation_dataset,batch_size=batch_size, shuffle=shuffle_dataset, collate_fn=collate_fn)
 
 
 # train_loader = DataLoader(train_dataset,batch_size=batch_size, shuffle=False)
