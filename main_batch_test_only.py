@@ -16,6 +16,10 @@ from torch.utils.data import Dataset, DataLoader
 from Dyck1_Datasets import NextTokenPredictionLongTestDataset, NextTokenPredictionShortTestDataset, \
     NextTokenPredictionTrainDataset, NextTokenPredictionDataset102to500tokens,NextTokenPredictionDataset502to1000tokens
 
+seed = 10
+torch.manual_seed(seed)
+np.random.seed(seed)
+
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--model_name', type=str, help='input model name (VanillaLSTM, VanillaRNN, VanillaGRU)')
@@ -30,6 +34,8 @@ parser.add_argument('--lr_scheduler_gamma',type=float, help='multiplication fact
 parser.add_argument('--num_epochs', type=int, help='number of training epochs')
 parser.add_argument('--num_runs', type=int, help='number of training runs')
 parser.add_argument('--best_run',type=int,help='run with the lowest loss and highest accuracy',default=-1)
+parser.add_argument('--checkpoint_step', type=int, help='checkpoint step', default=0)
+parser.add_argument('--shuffle_dataset',type=bool,default=False)
 
 
 args = parser.parse_args()
@@ -51,6 +57,11 @@ best_run = args.best_run
 if best_run==-1:
     best_run = num_runs-1
 
+checkpoint_step = int(num_epochs/4)
+if args.checkpoint_step!=0:
+    checkpoint_step = args.checkpoint_step
+
+shuffle_dataset = args.shuffle_dataset
 
 # model_name = 'VanillaLSTM'
 # task = 'NextTokenPrediction'
@@ -106,19 +117,38 @@ Dyck = DyckLanguage(NUM_PAR, P_VAL, Q_VAL)
 # path = "/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_"+str(task)+"/Minibatch_Training/"+model_name+"/"\
 #        +str(batch_size)+"_batch_size/"+str(learning_rate)+"_learning_rate/"+str(num_epochs)+"_epochs/"
 
+# path = "/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_"+str(task)+"/Minibatch_Training/"+model_name+"/"\
+#        +str(batch_size)+"_batch_size/"+str(learning_rate)+"_learning_rate/"+str(num_epochs)+"_epochs/"\
+#        +str(lr_scheduler_step)+"_lr_scheduler_step/"+str(lr_scheduler_gamma)+"_lr_scheduler_gamma/"
+
 path = "/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_"+str(task)+"/Minibatch_Training/"+model_name+"/"\
        +str(batch_size)+"_batch_size/"+str(learning_rate)+"_learning_rate/"+str(num_epochs)+"_epochs/"\
-       +str(lr_scheduler_step)+"_lr_scheduler_step/"+str(lr_scheduler_gamma)+"_lr_scheduler_gamma/"
+       +str(lr_scheduler_step)+"_lr_scheduler_step/"+str(lr_scheduler_gamma)+"_lr_scheduler_gamma/"\
+       +str(hidden_size)+"_hidden_units/"+str(num_runs)+"_runs/shuffle_"+str(shuffle_dataset)+"/"
+
+
+# print('model_name = ',model_name)
+# print('task = ',task)
+# print('feedback = ',feedback)
+# print('hidden_size = ',hidden_size)
+# print('num_layers = ',num_layers)
+# print('learning_rate = ',learning_rate)
+# print('num_epochs = ',num_epochs)
+# print('num_runs = ',num_runs)
+# # print('load_model = ',load_model)
 
 print('model_name = ',model_name)
 print('task = ',task)
 print('feedback = ',feedback)
 print('hidden_size = ',hidden_size)
+print('batch_size = ',batch_size)
 print('num_layers = ',num_layers)
 print('learning_rate = ',learning_rate)
 print('num_epochs = ',num_epochs)
 print('num_runs = ',num_runs)
-# print('load_model = ',load_model)
+print('shuffle = ',shuffle_dataset)
+
+
 
 # file_name = path+ 'Dyck1_' + task + '_' + str(
 #         num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' +str(batch_size) +'_batch_size_'+'_' + str(
@@ -286,7 +316,7 @@ def collate_fn(batch):
 
 
     # return seq_tensor.to(device), labels_tensor.to(device), lengths_tensor.to(device)
-    return seq_tensor.to(device), labels_tensor.to(device), lengths_tensor
+    return sentences, labels, seq_tensor.to(device), labels_tensor.to(device), lengths_tensor
 
 
 # train_dataset = NextTokenPredictionTrainDataset()
@@ -294,8 +324,8 @@ test_dataset = NextTokenPredictionDataset102to500tokens()
 long_dataset = NextTokenPredictionDataset502to1000tokens()
 
 # train_loader = DataLoader(train_dataset,batch_size=batch_size, shuffle=False, collate_fn=collate_fn)
-test_loader = DataLoader(test_dataset,batch_size=batch_size, shuffle=False, collate_fn=collate_fn)
-long_loader = DataLoader(long_dataset, batch_size=batch_size, shuffle=False, collate_fn=collate_fn)
+test_loader = DataLoader(test_dataset,batch_size=batch_size, shuffle=shuffle_dataset, collate_fn=collate_fn)
+long_loader = DataLoader(long_dataset, batch_size=batch_size, shuffle=shuffle_dataset, collate_fn=collate_fn)
 
 
 # train_loader = DataLoader(train_dataset,batch_size=batch_size, shuffle=False)
@@ -518,6 +548,7 @@ def main():
     test_accuracy = test_model(model, test_loader, 'short')
     test_accuracies.append(test_accuracy)
     long_test_accuracy = test_model(model, long_loader, 'long')
+    long_test_accuracies.append(long_test_accuracy)
     with open(file_name, "a") as f:
         # f.write('train accuracy for run ' + str(i) + ' = ' + str(train_accuracy) + '%\n')
         f.write('test accuracy for 102 to 500 tokens = ' + str(test_accuracy) + '%\n')
@@ -781,21 +812,23 @@ def test_model(model, loader, dataset):
     #         # out, hidden = model(input_seq[j].to(device), hidden)
     #         out, hidden = model(Dyck.lineToTensor(X[i][j]).to(device), hidden)
     #         output_seq[j] = out
-    for i, (input_seq, target_seq, length) in enumerate(loader):
+    for i, (sentences, labels, input_seq, target_seq, length) in enumerate(loader):
         output_seq = model(input_seq.to(device), length)
         # output_seq[i] = out
 
         with open(log_file, 'a') as f:
             f.write('////////////////////////////////////////\n')
-            f.write('input batch = ' + str(ds[i * batch_size:i * batch_size + batch_size]['x']) + '\n')
+            # f.write('input batch = ' + str(ds[i * batch_size:i * batch_size + batch_size]['x']) + '\n')
+            # f.write('encoded batch = ' + str(input_seq) + '\n')
+            f.write('input batch = ' + str(sentences) + '\n')
             f.write('encoded batch = ' + str(input_seq) + '\n')
 
         output_seq = model.mask(output_seq, target_seq, length)
 
-        with open(log_file, 'a') as f:
-            f.write('////////////////////////////////////////\n')
-            f.write('input sentence = ' + ds[i]['x'] + '\n')
-            f.write('encoded sentence = ' + str(input_seq) + '\n')
+        # with open(log_file, 'a') as f:
+        #     f.write('////////////////////////////////////////\n')
+        #     f.write('input sentence = ' + ds[i]['x'] + '\n')
+        #     f.write('encoded sentence = ' + str(input_seq) + '\n')
 
         with open(log_file, 'a') as f:
             f.write('actual output in test function = ' + str(output_seq) + '\n')
