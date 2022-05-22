@@ -399,15 +399,15 @@ long_loader = DataLoader(long_dataset, batch_size=batch_size, shuffle=shuffle_da
 
 def select_model(model_name, input_size, hidden_size, num_layers,batch_size, num_classes, output_activation):
     if model_name=='VanillaLSTM':
-        model = VanillaLSTM(input_size,hidden_size, num_layers, batch_size, num_classes, output_activation=output_activation)
+        selected_model = VanillaLSTM(input_size,hidden_size, num_layers, batch_size, num_classes, output_activation=output_activation)
     elif model_name=='VanillaRNN':
-        model = VanillaRNN(input_size, hidden_size, num_layers, batch_size, num_classes, output_activation=output_activation)
+        selected_model = VanillaRNN(input_size, hidden_size, num_layers, batch_size, num_classes, output_activation=output_activation)
     elif model_name=='VanillaGRU':
-        model = VanillaGRU(input_size,hidden_size, num_layers, batch_size, num_classes, output_activation=output_activation)
+        selected_model = VanillaGRU(input_size,hidden_size, num_layers, batch_size, num_classes, output_activation=output_activation)
     elif model_name == 'VanillaReLURNN':
-        model = VanillaReLURNN(input_size, hidden_size, num_layers, batch_size, num_classes, output_activation=output_activation)
+        selected_model = VanillaReLURNN(input_size, hidden_size, num_layers, batch_size, num_classes, output_activation=output_activation)
 
-    return model.to(device)
+    return selected_model.to(device)
 
 
 def read_sheets():
