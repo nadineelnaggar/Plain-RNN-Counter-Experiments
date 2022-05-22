@@ -416,7 +416,10 @@ def read_sheets():
         sheet_name = "run"+str(i)
         sheet_names.append(sheet_name)
     df = pd.read_excel(excel_name,sheet_name=sheet_names)
-    return df
+    dfs = []
+    for i in range(num_runs):
+        dfs.append(df.get(sheet_names[i]))
+    return dfs
 
 
 # print(Dyck.lineToTensorSigmoid('1110'))
