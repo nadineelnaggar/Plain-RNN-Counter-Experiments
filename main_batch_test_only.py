@@ -285,8 +285,8 @@ excel_name_inference = path+ 'Dyck1_' + task + '_' + str(
 with open(file_name, 'w') as f:
     f.write('\n')
 
-with open(train_log, 'w') as f:
-    f.write('\n')
+# with open(train_log, 'w') as f:
+#     f.write('\n')
 
 with open(test_log, 'w') as f:
     f.write('\n')
