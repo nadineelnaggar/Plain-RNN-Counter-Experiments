@@ -407,8 +407,8 @@ def select_model(model_name, input_size, hidden_size, num_layers,batch_size, num
     elif model_name == 'VanillaReLURNN':
         selected_model = VanillaReLURNN(input_size, hidden_size, num_layers, batch_size, num_classes, output_activation=output_activation)
 
-    # return selected_model.to(device)
-    return selected_model
+    return selected_model.to(device)
+    # return selected_model
 
 def read_sheets():
     sheet_names = []
