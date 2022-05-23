@@ -663,9 +663,10 @@ def main():
         losses_val=losses_val.tolist()
         losses_long_val = df['Average long validation losses']
         losses_long_val = losses_long_val.tolist()
-        runs.append(run)
+        # runs.append(run)
         for epoch in range(num_epochs):
             if epoch%checkpoint_step==0:
+                runs.append(run)
                 avg_train_losses.append(losses_train[epoch])
                 avg_val_losses.append(losses_val[epoch])
                 avg_long_val_losses.append(losses_long_val[epoch])
