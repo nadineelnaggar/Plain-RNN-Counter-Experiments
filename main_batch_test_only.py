@@ -407,8 +407,8 @@ def select_model(model_name, input_size, hidden_size, num_layers,batch_size, num
     elif model_name == 'VanillaReLURNN':
         selected_model = VanillaReLURNN(input_size, hidden_size, num_layers, batch_size, num_classes, output_activation=output_activation)
 
-    return selected_model.to(device)
-    # return selected_model
+    # return selected_model.to(device)
+    return selected_model
 
 def read_sheets():
     sheet_names = []
@@ -665,10 +665,12 @@ def main():
                 avg_long_val_losses.append(losses_long_val[epoch])
                 epochs.append(epoch)
                 checkpoint_model = select_model(model_name,input_size,hidden_size,num_layers,batch_size,num_classes,output_activation)
+                # checkpoint_model.to(device)
                 checkpoint_path = checkpoint+'run'+str(run)+"_epoch"+str(epoch)+".pth"
 
                 checkpt = torch.load(checkpoint_path)
                 checkpoint_model.load_state_dict(checkpt['model_state_dict'])
+                checkpoint_model.to(device)
                 checkpoint_test_accuracy, checkpoint_correct_guesses,checkpoint_correct_guesses_length, checkpoint_incorrect_guesses, checkpoint_incorrect_guesses_length, checkpoint_incorrect_guesses_first_fail,checkpoint_avg_first_fail_point = test_model(checkpoint_model,test_loader,'short')
                 test_accuracies.append(checkpoint_test_accuracy)
                 correct_guesses.append(checkpoint_correct_guesses)
