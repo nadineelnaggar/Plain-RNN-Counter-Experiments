@@ -695,7 +695,7 @@ def main():
                 incorrect_guesses_long.append(checkpoint_long_incorrect_guesses)
                 incorrect_guesses_long_lengths.append(checkpoint_long_incorrect_guesses_length)
                 incorrect_guesses_long_first_fail.append(checkpoint_long_incorrect_guesses_first_fail)
-                avg_point_of_failure_short.append(checkpoint_long_avg_first_fail_point)
+                avg_point_of_failure_long.append(checkpoint_long_avg_first_fail_point)
 
 
 
@@ -732,7 +732,7 @@ def main():
         incorrect_guesses_long.append(long_incorrect_guesses)
         incorrect_guesses_long_lengths.append(long_incorrect_guesses_length)
         incorrect_guesses_long_first_fail.append(long_incorrect_guesses_first_fail)
-        avg_point_of_failure_short.append(long_avg_first_fail_point)
+        avg_point_of_failure_long.append(long_avg_first_fail_point)
 
 
 
