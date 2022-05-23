@@ -407,8 +407,8 @@ def select_model(model_name, input_size, hidden_size, num_layers,batch_size, num
     elif model_name == 'VanillaReLURNN':
         selected_model = VanillaReLURNN(input_size, hidden_size, num_layers, batch_size, num_classes, output_activation=output_activation)
 
-    # return selected_model.to(device)
-    return selected_model
+    return selected_model.to(device)
+    # return selected_model
 
 def read_sheets():
     sheet_names = []
@@ -705,8 +705,8 @@ def main():
         avg_val_losses.append(losses_val[num_epochs-1])
         avg_long_val_losses.append(losses_long_val[num_epochs-1])
         mdl = modelname + 'run' + str(run) + '.pth'
-        model = select_model(mdl, input_size, hidden_size, num_layers, batch_size, num_classes,output_activation)
-        model.load_state_dict(torch.load(modelname))
+        model = select_model(model_name, input_size, hidden_size, num_layers, batch_size, num_classes,output_activation)
+        model.load_state_dict(torch.load(mdl))
         model.to(device)
         test_accuracy, test_correct_guesses,test_correct_guesses_length, test_incorrect_guesses, test_incorrect_guesses_length, test_incorrect_guesses_first_fail,test_avg_first_fail_point = test_model(model, test_loader, 'short')
         test_accuracies.append(test_accuracy)
