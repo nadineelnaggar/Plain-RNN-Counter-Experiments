@@ -804,19 +804,19 @@ def main():
     # plt.close()
 
     plt.scatter(x=avg_point_of_failure_short, y=1/avg_train_losses)
-    plt.xlabel('Average first point of failure for 950 to 1000 token Dyck-1 Sequences')
+    plt.xlabel('Average first point of failure for 990 to 1000 token Dyck-1 Sequences')
     plt.ylabel('Average training loss')
     plt.savefig(scatter_name_train)
     plt.close()
 
     plt.scatter(x=avg_point_of_failure_short, y=1/avg_val_losses)
-    plt.xlabel('Average first point of failure for 950 to 1000 token Dyck-1 Sequences')
+    plt.xlabel('Average first point of failure for 990 to 1000 token Dyck-1 Sequences')
     plt.ylabel('Average validation loss')
     plt.savefig(scatter_name_validation)
     plt.close()
 
     plt.scatter(x=avg_point_of_failure_short, y=1/avg_long_val_losses)
-    plt.xlabel('Average first point of failure for 950 to 1000 token Dyck-1 Sequences')
+    plt.xlabel('Average first point of failure for 990 to 1000 token Dyck-1 Sequences')
     plt.ylabel('Average long validation loss')
     plt.savefig(scatter_name_long_validation)
     plt.close()
@@ -848,9 +848,9 @@ def main():
     df1['avg training losses'] = avg_train_losses
     df1['avg validation losses']=avg_val_losses
     df1['avg long validation losses']=avg_long_val_losses
-    df1['correct guesses (950 to 1000 tokens)'] = correct_guesses
-    df1['correct guesses seq lengths (950 to 1000 tokens)'] = correct_guesses_lengths
-    df1['average first point of failure (950 to 1000 tokens)'] = avg_point_of_failure_short
+    df1['correct guesses (990 to 1000 tokens)'] = correct_guesses
+    df1['correct guesses seq lengths (990 to 1000 tokens)'] = correct_guesses_lengths
+    df1['average first point of failure (990 to 1000 tokens)'] = avg_point_of_failure_short
     # df1['correct guesses long (502 to 1000 tokens)']=correct_guesses_long
     # df1['correct guesses long seq lenghts (502 to 1000 tokens)']=correct_guesses_long_lengths
     # df1['avg point of failure long (502 to 1000 tokens)']=avg_point_of_failure_long
