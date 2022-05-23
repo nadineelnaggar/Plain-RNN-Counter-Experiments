@@ -15,7 +15,7 @@ from torch.utils.tensorboard import SummaryWriter
 from torch.utils.data import Dataset, DataLoader
 from Dyck1_Datasets import NextTokenPredictionLongTestDataset, NextTokenPredictionShortTestDataset, \
     NextTokenPredictionTrainDataset, NextTokenPredictionDataset102to500tokens,NextTokenPredictionDataset502to1000tokens, \
-    NextTokenPredictionDataset950to1000tokens
+    NextTokenPredictionDataset990to1000tokens
 
 seed = 10
 torch.manual_seed(seed)
@@ -279,7 +279,7 @@ checkpoint = path+ 'Dyck1_' + task + '_' + str(
 scatter_name_train = path+ 'Dyck1_' + task + '_' + str(
         num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' +str(batch_size) +'_batch_size_'+'_' + str(
         hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
-        num_epochs) + 'epochs_'+str(lr_scheduler_step)+"lr_scheduler_step_"+str(lr_scheduler_gamma)+"lr_scheduler_gamma_"+ str(num_runs)+'runs' + '_950to1000tokens_train_loss_SCATTER_PLOT.png'
+        num_epochs) + 'epochs_'+str(lr_scheduler_step)+"lr_scheduler_step_"+str(lr_scheduler_gamma)+"lr_scheduler_gamma_"+ str(num_runs)+'runs' + '_990to1000tokens_train_loss_SCATTER_PLOT.png'
 
 # long_scatter_name_train = path+ 'Dyck1_' + task + '_' + str(
 #         num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' +str(batch_size) +'_batch_size_'+'_' + str(
@@ -294,7 +294,7 @@ scatter_name_train = path+ 'Dyck1_' + task + '_' + str(
 scatter_name_validation = path+ 'Dyck1_' + task + '_' + str(
         num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' +str(batch_size) +'_batch_size_'+'_' + str(
         hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
-        num_epochs) + 'epochs_'+str(lr_scheduler_step)+"lr_scheduler_step_"+str(lr_scheduler_gamma)+"lr_scheduler_gamma_"+ str(num_runs)+'runs' + '_950to1000tokens_validation_loss_SCATTER_PLOT.png'
+        num_epochs) + 'epochs_'+str(lr_scheduler_step)+"lr_scheduler_step_"+str(lr_scheduler_gamma)+"lr_scheduler_gamma_"+ str(num_runs)+'runs' + '_990to1000tokens_validation_loss_SCATTER_PLOT.png'
 
 
 # long_scatter_name_validation = path+ 'Dyck1_' + task + '_' + str(
@@ -310,7 +310,7 @@ scatter_name_validation = path+ 'Dyck1_' + task + '_' + str(
 scatter_name_long_validation = path+ 'Dyck1_' + task + '_' + str(
         num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' +str(batch_size) +'_batch_size_'+'_' + str(
         hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
-        num_epochs) + 'epochs_'+str(lr_scheduler_step)+"lr_scheduler_step_"+str(lr_scheduler_gamma)+"lr_scheduler_gamma_"+ str(num_runs)+'runs' + '_950to1000tokens_long_validation_loss_SCATTER_PLOT.png'
+        num_epochs) + 'epochs_'+str(lr_scheduler_step)+"lr_scheduler_step_"+str(lr_scheduler_gamma)+"lr_scheduler_gamma_"+ str(num_runs)+'runs' + '_990to1000tokens_long_validation_loss_SCATTER_PLOT.png'
 
 
 # long_scatter_name_long_validation = path+ 'Dyck1_' + task + '_' + str(
@@ -430,7 +430,7 @@ def collate_fn(batch):
 # test_dataset = NextTokenPredictionDataset102to500tokens()
 # long_dataset = NextTokenPredictionDataset502to1000tokens()
 
-test_dataset = NextTokenPredictionDataset950to1000tokens()
+test_dataset = NextTokenPredictionDataset990to1000tokens()
 
 test_size = len(test_dataset)
 
