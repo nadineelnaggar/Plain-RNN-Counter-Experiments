@@ -691,6 +691,9 @@ def main():
     avg_val_losses = []
     avg_long_val_losses = []
     epochs = []
+    inverse_avg_train_losses = []
+    inverse_avg_val_losses = []
+    inverse_avg_long_val_losses = []
 
 
 
@@ -708,8 +711,11 @@ def main():
             if epoch%checkpoint_step==0:
                 runs.append(run)
                 avg_train_losses.append(losses_train[epoch])
+                inverse_avg_train_losses.append(1/losses_train[epoch])
                 avg_val_losses.append(losses_val[epoch])
+                inverse_avg_val_losses.append(1 / losses_val[epoch])
                 avg_long_val_losses.append(losses_long_val[epoch])
+                inverse_avg_long_val_losses.append(1 / losses_long_val[epoch])
                 epochs.append(epoch)
                 checkpoint_model = select_model(model_name,input_size,hidden_size,num_layers,batch_size,num_classes,output_activation)
                 # checkpoint_model.to(device)
@@ -804,19 +810,37 @@ def main():
     # plt.savefig(scatter_name_long_validation)
     # plt.close()
 
-    plt.scatter(x=avg_point_of_failure_short, y=1/avg_train_losses)
+    # plt.scatter(x=avg_point_of_failure_short, y=1/avg_train_losses)
+    # plt.xlabel('Average first point of failure for 990 to 1000 token Dyck-1 Sequences')
+    # plt.ylabel('Average training loss')
+    # plt.savefig(scatter_name_train)
+    # plt.close()
+    #
+    # plt.scatter(x=avg_point_of_failure_short, y=1/avg_val_losses)
+    # plt.xlabel('Average first point of failure for 990 to 1000 token Dyck-1 Sequences')
+    # plt.ylabel('Average validation loss')
+    # plt.savefig(scatter_name_validation)
+    # plt.close()
+    #
+    # plt.scatter(x=avg_point_of_failure_short, y=1/avg_long_val_losses)
+    # plt.xlabel('Average first point of failure for 990 to 1000 token Dyck-1 Sequences')
+    # plt.ylabel('Average long validation loss')
+    # plt.savefig(scatter_name_long_validation)
+    # plt.close()
+
+    plt.scatter(x=avg_point_of_failure_short, y=inverse_avg_train_losses)
     plt.xlabel('Average first point of failure for 990 to 1000 token Dyck-1 Sequences')
     plt.ylabel('Average training loss')
     plt.savefig(scatter_name_train)
     plt.close()
 
-    plt.scatter(x=avg_point_of_failure_short, y=1/avg_val_losses)
+    plt.scatter(x=avg_point_of_failure_short, y=inverse_avg_val_losses)
     plt.xlabel('Average first point of failure for 990 to 1000 token Dyck-1 Sequences')
     plt.ylabel('Average validation loss')
     plt.savefig(scatter_name_validation)
     plt.close()
 
-    plt.scatter(x=avg_point_of_failure_short, y=1/avg_long_val_losses)
+    plt.scatter(x=avg_point_of_failure_short, y=inverse_avg_long_val_losses)
     plt.xlabel('Average first point of failure for 990 to 1000 token Dyck-1 Sequences')
     plt.ylabel('Average long validation loss')
     plt.savefig(scatter_name_long_validation)
