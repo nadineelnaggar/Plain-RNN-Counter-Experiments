@@ -242,7 +242,7 @@ class NextTokenPredictionDataset502to1000tokens(Dataset):
 
 
 
-class NextTokenPredictionDataset950to1000tokens(Dataset):
+class NextTokenPredictionDataset990to1000tokens(Dataset):
     def __init__(self):
         # xy = np.loadtxt('Dyck1_Dataset_Suzgun_train_.txt', delimiter=",")
         # self.x = torch.from_numpy(xy[:,0])
@@ -256,7 +256,7 @@ class NextTokenPredictionDataset950to1000tokens(Dataset):
                 line = line.split(",")
                 sentence = line[0].strip()
                 label = line[1].strip()
-                if len(sentence)>=950:
+                if len(sentence)>=990:
                     self.x.append(sentence)
                     self.y.append(label)
                     self.lengths.append(len(sentence))
