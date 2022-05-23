@@ -460,7 +460,7 @@ def read_sheets():
     for i in range(num_runs):
         sheet_name = "run"+str(i)
         sheet_names.append(sheet_name)
-    df = pd.read_excel(excel_name,sheet_name=sheet_names)
+    df = pd.read_excel(excel_name,sheet_name=sheet_names, engine="openpyxl")
     dfs = []
     for i in range(num_runs):
         dfs.append(df.get(sheet_names[i]))
