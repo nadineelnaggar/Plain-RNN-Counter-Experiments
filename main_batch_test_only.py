@@ -14,7 +14,8 @@ from torch.utils.tensorboard import SummaryWriter
 # from tensorboardX import SummaryWriter
 from torch.utils.data import Dataset, DataLoader
 from Dyck1_Datasets import NextTokenPredictionLongTestDataset, NextTokenPredictionShortTestDataset, \
-    NextTokenPredictionTrainDataset, NextTokenPredictionDataset102to500tokens,NextTokenPredictionDataset502to1000tokens
+    NextTokenPredictionTrainDataset, NextTokenPredictionDataset102to500tokens,NextTokenPredictionDataset502to1000tokens, \
+    NextTokenPredictionDataset950to1000tokens
 
 seed = 10
 torch.manual_seed(seed)
@@ -110,9 +111,25 @@ length_bracket_pairs = 50
 
 pad_token=0
 
+# NUM_PAR = 1
+# MIN_SIZE = 102
+# MAX_SIZE = 500
+# P_VAL = 0.5
+# Q_VAL = 0.25
+#
+#
+# epsilon=0.5
+#
+# # train_size = 10000
+# test_size = 10000
+# long_size = 10000
+#
+# Dyck = DyckLanguage(NUM_PAR, P_VAL, Q_VAL)
+
+
 NUM_PAR = 1
-MIN_SIZE = 102
-MAX_SIZE = 500
+MIN_SIZE = 950
+MAX_SIZE = 1000
 P_VAL = 0.5
 Q_VAL = 0.25
 
@@ -120,11 +137,12 @@ Q_VAL = 0.25
 epsilon=0.5
 
 # train_size = 10000
-test_size = 10000
-long_size = 10000
+# test_size = 10000
+# long_size = 10000
+
+# len(NextTokenPredictionDataset950to1000tokens())
 
 Dyck = DyckLanguage(NUM_PAR, P_VAL, Q_VAL)
-
 
 
 # path = "/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_"+str(task)+"/Minibatch_Training/"+model_name+"/"
@@ -392,12 +410,16 @@ def collate_fn(batch):
 
 
 # train_dataset = NextTokenPredictionTrainDataset()
-test_dataset = NextTokenPredictionDataset102to500tokens()
-long_dataset = NextTokenPredictionDataset502to1000tokens()
+# test_dataset = NextTokenPredictionDataset102to500tokens()
+# long_dataset = NextTokenPredictionDataset502to1000tokens()
+
+test_dataset = NextTokenPredictionDataset950to1000tokens()
+
+test_size = len(test_dataset)
 
 # train_loader = DataLoader(train_dataset,batch_size=batch_size, shuffle=False, collate_fn=collate_fn)
 test_loader = DataLoader(test_dataset,batch_size=batch_size, shuffle=shuffle_dataset, collate_fn=collate_fn)
-long_loader = DataLoader(long_dataset, batch_size=batch_size, shuffle=shuffle_dataset, collate_fn=collate_fn)
+# long_loader = DataLoader(long_dataset, batch_size=batch_size, shuffle=shuffle_dataset, collate_fn=collate_fn)
 
 
 # train_loader = DataLoader(train_dataset,batch_size=batch_size, shuffle=False)
@@ -627,25 +649,25 @@ def main():
     dfs_read = read_sheets()
     # train_accuracies = []
     test_accuracies = []
-    long_test_accuracies = []
+    # long_test_accuracies = []
     # train_dataframes = []
     runs = []
     correct_guesses = []
     correct_guesses_lengths = []
-    correct_guesses_long = []
-    correct_guesses_long_lengths = []
+    # correct_guesses_long = []
+    # correct_guesses_long_lengths = []
 
 
     incorrect_guesses = []
     incorrect_guesses_lengths = []
-    incorrect_guesses_long = []
-    incorrect_guesses_long_lengths = []
+    # incorrect_guesses_long = []
+    # incorrect_guesses_long_lengths = []
     incorrect_guesses_first_fail = []
-    incorrect_guesses_long_first_fail = []
+    # incorrect_guesses_long_first_fail = []
 
     avg_point_of_failure_short = []
     # incorrect_lengths = []
-    avg_point_of_failure_long = []
+    # avg_point_of_failure_long = []
     # incorrect_lengths_long = []
     avg_train_losses = []
     avg_val_losses = []
@@ -689,14 +711,14 @@ def main():
 
 
 
-                checkpoint_long_accuracy, checkpoint_long_correct_guesses,checkpoint_long_correct_guesses_length, checkpoint_long_incorrect_guesses, checkpoint_long_incorrect_guesses_length, checkpoint_long_incorrect_guesses_first_fail,checkpoint_long_avg_first_fail_point = test_model(checkpoint_model,long_loader,'long')
-                long_test_accuracies.append(checkpoint_long_accuracy)
-                correct_guesses_long.append(checkpoint_long_correct_guesses)
-                correct_guesses_long_lengths.append(checkpoint_long_correct_guesses_length)
-                incorrect_guesses_long.append(checkpoint_long_incorrect_guesses)
-                incorrect_guesses_long_lengths.append(checkpoint_long_incorrect_guesses_length)
-                incorrect_guesses_long_first_fail.append(checkpoint_long_incorrect_guesses_first_fail)
-                avg_point_of_failure_long.append(checkpoint_long_avg_first_fail_point)
+                # checkpoint_long_accuracy, checkpoint_long_correct_guesses,checkpoint_long_correct_guesses_length, checkpoint_long_incorrect_guesses, checkpoint_long_incorrect_guesses_length, checkpoint_long_incorrect_guesses_first_fail,checkpoint_long_avg_first_fail_point = test_model(checkpoint_model,long_loader,'long')
+                # long_test_accuracies.append(checkpoint_long_accuracy)
+                # correct_guesses_long.append(checkpoint_long_correct_guesses)
+                # correct_guesses_long_lengths.append(checkpoint_long_correct_guesses_length)
+                # incorrect_guesses_long.append(checkpoint_long_incorrect_guesses)
+                # incorrect_guesses_long_lengths.append(checkpoint_long_incorrect_guesses_length)
+                # incorrect_guesses_long_first_fail.append(checkpoint_long_incorrect_guesses_first_fail)
+                # avg_point_of_failure_long.append(checkpoint_long_avg_first_fail_point)
 
 
 
@@ -726,60 +748,79 @@ def main():
 
 
 
-        long_test_accuracy, long_correct_guesses,long_correct_guesses_length, long_incorrect_guesses, long_incorrect_guesses_length, long_incorrect_guesses_first_fail,long_avg_first_fail_point = test_model(model, long_loader, 'long')
-        long_test_accuracies.append(long_test_accuracy)
-        correct_guesses_long.append(long_correct_guesses)
-        correct_guesses_long_lengths.append(long_correct_guesses_length)
-        incorrect_guesses_long.append(long_incorrect_guesses)
-        incorrect_guesses_long_lengths.append(long_incorrect_guesses_length)
-        incorrect_guesses_long_first_fail.append(long_incorrect_guesses_first_fail)
-        avg_point_of_failure_long.append(long_avg_first_fail_point)
+        # long_test_accuracy, long_correct_guesses,long_correct_guesses_length, long_incorrect_guesses, long_incorrect_guesses_length, long_incorrect_guesses_first_fail,long_avg_first_fail_point = test_model(model, long_loader, 'long')
+        # long_test_accuracies.append(long_test_accuracy)
+        # correct_guesses_long.append(long_correct_guesses)
+        # correct_guesses_long_lengths.append(long_correct_guesses_length)
+        # incorrect_guesses_long.append(long_incorrect_guesses)
+        # incorrect_guesses_long_lengths.append(long_incorrect_guesses_length)
+        # incorrect_guesses_long_first_fail.append(long_incorrect_guesses_first_fail)
+        # avg_point_of_failure_long.append(long_avg_first_fail_point)
 
 
 
         with open(file_name, "a") as f:
             # f.write('train accuracy for run ' + str(i) + ' = ' + str(train_accuracy) + '%\n')
-            f.write('test accuracy for 102 to 500 tokens for run '+str(run)+' = ' + str(test_accuracy) + '%\n')
-            f.write('long test accuracy for 502 to 1000 tokens for run '+str(run)+' = ' + str(long_test_accuracy) + '%\n')
+            # f.write('test accuracy for 102 to 500 tokens for run '+str(run)+' = ' + str(test_accuracy) + '%\n')
+            # f.write('long test accuracy for 502 to 1000 tokens for run '+str(run)+' = ' + str(long_test_accuracy) + '%\n')
+            f.write('test accuracy for 950 to 1000 tokens for run ' + str(run) + ' = ' + str(test_accuracy) + '%\n')
 
 
     plt.subplots()
 
-    plt.scatter(x=avg_point_of_failure_short,y=avg_train_losses)
-    plt.xlabel('Average first point of failure for 102 to 500 token Dyck-1 Sequences')
+    # plt.scatter(x=avg_point_of_failure_short,y=avg_train_losses)
+    # plt.xlabel('Average first point of failure for 102 to 500 token Dyck-1 Sequences')
+    # plt.ylabel('Average training loss')
+    # plt.savefig(scatter_name_train)
+    # plt.close()
+
+    # plt.scatter(x=avg_point_of_failure_short, y=avg_val_losses)
+    # plt.xlabel('Average first point of failure for 102 to 500 token Dyck-1 Sequences')
+    # plt.ylabel('Average validation loss')
+    # plt.savefig(scatter_name_validation)
+    # plt.close()
+    #
+    # plt.scatter(x=avg_point_of_failure_short, y=avg_long_val_losses)
+    # plt.xlabel('Average first point of failure for 102 to 500 token Dyck-1 Sequences')
+    # plt.ylabel('Average long validation loss')
+    # plt.savefig(scatter_name_long_validation)
+    # plt.close()
+
+    plt.scatter(x=avg_point_of_failure_short, y=1/avg_train_losses)
+    plt.xlabel('Average first point of failure for 950 to 1000 token Dyck-1 Sequences')
     plt.ylabel('Average training loss')
     plt.savefig(scatter_name_train)
     plt.close()
 
-    plt.scatter(x=avg_point_of_failure_short, y=avg_val_losses)
-    plt.xlabel('Average first point of failure for 102 to 500 token Dyck-1 Sequences')
+    plt.scatter(x=avg_point_of_failure_short, y=1/avg_val_losses)
+    plt.xlabel('Average first point of failure for 950 to 1000 token Dyck-1 Sequences')
     plt.ylabel('Average validation loss')
     plt.savefig(scatter_name_validation)
     plt.close()
 
-    plt.scatter(x=avg_point_of_failure_short, y=avg_long_val_losses)
-    plt.xlabel('Average first point of failure for 102 to 500 token Dyck-1 Sequences')
+    plt.scatter(x=avg_point_of_failure_short, y=1/avg_long_val_losses)
+    plt.xlabel('Average first point of failure for 950 to 1000 token Dyck-1 Sequences')
     plt.ylabel('Average long validation loss')
     plt.savefig(scatter_name_long_validation)
     plt.close()
 
-    plt.scatter(x=avg_point_of_failure_long, y=avg_train_losses)
-    plt.xlabel('Average first point of failure for 502 to 1000 token Dyck-1 Sequences')
-    plt.ylabel('Average training loss')
-    plt.savefig(long_scatter_name_train)
-    plt.close()
-
-    plt.scatter(x=avg_point_of_failure_long, y=avg_val_losses)
-    plt.xlabel('Average first point of failure for 502 to 1000 token Dyck-1 Sequences')
-    plt.ylabel('Average validation loss')
-    plt.savefig(long_scatter_name_validation)
-    plt.close()
-
-    plt.scatter(x=avg_point_of_failure_long, y=avg_long_val_losses)
-    plt.xlabel('Average first point of failure for 502 to 1000 token Dyck-1 Sequences')
-    plt.ylabel('Average long validation loss')
-    plt.savefig(long_scatter_name_long_validation)
-    plt.close()
+    # plt.scatter(x=avg_point_of_failure_long, y=avg_train_losses)
+    # plt.xlabel('Average first point of failure for 502 to 1000 token Dyck-1 Sequences')
+    # plt.ylabel('Average training loss')
+    # plt.savefig(long_scatter_name_train)
+    # plt.close()
+    #
+    # plt.scatter(x=avg_point_of_failure_long, y=avg_val_losses)
+    # plt.xlabel('Average first point of failure for 502 to 1000 token Dyck-1 Sequences')
+    # plt.ylabel('Average validation loss')
+    # plt.savefig(long_scatter_name_validation)
+    # plt.close()
+    #
+    # plt.scatter(x=avg_point_of_failure_long, y=avg_long_val_losses)
+    # plt.xlabel('Average first point of failure for 502 to 1000 token Dyck-1 Sequences')
+    # plt.ylabel('Average long validation loss')
+    # plt.savefig(long_scatter_name_long_validation)
+    # plt.close()
 
 
     # plt.legend()
@@ -790,12 +831,12 @@ def main():
     df1['avg training losses'] = avg_train_losses
     df1['avg validation losses']=avg_val_losses
     df1['avg long validation losses']=avg_long_val_losses
-    df1['correct guesses (102 to 500 tokens)'] = correct_guesses
-    df1['correct guesses seq lengths (102 to 500 tokens)'] = correct_guesses_lengths
-    df1['average first point of failure (102 to 500 tokens)'] = avg_point_of_failure_short
-    df1['correct guesses long (502 to 1000 tokens)']=correct_guesses_long
-    df1['correct guesses long seq lenghts (502 to 1000 tokens)']=correct_guesses_long_lengths
-    df1['avg point of failure long (502 to 1000 tokens)']=avg_point_of_failure_long
+    df1['correct guesses (950 to 1000 tokens)'] = correct_guesses
+    df1['correct guesses seq lengths (950 to 1000 tokens)'] = correct_guesses_lengths
+    df1['average first point of failure (950 to 1000 tokens)'] = avg_point_of_failure_short
+    # df1['correct guesses long (502 to 1000 tokens)']=correct_guesses_long
+    # df1['correct guesses long seq lenghts (502 to 1000 tokens)']=correct_guesses_long_lengths
+    # df1['avg point of failure long (502 to 1000 tokens)']=avg_point_of_failure_long
 
     writer = pd.ExcelWriter(excel_name, engine='xlsxwriter')
 
@@ -1043,9 +1084,9 @@ def test_model(model, loader, dataset):
     if dataset=='short':
         log_file=test_log
         ds = test_dataset
-    elif dataset=='long':
-        log_file=long_test_log
-        ds = long_dataset
+    # elif dataset=='long':
+    #     log_file=long_test_log
+    #     ds = long_dataset
 
 
     with open(log_file,'a') as f:
@@ -1077,12 +1118,12 @@ def test_model(model, loader, dataset):
         output_seq = model(input_seq.to(device), length)
         # output_seq[i] = out
 
-        with open(log_file, 'a') as f:
-            f.write('////////////////////////////////////////\n')
-            # f.write('input batch = ' + str(ds[i * batch_size:i * batch_size + batch_size]['x']) + '\n')
-            # f.write('encoded batch = ' + str(input_seq) + '\n')
-            f.write('input batch = ' + str(sentences) + '\n')
-            f.write('encoded batch = ' + str(input_seq) + '\n')
+        # with open(log_file, 'a') as f:
+        #     f.write('////////////////////////////////////////\n')
+        #     # f.write('input batch = ' + str(ds[i * batch_size:i * batch_size + batch_size]['x']) + '\n')
+        #     # f.write('encoded batch = ' + str(input_seq) + '\n')
+        #     f.write('input batch = ' + str(sentences) + '\n')
+        #     f.write('encoded batch = ' + str(input_seq) + '\n')
 
         output_seq = model.mask(output_seq, target_seq, length)
 
@@ -1091,8 +1132,8 @@ def test_model(model, loader, dataset):
         #     f.write('input sentence = ' + ds[i]['x'] + '\n')
         #     f.write('encoded sentence = ' + str(input_seq) + '\n')
 
-        with open(log_file, 'a') as f:
-            f.write('actual output in test function = ' + str(output_seq) + '\n')
+        # with open(log_file, 'a') as f:
+        #     f.write('actual output in test function = ' + str(output_seq) + '\n')
 
         output_seq = output_seq.view(batch_size, length[0], n_letters)
         target_seq = target_seq.view(batch_size, length[0], n_letters)
@@ -1104,12 +1145,12 @@ def test_model(model, loader, dataset):
         out_seq = out_seq.float()
 
 
-        with open(log_file, 'a') as f:
-            # f.write('rounded output in test function = ' + str(out_np) + '\n')
-            # f.write('target in test function = ' + str(target_np) + '\n')
-
-            f.write('rounded output in test function = ' + str(out_seq) + '\n')
-            f.write('target in test function = ' + str(target_seq) + '\n')
+        # with open(log_file, 'a') as f:
+        #     # f.write('rounded output in test function = ' + str(out_np) + '\n')
+        #     # f.write('target in test function = ' + str(target_np) + '\n')
+        #
+        #     f.write('rounded output in test function = ' + str(out_seq) + '\n')
+        #     f.write('target in test function = ' + str(target_seq) + '\n')
 
         for j in range(batch_size):
 
@@ -1119,6 +1160,8 @@ def test_model(model, loader, dataset):
                 num_correct += 1
                 correct_guesses.append(sentences[j])
                 correct_guesses_length.append(length[j].item())
+                # incorrect_guesses_first_fail.append(length[j].item())
+                sum_first_fail_points+=length[j].item()
 
                 with open(log_file, 'a') as f:
                     f.write('CORRECT' + '\n')
@@ -1147,8 +1190,8 @@ def test_model(model, loader, dataset):
     with open(log_file, 'a') as f:
         f.write('accuracy = ' + str(accuracy)+'%' + '\n')
     print(''+dataset+' test accuracy = '+ str(accuracy)+'%')
-    avg_first_fail_point = sum_first_fail_points/len(incorrect_guesses)
-
+    # avg_first_fail_point = sum_first_fail_points/len(incorrect_guesses)
+    avg_first_fail_point = sum_first_fail_points / (len(incorrect_guesses)+num_correct)
 
     return accuracy, correct_guesses,correct_guesses_length, incorrect_guesses, incorrect_guesses_length, incorrect_guesses_first_fail,avg_first_fail_point
 
