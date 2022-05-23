@@ -18,6 +18,21 @@ dfs = []
 for i in range(num_runs):
     dfs.append(dict_df.get(sheet_names[i]))
 
+
+def read_sheets():
+    sheet_names = []
+    for i in range(num_runs):
+        sheet_name = "run"+str(i)
+        sheet_names.append(sheet_name)
+    df = pd.read_excel(path_name,sheet_name=sheet_names)
+    dfs = []
+    for i in range(num_runs):
+        dfs.append(df.get(sheet_names[i]))
+    return dfs
+
+frames=read_sheets()
+print(frames[0].head())
+
 print(dfs[1].head())
 print(dfs[0].head())
 
