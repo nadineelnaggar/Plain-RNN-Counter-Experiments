@@ -77,7 +77,7 @@ print(len(dataset))
 count_1000=0
 
 for i in range(len(dataset)):
-    if len(dataset.x)==1000:
+    if len(dataset.x[i])==1000:
         count_1000+=1
 
 print(count_1000)
