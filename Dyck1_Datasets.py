@@ -240,6 +240,46 @@ class NextTokenPredictionDataset502to1000tokens(Dataset):
     def __len__(self):
         return self.n_samples
 
+
+
+class NextTokenPredictionDataset900to1000tokens(Dataset):
+    def __init__(self):
+        # xy = np.loadtxt('Dyck1_Dataset_Suzgun_train_.txt', delimiter=",")
+        # self.x = torch.from_numpy(xy[:,0])
+        # self.y = torch.from_numpy(xy[:, [1]])
+        self.x = []
+        self.y = []
+        self.lengths = []
+        # self.n_samples = xy.shape[0]
+        with open('Dyck1_Dataset_Suzgun_502to1000tokens.txt', 'r') as f:
+            for line in f:
+                line = line.split(",")
+                sentence = line[0].strip()
+                label = line[1].strip()
+                if len(sentence)>=900:
+                    self.x.append(sentence)
+                    self.y.append(label)
+                    self.lengths.append(len(sentence))
+
+        # self.x = self.x[:5000]
+        # self.y = self.y[:5000]
+        # self.lengths = self.lengths[:5000]
+
+        # self.x = self.x[:1000]
+        # self.y = self.y[:1000]
+        # self.lengths = self.lengths[:1000]
+
+        self.n_samples = len(self.x)
+
+
+
+    def __getitem__(self, index):
+        # return self.x[index], self.y[index]
+        return {'x':self.x[index], 'y':self.y[index], 'length':self.lengths[index]}
+
+    def __len__(self):
+        return self.n_samples
+
 # dataset_long = NextTokenPredictionLongTestDataset()
 # print(len(dataset_long))
 # print(dataset_long[20])
