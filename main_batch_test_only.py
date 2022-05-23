@@ -703,8 +703,7 @@ def main():
         avg_val_losses.append(losses_val[num_epochs-1])
         avg_long_val_losses.append(losses_long_val[num_epochs-1])
         mdl = modelname + 'run' + str(run) + '.pth'
-        model = select_model(mdl, input_size, hidden_size, num_layers, batch_size, num_classes,
-                             output_activation)
+        model = select_model(mdl, input_size, hidden_size, num_layers, batch_size, num_classes,output_activation)
         model.load_state_dict(torch.load(modelname))
         model.to(device)
         test_accuracy, test_correct_guesses,test_correct_guesses_length, test_incorrect_guesses, test_incorrect_guesses_length, test_incorrect_guesses_first_fail,test_avg_first_fail_point = test_model(model, test_loader, 'short')
