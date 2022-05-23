@@ -81,6 +81,8 @@ for i in range(len(dataset)):
         count_1000+=1
 
 print(count_1000)
+print(len(dataset.x[0]))
+print(len(dataset.x[-1]))
 
 # print(df.iloc([0][0]))
 # print(df.iloc['1','accuracy'])

@@ -265,6 +265,10 @@ class NextTokenPredictionDataset990to1000tokens(Dataset):
         # self.y = self.y[:5000]
         # self.lengths = self.lengths[:5000]
 
+        # self.x = self.x[:600]
+        # self.y = self.y[:600]
+        # self.lengths = self.lengths[:600]
+
         # self.x = self.x[:1000]
         # self.y = self.y[:1000]
         # self.lengths = self.lengths[:1000]

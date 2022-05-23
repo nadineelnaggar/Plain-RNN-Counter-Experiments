@@ -755,8 +755,11 @@ def main():
         runs.append(run)
         epochs.append(num_epochs-1)
         avg_train_losses.append(losses_train[num_epochs-1])
+        inverse_avg_train_losses.append(1 / losses_train[epoch])
         avg_val_losses.append(losses_val[num_epochs-1])
+        inverse_avg_val_losses.append(1 / losses_val[epoch])
         avg_long_val_losses.append(losses_long_val[num_epochs-1])
+        inverse_avg_long_val_losses.append(1 / losses_long_val[epoch])
         mdl = modelname + 'run' + str(run) + '.pth'
         model = select_model(model_name, input_size, hidden_size, num_layers, batch_size, num_classes,output_activation)
         model.load_state_dict(torch.load(mdl))
