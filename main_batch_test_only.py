@@ -892,6 +892,7 @@ def main():
     writer = pd.ExcelWriter(excel_name_inference, engine='xlsxwriter')
 
     df1.to_excel(writer, index=False)
+    writer.save()
 
     # for i in range(num_runs):
     #     torch.manual_seed(i)
