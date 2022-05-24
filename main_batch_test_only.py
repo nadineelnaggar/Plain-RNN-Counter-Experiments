@@ -432,7 +432,7 @@ def collate_fn(batch):
 
     max_depths = []
     timestep_depths = []
-    for i in range(len(sentences)):
+    for i in range(len(batch)):
         max_depth, timestep_depth = get_timestep_depths(sentences[i])
         max_depths.append(max_depth)
         timestep_depths.append(timestep_depth)
