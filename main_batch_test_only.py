@@ -279,7 +279,7 @@ checkpoint = path+ 'Dyck1_' + task + '_' + str(
 scatter_name_train = path+ 'Dyck1_' + task + '_' + str(
         num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' +str(batch_size) +'_batch_size_'+'_' + str(
         hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
-        num_epochs) + 'epochs_'+str(lr_scheduler_step)+"lr_scheduler_step_"+str(lr_scheduler_gamma)+"lr_scheduler_gamma_"+ str(num_runs)+'runs' + '_990to1000tokens_train_loss_SCATTER_PLOT.png'
+        num_epochs) + 'epochs_'+str(lr_scheduler_step)+"lr_scheduler_step_"+str(lr_scheduler_gamma)+"lr_scheduler_gamma_"+ str(num_runs)+'runs' + '_2000tokens_train_loss_SCATTER_PLOT.png'
 
 # long_scatter_name_train = path+ 'Dyck1_' + task + '_' + str(
 #         num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' +str(batch_size) +'_batch_size_'+'_' + str(
@@ -294,7 +294,7 @@ scatter_name_train = path+ 'Dyck1_' + task + '_' + str(
 scatter_name_validation = path+ 'Dyck1_' + task + '_' + str(
         num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' +str(batch_size) +'_batch_size_'+'_' + str(
         hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
-        num_epochs) + 'epochs_'+str(lr_scheduler_step)+"lr_scheduler_step_"+str(lr_scheduler_gamma)+"lr_scheduler_gamma_"+ str(num_runs)+'runs' + '_990to1000tokens_validation_loss_SCATTER_PLOT.png'
+        num_epochs) + 'epochs_'+str(lr_scheduler_step)+"lr_scheduler_step_"+str(lr_scheduler_gamma)+"lr_scheduler_gamma_"+ str(num_runs)+'runs' + '_2000tokens_validation_loss_SCATTER_PLOT.png'
 
 
 # long_scatter_name_validation = path+ 'Dyck1_' + task + '_' + str(
@@ -310,7 +310,7 @@ scatter_name_validation = path+ 'Dyck1_' + task + '_' + str(
 scatter_name_long_validation = path+ 'Dyck1_' + task + '_' + str(
         num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' +str(batch_size) +'_batch_size_'+'_' + str(
         hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
-        num_epochs) + 'epochs_'+str(lr_scheduler_step)+"lr_scheduler_step_"+str(lr_scheduler_gamma)+"lr_scheduler_gamma_"+ str(num_runs)+'runs' + '_990to1000tokens_long_validation_loss_SCATTER_PLOT.png'
+        num_epochs) + 'epochs_'+str(lr_scheduler_step)+"lr_scheduler_step_"+str(lr_scheduler_gamma)+"lr_scheduler_gamma_"+ str(num_runs)+'runs' + '_2000tokens_long_validation_loss_SCATTER_PLOT.png'
 
 
 # long_scatter_name_long_validation = path+ 'Dyck1_' + task + '_' + str(
@@ -870,21 +870,21 @@ def main():
 
     # plt.scatter(x=avg_point_of_failure_short, y=inverse_avg_train_losses)
     plt.scatter(x=inverse_avg_train_losses, y=avg_point_of_failure_short)
-    plt.xlabel('Average first point of failure for 990 to 1000 token Dyck-1 Sequences')
+    plt.xlabel('Average first point of failure for 2000 token Dyck-1 Sequences')
     plt.ylabel('Inverse of Average training loss')
     plt.savefig(scatter_name_train)
     plt.close()
 
     # plt.scatter(x=avg_point_of_failure_short, y=inverse_avg_val_losses)
     plt.scatter(x=inverse_avg_val_losses,y=avg_point_of_failure_short)
-    plt.xlabel('Average first point of failure for 990 to 1000 token Dyck-1 Sequences')
+    plt.xlabel('Average first point of failure for 2000 token Dyck-1 Sequences')
     plt.ylabel('Inverse of Average validation loss')
     plt.savefig(scatter_name_validation)
     plt.close()
 
     # plt.scatter(x=avg_point_of_failure_short, y=inverse_avg_long_val_losses)
     plt.scatter(x=inverse_avg_long_val_losses,y=avg_point_of_failure_short)
-    plt.xlabel('Average first point of failure for 990 to 1000 token Dyck-1 Sequences')
+    plt.xlabel('Average first point of failure for 2000 token Dyck-1 Sequences')
     plt.ylabel('Inverse of Average long validation loss')
     plt.savefig(scatter_name_long_validation)
     plt.close()
