@@ -401,10 +401,10 @@ def encode_batch(sentences, labels, lengths, batch_size):
                 pos = vocab.index(char)
                 sentence_tensor[i][index][pos]=1
 
-    num_sequences = len(lengths)
-    if len(lengths)<batch_size:
-        for j in range(batch_size-num_sequences):
-            lengths.append(0)
+    # num_sequences = len(lengths)
+    # if len(lengths)<batch_size:
+    #     for j in range(batch_size-num_sequences):
+    #         lengths.append(0)
 
     sentence_tensor.requires_grad_(True)
     # lengths_tensor = torch.tensor(lengths, dtype=torch.long)
