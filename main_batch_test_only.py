@@ -883,7 +883,7 @@ def main():
     # df1['correct guesses long seq lenghts (502 to 1000 tokens)']=correct_guesses_long_lengths
     # df1['avg point of failure long (502 to 1000 tokens)']=avg_point_of_failure_long
 
-    writer = pd.ExcelWriter(excel_name, engine='xlsxwriter')
+    writer = pd.ExcelWriter(excel_name_inference, engine='xlsxwriter')
 
     df1.to_excel(writer, index=False)
 
