@@ -386,8 +386,8 @@ def encode_batch(sentences, labels, lengths, batch_size):
     sentence_tensor = torch.zeros(batch_size,max_length,len(vocab))
 
     labels_tensor = torch.tensor([])
-    # for i in range(len(sentences)):
-    for i in range(batch_size):
+    for i in range(len(sentences)):
+    # for i in range(batch_size):
 
         sentence = sentences[i]
         labels_tensor = torch.cat((labels_tensor, Dyck.lineToTensorSigmoid(labels[i],max_len=max_length)))
