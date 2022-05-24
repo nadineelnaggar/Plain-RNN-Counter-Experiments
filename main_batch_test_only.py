@@ -434,6 +434,8 @@ def collate_fn(batch):
     timestep_depths = []
     for i in range(len(sentences)):
         max_depth, timestep_depth = get_timestep_depths(sentences[i])
+        max_depths.append(max_depth)
+        timestep_depths.append(timestep_depth)
 
 
     # return seq_tensor.to(device), labels_tensor.to(device), lengths_tensor.to(device)
