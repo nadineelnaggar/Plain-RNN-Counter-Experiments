@@ -417,20 +417,43 @@ def collate_fn(batch):
 
     sentences = [batch[i]['x'] for i in range(len(batch))]
     labels = [batch[i]['y'] for i in range(len(batch))]
+    # max_depth = [batch[i]['max_depth'] for i in range(len(batch))]
     # print('labels in collate function  = ',labels)
     lengths = [len(sentence) for sentence in sentences]
 
     sentences.sort(key=len, reverse=True)
     labels.sort(key=len,reverse=True)
     lengths.sort(reverse=True)
+    # max_depth.sort(reverse=True)
 
 
     # seq_tensor, labels_tensor, lengths_tensor = encode_batch(sentences, labels,lengths, batch_size=len(sentences))
     seq_tensor, labels_tensor, lengths_tensor = encode_batch(sentences, labels, lengths, batch_size=batch_size)
 
+    max_depths = []
+    timestep_depths = []
+    for i in range(len(sentences)):
+        max_depth, timestep_depth = get_timestep_depths(sentences[i])
+
 
     # return seq_tensor.to(device), labels_tensor.to(device), lengths_tensor.to(device)
-    return sentences, labels, seq_tensor.to(device), labels_tensor.to(device), lengths_tensor
+    return sentences, labels, seq_tensor.to(device), labels_tensor.to(device), lengths_tensor, max_depths, timestep_depths
+
+def get_timestep_depths(x):
+    max_depth=0
+    current_depth=0
+    timestep_depths = []
+    for i in range(len(x)):
+
+        if x[i] == '(':
+            current_depth += 1
+            timestep_depths.append(current_depth)
+            if current_depth > max_depth:
+                max_depth = current_depth
+        elif x[i] == ')':
+            current_depth -= 1
+            timestep_depths.append(current_depth)
+    return max_depth, timestep_depths
 
 
 # train_dataset = NextTokenPredictionTrainDataset()
@@ -1169,7 +1192,7 @@ def test_model(model, loader, dataset):
     #         # out, hidden = model(input_seq[j].to(device), hidden)
     #         out, hidden = model(Dyck.lineToTensor(X[i][j]).to(device), hidden)
     #         output_seq[j] = out
-    for i, (sentences, labels, input_seq, target_seq, length) in enumerate(loader):
+    for i, (sentences, labels, input_seq, target_seq, length, max_depth, timestep_depth) in enumerate(loader):
         output_seq = model(input_seq.to(device), length)
         # output_seq[i] = out
 

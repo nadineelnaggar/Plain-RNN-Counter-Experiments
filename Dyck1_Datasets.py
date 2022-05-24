@@ -326,23 +326,24 @@ class NextTokenPredictionDataset2000tokens(Dataset):
 
         max_depth = []
 
-        for i in range(20):
-            x_val = self.x[i]+self.x[i+1]
-            y_val = self.y[i]+self.y[i+1]
-            # x_new.append(self.x[i]+self.x[i+1])
-            # y_new.append(self.y[i]+self.y[i+1])
-            x_new.append(x_val)
-            y_new.append(y_val)
-            x_max_depth = self.get_max_depth(x_val)
-            max_depth.append(x_max_depth)
+        for i in range(len(self.x)):
+            for j in range(len(self.x)):
+                x_val = self.x[i]+self.x[j]
+                y_val = self.y[i]+self.y[j]
+                # x_new.append(self.x[i]+self.x[i+1])
+                # y_new.append(self.y[i]+self.y[i+1])
+                x_new.append(x_val)
+                y_new.append(y_val)
+                x_max_depth = self.get_max_depth(x_val)
+                max_depth.append(x_max_depth)
 
 
-            x_val2 = self.x[i+1]+self.x[i]
-            y_val2 = self.y[i+1]+self.y[i]
-            # x_new.append(self.x[i+1]+self.x[i])
-            # y_new.append(self.y[i+1]+self.y[i])
-            x_max_depth2 = self.get_max_depth(x_val2)
-            max_depth.append(x_max_depth2)
+            # x_val2 = self.x[i+1]+self.x[i]
+            # y_val2 = self.y[i+1]+self.y[i]
+            # # x_new.append(self.x[i+1]+self.x[i])
+            # # y_new.append(self.y[i+1]+self.y[i])
+            # x_max_depth2 = self.get_max_depth(x_val2)
+            # max_depth.append(x_max_depth2)
 
 
 

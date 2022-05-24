@@ -97,7 +97,7 @@ print(len(dataset.x[-1]))
 dataset2 = NextTokenPredictionDataset2000tokens()
 print(len(dataset2.x[0]))
 print(len(dataset2))
-print(dataset2.max_depth[0])
+print(max(dataset2.max_depth))
 
 # for i in range(len(dataset2)):
 #     print(len(dataset2.x[i]))
