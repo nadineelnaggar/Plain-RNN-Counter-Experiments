@@ -1281,7 +1281,7 @@ def test_model(model, loader, dataset):
     # avg_first_fail_point = sum_first_fail_points/len(incorrect_guesses)
     avg_first_fail_point = sum_first_fail_points / (len(incorrect_guesses)+num_correct)
 
-    return accuracy, correct_guesses,correct_guesses_length, incorrect_guesses, incorrect_guesses_length, incorrect_guesses_first_fail,avg_first_fail_point
+    return accuracy, correct_guesses,correct_guesses_length, incorrect_guesses, incorrect_guesses_length, incorrect_guesses_first_fail,avg_first_fail_point, max_depth, timestep_depth
 
 
 
