@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import torch
 import torch.nn as nn
 
-from Dyck1_Datasets import NextTokenPredictionDataset990to1000tokens, NextTokenPredictionDataset502to1000tokens
+from Dyck1_Datasets import NextTokenPredictionDataset990to1000tokens, NextTokenPredictionDataset502to1000tokens, NextTokenPredictionDataset2000tokens
 
 path_name = '/Users/nadineelnaggar/Google Drive/PhD/EXPT_LOGS/Dyck1_NextTokenPrediction/Minibatch_Training/VanillaReLURNN/1_batch_size/0.01_learning_rate/50_epochs/50_lr_scheduler_step/1.0_lr_scheduler_gamma/1_hidden_units/10_runs/shuffle_True/Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaReLURNN_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_50epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_10runs.xlsx'
 
@@ -92,3 +92,12 @@ print(len(dataset.x[-1]))
 # print(df.at([0,'average training loss']).head())
 
 # print(df['average training loss'].head())
+
+
+dataset2 = NextTokenPredictionDataset2000tokens()
+print(len(dataset2.x[0]))
+print(len(dataset2))
+print(dataset2.max_depth[0])
+
+# for i in range(len(dataset2)):
+#     print(len(dataset2.x[i]))

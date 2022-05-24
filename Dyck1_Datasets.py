@@ -288,3 +288,91 @@ class NextTokenPredictionDataset990to1000tokens(Dataset):
 # print(len(dataset_long))
 # print(dataset_long[20])
 # print(dataset_long[20]['x'])
+
+
+class NextTokenPredictionDataset2000tokens(Dataset):
+    def __init__(self):
+        # xy = np.loadtxt('Dyck1_Dataset_Suzgun_train_.txt', delimiter=",")
+        # self.x = torch.from_numpy(xy[:,0])
+        # self.y = torch.from_numpy(xy[:, [1]])
+        self.x = []
+        self.y = []
+        x_new = []
+        y_new = []
+
+        self.lengths = []
+        # self.n_samples = xy.shape[0]
+        with open('Dyck1_Dataset_Suzgun_502to1000tokens.txt', 'r') as f:
+            for line in f:
+                line = line.split(",")
+                sentence = line[0].strip()
+                label = line[1].strip()
+                if len(sentence)==1000:
+                    self.x.append(sentence)
+                    self.y.append(label)
+                    self.lengths.append(len(sentence))
+
+        # self.x = self.x[:5000]
+        # self.y = self.y[:5000]
+        # self.lengths = self.lengths[:5000]
+
+        # self.x = self.x[:600]
+        # self.y = self.y[:600]
+        # self.lengths = self.lengths[:600]
+
+        # self.x = self.x[:1000]
+        # self.y = self.y[:1000]
+        # self.lengths = self.lengths[:1000]
+
+        max_depth = []
+
+        for i in range(20):
+            x_val = self.x[i]+self.x[i+1]
+            y_val = self.y[i]+self.y[i+1]
+            # x_new.append(self.x[i]+self.x[i+1])
+            # y_new.append(self.y[i]+self.y[i+1])
+            x_new.append(x_val)
+            y_new.append(y_val)
+            x_max_depth = self.get_max_depth(x_val)
+            max_depth.append(x_max_depth)
+
+
+            x_val2 = self.x[i+1]+self.x[i]
+            y_val2 = self.y[i+1]+self.y[i]
+            # x_new.append(self.x[i+1]+self.x[i])
+            # y_new.append(self.y[i+1]+self.y[i])
+            x_max_depth2 = self.get_max_depth(x_val2)
+            max_depth.append(x_max_depth2)
+
+
+
+
+        self.x= x_new
+        self.y = y_new
+        self.max_depth = max_depth
+
+
+        self.n_samples = len(self.x)
+
+
+
+    def __getitem__(self, index):
+        # return self.x[index], self.y[index]
+        return {'x':self.x[index], 'y':self.y[index], 'length':self.lengths[index]}
+
+    def __len__(self):
+        return self.n_samples
+
+    def get_max_depth(self,x):
+        max_depth = 0
+        # stack = []
+        current_depth = 0
+        for i in range(len(x)):
+
+            if x[i]=='(':
+                current_depth+=1
+                if current_depth>max_depth:
+                    max_depth=current_depth
+            elif x[i]==')':
+                current_depth-=1
+        return max_depth
