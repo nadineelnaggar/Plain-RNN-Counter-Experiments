@@ -359,7 +359,7 @@ class NextTokenPredictionDataset2000tokens(Dataset):
 
     def __getitem__(self, index):
         # return self.x[index], self.y[index]
-        return {'x':self.x[index], 'y':self.y[index], 'length':self.lengths[index]}
+        return {'x':self.x[index], 'y':self.y[index], 'length':self.lengths[index], 'max depth':self.max_depth}
 
     def __len__(self):
         return self.n_samples
