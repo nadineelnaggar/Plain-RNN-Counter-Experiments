@@ -324,7 +324,7 @@ class NextTokenPredictionDataset2000tokens(Dataset):
         # self.y = self.y[:1000]
         # self.lengths = self.lengths[:1000]
 
-        max_depth = []
+        # max_depth = []
 
         for i in range(len(self.x)):
             for j in range(len(self.x)):
@@ -334,8 +334,8 @@ class NextTokenPredictionDataset2000tokens(Dataset):
                 # y_new.append(self.y[i]+self.y[i+1])
                 x_new.append(x_val)
                 y_new.append(y_val)
-                x_max_depth = self.get_max_depth(x_val)
-                max_depth.append(x_max_depth)
+                # x_max_depth = self.get_max_depth(x_val)
+                # max_depth.append(x_max_depth)
 
 
             # x_val2 = self.x[i+1]+self.x[i]
@@ -350,7 +350,7 @@ class NextTokenPredictionDataset2000tokens(Dataset):
 
         self.x= x_new
         self.y = y_new
-        self.max_depth = max_depth
+        # self.max_depth = max_depth
 
 
         self.n_samples = len(self.x)
@@ -359,7 +359,7 @@ class NextTokenPredictionDataset2000tokens(Dataset):
 
     def __getitem__(self, index):
         # return self.x[index], self.y[index]
-        return {'x':self.x[index], 'y':self.y[index], 'length':self.lengths[index], 'max depth':self.max_depth}
+        return {'x':self.x[index], 'y':self.y[index], 'length':self.lengths[index]}
 
     def __len__(self):
         return self.n_samples
