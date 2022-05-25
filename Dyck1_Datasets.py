@@ -297,6 +297,7 @@ class NextTokenPredictionDataset2000tokens(Dataset):
         # self.y = torch.from_numpy(xy[:, [1]])
         self.x = []
         self.y = []
+        self.max_depths= []
         x_new = []
         y_new = []
 
@@ -310,7 +311,7 @@ class NextTokenPredictionDataset2000tokens(Dataset):
                 if len(sentence)==1000:
                     self.x.append(sentence)
                     self.y.append(label)
-                    self.lengths.append(len(sentence))
+                    # self.lengths.append(len(sentence))
 
         # self.x = self.x[:5000]
         # self.y = self.y[:5000]
@@ -324,7 +325,8 @@ class NextTokenPredictionDataset2000tokens(Dataset):
         # self.y = self.y[:1000]
         # self.lengths = self.lengths[:1000]
 
-        # max_depth = []
+        max_depths = []
+        timestep_depths = []
 
         for i in range(len(self.x)):
             for j in range(len(self.x)):
@@ -334,9 +336,13 @@ class NextTokenPredictionDataset2000tokens(Dataset):
                 # y_new.append(self.y[i]+self.y[i+1])
                 x_new.append(x_val)
                 y_new.append(y_val)
+                self.lengths.append(len(x_val))
                 # x_max_depth = self.get_max_depth(x_val)
                 # max_depth.append(x_max_depth)
 
+                max_depth, timestep_depth = self.get_timestep_depths(self.x)
+                max_depths.append(max_depth)
+                timestep_depths.append(timestep_depth)
 
             # x_val2 = self.x[i+1]+self.x[i]
             # y_val2 = self.y[i+1]+self.y[i]
@@ -351,6 +357,8 @@ class NextTokenPredictionDataset2000tokens(Dataset):
         self.x= x_new
         self.y = y_new
         # self.max_depth = max_depth
+        self.max_depths = max_depths
+        self.timestep_depths = timestep_depths
 
 
         self.n_samples = len(self.x)
@@ -359,7 +367,9 @@ class NextTokenPredictionDataset2000tokens(Dataset):
 
     def __getitem__(self, index):
         # return self.x[index], self.y[index]
-        return {'x':self.x[index], 'y':self.y[index], 'length':self.lengths[index]}
+        # return {'x':self.x[index], 'y':self.y[index], 'length':self.lengths[index], 'max_depth':self.max_depths[index], 'timestep_depths':self.timestep_depths[index]}
+        # return {'x':self.x[index], 'y':self.y[index], 'length':self.lengths[index], 'max_depth':self.max_depths[index]}
+        return {'x': self.x[index], 'y': self.y[index], 'length': self.lengths[index]}
 
     def __len__(self):
         return self.n_samples
@@ -377,3 +387,19 @@ class NextTokenPredictionDataset2000tokens(Dataset):
             elif x[i]==')':
                 current_depth-=1
         return max_depth
+
+    def get_timestep_depths(self,x):
+        max_depth = 0
+        current_depth = 0
+        timestep_depths = []
+        for i in range(len(x)):
+
+            if x[i] == '(':
+                current_depth += 1
+                timestep_depths.append(current_depth)
+                if current_depth > max_depth:
+                    max_depth = current_depth
+            elif x[i] == ')':
+                current_depth -= 1
+                timestep_depths.append(current_depth)
+        return max_depth, timestep_depths

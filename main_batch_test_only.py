@@ -52,6 +52,7 @@ parser.add_argument('--num_runs', type=int, help='number of training runs')
 # parser.add_argument('--best_run',type=int,help='run with the lowest loss and highest accuracy',default=-1)
 parser.add_argument('--checkpoint_step', type=int, help='checkpoint step', default=0)
 parser.add_argument('--shuffle_dataset',type=bool,default=False)
+parser.add_argument('--num_checkpoints', type=int,default=100, help='number of checkpoints we want to include if we dont need all of them (e.g., first 5 checkpoints only), stop after n checkpoints')
 
 
 args = parser.parse_args()
@@ -68,6 +69,8 @@ batch_size = args.batch_size
 # load_model = args.load_model
 lr_scheduler_gamma = args.lr_scheduler_gamma
 lr_scheduler_step = args.lr_scheduler_step
+num_checkpoints = args.num_checkpoints
+
 # best_run = args.best_run
 #
 # if best_run==-1:
@@ -409,6 +412,11 @@ def encode_batch(sentences, labels, lengths, batch_size):
     sentence_tensor.requires_grad_(True)
     # lengths_tensor = torch.tensor(lengths, dtype=torch.long)
     lengths_tensor = torch.tensor(lengths, dtype=torch.int64).cpu()
+    if len(lengths_tensor)<batch_size:
+        for j in range(batch_size - len(sentences)):
+            lengths_tensor=torch.cat((lengths_tensor,torch.tensor(0,dtype=torch.int64)))
+
+
     # print('labels tensor = ',labels_tensor)
     return sentence_tensor, labels_tensor, lengths_tensor
 
@@ -420,6 +428,9 @@ def collate_fn(batch):
     # max_depth = [batch[i]['max_depth'] for i in range(len(batch))]
     # print('labels in collate function  = ',labels)
     lengths = [len(sentence) for sentence in sentences]
+    # max_depths = [batch[i]['max_depth'] for i in range(len(batch))]
+    # timestep_depths = [batch_size[i]['timestep_depths'] for i in range(len(batch))]
+
 
     sentences.sort(key=len, reverse=True)
     labels.sort(key=len,reverse=True)
@@ -427,21 +438,25 @@ def collate_fn(batch):
     # max_depth.sort(reverse=True)
 
 
+
+
     # seq_tensor, labels_tensor, lengths_tensor = encode_batch(sentences, labels,lengths, batch_size=len(sentences))
     seq_tensor, labels_tensor, lengths_tensor = encode_batch(sentences, labels, lengths, batch_size=batch_size)
 
-    max_depths = []
-    timestep_depths = []
+    # max_depths = []
+    # timestep_depths = []
     # for i in range(len(batch)):
     #     max_depth, timestep_depth = get_timestep_depths(sentences[i])
     #     max_depths.append(max_depth)
     #     timestep_depths.append(timestep_depth)
 
+    # max_depths_tensor = torch.tensor(max_depths,dtype=torch.float32)
+    # timestep_depths_tensor = torch.tensor(timestep_depths,dtype=torch.float32)
+
 
     # return seq_tensor.to(device), labels_tensor.to(device), lengths_tensor.to(device)
     # return sentences, labels, seq_tensor.to(device), labels_tensor.to(device), lengths_tensor, max_depths, timestep_depths
-    return sentences, labels, seq_tensor.to(device), labels_tensor.to(
-        device), lengths_tensor
+    return sentences, labels, seq_tensor.to(device), labels_tensor.to(device), lengths_tensor
 
 def get_timestep_depths(x):
     max_depth=0
@@ -728,9 +743,10 @@ def main():
     inverse_avg_val_losses = []
     inverse_avg_long_val_losses = []
 
-    max_depths = []
-    timestep_depths = []
-
+    max_depths_correct_guesses = []
+    timestep_depths_correct_guesses = []
+    max_depths_incorrect_guesses = []
+    timestep_depths_incorrect_guesses = []
 
 
 
@@ -744,8 +760,10 @@ def main():
         losses_long_val = df['Average long validation losses']
         losses_long_val = losses_long_val.tolist()
         # runs.append(run)
+        checkpoint_count = 0
         for epoch in range(num_epochs):
-            if epoch%checkpoint_step==0:
+            if epoch%checkpoint_step==0 and checkpoint_count<=num_checkpoints:
+                checkpoint_count+=1
                 runs.append(run)
                 avg_train_losses.append(losses_train[epoch])
                 inverse_avg_train_losses.append(1/losses_train[epoch])
@@ -762,7 +780,7 @@ def main():
                 checkpoint_model.load_state_dict(checkpt['model_state_dict'])
                 checkpoint_model.to(device)
                 # checkpoint_test_accuracy, checkpoint_correct_guesses,checkpoint_correct_guesses_length, checkpoint_incorrect_guesses, checkpoint_incorrect_guesses_length, checkpoint_incorrect_guesses_first_fail,checkpoint_avg_first_fail_point, checkpoint_max_depth, checkpoint_timestep_depth = test_model(checkpoint_model,test_loader,'short')
-                checkpoint_test_accuracy, checkpoint_correct_guesses, checkpoint_correct_guesses_length, checkpoint_incorrect_guesses, checkpoint_incorrect_guesses_length, checkpoint_incorrect_guesses_first_fail, checkpoint_avg_first_fail_point = test_model(checkpoint_model, test_loader, 'short')
+                checkpoint_test_accuracy, checkpoint_correct_guesses, checkpoint_correct_guesses_length, checkpoint_incorrect_guesses, checkpoint_incorrect_guesses_length, checkpoint_incorrect_guesses_first_fail, checkpoint_avg_first_fail_point, checkpoint_max_depth_correct, checkpoint_timestep_depth_correct, checkpoint_max_depth_incorrect, checkpoint_timestep_depth_incorrect = test_model(checkpoint_model, test_loader, 'short')
 
                 test_accuracies.append(checkpoint_test_accuracy)
                 correct_guesses.append(checkpoint_correct_guesses)
@@ -773,6 +791,10 @@ def main():
                 avg_point_of_failure_short.append(checkpoint_avg_first_fail_point)
                 # max_depths.append(checkpoint_max_depth)
                 # timestep_depths.append(checkpoint_timestep_depth)
+                max_depths_correct_guesses.append(checkpoint_max_depth_correct)
+                max_depths_incorrect_guesses.append(checkpoint_max_depth_incorrect)
+                timestep_depths_correct_guesses.append(checkpoint_timestep_depth_correct)
+                timestep_depths_incorrect_guesses.append(checkpoint_timestep_depth_incorrect)
 
 
 
@@ -806,7 +828,7 @@ def main():
         model.load_state_dict(torch.load(mdl))
         model.to(device)
         # test_accuracy, test_correct_guesses,test_correct_guesses_length, test_incorrect_guesses, test_incorrect_guesses_length, test_incorrect_guesses_first_fail,test_avg_first_fail_point, test_max_depth, test_timestep_depth = test_model(model, test_loader, 'short')
-        test_accuracy, test_correct_guesses, test_correct_guesses_length, test_incorrect_guesses, test_incorrect_guesses_length, test_incorrect_guesses_first_fail, test_avg_first_fail_point = test_model(model, test_loader, 'short')
+        test_accuracy, test_correct_guesses, test_correct_guesses_length, test_incorrect_guesses, test_incorrect_guesses_length, test_incorrect_guesses_first_fail, test_avg_first_fail_point, max_depth_correct, timestep_depth_correct, max_depth_incorrect, timestep_depth_incorrect = test_model(model, test_loader, 'short')
 
         test_accuracies.append(test_accuracy)
         correct_guesses.append(test_correct_guesses)
@@ -815,6 +837,11 @@ def main():
         incorrect_guesses_lengths.append(test_incorrect_guesses_length)
         incorrect_guesses_first_fail.append(test_incorrect_guesses_first_fail)
         avg_point_of_failure_short.append(test_avg_first_fail_point)
+        max_depths_correct_guesses.append(max_depth_correct)
+        max_depths_incorrect_guesses.append(max_depth_incorrect)
+        timestep_depths_correct_guesses.append(timestep_depth_correct)
+        timestep_depths_incorrect_guesses.append(timestep_depth_incorrect)
+
         # max_depths.append(test_max_depth)
         # timestep_depths.append(test_timestep_depth)
 
@@ -897,6 +924,8 @@ def main():
     plt.savefig(scatter_name_long_validation)
     plt.close()
 
+
+
     # plt.scatter(x=avg_point_of_failure_long, y=avg_train_losses)
     # plt.xlabel('Average first point of failure for 502 to 1000 token Dyck-1 Sequences')
     # plt.ylabel('Average training loss')
@@ -924,9 +953,18 @@ def main():
     df1['avg training losses'] = avg_train_losses
     df1['avg validation losses']=avg_val_losses
     df1['avg long validation losses']=avg_long_val_losses
-    df1['correct guesses (990 to 1000 tokens)'] = correct_guesses
-    df1['correct guesses seq lengths (990 to 1000 tokens)'] = correct_guesses_lengths
-    df1['average first point of failure (990 to 1000 tokens)'] = avg_point_of_failure_short
+    # df1['correct guesses (990 to 1000 tokens)'] = correct_guesses
+    # df1['correct guesses seq lengths (990 to 1000 tokens)'] = correct_guesses_lengths
+    # df1['average first point of failure (990 to 1000 tokens)'] = avg_point_of_failure_short
+    df1['correct guesses (2000 tokens)'] = correct_guesses
+    df1['correct guesses seq lengths (2000 tokens)'] = correct_guesses_lengths
+    df1['average first point of failure (2000 tokens)'] = avg_point_of_failure_short
+    df1['max depth for correct sequences (2000 tokens)']=max_depths_correct_guesses
+    df1['timestep depths for correct sequences'] = timestep_depths_correct_guesses
+    df1['max depth for incorrect sequences (2000 tokens)'] = max_depths_incorrect_guesses
+    df1['timestep depths for incorrect sequences'] = timestep_depths_incorrect_guesses
+
+
     # df1['max depths']=max_depths
     # df1['timestep depths'] = timestep_depths
     # df1['correct guesses long (502 to 1000 tokens)']=correct_guesses_long
@@ -1167,6 +1205,12 @@ def test_model(model, loader, dataset):
     incorrect_guesses_first_fail = []
     sum_first_fail_points = 0
 
+
+    max_depths_correct_guesses = []
+    timestep_depths_correct_guesses = []
+    max_depths_incorrect_guesses = []
+    timestep_depths_incorrect_guesses = []
+
     model.eval()
     num_correct = 0
     # dataset = ''
@@ -1210,7 +1254,7 @@ def test_model(model, loader, dataset):
     #         # out, hidden = model(input_seq[j].to(device), hidden)
     #         out, hidden = model(Dyck.lineToTensor(X[i][j]).to(device), hidden)
     #         output_seq[j] = out
-    for i, (sentences, labels, input_seq, target_seq, length, max_depth, timestep_depth) in enumerate(loader):
+    for i, (sentences, labels, input_seq, target_seq, length) in enumerate(loader):
 
     # for i, (sentences, labels, input_seq, target_seq, length, max_depth, timestep_depth) in enumerate(loader):
         output_seq = model(input_seq.to(device), length)
@@ -1253,6 +1297,7 @@ def test_model(model, loader, dataset):
         for j in range(batch_size):
 
             # if out_np[j].all() == target_np[j].all():
+            max_depth, timestep_depth = get_timestep_depths(sentences[j])
             if torch.equal(out_seq[j], target_seq[j]):
             # if np.all(np.equal(out_np[j], target_np[j])) and (out_np[j].flatten() == target_np[j].flatten()).all():
                 num_correct += 1
@@ -1260,6 +1305,8 @@ def test_model(model, loader, dataset):
                 correct_guesses_length.append(length[j].item())
                 # incorrect_guesses_first_fail.append(length[j].item())
                 sum_first_fail_points+=length[j].item()
+                max_depths_correct_guesses.append(max_depth)
+                timestep_depths_correct_guesses.append(timestep_depth)
 
                 with open(log_file, 'a') as f:
                     f.write('CORRECT' + '\n')
@@ -1270,6 +1317,8 @@ def test_model(model, loader, dataset):
                         incorrect_guesses_first_fail.append(k)
                         sum_first_fail_points+=k
                         incorrect_guesses_length.append(length[j].item())
+                        max_depths_incorrect_guesses.append(max_depth)
+                        timestep_depths_incorrect_guesses.append(timestep_depth)
                         break
 
                 with open(log_file, 'a') as f:
@@ -1292,7 +1341,7 @@ def test_model(model, loader, dataset):
     avg_first_fail_point = sum_first_fail_points / (len(incorrect_guesses)+num_correct)
 
     # return accuracy, correct_guesses,correct_guesses_length, incorrect_guesses, incorrect_guesses_length, incorrect_guesses_first_fail,avg_first_fail_point, max_depth, timestep_depth
-    return accuracy, correct_guesses,correct_guesses_length, incorrect_guesses, incorrect_guesses_length, incorrect_guesses_first_fail,avg_first_fail_point
+    return accuracy, correct_guesses,correct_guesses_length, incorrect_guesses, incorrect_guesses_length, incorrect_guesses_first_fail,avg_first_fail_point, max_depths_correct_guesses, timestep_depths_correct_guesses, max_depths_incorrect_guesses, timestep_depths_incorrect_guesses
 
 
 
