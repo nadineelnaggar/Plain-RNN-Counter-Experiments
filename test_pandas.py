@@ -64,9 +64,9 @@ print(arr3)
 print(len(arr))
 print(len(arr3))
 
-plt.subplots()
-plt.scatter(x=arr3,y=arr)
-plt.show()
+# plt.subplots()
+# plt.scatter(x=arr3,y=arr)
+# plt.show()
 
 
 # dataset = NextTokenPredictionDataset1000tokens()
@@ -97,7 +97,29 @@ print(len(dataset.x[-1]))
 dataset2 = NextTokenPredictionDataset2000tokens()
 print(len(dataset2.x[0]))
 print(len(dataset2))
-print(max(dataset2.max_depth))
+# print(max(dataset2.max_depth))
 
 # for i in range(len(dataset2)):
 #     print(len(dataset2.x[i]))
+
+def get_timestep_depths(x):
+    max_depth=0
+    current_depth=0
+    timestep_depths = []
+    for i in range(len(x)):
+
+        if x[i] == '(':
+            current_depth += 1
+            timestep_depths.append(current_depth)
+            if current_depth > max_depth:
+                max_depth = current_depth
+        elif x[i] == ')':
+            current_depth -= 1
+            timestep_depths.append(current_depth)
+    return max_depth, timestep_depths
+
+# print(get_timestep_depths(dataset2.x[0]))
+
+max_depth, timestep_depths = get_timestep_depths(dataset2.x[0])
+print(max_depth)
+print(timestep_depths)
