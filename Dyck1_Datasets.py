@@ -403,3 +403,39 @@ class NextTokenPredictionDataset2000tokens(Dataset):
                 current_depth -= 1
                 timestep_depths.append(current_depth)
         return max_depth, timestep_depths
+
+
+class NextTokenPredictionDataset2000tokens_nested(Dataset):
+    def __init__(self):
+
+        self.x = []
+        self.y = []
+        self.max_depths= []
+
+
+        self.lengths = []
+        # self.n_samples = xy.shape[0]
+        with open('Dyck1_Dataset_Suzgun_2000tokens)nested.txt', 'r') as f:
+            for line in f:
+                line = line.split(",")
+                sentence = line[0].strip()
+                label = line[1].strip()
+                length = line[2].strip()
+
+                self.x.append(sentence)
+                self.y.append(label)
+                self.lengths.append(length)
+
+
+
+
+
+        self.n_samples = len(self.x)
+
+
+
+    def __getitem__(self, index):
+        return {'x': self.x[index], 'y': self.y[index], 'length': self.lengths[index]}
+
+    def __len__(self):
+        return self.n_samples
