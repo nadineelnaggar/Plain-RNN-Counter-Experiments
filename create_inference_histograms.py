@@ -102,7 +102,7 @@ def create_histogram():
         #     if max_depth[j] not in bins:
         #         bins.append(max_depth[j])
         # plt.hist(x=max_depth[i], range=[0,1000])
-        plt.his(fpf, bins=bins,range=max_depth[i])
+        plt.hist(fpf, bins=bins,range=max_depth[i])
         plt.savefig('histogram'+str(i)+'.png')
         plt.show()
         plt.close()
