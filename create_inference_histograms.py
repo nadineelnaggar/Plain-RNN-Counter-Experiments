@@ -91,6 +91,12 @@ def create_histogram():
     all_fpf = df['first point of failure for each incorrect sequence']
 
     avg_fpf = df['average first point of failure (2000 tokens)']
+
+    hist_bins = []
+    for i in range(1000):
+        hist_bins.append(i)
+
+
     for i in range(5):
         plt.subplots()
         bins = []
@@ -98,13 +104,13 @@ def create_histogram():
         fpf = avg_fpf[i]
         fpfs.append(fpf)
         max_depths = max_depth[i]
-        for k in range(len(fpfs)):
-            bins.append(k)
+        # for k in range(len(fpfs)):
+        #     bins.append(k)
         # for j in range(min(max_depth[j]), max(max_depth[j])+1):
         #     if max_depth[j] not in bins:
         #         bins.append(max_depth[j])
         # plt.hist(x=max_depth[i], range=[0,1000])
-        plt.hist(max_depth[i], bins=bins,range=fpfs)
+        plt.hist(fpfs, bins=hist_bins,range=max_depth[i])
         plt.savefig('histogram'+str(i)+'.png')
         plt.show()
         plt.close()
