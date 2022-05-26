@@ -82,8 +82,8 @@ def read_sheets():
     # return dfs
     return df
 
-frames=read_sheets()
-print(frames.head())
+# frames=read_sheets()
+# print(frames.head())
 
 def create_histogram():
     df = read_sheets()
@@ -96,3 +96,5 @@ def create_histogram():
         plt.hist(x=max_depth[i], range=all_fpf[i])
         plt.show()
         plt.close()
+
+create_histogram()
