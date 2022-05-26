@@ -96,11 +96,11 @@ def create_histogram():
     for i in range(1000):
         hist_bins.append(i)
 
-
+    fpfs = []
     for i in range(5):
         plt.subplots()
         bins = []
-        fpfs = []
+
         fpf = avg_fpf[i]
         fpfs.append(fpf)
         max_depths = max_depth[i]
