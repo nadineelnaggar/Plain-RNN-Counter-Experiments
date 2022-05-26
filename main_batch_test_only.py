@@ -961,6 +961,7 @@ def main():
     df1['incorrect guesses (2000 tokens)'] = incorrect_guesses
     df1['incorrect guesses seq lengths (2000 tokens)'] = incorrect_guesses_lengths
     df1['average first point of failure (2000 tokens)'] = avg_point_of_failure_short
+    df1['first point of failure for each incorrect sequence']=incorrect_guesses_first_fail
     df1['max depth for correct sequences (2000 tokens)']=max_depths_correct_guesses
     df1['timestep depths for correct sequences'] = timestep_depths_correct_guesses
     df1['max depth for incorrect sequences (2000 tokens)'] = max_depths_incorrect_guesses
