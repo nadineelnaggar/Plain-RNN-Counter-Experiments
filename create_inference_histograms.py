@@ -87,11 +87,11 @@ def read_sheets():
 
 def create_histogram():
     df = read_sheets()
-    max_depth = df['max depth for incorrect sequences (2000 tokens)'][0]
-    print(type(max_depth))
-    print(max_depth[:20])
-    txt = df['first point of failure for each incorrect sequence'][0]
-    all_fpf=[int(s) for s in txt.split(', ') if s.isdigit()]
+    # max_depth = df['max depth for incorrect sequences (2000 tokens)'][0]
+    # print(type(max_depth))
+    # print(max_depth[:20])
+    # txt = df['first point of failure for each incorrect sequence'][0]
+    # all_fpf=[int(s) for s in txt.split(', ') if s.isdigit()]
 
     avg_fpf = df['average first point of failure (2000 tokens)']
 
@@ -101,6 +101,11 @@ def create_histogram():
 
     fpfs = []
     for i in range(5):
+        max_depth = df['max depth for incorrect sequences (2000 tokens)'][i]
+        print(type(max_depth))
+        print(max_depth[:20])
+        txt = df['first point of failure for each incorrect sequence'][i]
+        all_fpf = [int(s) for s in txt.split(', ') if s.isdigit()]
         plt.subplots()
         bins = []
 
