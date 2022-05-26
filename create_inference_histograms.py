@@ -94,6 +94,7 @@ def create_histogram():
     for i in range(5):
         plt.subplots()
         plt.hist(x=max_depth[i], range=[0,1000])
+        plt.savefig('histogram'+str(i)+'.png')
         plt.show()
         plt.close()
 
