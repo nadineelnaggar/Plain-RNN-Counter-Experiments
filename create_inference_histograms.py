@@ -93,7 +93,7 @@ def create_histogram():
     avg_fpf = df['average first point of failure (2000 tokens)']
     for i in range(5):
         plt.subplots()
-        plt.hist(x=max_depth[i], range=all_fpf[i])
+        plt.hist(x=max_depth[i], range=[0,1000])
         plt.show()
         plt.close()
 
