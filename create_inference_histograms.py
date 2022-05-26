@@ -98,7 +98,7 @@ def create_histogram():
         fpf = avg_fpf[i]
         fpfs.append(fpf)
         max_depths = max_depth[i]
-        for k in range(len(fpf)):
+        for k in range(len(fpfs)):
             bins.append(k)
         # for j in range(min(max_depth[j]), max(max_depth[j])+1):
         #     if max_depth[j] not in bins:
