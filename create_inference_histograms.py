@@ -84,3 +84,15 @@ def read_sheets():
 
 frames=read_sheets()
 print(frames.head())
+
+def create_histogram():
+    df = read_sheets()
+    max_depth = df['max depth for incorrect sequences (2000 tokens)']
+    all_fpf = df['first point of failure for each incorrect sequence']
+
+    avg_fpf = df['average first point of failure (2000 tokens)']
+    for i in range(5):
+        plt.subplots()
+        plt.hist(x=max_depth[i], range=all_fpf[i])
+        plt.show()
+        plt.close()
