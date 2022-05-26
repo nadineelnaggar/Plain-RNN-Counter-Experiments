@@ -87,8 +87,8 @@ def read_sheets():
 
 def create_histogram():
     df = read_sheets()
-    max_depth = df['max depth for incorrect sequences (2000 tokens)']
-    all_fpf = df['first point of failure for each incorrect sequence']
+    max_depth = df['max depth for incorrect sequences (2000 tokens)'][0]
+    all_fpf = df['first point of failure for each incorrect sequence'][0]
 
     avg_fpf = df['average first point of failure (2000 tokens)']
 
@@ -110,7 +110,8 @@ def create_histogram():
         #     if max_depth[j] not in bins:
         #         bins.append(max_depth[j])
         # plt.hist(x=max_depth[i], range=[0,1000])
-        plt.hist(fpfs, bins=hist_bins,range=[0,max(max_depth[i])])
+        # plt.hist(fpfs, bins=hist_bins,range=[0,max(max_depth[i])])
+        plt.hist(all_fpf)
         plt.savefig('histogram'+str(i)+'.png')
         plt.show()
         plt.close()
