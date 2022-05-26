@@ -5,6 +5,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 import argparse
 
+# RERUN THE CODE TO GENERATE THE EXCEL SHEETS NOW THAT THE SHUFFLE DATA IS FALSE IN THE DATALOADER,
+# THEN GENERATE HISTOGRAMS
+
 
 # to read the excel generated from the inference code
 # read the excel from the inference
