@@ -94,7 +94,9 @@ def create_histogram():
     for i in range(5):
         plt.subplots()
         bins = []
-        fpf = avg_fpf
+        fpfs = []
+        fpf = avg_fpf[i]
+        fpfs.append(fpf)
         max_depths = max_depth[i]
         for k in range(len(fpf)):
             bins.append(k)
@@ -102,7 +104,7 @@ def create_histogram():
         #     if max_depth[j] not in bins:
         #         bins.append(max_depth[j])
         # plt.hist(x=max_depth[i], range=[0,1000])
-        plt.hist(fpf, bins=bins,range=max_depth[i])
+        plt.hist(fpfs, bins=bins,range=max_depth[i])
         plt.savefig('histogram'+str(i)+'.png')
         plt.show()
         plt.close()
