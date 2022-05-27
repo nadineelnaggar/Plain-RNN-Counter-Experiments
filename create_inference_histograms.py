@@ -133,3 +133,5 @@ def create_histogram():
         plt.close()
 
 create_histogram()
+
+# def create_histogram_one_sequence():

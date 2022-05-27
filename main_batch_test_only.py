@@ -15,7 +15,7 @@ from torch.utils.tensorboard import SummaryWriter
 from torch.utils.data import Dataset, DataLoader
 from Dyck1_Datasets import NextTokenPredictionLongTestDataset, NextTokenPredictionShortTestDataset, \
     NextTokenPredictionTrainDataset, NextTokenPredictionDataset102to500tokens,NextTokenPredictionDataset502to1000tokens, \
-    NextTokenPredictionDataset990to1000tokens, NextTokenPredictionDataset2000tokens
+    NextTokenPredictionDataset990to1000tokens, NextTokenPredictionDataset2000tokens, NextTokenPredictionDataset2000tokens_nested
 
 seed = 10
 torch.manual_seed(seed)
@@ -480,7 +480,8 @@ def get_timestep_depths(x):
 # long_dataset = NextTokenPredictionDataset502to1000tokens()
 
 # test_dataset = NextTokenPredictionDataset990to1000tokens()
-test_dataset = NextTokenPredictionDataset2000tokens()
+# test_dataset = NextTokenPredictionDataset2000tokens()
+test_dataset = NextTokenPredictionDataset2000tokens_nested()
 test_size = len(test_dataset)
 
 # train_loader = DataLoader(train_dataset,batch_size=batch_size, shuffle=False, collate_fn=collate_fn)
