@@ -165,13 +165,13 @@ def create_histogram_one_sequence_multiple_models():
             txt = df['first point of failure for each incorrect sequence'][j]
             all_fpf = [int(s) for s in txt.split(', ') if s.isdigit()]
             fpfs.append(all_fpf[i])
-            plt.subplots()
-            plt.hist(all_fpf, bins=range(0, 1001, 50))
-            plt.xlabel('First point of failure for each incorrect sequence')
-            plt.ylabel('Number of incorrect sequences')
-            plt.savefig(path + 'histogram one sequence multiple models ' + str(i) + '.png')
-            plt.show()
-            plt.close()
+        plt.subplots()
+        plt.hist(all_fpf, bins=range(0, 1001, 50))
+        plt.xlabel('First point of failure for each incorrect sequence')
+        plt.ylabel('Number of incorrect sequences')
+        plt.savefig(path + 'histogram one sequence multiple models ' + str(i) + '.png')
+        plt.show()
+        plt.close()
 
 
 
