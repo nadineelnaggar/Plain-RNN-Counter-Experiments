@@ -64,15 +64,15 @@ num_bracket_pairs = 25
 
 
 
-path = "/Users/nadineelnaggar/Google Drive/PhD/EXPT_LOGS/Dyck1_"+str(task)+"/Minibatch_Training/"+model_name+"/"\
-       +str(batch_size)+"_batch_size/"+str(learning_rate)+"_learning_rate/"+str(num_epochs)+"_epochs/"\
-       +str(lr_scheduler_step)+"_lr_scheduler_step/"+str(lr_scheduler_gamma)+"_lr_scheduler_gamma/"\
-       +str(hidden_size)+"_hidden_units/"+str(num_runs)+"_runs/shuffle_"+str(shuffle_dataset)+"/"
-
-# path = "/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_"+str(task)+"/Minibatch_Training/"+model_name+"/"\
+# path = "/Users/nadineelnaggar/Google Drive/PhD/EXPT_LOGS/Dyck1_"+str(task)+"/Minibatch_Training/"+model_name+"/"\
 #        +str(batch_size)+"_batch_size/"+str(learning_rate)+"_learning_rate/"+str(num_epochs)+"_epochs/"\
 #        +str(lr_scheduler_step)+"_lr_scheduler_step/"+str(lr_scheduler_gamma)+"_lr_scheduler_gamma/"\
 #        +str(hidden_size)+"_hidden_units/"+str(num_runs)+"_runs/shuffle_"+str(shuffle_dataset)+"/"
+
+path = "/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_"+str(task)+"/Minibatch_Training/"+model_name+"/"\
+       +str(batch_size)+"_batch_size/"+str(learning_rate)+"_learning_rate/"+str(num_epochs)+"_epochs/"\
+       +str(lr_scheduler_step)+"_lr_scheduler_step/"+str(lr_scheduler_gamma)+"_lr_scheduler_gamma/"\
+       +str(hidden_size)+"_hidden_units/"+str(num_runs)+"_runs/shuffle_"+str(shuffle_dataset)+"/"
 
 excel_name_inference = path+ 'Dyck1_' + task + '_' + str(
         num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' +str(batch_size) +'_batch_size_'+'_' + str(
@@ -90,10 +90,14 @@ def read_sheets():
     # return dfs
     return df
 
-# frames=read_sheets()
+frames=read_sheets()
 # print(frames.head())
+print(frames['first point of failure for each incorrect sequence'].head())
+print(len(frames['first point of failure for each incorrect sequence']))
 
 def create_histogram():
+    # different models, all sequences (one histogram per model)
+
     df = read_sheets()
     # max_depth = df['max depth for incorrect sequences (2000 tokens)'][0]
     # print(type(max_depth))
@@ -128,10 +132,69 @@ def create_histogram():
         # plt.hist(x=max_depth[i], range=[0,1000])
         # plt.hist(fpfs, bins=hist_bins,range=[0,max(max_depth[i])])
         plt.hist(all_fpf, bins=range(0,1001,50))
-        plt.savefig('histogram'+str(i)+'.png')
+        plt.xlabel('First point of failure for each incorrect sequence')
+        plt.ylabel('Number of incorrect sequences')
+        plt.savefig(path+'histogram one model multiple sequences '+str(i)+'.png')
         plt.show()
         plt.close()
 
-create_histogram()
+# create_histogram()
 
-# def create_histogram_one_sequence():
+def create_histogram_one_sequence_multiple_models():
+    # choose a sequence (maybe 5, and create one histogram per sequence)
+    # extract the max_depth of the sequence
+    # extract the fpf of this particular sequence on the different models
+    # plot histogram of the fpf
+    # plot the timestep depths if possible
+
+    df = read_sheets()
+    num_models = len(df) #number of rows in the dataframe = number of models
+
+    #read relevant columns from the dataframe
+
+    avg_fpf = df['average first point of failure (2000 tokens)']
+    # all_fpfs = df['first point of failure for each incorrect sequence']
+
+
+
+
+
+    for i in range(5):
+        fpfs = []
+        for j in range(num_models):
+            txt = df['first point of failure for each incorrect sequence'][j]
+            all_fpf = [int(s) for s in txt.split(', ') if s.isdigit()]
+            fpfs.append(all_fpf[i])
+            plt.subplots()
+            plt.hist(all_fpf, bins=range(0, 1001, 50))
+            plt.xlabel('First point of failure for each incorrect sequence')
+            plt.ylabel('Number of incorrect sequences')
+            plt.savefig(path + 'histogram one sequence multiple models ' + str(i) + '.png')
+            plt.show()
+            plt.close()
+
+
+
+    # for i in range(5):
+    #     max_depth = df['max depth for incorrect sequences (2000 tokens)'][i]
+    #     # print(type(max_depth))
+    #     # print(max_depth[:20])
+    #     txt = df['first point of failure for each incorrect sequence'][i]
+    #     all_fpf = [int(s) for s in txt.split(', ') if s.isdigit()]
+    #     fpfs.append(all_fpf[0])
+    #     plt.subplots()
+    #     bins = []
+    #
+    #     fpf = avg_fpf[i]
+    #     fpfs.append(fpf)
+    #     max_depths = max_depth[i]
+    #
+    #     plt.hist(all_fpf, bins=range(0, 1001, 50))
+    #     plt.xlabel('First point of failure for each incorrect sequence')
+    #     plt.ylabel('Number of incorrect sequences')
+    #     plt.savefig(path+'histogram one sequence multiple models ' + str(i) + '.png')
+    #     plt.show()
+    #     plt.close()
+
+create_histogram()
+create_histogram_one_sequence_multiple_models()
