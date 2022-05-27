@@ -415,7 +415,7 @@ class NextTokenPredictionDataset2000tokens_nested(Dataset):
 
         self.lengths = []
         # self.n_samples = xy.shape[0]
-        with open('Dyck1_Dataset_Suzgun_2000tokens)nested.txt', 'r') as f:
+        with open('Dyck1_Dataset_Suzgun_2000tokens_nested.txt', 'r') as f:
             for line in f:
                 line = line.split(",")
                 sentence = line[0].strip()
