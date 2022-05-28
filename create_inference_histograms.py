@@ -4,6 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 import argparse
+from Dyck1_Datasets import NextTokenPredictionDataset2000tokens_nested
 
 # RERUN THE CODE TO GENERATE THE EXCEL SHEETS NOW THAT THE SHUFFLE DATA IS FALSE IN THE DATALOADER,
 # THEN GENERATE HISTOGRAMS
@@ -140,12 +141,31 @@ def create_histogram():
 
 # create_histogram()
 
+def get_timestep_depths(x):
+    max_depth=0
+    current_depth=0
+    timestep_depths = []
+    for i in range(len(x)):
+
+        if x[i] == '(':
+            current_depth += 1
+            timestep_depths.append(current_depth)
+            if current_depth > max_depth:
+                max_depth = current_depth
+        elif x[i] == ')':
+            current_depth -= 1
+            timestep_depths.append(current_depth)
+    return max_depth, timestep_depths
+
 def create_histogram_one_sequence_multiple_models():
     # choose a sequence (maybe 5, and create one histogram per sequence)
     # extract the max_depth of the sequence
     # extract the fpf of this particular sequence on the different models
     # plot histogram of the fpf
     # plot the timestep depths if possible
+
+    dataset = NextTokenPredictionDataset2000tokens_nested()
+
 
     df = read_sheets()
     num_models = len(df) #number of rows in the dataframe = number of models
@@ -161,12 +181,17 @@ def create_histogram_one_sequence_multiple_models():
 
     for i in range(5):
         fpfs = []
+        seq, label, length = dataset[i]
+        timestep_depths = []
+        max_depth, timestep_depth = get_timestep_depths(seq)
+        timestep_depths.append(timestep_depth)
         for j in range(num_models):
             txt = df['first point of failure for each incorrect sequence'][j]
             all_fpf = [int(s) for s in txt.split(', ') if s.isdigit()]
             fpfs.append(all_fpf[i])
         plt.subplots()
         plt.hist(fpfs, bins=range(0, 2001, 50))
+        plt.plot(timestep_depth,color='red')
         plt.xlabel('First point of failure for each incorrect sequence')
         plt.ylabel('Number of incorrect sequences')
         plt.savefig(path + 'histogram one sequence multiple models ' + str(i) + '.png')
