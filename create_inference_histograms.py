@@ -199,7 +199,7 @@ def create_histogram_one_sequence_multiple_models():
         plt.show()
         plt.close()
         plt.subplots()
-        plt.plot(x=len(timestep_depth),y=timestep_depth, color='red')
+        plt.plot([i for i in range(len(timestep_depth))],timestep_depth, color='red')
         plt.xlabel('Timestep')
         plt.ylabel('Stack Depths')
         plt.savefig(path + 'timestep depth one sequence multiple models ' + str(i) + '.png')
