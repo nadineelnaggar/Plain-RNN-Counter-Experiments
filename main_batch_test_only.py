@@ -15,7 +15,8 @@ from torch.utils.tensorboard import SummaryWriter
 from torch.utils.data import Dataset, DataLoader
 from Dyck1_Datasets import NextTokenPredictionLongTestDataset, NextTokenPredictionShortTestDataset, \
     NextTokenPredictionTrainDataset, NextTokenPredictionDataset102to500tokens,NextTokenPredictionDataset502to1000tokens, \
-    NextTokenPredictionDataset990to1000tokens, NextTokenPredictionDataset2000tokens, NextTokenPredictionDataset2000tokens_nested
+    NextTokenPredictionDataset990to1000tokens, NextTokenPredictionDataset2000tokens, \
+    NextTokenPredictionDataset2000tokens_nested, NextTokenPredictionDataset2000tokens_zigzag
 
 seed = 10
 torch.manual_seed(seed)
@@ -53,6 +54,7 @@ parser.add_argument('--num_runs', type=int, help='number of training runs')
 parser.add_argument('--checkpoint_step', type=int, help='checkpoint step', default=0)
 parser.add_argument('--shuffle_dataset',type=bool,default=False)
 parser.add_argument('--num_checkpoints', type=int,default=100, help='number of checkpoints we want to include if we dont need all of them (e.g., first 5 checkpoints only), stop after n checkpoints')
+parser.add_argument('--dataset_type',type=str, default='nested',help='nested, zigzag or appended')
 
 
 args = parser.parse_args()
@@ -70,6 +72,8 @@ batch_size = args.batch_size
 lr_scheduler_gamma = args.lr_scheduler_gamma
 lr_scheduler_step = args.lr_scheduler_step
 num_checkpoints = args.num_checkpoints
+dataset_type = args.dataset_type
+
 
 # best_run = args.best_run
 #
@@ -279,6 +283,9 @@ checkpoint = path+ 'Dyck1_' + task + '_' + str(
 #         hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
 #         num_epochs) + 'epochs_'+str(lr_scheduler_step)+"lr_scheduler_step_"+str(lr_scheduler_gamma)+"lr_scheduler_gamma_"+ str(num_runs)+'runs' + '_102to500tokens_train_loss_SCATTER_PLOT.png'
 
+
+prefix = path+'INFERENCE_'+dataset_type+'_'+str(checkpoint_step)+'checkpoint_step_upto'+str(num_checkpoints)+'checkpoints_'
+
 scatter_name_train = path+ 'Dyck1_' + task + '_' + str(
         num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' +str(batch_size) +'_batch_size_'+'_' + str(
         hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
@@ -485,6 +492,14 @@ def get_timestep_depths(x):
 # test_dataset = NextTokenPredictionDataset2000tokens()
 test_dataset = NextTokenPredictionDataset2000tokens_nested()
 test_size = len(test_dataset)
+
+if dataset_type=='nested':
+    test_dataset=NextTokenPredictionDataset2000tokens_nested()
+elif dataset_type=='zigzag':
+    test_dataset=NextTokenPredictionDataset2000tokens_zigzag()
+elif dataset_type=='appended':
+    test_dataset=NextTokenPredictionDataset2000tokens()
+test_size=len(test_dataset)
 
 # train_loader = DataLoader(train_dataset,batch_size=batch_size, shuffle=False, collate_fn=collate_fn)
 test_loader = DataLoader(test_dataset,batch_size=batch_size, shuffle=False, collate_fn=collate_fn)
