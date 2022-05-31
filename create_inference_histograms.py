@@ -4,7 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 import argparse
-from Dyck1_Datasets import NextTokenPredictionDataset2000tokens_nested
+from Dyck1_Datasets import NextTokenPredictionDataset2000tokens_nested, NextTokenPredictionDataset2000tokens_zigzag
 
 # RERUN THE CODE TO GENERATE THE EXCEL SHEETS NOW THAT THE SHUFFLE DATA IS FALSE IN THE DATALOADER,
 # THEN GENERATE HISTOGRAMS
@@ -38,6 +38,8 @@ parser.add_argument('--num_runs', type=int, help='number of training runs')
 parser.add_argument('--checkpoint_step', type=int, help='checkpoint step', default=0)
 parser.add_argument('--shuffle_dataset',type=bool,default=False)
 parser.add_argument('--num_checkpoints', type=int,default=100, help='number of checkpoints we want to include if we dont need all of them (e.g., first 5 checkpoints only), stop after n checkpoints')
+parser.add_argument('--dataset_type',type=str, default='nested',help='nested, zigzag or appended')
+parser.add_argument('--runtime',type=str, help='local or colab', default='colab')
 
 
 args = parser.parse_args()
@@ -57,6 +59,8 @@ lr_scheduler_step = args.lr_scheduler_step
 num_checkpoints = args.num_checkpoints
 shuffle_dataset = args.shuffle_dataset
 checkpoint_step = args.checkpoint_step
+dataset_type = args.dataset_type
+runtime = args.runtime
 
 use_optimiser='Adam'
 
@@ -64,22 +68,28 @@ num_bracket_pairs = 25
 
 
 
+if runtime=='local':
+    path = "/Users/nadineelnaggar/Google Drive/PhD/EXPT_LOGS/Dyck1_"+str(task)+"/Minibatch_Training/"+model_name+"/"\
+           +str(batch_size)+"_batch_size/"+str(learning_rate)+"_learning_rate/"+str(num_epochs)+"_epochs/"\
+           +str(lr_scheduler_step)+"_lr_scheduler_step/"+str(lr_scheduler_gamma)+"_lr_scheduler_gamma/"\
+           +str(hidden_size)+"_hidden_units/"+str(num_runs)+"_runs/shuffle_"+str(shuffle_dataset)+"/"
+elif runtime=='colab':
+    path = "/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_"+str(task)+"/Minibatch_Training/"+model_name+"/"\
+           +str(batch_size)+"_batch_size/"+str(learning_rate)+"_learning_rate/"+str(num_epochs)+"_epochs/"\
+           +str(lr_scheduler_step)+"_lr_scheduler_step/"+str(lr_scheduler_gamma)+"_lr_scheduler_gamma/"\
+           +str(hidden_size)+"_hidden_units/"+str(num_runs)+"_runs/shuffle_"+str(shuffle_dataset)+"/"
 
-# path = "/Users/nadineelnaggar/Google Drive/PhD/EXPT_LOGS/Dyck1_"+str(task)+"/Minibatch_Training/"+model_name+"/"\
-#        +str(batch_size)+"_batch_size/"+str(learning_rate)+"_learning_rate/"+str(num_epochs)+"_epochs/"\
-#        +str(lr_scheduler_step)+"_lr_scheduler_step/"+str(lr_scheduler_gamma)+"_lr_scheduler_gamma/"\
-#        +str(hidden_size)+"_hidden_units/"+str(num_runs)+"_runs/shuffle_"+str(shuffle_dataset)+"/"
 
-path = "/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_"+str(task)+"/Minibatch_Training/"+model_name+"/"\
-       +str(batch_size)+"_batch_size/"+str(learning_rate)+"_learning_rate/"+str(num_epochs)+"_epochs/"\
-       +str(lr_scheduler_step)+"_lr_scheduler_step/"+str(lr_scheduler_gamma)+"_lr_scheduler_gamma/"\
-       +str(hidden_size)+"_hidden_units/"+str(num_runs)+"_runs/shuffle_"+str(shuffle_dataset)+"/"
 
-excel_name_inference = path+ 'Dyck1_' + task + '_' + str(
-        num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' +str(batch_size) +'_batch_size_'+'_' + str(
-        hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
-        num_epochs) + 'epochs_'+str(lr_scheduler_step)+"lr_scheduler_step_"+str(lr_scheduler_gamma)+"lr_scheduler_gamma_"+ str(num_runs)+'runs_'+str(checkpoint_step)+"checkpoint_step_"+str(num_checkpoints)+"checkpoints" + 'INFERENCE.xlsx'
+prefix = path+'INFERENCE_'+dataset_type+'_'+str(checkpoint_step)+'checkpoint_step_upto'+str(num_checkpoints)+'checkpoints_'
 
+
+# excel_name_inference = path+ 'Dyck1_' + task + '_' + str(
+#         num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' +str(batch_size) +'_batch_size_'+'_' + str(
+#         hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
+#         num_epochs) + 'epochs_'+str(lr_scheduler_step)+"lr_scheduler_step_"+str(lr_scheduler_gamma)+"lr_scheduler_gamma_"+ str(num_runs)+'runs_'+str(checkpoint_step)+"checkpoint_step_"+str(num_checkpoints)+"checkpoints" + 'INFERENCE.xlsx'
+
+excel_name_inference=prefix+'EXCEL INFERENCE.xlsx'
 
 def read_sheets():
     sheet_name='Sheet1'
@@ -135,7 +145,8 @@ def create_histogram():
         plt.hist(all_fpf, bins=range(0,2001,50))
         plt.xlabel('First point of failure for each incorrect sequence')
         plt.ylabel('Number of incorrect sequences')
-        plt.savefig(path+'histogram one model multiple sequences '+str(i)+'.png')
+        # plt.savefig(path+'histogram one model multiple sequences '+str(i)+'.png')
+        plt.savefig(prefix + 'histogram one model multiple sequences ' + str(i) + '.png')
         plt.show()
         plt.close()
 
@@ -164,7 +175,12 @@ def create_histogram_one_sequence_multiple_models():
     # plot histogram of the fpf
     # plot the timestep depths if possible
 
-    dataset = NextTokenPredictionDataset2000tokens_nested()
+
+    if dataset_type=='nested':
+        dataset = NextTokenPredictionDataset2000tokens_nested()
+    elif dataset_type=='zigzag':
+        dataset = NextTokenPredictionDataset2000tokens_zigzag()
+
 
 
     df = read_sheets()
@@ -203,7 +219,8 @@ def create_histogram_one_sequence_multiple_models():
         plt.plot([i for i in range(len(timestep_depth))],timestep_depth, color='red')
         plt.xlabel('Timestep')
         plt.ylabel('Stack Depths')
-        plt.savefig(path + 'timestep depth one sequence multiple models ' + str(i) + '.png')
+        # plt.savefig(path + 'timestep depth one sequence multiple models ' + str(i) + '.png')
+        plt.savefig(prefix + 'timestep depth one sequence multiple models ' + str(i) + '.png')
         plt.show()
         plt.close()
 
