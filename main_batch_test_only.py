@@ -756,6 +756,7 @@ def main():
     runs = []
     correct_guesses = []
     correct_guesses_lengths = []
+    correct_guesses_max_depth = []
     # correct_guesses_long = []
     # correct_guesses_long_lengths = []
 
@@ -765,6 +766,7 @@ def main():
     # incorrect_guesses_long = []
     # incorrect_guesses_long_lengths = []
     incorrect_guesses_first_fail = []
+    incorrect_guesses_max_depth = []
     # incorrect_guesses_long_first_fail = []
 
     avg_point_of_failure_short = []
@@ -829,6 +831,8 @@ def main():
                 incorrect_guesses_lengths.append(checkpoint_incorrect_guesses_length)
                 incorrect_guesses_first_fail.append(checkpoint_incorrect_guesses_first_fail)
                 avg_point_of_failure_short.append(checkpoint_avg_first_fail_point)
+                # max_depths_correct_guesses.append(checkpoint_max_depth_correct)
+                # max_depths_incorrect_guesses.append(checkpoint_max_depth_incorrect)
                 # max_depths.append(checkpoint_max_depth)
                 # timestep_depths.append(checkpoint_timestep_depth)
                 max_depths_correct_guesses.append(checkpoint_max_depth_correct)
