@@ -187,6 +187,8 @@ print('learning_rate = ',learning_rate)
 print('num_epochs = ',num_epochs)
 print('num_runs = ',num_runs)
 print('shuffle = ',shuffle_dataset)
+print('dataset_type = ',dataset_type)
+
 
 
 
@@ -286,10 +288,15 @@ checkpoint = path+ 'Dyck1_' + task + '_' + str(
 
 prefix = path+'INFERENCE_'+dataset_type+'_'+str(checkpoint_step)+'checkpoint_step_upto'+str(num_checkpoints)+'checkpoints_'
 
-scatter_name_train = path+ 'Dyck1_' + task + '_' + str(
-        num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' +str(batch_size) +'_batch_size_'+'_' + str(
-        hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
-        num_epochs) + 'epochs_'+str(lr_scheduler_step)+"lr_scheduler_step_"+str(lr_scheduler_gamma)+"lr_scheduler_gamma_"+ str(num_runs)+'runs_'+str(checkpoint_step)+"checkpoint_step_"+str(num_checkpoints)+"checkpoints" + '_2000tokens_train_loss_SCATTER_PLOT.png'
+# scatter_name_train = path+ 'Dyck1_' + task + '_' + str(
+#         num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' +str(batch_size) +'_batch_size_'+'_' + str(
+#         hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
+#         num_epochs) + 'epochs_'+str(lr_scheduler_step)+"lr_scheduler_step_"+str(lr_scheduler_gamma)+"lr_scheduler_gamma_"+ str(num_runs)+'runs_'+str(checkpoint_step)+"checkpoint_step_"+str(num_checkpoints)+"checkpoints" + '_2000tokens_train_loss_SCATTER_PLOT.png'
+
+scatter_name_train = prefix+'TRAIN LOSS SCATTER PLOT.png'
+scatter_name_inverse_train = prefix+'INVERSE TRAIN LOSS SCATTER PLOT.png'
+scatter_name_log_train = prefix+'LOG TRAIN LOSS SCATTER PLOT.png'
+scatter_name_inverse_log_train = prefix+'INVERSE LOG TRAIN LOSS SCATTER PLOT.png'
 
 # long_scatter_name_train = path+ 'Dyck1_' + task + '_' + str(
 #         num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' +str(batch_size) +'_batch_size_'+'_' + str(
@@ -301,11 +308,15 @@ scatter_name_train = path+ 'Dyck1_' + task + '_' + str(
 #         hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
 #         num_epochs) + 'epochs_'+str(lr_scheduler_step)+"lr_scheduler_step_"+str(lr_scheduler_gamma)+"lr_scheduler_gamma_"+ str(num_runs)+'runs' + '_102to500tokens_validation_loss_SCATTER_PLOT.png'
 
-scatter_name_validation = path+ 'Dyck1_' + task + '_' + str(
-        num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' +str(batch_size) +'_batch_size_'+'_' + str(
-        hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
-        num_epochs) + 'epochs_'+str(lr_scheduler_step)+"lr_scheduler_step_"+str(lr_scheduler_gamma)+"lr_scheduler_gamma_"+ str(num_runs)+'runs_'+str(checkpoint_step)+"checkpoint_step_"+str(num_checkpoints)+"checkpoints" + '_2000tokens_validation_loss_SCATTER_PLOT.png'
+# scatter_name_validation = path+ 'Dyck1_' + task + '_' + str(
+#         num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' +str(batch_size) +'_batch_size_'+'_' + str(
+#         hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
+#         num_epochs) + 'epochs_'+str(lr_scheduler_step)+"lr_scheduler_step_"+str(lr_scheduler_gamma)+"lr_scheduler_gamma_"+ str(num_runs)+'runs_'+str(checkpoint_step)+"checkpoint_step_"+str(num_checkpoints)+"checkpoints" + '_2000tokens_validation_loss_SCATTER_PLOT.png'
 
+scatter_name_validation = prefix+'VALIDATION LOSS SCATTER PLOT.png'
+scatter_name_inverse_validation = prefix+'INVERSE VALIDATION LOSS SCATTER PLOT.png'
+scatter_name_log_validation = prefix+'LOG VALIDATION LOSS SCATTER PLOT.png'
+scatter_name_inverse_log_validation = prefix+'INVERSE LOG VALIDATION LOSS SCATTER PLOT.png'
 
 # long_scatter_name_validation = path+ 'Dyck1_' + task + '_' + str(
 #         num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' +str(batch_size) +'_batch_size_'+'_' + str(
@@ -317,11 +328,15 @@ scatter_name_validation = path+ 'Dyck1_' + task + '_' + str(
 #         hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
 #         num_epochs) + 'epochs_'+str(lr_scheduler_step)+"lr_scheduler_step_"+str(lr_scheduler_gamma)+"lr_scheduler_gamma_"+ str(num_runs)+'runs' + '_102to500tokens_long_validation_loss_SCATTER_PLOT.png'
 
-scatter_name_long_validation = path+ 'Dyck1_' + task + '_' + str(
-        num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' +str(batch_size) +'_batch_size_'+'_' + str(
-        hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
-        num_epochs) + 'epochs_'+str(lr_scheduler_step)+"lr_scheduler_step_"+str(lr_scheduler_gamma)+"lr_scheduler_gamma_"+ str(num_runs)+'runs_'+str(checkpoint_step)+"checkpoint_step_"+str(num_checkpoints)+"checkpoints" + '_2000tokens_long_validation_loss_SCATTER_PLOT.png'
+# scatter_name_long_validation = path+ 'Dyck1_' + task + '_' + str(
+#         num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' +str(batch_size) +'_batch_size_'+'_' + str(
+#         hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
+#         num_epochs) + 'epochs_'+str(lr_scheduler_step)+"lr_scheduler_step_"+str(lr_scheduler_gamma)+"lr_scheduler_gamma_"+ str(num_runs)+'runs_'+str(checkpoint_step)+"checkpoint_step_"+str(num_checkpoints)+"checkpoints" + '_2000tokens_long_validation_loss_SCATTER_PLOT.png'
 
+scatter_name_long_validation = prefix+'LONG VALIDATION LOSS SCATTER PLOT.png'
+scatter_name_inverse_long_validation = prefix+'INVERSE LONG VALIDATION LOSS SCATTER PLOT.png'
+scatter_name_log_long_validation = prefix+'LOG LONG VALIDATION LOSS SCATTER PLOT.png'
+scatter_name_inverse_log_long_validation = prefix+'INVERSE LOG LONG VALIDATION LOSS SCATTER PLOT.png'
 
 # long_scatter_name_long_validation = path+ 'Dyck1_' + task + '_' + str(
 #         num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' +str(batch_size) +'_batch_size_'+'_' + str(
@@ -333,7 +348,9 @@ scatter_name_long_validation = path+ 'Dyck1_' + task + '_' + str(
 #         hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
 #         num_epochs) + 'epochs_'+str(lr_scheduler_step)+"lr_scheduler_step_"+str(lr_scheduler_gamma)+"lr_scheduler_gamma_"+ str(num_runs)+'runs_'+str(checkpoint_step)+"checkpoint_step_"+str(num_checkpoints)+"checkpoints" + 'INFERENCE.xlsx'
 
-excel_name_inference=path+'EXCEL INFERENCE.xlsx'
+# excel_name_inference=path+'EXCEL INFERENCE.xlsx'
+
+excel_name_inference=prefix+'EXCEL INFERENCE.xlsx'
 
 with open(file_name, 'w') as f:
     f.write('\n')
@@ -499,6 +516,7 @@ elif dataset_type=='zigzag':
     test_dataset=NextTokenPredictionDataset2000tokens_zigzag()
 elif dataset_type=='appended':
     test_dataset=NextTokenPredictionDataset2000tokens()
+
 test_size=len(test_dataset)
 
 # train_loader = DataLoader(train_dataset,batch_size=batch_size, shuffle=False, collate_fn=collate_fn)
@@ -761,6 +779,10 @@ def main():
     inverse_avg_val_losses = []
     inverse_avg_long_val_losses = []
 
+    log_avg_train_losses = []
+    log_avg_val_losses = []
+    log_avg_long_val_losses = []
+
     max_depths_correct_guesses = []
     timestep_depths_correct_guesses = []
     max_depths_incorrect_guesses = []
@@ -883,6 +905,52 @@ def main():
             # f.write('test accuracy for 950 to 1000 tokens for run ' + str(run) + ' = ' + str(test_accuracy) + '%\n')
             f.write('test accuracy for 2000 tokens for run ' + str(run) + ' = ' + str(test_accuracy) + '%\n')
 
+    log_avg_train_losses=np.log(avg_train_losses)
+    log_avg_val_losses = np.log(avg_val_losses)
+    log_avg_long_val_losses = np.log(avg_long_val_losses)
+
+    log_inverse_avg_train_losses = np.log(inverse_avg_train_losses)
+    log_inverse_avg_val_losses = np.log(inverse_avg_val_losses)
+    log_inverse_avg_long_val_losses = np.log(inverse_avg_long_val_losses)
+
+    df1 = pd.DataFrame()
+    df1['run'] = runs
+    df1['epoch'] = epochs
+    df1['avg training losses'] = avg_train_losses
+    df1['avg validation losses'] = avg_val_losses
+    df1['avg long validation losses'] = avg_long_val_losses
+    df1['log of avg train losses'] = log_avg_train_losses
+    df1['log of avg validation losses'] = log_avg_val_losses
+    df1['log of avg long validation losses'] = log_avg_long_val_losses
+    df1['log of inverse avg train losses'] = log_inverse_avg_train_losses
+    df1['log of inverse avg validation losses'] = log_inverse_avg_val_losses
+    df1['log of inverse avg long validation losses'] = log_inverse_avg_long_val_losses
+    # df1['correct guesses (990 to 1000 tokens)'] = correct_guesses
+    # df1['correct guesses seq lengths (990 to 1000 tokens)'] = correct_guesses_lengths
+    # df1['average first point of failure (990 to 1000 tokens)'] = avg_point_of_failure_short
+    df1['correct guesses (2000 tokens)'] = correct_guesses
+    df1['correct guesses seq lengths (2000 tokens)'] = correct_guesses_lengths
+    df1['incorrect guesses (2000 tokens)'] = incorrect_guesses
+    df1['incorrect guesses seq lengths (2000 tokens)'] = incorrect_guesses_lengths
+    df1['average first point of failure (2000 tokens)'] = avg_point_of_failure_short
+    df1['first point of failure for each incorrect sequence'] = incorrect_guesses_first_fail
+    df1['max depth for correct sequences (2000 tokens)'] = max_depths_correct_guesses
+    df1['timestep depths for correct sequences'] = timestep_depths_correct_guesses
+    df1['max depth for incorrect sequences (2000 tokens)'] = max_depths_incorrect_guesses
+    df1['timestep depths for incorrect sequences'] = timestep_depths_incorrect_guesses
+
+    # df1['max depths']=max_depths
+    # df1['timestep depths'] = timestep_depths
+    # df1['correct guesses long (502 to 1000 tokens)']=correct_guesses_long
+    # df1['correct guesses long seq lenghts (502 to 1000 tokens)']=correct_guesses_long_lengths
+    # df1['avg point of failure long (502 to 1000 tokens)']=avg_point_of_failure_long
+
+    writer = pd.ExcelWriter(excel_name_inference, engine='xlsxwriter')
+
+    df1.to_excel(writer, index=False)
+    writer.save()
+
+
     plt.subplots()
 
     # plt.scatter(x=avg_point_of_failure_short,y=avg_train_losses)
@@ -922,26 +990,88 @@ def main():
     # plt.close()
 
     # plt.scatter(x=avg_point_of_failure_short, y=inverse_avg_train_losses)
-    plt.scatter(x=inverse_avg_train_losses, y=avg_point_of_failure_short)
-    plt.xlabel('Average first point of failure for 2000 token Dyck-1 Sequences')
-    plt.ylabel('Inverse of Average training loss')
+    plt.scatter(x=avg_train_losses, y=avg_point_of_failure_short)
+    plt.ylabel('Average first point of failure for 2000 token Dyck-1 Sequences')
+    plt.xlabel('Average training loss')
     plt.savefig(scatter_name_train)
     plt.close()
 
     # plt.scatter(x=avg_point_of_failure_short, y=inverse_avg_val_losses)
-    plt.scatter(x=inverse_avg_val_losses,y=avg_point_of_failure_short)
-    plt.xlabel('Average first point of failure for 2000 token Dyck-1 Sequences')
-    plt.ylabel('Inverse of Average validation loss')
+    plt.scatter(x=avg_val_losses,y=avg_point_of_failure_short)
+    plt.ylabel('Average first point of failure for 2000 token Dyck-1 Sequences')
+    plt.xlabel('Average validation loss')
     plt.savefig(scatter_name_validation)
     plt.close()
 
     # plt.scatter(x=avg_point_of_failure_short, y=inverse_avg_long_val_losses)
-    plt.scatter(x=inverse_avg_long_val_losses,y=avg_point_of_failure_short)
-    plt.xlabel('Average first point of failure for 2000 token Dyck-1 Sequences')
-    plt.ylabel('Inverse of Average long validation loss')
+    plt.scatter(x=avg_long_val_losses,y=avg_point_of_failure_short)
+    plt.ylabel('Average first point of failure for 2000 token Dyck-1 Sequences')
+    plt.xlabel('Average long validation loss')
     plt.savefig(scatter_name_long_validation)
     plt.close()
 
+    #############
+    plt.scatter(x=inverse_avg_train_losses, y=avg_point_of_failure_short)
+    plt.ylabel('Average first point of failure for 2000 token Dyck-1 Sequences')
+    plt.xlabel('Inverse of Average training loss')
+    plt.savefig(scatter_name_inverse_train)
+    plt.close()
+
+    # plt.scatter(x=avg_point_of_failure_short, y=inverse_avg_val_losses)
+    plt.scatter(x=inverse_avg_val_losses, y=avg_point_of_failure_short)
+    plt.ylabel('Average first point of failure for 2000 token Dyck-1 Sequences')
+    plt.xlabel('Inverse of Average validation loss')
+    plt.savefig(scatter_name_inverse_validation)
+    plt.close()
+
+    # plt.scatter(x=avg_point_of_failure_short, y=inverse_avg_long_val_losses)
+    plt.scatter(x=inverse_avg_long_val_losses, y=avg_point_of_failure_short)
+    plt.ylabel('Average first point of failure for 2000 token Dyck-1 Sequences')
+    plt.xlabel('Average of long validation loss')
+    plt.savefig(scatter_name_inverse_long_validation)
+    plt.close()
+
+    ######################
+    plt.scatter(x=log_avg_train_losses, y=avg_point_of_failure_short)
+    plt.ylabel('Average first point of failure for 2000 token Dyck-1 Sequences')
+    plt.xlabel('Log of Average training loss')
+    plt.savefig(scatter_name_log_train)
+    plt.close()
+
+    # plt.scatter(x=avg_point_of_failure_short, y=inverse_avg_val_losses)
+    plt.scatter(x=log_avg_val_losses, y=avg_point_of_failure_short)
+    plt.ylabel('Average first point of failure for 2000 token Dyck-1 Sequences')
+    plt.xlabel('Log of Average validation loss')
+    plt.savefig(scatter_name_log_validation)
+    plt.close()
+
+    # plt.scatter(x=avg_point_of_failure_short, y=inverse_avg_long_val_losses)
+    plt.scatter(x=log_avg_long_val_losses, y=avg_point_of_failure_short)
+    plt.ylabel('Average first point of failure for 2000 token Dyck-1 Sequences')
+    plt.xlabel('Log of Average long validation loss')
+    plt.savefig(scatter_name_log_long_validation)
+    plt.close()
+
+    ###########################
+    plt.scatter(x=log_inverse_avg_train_losses, y=avg_point_of_failure_short)
+    plt.ylabel('Average first point of failure for 2000 token Dyck-1 Sequences')
+    plt.xlabel('Log of the inverse Average training loss')
+    plt.savefig(scatter_name_inverse_log_train)
+    plt.close()
+
+    # plt.scatter(x=avg_point_of_failure_short, y=inverse_avg_val_losses)
+    plt.scatter(x=log_inverse_avg_val_losses, y=avg_point_of_failure_short)
+    plt.ylabel('Average first point of failure for 2000 token Dyck-1 Sequences')
+    plt.xlabel('Log of the inverse Average validation loss')
+    plt.savefig(scatter_name_log_validation)
+    plt.close()
+
+    # plt.scatter(x=avg_point_of_failure_short, y=inverse_avg_long_val_losses)
+    plt.scatter(x=log_inverse_avg_long_val_losses, y=avg_point_of_failure_short)
+    plt.ylabel('Average first point of failure for 2000 token Dyck-1 Sequences')
+    plt.xlabel('Log of the inverse Average long validation loss')
+    plt.savefig(scatter_name_log_long_validation)
+    plt.close()
 
 
     # plt.scatter(x=avg_point_of_failure_long, y=avg_train_losses)
@@ -965,37 +1095,7 @@ def main():
 
     # plt.legend()
 
-    df1 = pd.DataFrame()
-    df1['run']= runs
-    df1['epoch'] = epochs
-    df1['avg training losses'] = avg_train_losses
-    df1['avg validation losses']=avg_val_losses
-    df1['avg long validation losses']=avg_long_val_losses
-    # df1['correct guesses (990 to 1000 tokens)'] = correct_guesses
-    # df1['correct guesses seq lengths (990 to 1000 tokens)'] = correct_guesses_lengths
-    # df1['average first point of failure (990 to 1000 tokens)'] = avg_point_of_failure_short
-    df1['correct guesses (2000 tokens)'] = correct_guesses
-    df1['correct guesses seq lengths (2000 tokens)'] = correct_guesses_lengths
-    df1['incorrect guesses (2000 tokens)'] = incorrect_guesses
-    df1['incorrect guesses seq lengths (2000 tokens)'] = incorrect_guesses_lengths
-    df1['average first point of failure (2000 tokens)'] = avg_point_of_failure_short
-    df1['first point of failure for each incorrect sequence']=incorrect_guesses_first_fail
-    df1['max depth for correct sequences (2000 tokens)']=max_depths_correct_guesses
-    df1['timestep depths for correct sequences'] = timestep_depths_correct_guesses
-    df1['max depth for incorrect sequences (2000 tokens)'] = max_depths_incorrect_guesses
-    df1['timestep depths for incorrect sequences'] = timestep_depths_incorrect_guesses
 
-
-    # df1['max depths']=max_depths
-    # df1['timestep depths'] = timestep_depths
-    # df1['correct guesses long (502 to 1000 tokens)']=correct_guesses_long
-    # df1['correct guesses long seq lenghts (502 to 1000 tokens)']=correct_guesses_long_lengths
-    # df1['avg point of failure long (502 to 1000 tokens)']=avg_point_of_failure_long
-
-    writer = pd.ExcelWriter(excel_name_inference, engine='xlsxwriter')
-
-    df1.to_excel(writer, index=False)
-    writer.save()
 
     # for i in range(num_runs):
     #     torch.manual_seed(i)
