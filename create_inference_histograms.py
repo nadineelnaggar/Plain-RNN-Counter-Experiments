@@ -195,7 +195,7 @@ def create_histogram_one_sequence_multiple_models():
 
 
 
-    for i in range(10):
+    for i in range(len(dataset)):
         fpfs = []
         seq, label, length = dataset[i]
         timestep_depths = []
