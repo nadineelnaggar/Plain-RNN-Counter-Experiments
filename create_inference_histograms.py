@@ -195,7 +195,7 @@ def create_histogram_one_sequence_multiple_models():
 
 
 
-    for i in range(len(dataset)):
+    for i in range(10):
         fpfs = []
         seq, label, length = dataset[i]
         timestep_depths = []
@@ -204,7 +204,8 @@ def create_histogram_one_sequence_multiple_models():
         for j in range(num_models):
             txt = df['first point of failure for each incorrect sequence'][j]
             all_fpf = [int(s) for s in txt.split(', ') if s.isdigit()]
-            fpfs.append(all_fpf[i])
+            for k in range(len(all_fpf)):
+                fpfs.append(all_fpf[k])
         plt.subplots()
         # plt.plot(timestep_depth, color='red')
         plt.hist(fpfs, bins=range(0, 2001, 50))
