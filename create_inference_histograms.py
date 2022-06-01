@@ -128,6 +128,8 @@ def create_histogram():
         print(type(max_depth))
         print(max_depth[:20])
         txt = df['first point of failure for each incorrect sequence'][i]
+        txt = txt.replace('[', '')
+        txt = txt.replace(']', '')
         all_fpf = [int(s) for s in txt.split(', ') if s.isdigit()]
         plt.subplots()
         bins = []
@@ -203,7 +205,11 @@ def create_histogram_one_sequence_multiple_models():
         timestep_depths.append(timestep_depth)
         for j in range(num_models):
             txt = df['first point of failure for each incorrect sequence'][j]
+            txt = txt.replace('[','')
+            txt = txt.replace(']','')
             all_fpf = [int(s) for s in txt.split(', ') if s.isdigit()]
+            print('all_fpf = ',all_fpf)
+            print('len(all_fpf) = ',len(all_fpf))
             try:
                 fpfs.append(all_fpf[i])
             except:
