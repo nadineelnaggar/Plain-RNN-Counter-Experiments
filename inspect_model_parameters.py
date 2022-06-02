@@ -130,16 +130,16 @@ def inspect_model_parameters():
                 elif 'bias' in param[0]:
                     biases.append(param[1])
 
-        elif model_name=='VanillaLSTM':
-            print(model_name)
-            weights = []
-            biases = []
-            print(model.lstm.named_parameters())
-            for param in model.lstm.named_parameters():
-                if 'weight' in param[0]:
-                    weights.append(param[1])
-                elif 'bias' in param[0]:
-                    biases.append(param[1])
+        # elif model_name=='VanillaLSTM':
+        #     print(model_name)
+        #     weights = []
+        #     biases = []
+        #     print(model.lstm.named_parameters())
+        #     for param in model.lstm.named_parameters():
+        #         if 'weight' in param[0]:
+        #             weights.append(param[1])
+        #         elif 'bias' in param[0]:
+        #             biases.append(param[1])
 
             print(weights)
             print(biases)
