@@ -114,6 +114,9 @@ def inspect_model_parameters():
         model.load_state_dict(torch.load(mdl))
         model.to(device)
 
+        print('*************************************')
+        print('RUN ',run)
+        print('*************************************')
         if model_name=='VanillaReLURNN':
             # print(model.rnn.Variables.weights)
             # print(model.rnn.Variables.biases)
