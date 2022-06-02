@@ -115,7 +115,7 @@ def inspect_model_parameters():
         model.to(device)
 
         if model_name=='VanillaReLURNN':
-            print(model.rnn.weight)
+            print(model.rnn.weights)
             # print('RNN weight_ih = ',model.rnn.weight_ih_l)
             # print('RNN weight_hh = ',model.rnn.weight_hh_l)
             # print('RNN bias_ih = ',model.rnn.bias_ih_l)
