@@ -116,3 +116,5 @@ def inspect_model_parameters():
 
         if model_name=='VanillaReLURNN':
             print('RNN weight_ih = ',model.rnn.weight_ih_l)
+
+inspect_model_parameters()
