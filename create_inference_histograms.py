@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import argparse
 from Dyck1_Datasets import NextTokenPredictionDataset2000tokens_nested, NextTokenPredictionDataset2000tokens_zigzag
+from models_batch import VanillaLSTM, VanillaRNN, VanillaGRU, VanillaReLURNN
 
 # RERUN THE CODE TO GENERATE THE EXCEL SHEETS NOW THAT THE SHUFFLE DATA IS FALSE IN THE DATALOADER,
 # THEN GENERATE HISTOGRAMS
@@ -21,6 +22,7 @@ seed = 10
 torch.manual_seed(seed)
 np.random.seed(seed)
 
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--model_name', type=str, help='input model name (VanillaLSTM, VanillaRNN, VanillaGRU)')
@@ -260,3 +262,32 @@ def create_histogram_one_sequence_multiple_models():
 
 create_histogram()
 create_histogram_one_sequence_multiple_models()
+
+modelname = path+ 'Dyck1_' + task + '_' + str(
+        num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' +str(batch_size) +'_batch_size_'+'_' + str(
+        hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
+        num_epochs) + 'epochs_'+ str(num_runs)+'runs' + '_MODEL_'
+
+
+def select_model(model_name, input_size, hidden_size, num_layers,batch_size, num_classes, output_activation):
+    if model_name=='VanillaLSTM':
+        selected_model = VanillaLSTM(input_size,hidden_size, num_layers, batch_size, num_classes, output_activation=output_activation)
+    elif model_name=='VanillaRNN':
+        selected_model = VanillaRNN(input_size, hidden_size, num_layers, batch_size, num_classes, output_activation=output_activation)
+    elif model_name=='VanillaGRU':
+        selected_model = VanillaGRU(input_size,hidden_size, num_layers, batch_size, num_classes, output_activation=output_activation)
+    elif model_name == 'VanillaReLURNN':
+        selected_model = VanillaReLURNN(input_size, hidden_size, num_layers, batch_size, num_classes, output_activation=output_activation)
+
+    return selected_model.to(device)
+
+def create_depth_charts():
+    input_size = 2
+    num_classes = 2
+    output_activation='Sigmoid'
+    for run in range(num_runs):
+        mdl = modelname + 'run' + str(run) + '.pth'
+        model = select_model(model_name, input_size, hidden_size, num_layers, batch_size, num_classes,
+                             output_activation)
+        model.load_state_dict(torch.load(mdl))
+        model.to(device)
