@@ -118,12 +118,24 @@ def inspect_model_parameters():
         print('RUN ',run)
         print('*************************************')
         if model_name=='VanillaReLURNN':
+            print(model_name)
             # print(model.rnn.Variables.weights)
             # print(model.rnn.Variables.biases)
             weights = []
             biases = []
             print(model.rnn.named_parameters())
             for param in model.rnn.named_parameters():
+                if 'weight' in param[0]:
+                    weights.append(param[1])
+                elif 'bias' in param[0]:
+                    biases.append(param[1])
+
+        elif model_name=='VanillaLSTM':
+            print(model_name)
+            weights = []
+            biases = []
+            print(model.lstm.named_parameters())
+            for param in model.lstm.named_parameters():
                 if 'weight' in param[0]:
                     weights.append(param[1])
                 elif 'bias' in param[0]:
