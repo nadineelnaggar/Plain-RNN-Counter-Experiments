@@ -193,8 +193,8 @@ def inspect_model_parameters():
                     weights_ig.append(weights_ih[2])
                     weights_io.append(weights_ih[3])
 
-                print('weight_hi = ',weights_hi)
-                print('weight_ii = ',weights_ii)
+            print('weight_hi = ',weights_hi)
+            print('weight_ii = ',weights_ii)
 
 
 
