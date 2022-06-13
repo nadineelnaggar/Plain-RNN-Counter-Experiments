@@ -17,6 +17,8 @@ from Dyck1_Datasets import NextTokenPredictionLongTestDataset, NextTokenPredicti
     NextTokenPredictionTrainDataset, NextTokenPredictionDataset102to500tokens,NextTokenPredictionDataset502to1000tokens, \
     NextTokenPredictionDataset990to1000tokens, NextTokenPredictionDataset2000tokens, \
     NextTokenPredictionDataset2000tokens_nested, NextTokenPredictionDataset2000tokens_zigzag
+import math
+
 
 seed = 10
 torch.manual_seed(seed)
@@ -128,11 +130,25 @@ def inspect_model_parameters():
         biases_hf = []
         biases_hg = []
         biases_ho = []
+
+        metrics_ft = []
+        metrics_it_1 = []
+        metrics_it_constant = []
+        metrics_ot = []
+        metrics_ctilde_open = []
+        metrics_ctilde_close = []
+
     elif model_name=='VanillaReLURNN':
         weights_ih = []
         weights_hh = []
         biases_ih = []
         biases_hh = []
+
+        metric_wi = []
+        metric_bi = []
+        metric_wh = []
+        metric_bh = []
+
 
     for run in range(num_runs):
         mdl = modelname + 'run' + str(run) + '.pth'
@@ -255,12 +271,17 @@ def inspect_model_parameters():
                     biases_io.append(biases_ih[3])
 
 
+
             print('TO CALCULATE IT')
             print('weight_ii = ', weights_ii[run])
             print('bias_ii = ', biases_ii[run])
             print('weight_hi = ',weights_hi[run])
             print('bias_hi = ',biases_hi[run])
 
+            metric_it_1 = min(weights_ii[run][0].item(),weights_ii[run][1].item())+biases_ii[run].item()+biases_hi[run].item()+torch.abs(weights_hi[run]).item()
+            # metric_it_constant = torch.max()
+            metrics_it_1.append(metric_it_1)
+            print('metric_it_1 = ',metric_it_1)
 
 
             print('TO CALCULATE FT')
@@ -269,17 +290,35 @@ def inspect_model_parameters():
             print('weight_hf = ',weights_hf[run])
             print('bias_hf = ',biases_hf[run])
 
+            metric_ft_1 = min(weights_if[run][0].item(), weights_if[run][1].item())+biases_if[run].item()+biases_hf[run].item()+torch.abs(weights_hf[run]).item()
+            metrics_ft.append(metric_ft_1)
+            print('metric_ft_1 = ',metric_ft_1)
+
+
             print('TO CALCULATE GT (C TILDE IN THE PAPER)')
             print('weight_ig = ',weights_ig[run])
             print('bias_ig = ',biases_ig[run])
             print('weight_hg = ',weights_hg[run])
             print('bias_hg = ',biases_hg[run])
 
+            metric_ctilde_open = weights_ig[run][0].item()+biases_ig[run].item()+biases_hg[run].item()-torch.abs(weights_hg[run]).item()
+            metrics_ctilde_open.append(metric_ctilde_open)
+
+            metric_ctilde_close = weights_ig[run][1].item() + biases_ig[run].item() + biases_hg[run].item() + torch.abs(
+                weights_hg[run]).item()
+            metrics_ctilde_close.append(metric_ctilde_close)
+
+            print('metric_ctilde_open = ',metric_ctilde_open)
+            print('metric_ctilde_close = ',metric_ctilde_close)
+
+
             print('TO CALCULATE OT')
             print('weight_io = ',weights_io[run])
             print('bias_io = ',biases_io[run])
             print('weight_ho = ',weights_ho[run])
             print('bias_ho = ',biases_ho[run])
+
+
 
 
 
