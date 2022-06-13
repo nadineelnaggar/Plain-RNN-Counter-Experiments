@@ -123,6 +123,7 @@ def inspect_model_parameters():
             # print(model.rnn.Variables.biases)
             weights = []
             biases = []
+
             print(model.rnn.named_parameters())
             for param in model.rnn.named_parameters():
                 if 'weight' in param[0]:
@@ -179,19 +180,19 @@ def inspect_model_parameters():
             for param in model.lstm.named_parameters():
                 if 'weight_hh' in param[0]:
                     weights_hh = param[1]
-                    weights_hi.append(weights_hh[0])
-                    weights_hf.append(weights_hh[1])
-                    weights_hg.append(weights_hh[2])
-                    weights_ho.append(weights_hh[3])
+                    weights_hi.append(weights_hh[0].item())
+                    weights_hf.append(weights_hh[1].item())
+                    weights_hg.append(weights_hh[2].item())
+                    weights_ho.append(weights_hh[3].item())
 
 
 
                 elif 'weight_ih' in param[0]:
                     weights_ih = param[1]
-                    weights_ii.append(weights_ih[0])
-                    weights_if.append(weights_ih[1])
-                    weights_ig.append(weights_ih[2])
-                    weights_io.append(weights_ih[3])
+                    weights_ii.append(weights_ih[0].item())
+                    weights_if.append(weights_ih[1].item())
+                    weights_ig.append(weights_ih[2].item())
+                    weights_io.append(weights_ih[3].item())
 
             print('weight_hi = ',weights_hi)
             print('weight_ii = ',weights_ii)
