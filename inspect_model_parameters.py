@@ -214,7 +214,7 @@ def inspect_model_parameters():
             # biases_ho = []
 
 
-            print(list(model.lstm.named_parameters()))
+            # print(list(model.lstm.named_parameters()))
             # for param in model.lstm.names_parameters():
             for param in model.lstm.named_parameters():
                 if 'weight_hh' in param[0]:
