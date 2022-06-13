@@ -279,7 +279,7 @@ def inspect_model_parameters():
             print('weight_hi = ',weights_hi[run])
             print('bias_hi = ',biases_hi[run])
 
-            metric_it_1 = min(weights_ii[run][0].item(),weights_ii[run][1].item())+biases_ii[run].item()+biases_hi[run].item()+torch.abs(weights_hi[run]).item()
+            metric_it_1 = min(weights_ii[run][0].item(),weights_ii[run][1].item())+biases_ii[run].item()+biases_hi[run].item()-torch.abs(weights_hi[run]).item()
             # metric_it_constant = torch.max()
             metrics_it_1.append(metric_it_1)
             print('metric_it_1 = ',metric_it_1)
@@ -295,7 +295,7 @@ def inspect_model_parameters():
             print('weight_hf = ',weights_hf[run])
             print('bias_hf = ',biases_hf[run])
 
-            metric_ft_1 = min(weights_if[run][0].item(), weights_if[run][1].item())+biases_if[run].item()+biases_hf[run].item()+torch.abs(weights_hf[run]).item()
+            metric_ft_1 = min(weights_if[run][0].item(), weights_if[run][1].item())+biases_if[run].item()+biases_hf[run].item()-torch.abs(weights_hf[run]).item()
             metrics_ft.append(metric_ft_1)
             print('metric_ft_1 = ',metric_ft_1)
             print('sigmoid(metric_ft_1) = ',torch.sigmoid(torch.tensor(metric_ft_1,dtype=torch.float32)))
