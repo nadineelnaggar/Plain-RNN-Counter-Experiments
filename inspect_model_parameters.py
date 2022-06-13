@@ -137,6 +137,8 @@ def inspect_model_parameters():
         metrics_ot = []
         metrics_ctilde_open = []
         metrics_ctilde_close = []
+        metrics_ctilde_open_worst_case = []
+        metrics_ctilde_close_worst_case = []
 
     elif model_name=='VanillaReLURNN':
         weights_ih = []
@@ -312,19 +314,30 @@ def inspect_model_parameters():
             print('weight_hg = ',weights_hg[run])
             print('bias_hg = ',biases_hg[run])
 
-            metric_ctilde_open = weights_ig[run][0].item()+biases_ig[run].item()+biases_hg[run].item()-torch.abs(weights_hg[run]).item()
+            metric_ctilde_open = weights_ig[run][0].item()+biases_ig[run].item()+biases_hg[run].item()+torch.abs(weights_hg[run]).item()
             metrics_ctilde_open.append(metric_ctilde_open)
-
-
+            metric_ctilde_open_worst_case = weights_ig[run][0].item() + biases_ig[run].item() + biases_hg[run].item() - torch.abs(
+                weights_hg[run]).item()
+            metrics_ctilde_open_worst_case.append(metric_ctilde_open_worst_case)
             metric_ctilde_close = weights_ig[run][1].item() + biases_ig[run].item() + biases_hg[run].item() + torch.abs(
                 weights_hg[run]).item()
             metrics_ctilde_close.append(metric_ctilde_close)
+
+            metric_ctilde_close_worst_case = weights_ig[run][1].item() + biases_ig[run].item() + biases_hg[run].item() + torch.abs(
+                weights_hg[run]).item()
+            metrics_ctilde_close_worst_case.append(metric_ctilde_close_worst_case)
 
             print('metric_ctilde_open = ',metric_ctilde_open)
             print('metric_ctilde_close = ',metric_ctilde_close)
 
             print('tanh(metric_ctilde_open) = ', torch.tanh(torch.tensor(metric_ctilde_open, dtype=torch.float32)))
             print('tanh(metric_ctilde_close) = ', torch.tanh(torch.tensor(metric_ctilde_close, dtype=torch.float32)))
+
+            print('metric_ctilde_open worst case = ', metric_ctilde_open_worst_case)
+            print('metric_ctilde_close worst case = ', metric_ctilde_close_worst_case)
+
+            print('tanh(metric_ctilde_open worst case) = ', torch.tanh(torch.tensor(metric_ctilde_open_worst_case, dtype=torch.float32)))
+            print('tanh(metric_ctilde_close worst case) = ', torch.tanh(torch.tensor(metric_ctilde_close_worst_case, dtype=torch.float32)))
 
             print('\n')
             print('TO CALCULATE OT')
