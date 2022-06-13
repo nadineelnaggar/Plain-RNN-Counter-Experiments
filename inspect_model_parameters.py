@@ -329,7 +329,7 @@ def inspect_model_parameters():
             metrics_ot.append(metric_ot)
             print('metric_ot = ',metric_ot)
             print('sigmoid(metric_ot) = ',torch.sigmoid(torch.tensor(metric_ot,dtype=torch.float32)))
-
+            print('\n')
 
 
 
