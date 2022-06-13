@@ -107,6 +107,33 @@ def inspect_model_parameters():
     input_size = 2
     num_classes = 2
     output_activation='Sigmoid'
+
+    if model_name=='VanillaLSTM':
+        weights_ii = []
+        weights_if = []
+        weights_ig = []
+        weights_io = []
+
+        biases_ii = []
+        biases_if = []
+        biases_ig = []
+        biases_io = []
+
+        weights_hi = []
+        weights_hf = []
+        weights_hg = []
+        weights_ho = []
+
+        biases_hi = []
+        biases_hf = []
+        biases_hg = []
+        biases_ho = []
+    elif model_name=='VanillaReLURNN':
+        weights_ih = []
+        weights_hh = []
+        biases_ih = []
+        biases_hh = []
+
     for run in range(num_runs):
         mdl = modelname + 'run' + str(run) + '.pth'
         model = select_model(model_name, input_size, hidden_size, num_layers, batch_size, num_classes,
@@ -121,16 +148,30 @@ def inspect_model_parameters():
             print(model_name)
             # print(model.rnn.Variables.weights)
             # print(model.rnn.Variables.biases)
-            weights = []
-            biases = []
+            # weights = []
+            # biases = []
 
             print(model.rnn.named_parameters())
             for param in model.rnn.named_parameters():
-                if 'weight' in param[0]:
-                    weights.append(param[1])
-                elif 'bias' in param[0]:
-                    biases.append(param[1])
+                # if 'weight' in param[0]:
+                #     weights.append(param[1])
+                # elif 'bias' in param[0]:
+                #     biases.append(param[1])
 
+                if 'weight_ih' in param[0]:
+                    weights_ih.append(param[1])
+                elif 'bias_ih' in param[0]:
+                    biases_ih.append(param[1])
+                elif 'weight_hh' in param[0]:
+                    weights_hh.append(param[1])
+                elif 'bias_hh' in param[0]:
+                    biases_hh.append(param[1])
+
+
+            print('weight_ih = ',weights_ih[run])
+            print('bias_ig = ',biases_ih[run])
+            print('weight_hh = ',weights_hh[run])
+            print('bias_hh = ',biases_hh[run])
         # elif model_name=='VanillaLSTM':
         #     print(model_name)
         #     weights = []
@@ -142,8 +183,8 @@ def inspect_model_parameters():
         #         elif 'bias' in param[0]:
         #             biases.append(param[1])
 
-            print(weights)
-            print(biases)
+            # print(weights)
+            # print(biases)
             # print('RNN weight_ih = ',model.rnn.weight_ih_l)
             # print('RNN weight_hh = ',model.rnn.weight_hh_l)
             # print('RNN bias_ih = ',model.rnn.bias_ih_l)
@@ -151,30 +192,28 @@ def inspect_model_parameters():
 
         elif model_name=='VanillaLSTM':
             print(model_name)
-            # weights_ih=[]
-            weights_ii = []
-            weights_if = []
-            weights_ig = []
-            weights_io = []
 
-            biases_ii = []
-            biases_if = []
-            biases_ig = []
-            biases_io = []
+            # weights_ii = []
+            # weights_if = []
+            # weights_ig = []
+            # weights_io = []
+            #
+            # biases_ii = []
+            # biases_if = []
+            # biases_ig = []
+            # biases_io = []
+            #
+            # weights_hi = []
+            # weights_hf = []
+            # weights_hg = []
+            # weights_ho = []
+            #
+            # biases_hi = []
+            # biases_hf = []
+            # biases_hg = []
+            # biases_ho = []
 
-            weights_hi = []
-            weights_hf = []
-            weights_hg = []
-            weights_ho = []
 
-            biases_hi = []
-            biases_hf = []
-            biases_hg = []
-            biases_ho = []
-
-            # weights_hh = []
-            # biases_ih = []
-            # biases_hh = []
             print(list(model.lstm.named_parameters()))
             # for param in model.lstm.names_parameters():
             for param in model.lstm.named_parameters():
@@ -217,30 +256,30 @@ def inspect_model_parameters():
 
 
             print('TO CALCULATE IT')
-            print('weight_ii = ', weights_ii)
-            print('bias_ii = ', biases_ii)
-            print('weight_hi = ',weights_hi)
-            print('bias_hi = ',biases_hi)
+            print('weight_ii = ', weights_ii[run])
+            print('bias_ii = ', biases_ii[run])
+            print('weight_hi = ',weights_hi[run])
+            print('bias_hi = ',biases_hi[run])
 
 
 
             print('TO CALCULATE FT')
-            print('weight_if = ',weights_if)
-            print('bias_if = ',biases_if)
-            print('weight_hf = ',weights_hf)
-            print('bias_hf = ',biases_hf)
+            print('weight_if = ',weights_if[run])
+            print('bias_if = ',biases_if[run])
+            print('weight_hf = ',weights_hf[run])
+            print('bias_hf = ',biases_hf[run])
 
             print('TO CALCULATE GT (C TILDE IN THE PAPER)')
-            print('weight_ig = ',weights_ig)
-            print('bias_ig = ',biases_ig)
-            print('weight_hg = ',weights_hg)
-            print('bias_hg = ',biases_hg)
+            print('weight_ig = ',weights_ig[run])
+            print('bias_ig = ',biases_ig[run])
+            print('weight_hg = ',weights_hg[run])
+            print('bias_hg = ',biases_hg[run])
 
             print('TO CALCULATE OT')
-            print('weight_io = ',weights_io)
-            print('bias_io = ',biases_io)
-            print('weight_ho = ',weights_ho)
-            print('bias_ho = ',biases_ho)
+            print('weight_io = ',weights_io[run])
+            print('bias_io = ',biases_io[run])
+            print('weight_ho = ',weights_ho[run])
+            print('bias_ho = ',biases_ho[run])
 
 
 
