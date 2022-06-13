@@ -159,13 +159,13 @@ def inspect_model_parameters():
                 #     biases.append(param[1])
 
                 if 'weight_ih' in param[0]:
-                    weights_ih.append(param[1].cpu().detach().numpy())
+                    weights_ih.append(param[1])
                 elif 'bias_ih' in param[0]:
-                    biases_ih.append(param[1].cpu().detach().numpy())
+                    biases_ih.append(param[1])
                 elif 'weight_hh' in param[0]:
-                    weights_hh.append(param[1].cpu().detach().numpy())
+                    weights_hh.append(param[1])
                 elif 'bias_hh' in param[0]:
-                    biases_hh.append(param[1].cpu().detach().numpy())
+                    biases_hh.append(param[1])
 
 
             print('weight_ih = ',weights_ih[run])
