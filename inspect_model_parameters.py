@@ -282,7 +282,7 @@ def inspect_model_parameters():
             # metric_it_constant = torch.max()
             metrics_it_1.append(metric_it_1)
             print('metric_it_1 = ',metric_it_1)
-            print('sigmoid(metric_it_1) = ',torch.sigmoid(torch.tensor(metrics_it_1,dtype=torch.float32)))
+            print('sigmoid(metric_it_1) = ',torch.sigmoid(torch.tensor(metric_it_1,dtype=torch.float32)))
 
 
             print('TO CALCULATE FT')
