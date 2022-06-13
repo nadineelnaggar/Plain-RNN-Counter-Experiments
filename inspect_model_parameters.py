@@ -145,13 +145,13 @@ def inspect_model_parameters():
         print('RUN ',run)
         print('*************************************')
         if model_name=='VanillaReLURNN':
-            print(model_name)
+            # print(model_name)
             # print(model.rnn.Variables.weights)
             # print(model.rnn.Variables.biases)
             # weights = []
             # biases = []
 
-            print(model.rnn.named_parameters())
+            # print(model.rnn.named_parameters())
             for param in model.rnn.named_parameters():
                 # if 'weight' in param[0]:
                 #     weights.append(param[1])
