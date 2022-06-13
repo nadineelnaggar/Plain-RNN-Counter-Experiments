@@ -315,8 +315,8 @@ def inspect_model_parameters():
             print('metric_ctilde_open = ',metric_ctilde_open)
             print('metric_ctilde_close = ',metric_ctilde_close)
 
-            print('tanh(metric_ctilde_open) = ', torch.tensor(metric_ctilde_open, dtype=torch.float32))
-            print('tanh(metric_ctilde_close) = ', torch.tensor(metric_ctilde_close, dtype=torch.float32))
+            print('tanh(metric_ctilde_open) = ', torch.tanh(torch.tensor(metric_ctilde_open, dtype=torch.float32)))
+            print('tanh(metric_ctilde_close) = ', torch.tanh(torch.tensor(metric_ctilde_close, dtype=torch.float32)))
 
             print('\n')
             print('TO CALCULATE OT')
