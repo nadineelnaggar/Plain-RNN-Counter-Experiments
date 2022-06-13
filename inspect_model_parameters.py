@@ -319,7 +319,8 @@ def inspect_model_parameters():
             metric_ctilde_open_worst_case = weights_ig[run][0].item() + biases_ig[run].item() + biases_hg[run].item() - torch.abs(
                 weights_hg[run]).item()
             metrics_ctilde_open_worst_case.append(metric_ctilde_open_worst_case)
-            metric_ctilde_close = weights_ig[run][1].item() + biases_ig[run].item() + biases_hg[run].item() + torch.abs(
+
+            metric_ctilde_close = weights_ig[run][1].item() + biases_ig[run].item() + biases_hg[run].item() - torch.abs(
                 weights_hg[run]).item()
             metrics_ctilde_close.append(metric_ctilde_close)
 
