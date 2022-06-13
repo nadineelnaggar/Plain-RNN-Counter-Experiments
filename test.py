@@ -74,6 +74,24 @@ print(torch.sigmoid(torch.tensor(-32,dtype=torch.float32)))
 print(torch.tanh(torch.tensor(32,dtype=torch.float32)))
 print(torch.tanh(torch.tensor(-32,dtype=torch.float32)))
 
+
+print('8')
+
+print('sigmoid(8) = ',torch.sigmoid(torch.tensor(8,dtype=torch.float32)))
+print('sigmoid(-8) = ',torch.sigmoid(torch.tensor(-8,dtype=torch.float32)))
+
+print('tanh(8) = ',torch.tanh(torch.tensor(8,dtype=torch.float32)))
+print('tanh(-8) = ',torch.tanh(torch.tensor(-8,dtype=torch.float32)))
+
+
+print('4')
+
+print(torch.sigmoid(torch.tensor(4,dtype=torch.float32)))
+print(torch.sigmoid(torch.tensor(-4,dtype=torch.float32)))
+
+print(torch.tanh(torch.tensor(4,dtype=torch.float32)))
+print(torch.tanh(torch.tensor(-4,dtype=torch.float32)))
+
 # class Model(nn.Module):
 #     def __init__(self):
 #         super(Model, self).__init__()
