@@ -282,6 +282,7 @@ def inspect_model_parameters():
             # metric_it_constant = torch.max()
             metrics_it_1.append(metric_it_1)
             print('metric_it_1 = ',metric_it_1)
+            print('sigmoid(metric_it_1) = ',torch.sigmoid(torch.tensor(metrics_it_1,dtype=torch.float32)))
 
 
             print('TO CALCULATE FT')
@@ -293,6 +294,7 @@ def inspect_model_parameters():
             metric_ft_1 = min(weights_if[run][0].item(), weights_if[run][1].item())+biases_if[run].item()+biases_hf[run].item()+torch.abs(weights_hf[run]).item()
             metrics_ft.append(metric_ft_1)
             print('metric_ft_1 = ',metric_ft_1)
+            print('sigmoid(metric_ft_1) = ',torch.sigmoid(torch.tensor(metric_ft_1,dtype=torch.float32)))
 
 
             print('TO CALCULATE GT (C TILDE IN THE PAPER)')
@@ -304,6 +306,7 @@ def inspect_model_parameters():
             metric_ctilde_open = weights_ig[run][0].item()+biases_ig[run].item()+biases_hg[run].item()-torch.abs(weights_hg[run]).item()
             metrics_ctilde_open.append(metric_ctilde_open)
 
+
             metric_ctilde_close = weights_ig[run][1].item() + biases_ig[run].item() + biases_hg[run].item() + torch.abs(
                 weights_hg[run]).item()
             metrics_ctilde_close.append(metric_ctilde_close)
@@ -311,6 +314,8 @@ def inspect_model_parameters():
             print('metric_ctilde_open = ',metric_ctilde_open)
             print('metric_ctilde_close = ',metric_ctilde_close)
 
+            print('tanh(metric_ctilde_open) = ', torch.tensor(metric_ctilde_open, dtype=torch.float32))
+            print('tanh(metric_ctilde_close) = ', torch.tensor(metric_ctilde_close, dtype=torch.float32))
 
             print('TO CALCULATE OT')
             print('weight_io = ',weights_io[run])
@@ -318,6 +323,10 @@ def inspect_model_parameters():
             print('weight_ho = ',weights_ho[run])
             print('bias_ho = ',biases_ho[run])
 
+            metric_ot = biases_io[run].item() + biases_ho[run].item()-max(weights_io[run][0].item(),weights_io[run][1].item())-weights_ho[run].item()
+            metrics_ot.append(metric_ot)
+            print('metric_ot = ',metric_ot)
+            print('sigmoid(metric_ot) = ',torch.sigmoid(torch.tensor(metric_ot,dtype=torch.float32)))
 
 
 
