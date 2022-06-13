@@ -54,7 +54,8 @@ parser.add_argument('--num_runs', type=int, help='number of training runs')
 parser.add_argument('--checkpoint_step', type=int, help='checkpoint step', default=0)
 parser.add_argument('--shuffle_dataset',type=bool,default=False)
 parser.add_argument('--num_checkpoints', type=int,default=100, help='number of checkpoints we want to include if we dont need all of them (e.g., first 5 checkpoints only), stop after n checkpoints')
-parser.add_argument('--dataset_type',type=str, default='nested',help='nested, zigzag or appended')
+# parser.add_argument('--dataset_type',type=str, default='nested',help='nested, zigzag or appended')
+parser.add_argument('--dataset_type',type=str, default='nested',help='nested, zigzag or concatenated')
 
 
 args = parser.parse_args()
@@ -514,7 +515,8 @@ if dataset_type=='nested':
     test_dataset=NextTokenPredictionDataset2000tokens_nested()
 elif dataset_type=='zigzag':
     test_dataset=NextTokenPredictionDataset2000tokens_zigzag()
-elif dataset_type=='appended':
+# elif dataset_type=='appended':
+elif dataset_type == 'concatenated':
     test_dataset=NextTokenPredictionDataset2000tokens()
 
 test_size=len(test_dataset)
