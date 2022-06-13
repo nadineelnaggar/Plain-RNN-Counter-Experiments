@@ -283,9 +283,10 @@ def inspect_model_parameters():
             # metric_it_constant = torch.max()
             metrics_it_1.append(metric_it_1)
             print('metric_it_1 = ',metric_it_1)
-            print('sigmoid(metric_it_1) = ',torch.sigmoid(torch.tensor(metric_it_1,dtype=torch.float32)))
+            print('sigmoid(metric_it_1_min) = ',torch.sigmoid(torch.tensor(metric_it_1,dtype=torch.float32)))
             metric_it_1_best_case = max(weights_ii[run][0].item(), weights_ii[run][1].item()) + biases_ii[run].item() + biases_hi[
                 run].item() + torch.abs(weights_hi[run]).item()
+            print('metric_it_1_best_case = ',metric_it_1_best_case.item())
             print('sigmoid(metric_it_1_best_case) = ',torch.sigmoid(torch.tensor(metric_it_1_best_case,dtype=torch.float32)))
 
             print('\n')
@@ -301,6 +302,7 @@ def inspect_model_parameters():
             print('sigmoid(metric_ft_1) = ',torch.sigmoid(torch.tensor(metric_ft_1,dtype=torch.float32)))
             metric_ft_1_best_case = max(weights_if[run][0].item(), weights_if[run][1].item()) + biases_if[run].item() + biases_hf[
                 run].item() + torch.abs(weights_hf[run]).item()
+            print('metric_ft_1_best_case = ',metric_ft_1_best_case.item())
             print('sigmoid(metric_ft_1_best_case) = ', torch.sigmoid(torch.tensor(metric_ft_1_best_case, dtype=torch.float32)))
 
             print('\n')
