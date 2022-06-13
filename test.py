@@ -92,6 +92,14 @@ print(torch.sigmoid(torch.tensor(-4,dtype=torch.float32)))
 print(torch.tanh(torch.tensor(4,dtype=torch.float32)))
 print(torch.tanh(torch.tensor(-4,dtype=torch.float32)))
 
+print('16')
+
+print(torch.sigmoid(torch.tensor(16,dtype=torch.float32)))
+print(torch.sigmoid(torch.tensor(-16,dtype=torch.float32)))
+
+print(torch.tanh(torch.tensor(16,dtype=torch.float32)))
+print(torch.tanh(torch.tensor(-16,dtype=torch.float32)))
+
 # class Model(nn.Module):
 #     def __init__(self):
 #         super(Model, self).__init__()
