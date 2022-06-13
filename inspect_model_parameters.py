@@ -150,12 +150,53 @@ def inspect_model_parameters():
 
         elif model_name=='VanillaLSTM':
             print(model_name)
-            weights_ih=[]
-            weights_hh = []
-            biases_ih = []
-            biases_hh = []
+            # weights_ih=[]
+            weights_ii = []
+            weights_if = []
+            weights_ig = []
+            weights_io = []
+
+            biases_ii = []
+            biases_if = []
+            biases_ig = []
+            biases_io = []
+
+            weights_hi = []
+            weights_hf = []
+            weights_hg = []
+            weights_ho = []
+
+            biases_hi = []
+            biases_hf = []
+            biases_hg = []
+            biases_ho = []
+
+            # weights_hh = []
+            # biases_ih = []
+            # biases_hh = []
             print(list(model.lstm.named_parameters()))
             # for param in model.lstm.names_parameters():
+            for param in model.lstm.named_parameters():
+                if 'weight_hh' in param[0]:
+                    weights_hh = param[1]
+                    weights_hi.append(weights_hh[0])
+                    weights_hf.append(weights_hh[1])
+                    weights_hg.append(weights_hh[2])
+                    weights_ho.append(weights_hh[3])
+
+
+
+                elif 'weight_ih' in param[0]:
+                    weights_ih = param[1]
+                    weights_ii.append(weights_ih[0])
+                    weights_if.append(weights_ih[1])
+                    weights_ig.append(weights_ih[2])
+                    weights_io.append(weights_ih[3])
+
+                print('weight_hi = ',weights_hi)
+                print('weight_ii = ',weights_ii)
+
+
 
 
 
