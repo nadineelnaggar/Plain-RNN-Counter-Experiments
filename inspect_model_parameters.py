@@ -169,7 +169,7 @@ def inspect_model_parameters():
 
 
             print('weight_ih = ',weights_ih[run])
-            print('bias_ig = ',biases_ih[run])
+            print('bias_ih = ',biases_ih[run])
             print('weight_hh = ',weights_hh[run])
             print('bias_hh = ',biases_hh[run])
         # elif model_name=='VanillaLSTM':
