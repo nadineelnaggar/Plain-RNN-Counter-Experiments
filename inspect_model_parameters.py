@@ -194,8 +194,53 @@ def inspect_model_parameters():
                     weights_ig.append(weights_ih[2])
                     weights_io.append(weights_ih[3])
 
+                elif 'bias_ih' in param[0]:
+                    biases_ih = param[1]
+                    biases_ii.append(biases_ih[0])
+                    biases_if.append(biases_ih[1])
+                    biases_ig.append(biases_ih[2])
+                    biases_io.append(biases_ih[3])
+
+                elif 'bias_hh' in param[0]:
+                    biases_hh=param[1]
+                    biases_hi.append(biases_hh[0])
+                    biases_hf.append(biases_hh[1])
+                    biases_hg.append(biases_hh[2])
+                    biases_ho.append(biases_hh[3])
+
+                elif 'bias_ih' in param[0]:
+                    biases_ih=param[1]
+                    biases_ii.append(biases_ih[0])
+                    biases_if.append(biases_ih[1])
+                    biases_ig.append(biases_ih[2])
+                    biases_io.append(biases_ih[3])
+
+
+            print('TO CALCULATE IT')
+            print('weight_ii = ', weights_ii)
+            print('bias_ii = ', biases_ii)
             print('weight_hi = ',weights_hi)
-            print('weight_ii = ',weights_ii)
+            print('bias_hi = ',biases_hi)
+
+
+
+            print('TO CALCULATE FT')
+            print('weight_if = ',weights_if)
+            print('bias_if = ',biases_if)
+            print('weight_hf = ',weights_hf)
+            print('bias_hf = ',biases_hf)
+
+            print('TO CALCULATE GT (C TILDE IN THE PAPER)')
+            print('weight_ig = ',weights_ig)
+            print('bias_ig = ',biases_ig)
+            print('weight_hg = ',weights_hg)
+            print('bias_hg = ',biases_hg)
+
+            print('TO CALCULATE OT')
+            print('weight_io = ',weights_io)
+            print('bias_io = ',biases_io)
+            print('weight_ho = ',weights_ho)
+            print('bias_ho = ',biases_ho)
 
 
 
