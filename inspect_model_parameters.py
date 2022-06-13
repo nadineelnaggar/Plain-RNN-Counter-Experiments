@@ -148,5 +148,15 @@ def inspect_model_parameters():
             # print('RNN bias_ih = ',model.rnn.bias_ih_l)
             # print('RNN bias_hh = ',model.rnn.bias_hh_l)
 
+        elif model_name=='VanillaLSTM':
+            print(model_name)
+            weights_ih=[]
+            weights_hh = []
+            biases_ih = []
+            biases_hh = []
+            print(list(model.lstm.named_parameters()))
+            # for param in model.lstm.names_parameters():
+
+
 
 inspect_model_parameters()
