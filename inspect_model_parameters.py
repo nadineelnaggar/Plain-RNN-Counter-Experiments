@@ -286,7 +286,7 @@ def inspect_model_parameters():
             print('sigmoid(metric_it_1) = ',torch.sigmoid(torch.tensor(metric_it_1,dtype=torch.float32)))
             metric_it_1_best_case = max(weights_ii[run][0].item(), weights_ii[run][1].item()) + biases_ii[run].item() + biases_hi[
                 run].item() + torch.abs(weights_hi[run]).item()
-            print('sigmoid(metric_it_1_best_case) = 'torch.sigmoid(torch.tensor(metric_it_1_best_case,dtype=torch.float32)))
+            print('sigmoid(metric_it_1_best_case) = ',torch.sigmoid(torch.tensor(metric_it_1_best_case,dtype=torch.float32)))
 
             print('\n')
             print('TO CALCULATE FT')
