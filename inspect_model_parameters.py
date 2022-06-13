@@ -272,6 +272,7 @@ def inspect_model_parameters():
 
 
 
+            print('\n')
             print('TO CALCULATE IT')
             print('weight_ii = ', weights_ii[run])
             print('bias_ii = ', biases_ii[run])
@@ -284,7 +285,7 @@ def inspect_model_parameters():
             print('metric_it_1 = ',metric_it_1)
             print('sigmoid(metric_it_1) = ',torch.sigmoid(torch.tensor(metric_it_1,dtype=torch.float32)))
 
-
+            print('\n')
             print('TO CALCULATE FT')
             print('weight_if = ',weights_if[run])
             print('bias_if = ',biases_if[run])
@@ -296,7 +297,7 @@ def inspect_model_parameters():
             print('metric_ft_1 = ',metric_ft_1)
             print('sigmoid(metric_ft_1) = ',torch.sigmoid(torch.tensor(metric_ft_1,dtype=torch.float32)))
 
-
+            print('\n')
             print('TO CALCULATE GT (C TILDE IN THE PAPER)')
             print('weight_ig = ',weights_ig[run])
             print('bias_ig = ',biases_ig[run])
@@ -317,6 +318,7 @@ def inspect_model_parameters():
             print('tanh(metric_ctilde_open) = ', torch.tensor(metric_ctilde_open, dtype=torch.float32))
             print('tanh(metric_ctilde_close) = ', torch.tensor(metric_ctilde_close, dtype=torch.float32))
 
+            print('\n')
             print('TO CALCULATE OT')
             print('weight_io = ',weights_io[run])
             print('bias_io = ',biases_io[run])
