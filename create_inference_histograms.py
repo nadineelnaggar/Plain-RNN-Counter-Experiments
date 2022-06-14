@@ -4,7 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 import argparse
-from Dyck1_Datasets import NextTokenPredictionDataset2000tokens_nested, NextTokenPredictionDataset2000tokens_zigzag
+from Dyck1_Datasets import NextTokenPredictionDataset2000tokens_nested, NextTokenPredictionDataset2000tokens_zigzag, NextTokenPredictionDataset2000tokens
 from models_batch import VanillaLSTM, VanillaRNN, VanillaGRU, VanillaReLURNN
 
 # RERUN THE CODE TO GENERATE THE EXCEL SHEETS NOW THAT THE SHUFFLE DATA IS FALSE IN THE DATALOADER,
@@ -184,6 +184,8 @@ def create_histogram_one_sequence_multiple_models():
         dataset = NextTokenPredictionDataset2000tokens_nested()
     elif dataset_type=='zigzag':
         dataset = NextTokenPredictionDataset2000tokens_zigzag()
+    elif dataset_type=='concatenated':
+        dataset = NextTokenPredictionDataset2000tokens()
 
 
 
