@@ -332,6 +332,15 @@ def inspect_model_parameters():
         metrics_ctilde_close_best_case = []
         metrics_ctilde_open_worst_case = []
         metrics_ctilde_close_worst_case = []
+        sigmoid_metric_ft_worst_case = []
+        sigmoid_metric_ft_best_case = []
+        sigmoid_metric_it_best_case = []
+        sigmoid_metric_it_worst_case = []
+        tanh_metric_ctilde_open_worst_case = []
+        tanh_metric_ctilde_open_best_case = []
+        tanh_metric_ctilde_close_worst_case = []
+        tanh_metric_ctilde_close_best_case = []
+        sigmoid_metric_ot = []
 
     elif model_name=='VanillaReLURNN':
         weights_ih = []
@@ -411,6 +420,8 @@ def inspect_model_parameters():
                     metrics_ctilde_close_best_case.append(metric_ctilde_close)
                     metrics_ctilde_close_worst_case.append(metric_ctilde_close_worst_case)
                     metrics_ot.append(metric_ot)
+
+
                 elif model_name == 'VanillaReLURNN':
 
                     for param in model.rnn.named_parameters():
