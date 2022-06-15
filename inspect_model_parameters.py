@@ -293,10 +293,13 @@ def inspect_rnn(model):
     print('weight_hh = ', weights_hh)
     print('bias_hh = ', biases_hh)
 
-    metric_weight_ratio = weights_ih[0]/weights_ih[1]
-    metric_total_ratio = (weights_ih[0]+biases_ih+biases_hh)/weights_ih[1]
+    # metric_weight_ratio = weights_ih[0]/weights_ih[1]
+    # metric_total_ratio = (weights_ih[0]+biases_ih+biases_hh)/weights_ih[1]
+    metric_inc_dec_ratio = ((weights_ih[0]+biases_hh+biases_ih)/(weights_ih[1]+biases_ih+biases_hh)).item()
+    metric_hidden_weight = weights_hh.item()
 
-    return weights_ih, biases_ih, weights_hh, biases_hh
+
+    return weights_ih[0].item(), weights_ih[1].item(), biases_ih.item(), weights_hh.item(), biases_hh.item(), metric_inc_dec_ratio, metric_hidden_weight
 
 
 
@@ -357,15 +360,20 @@ def inspect_model_parameters():
         sigmoid_metrics_ot = []
 
     elif model_name=='VanillaReLURNN':
-        weights_ih = []
+        weights_ih_0 = []
+        weights_ih_1 = []
         weights_hh = []
         biases_ih = []
         biases_hh = []
 
-        metric_wi = []
-        metric_bi = []
-        metric_wh = []
-        metric_bh = []
+        metrics_inc_dec = []
+        metrics_hidden_weight = []
+
+
+        # metric_wi = []
+        # metric_bi = []
+        # metric_wh = []
+        # metric_bh = []
 
 
     for run in range(num_runs):
@@ -407,8 +415,8 @@ def inspect_model_parameters():
                     weight_hf, weight_hi, weight_hg, weight_ho, bias_hf, bias_hi, bias_hg, bias_ho, \
                     metric_ft_1, metric_ft_1_best_case, metric_it_1, metric_it_1_best_case, metric_ctilde_open, metric_ctilde_open_worst_case, \
                     metric_ctilde_close, metric_ctilde_close_worst_case, metric_ot, sigmoid_metric_ft_1_best, sigmoid_metric_ft_1_worst, \
-           sigmoid_metric_it_1_best, sigmoid_metric_it_1_worst, tanh_metric_ctilde_open_best, tanh_metric_ctilde_open_worst, \
-           tanh_metric_ctilde_close_best, tanh_metric_ctilde_close_worst, sigmoid_metric_ot = inspect_lstm(checkpoint_model)
+                    sigmoid_metric_it_1_best, sigmoid_metric_it_1_worst, tanh_metric_ctilde_open_best, tanh_metric_ctilde_open_worst, \
+                    tanh_metric_ctilde_close_best, tanh_metric_ctilde_close_worst, sigmoid_metric_ot = inspect_lstm(checkpoint_model)
 
 
                     weights_if.append(weight_if)
@@ -451,22 +459,34 @@ def inspect_model_parameters():
 
                 elif model_name == 'VanillaReLURNN':
 
-                    for param in model.rnn.named_parameters():
+                    weight_ih_0, weight_ih_1, bias_ih, weight_hh, bias_hh, metric_inc_dec_ratio, metric_hidden_weight = inspect_rnn(checkpoint_model)
+                    weights_ih_0.append(weight_ih_0)
+                    weights_ih_1.append(weight_ih_1)
+                    biases_ih.append(bias_ih)
+                    weights_hh.append(weight_hh)
+                    biases_hh.append(bias_hh)
+                    metrics_inc_dec.append(metric_inc_dec_ratio)
+                    metrics_hidden_weight.append(metric_hidden_weight)
 
 
-                        if 'weight_ih' in param[0]:
-                            weights_ih.append(param[1])
-                        elif 'bias_ih' in param[0]:
-                            biases_ih.append(param[1])
-                        elif 'weight_hh' in param[0]:
-                            weights_hh.append(param[1])
-                        elif 'bias_hh' in param[0]:
-                            biases_hh.append(param[1])
+                    # for param in model.rnn.named_parameters():
+                    #
+                    #
+                    #     if 'weight_ih' in param[0]:
+                    #         weights_ih.append(param[1])
+                    #     elif 'bias_ih' in param[0]:
+                    #         biases_ih.append(param[1])
+                    #     elif 'weight_hh' in param[0]:
+                    #         weights_hh.append(param[1])
+                    #     elif 'bias_hh' in param[0]:
+                    #         biases_hh.append(param[1])
+                    #
+                    # print('weight_ih = ', weights_ih[run])
+                    # print('bias_ih = ', biases_ih[run])
+                    # print('weight_hh = ', weights_hh[run])
+                    # print('bias_hh = ', biases_hh[run])
 
-                    print('weight_ih = ', weights_ih[run])
-                    print('bias_ih = ', biases_ih[run])
-                    print('weight_hh = ', weights_hh[run])
-                    print('bias_hh = ', biases_hh[run])
+
 
                     # finish appending the rest to the arrays, do the same for non checkpoints, and for RNNs
 
@@ -481,8 +501,8 @@ def inspect_model_parameters():
             weight_hf, weight_hi, weight_hg, weight_ho, bias_hf, bias_hi, bias_hg, bias_ho, \
             metric_ft_1, metric_ft_1_best_case, metric_it_1, metric_it_1_best_case, metric_ctilde_open, metric_ctilde_open_worst_case, \
             metric_ctilde_close, metric_ctilde_close_worst_case, metric_ot, sigmoid_metric_ft_1_best, sigmoid_metric_ft_1_worst, \
-           sigmoid_metric_it_1_best, sigmoid_metric_it_1_worst, tanh_metric_ctilde_open_best, tanh_metric_ctilde_open_worst, \
-           tanh_metric_ctilde_close_best, tanh_metric_ctilde_close_worst, sigmoid_metric_ot = inspect_lstm(model)
+            sigmoid_metric_it_1_best, sigmoid_metric_it_1_worst, tanh_metric_ctilde_open_best, tanh_metric_ctilde_open_worst, \
+            tanh_metric_ctilde_close_best, tanh_metric_ctilde_close_worst, sigmoid_metric_ot = inspect_lstm(model)
 
             weights_if.append(weight_if)
             weights_ii.append(weight_ig)
@@ -519,6 +539,15 @@ def inspect_model_parameters():
             tanh_metrics_ctilde_open_worst_case.append(tanh_metric_ctilde_open_worst)
             tanh_metrics_ctilde_close_best_case.append(tanh_metric_ctilde_close_best)
             tanh_metrics_ctilde_close_worst_case.append(tanh_metric_ctilde_close_worst)
+        elif model_name=='VanillaReLURNN':
+            weight_ih_0, weight_ih_1, bias_ih, weight_hh, bias_hh, metric_inc_dec_ratio, metric_hidden_weight = inspect_rnn(model)
+            weights_ih_0.append(weight_ih_0)
+            weights_ih_1.append(weight_ih_1)
+            biases_ih.append(bias_ih)
+            weights_hh.append(weight_hh)
+            biases_hh.append(bias_hh)
+            metrics_inc_dec.append(metric_inc_dec_ratio)
+            metrics_hidden_weight.append(metric_hidden_weight)
 
         # print('*************************************')
         # print('RUN ',run)
