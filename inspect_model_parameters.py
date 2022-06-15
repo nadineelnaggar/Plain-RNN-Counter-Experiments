@@ -490,6 +490,15 @@ def inspect_model_parameters():
 
                     # finish appending the rest to the arrays, do the same for non checkpoints, and for RNNs
 
+        runs.append(run)
+        avg_train_losses.append(losses_train[num_epochs])
+        inverse_avg_train_losses.append(1 / losses_train[num_epochs])
+        avg_val_losses.append(losses_val[num_epochs])
+        inverse_avg_val_losses.append(1 / losses_val[num_epochs])
+        avg_long_val_losses.append(losses_long_val[num_epochs])
+        inverse_avg_long_val_losses.append(1 / losses_long_val[num_epochs])
+        epochs.append(num_epochs)
+        
         mdl = modelname + 'run' + str(run) + '.pth'
         model = select_model(model_name, input_size, hidden_size, num_layers, batch_size, num_classes,
                              output_activation)
@@ -549,6 +558,79 @@ def inspect_model_parameters():
             metrics_inc_dec.append(metric_inc_dec_ratio)
             metrics_hidden_weight.append(metric_hidden_weight)
 
+    df1 = pd.DataFrame()
+    log_avg_train_losses = np.log(avg_train_losses)
+    log_avg_val_losses = np.log(avg_val_losses)
+    log_avg_long_val_losses = np.log(avg_long_val_losses)
+
+    log_inverse_avg_train_losses = np.log(inverse_avg_train_losses)
+    log_inverse_avg_val_losses = np.log(inverse_avg_val_losses)
+    log_inverse_avg_long_val_losses = np.log(inverse_avg_long_val_losses)
+    
+    
+    df1['run'] =runs
+    df1['epochs'] = epochs
+    df1['avg training losses'] = avg_train_losses
+    df1['avg validation losses'] = avg_val_losses
+    df1['avg long validation losses'] = avg_long_val_losses
+    df1['log of avg train losses'] = log_avg_train_losses
+    df1['log of avg validation losses'] = log_avg_val_losses
+    df1['log of avg long validation losses'] = log_avg_long_val_losses
+    df1['log of inverse avg train losses'] = log_inverse_avg_train_losses
+    df1['log of inverse avg validation losses'] = log_inverse_avg_val_losses
+    df1['log of inverse avg long validation losses'] = log_inverse_avg_long_val_losses
+
+    if model_name == 'VanillaLSTM':
+        
+        df1['weights_if'] = weights_if
+        df1['biases_if'] = biases_if
+        df1['weights_ii'] = weights_ii
+        df1['biases_ii'] = biases_ii
+        df1['weights_ig'] = weights_ig
+        df1['biases_ig'] = biases_ig
+        df1['weights_io'] = weights_io
+        df1['biases_io'] = biases_io
+        df1['weights_hf'] = weights_hf
+        df1['biases_hf'] = biases_hf
+        df1['weights_hi'] = weights_hi
+        df1['biases_hi'] = biases_hi
+        df1['weights_hg'] = weights_hg
+        df1['biases_hg'] = biases_hg
+        df1['weights_ho'] = weights_ho
+        df1['biases_ho'] = biases_ho
+        df1['metrics_ft_worst_case']=metrics_ft_worst_case
+        df1['metrics_ft_best_case'] = metrics_ft_best_case
+        df1['metrics_it_1_best_case'] = metrics_it_1_best_case
+        df1['metrics_it_1_worst_case']= metrics_it_1_worst_case
+        df1['metrics_ctilde_open_best_case'] = metrics_ctilde_open_best_case
+        df1['metrics_ctilde_open_worst_case'] = metrics_ctilde_open_worst_case
+        df1['metrics_ctilde_close_best_case'] = metrics_ctilde_close_best_case
+        df1['metrics_ctilde_close_worst_case'] = metrics_ctilde_close_worst_case
+        df1['metrics_ot'] = metrics_ot
+        df1['sigmoid_metrics_ft_best_case'] = sigmoid_metrics_ft_best_case
+        df1['sigmoid_metrics_ft_worst_case'] = sigmoid_metrics_ft_worst_case
+        df1['sigmoid_metrics_it_best_case'] = sigmoid_metrics_it_best_case
+        df1['sigmoid_metrics_it_worst_case'] = sigmoid_metrics_it_worst_case
+        df1['sigmoid_metrics_ot'] = sigmoid_metrics_ot
+        df1['tanh_metrics_ctilde_open_best_case'] = tanh_metrics_ctilde_open_best_case
+        df1['tanh_metrics_ctilde_open_worst_case'] = tanh_metrics_ctilde_open_worst_case
+        df1['tanh_metrics_ctilde_close_best_case'] = tanh_metrics_ctilde_close_best_case
+        df1['tanh_metrics_ctilde_close_worst_case'] = tanh_metrics_ctilde_close_worst_case
+
+    elif model_name=='VanillaReLURNN':
+        df1['weights_ih_0'] = weights_ih_0
+        df1['weights_ih_1'] = weights_ih_1
+        df1['biases_ih'] = biases_ih
+        df1['weights_hh'] = weights_hh
+        df1['biases_hh'] = biases_hh
+        df1['metrics_inc_dec'] = metrics_inc_dec
+        df1['metrics_hidden_weight'] = metrics_hidden_weight
+
+    writer = pd.ExcelWriter(excel_name, engine='xlsxwriter')
+
+    df1.to_excel(writer, index=False)
+    writer.save()
+        
         # print('*************************************')
         # print('RUN ',run)
         # print('*************************************')
