@@ -630,7 +630,7 @@ def inspect_model_parameters():
 
     df1.to_excel(writer, index=False)
     writer.save()
-        
+
         # print('*************************************')
         # print('RUN ',run)
         # print('*************************************')
