@@ -189,6 +189,9 @@ def inspect_lstm(model):
     print('metric_it_1_best_case = ', metric_it_1_best_case)
     print('sigmoid(metric_it_1_best_case) = ', torch.sigmoid(torch.tensor(metric_it_1_best_case, dtype=torch.float32)))
 
+    sigmoid_metric_it_1_best = torch.sigmoid(torch.tensor(metric_it_1_best_case, dtype=torch.float32)).item()
+    sigmoid_metric_it_1_worst = torch.sigmoid(torch.tensor(metric_it_1, dtype=torch.float32)).item()
+
     print('\n')
     print('TO CALCULATE FT')
     print('weight_if = ', weights_if)
@@ -204,6 +207,9 @@ def inspect_lstm(model):
                             biases_hf.item() + torch.abs(weights_hf).item()
     print('metric_ft_1_best_case = ', metric_ft_1_best_case)
     print('sigmoid(metric_ft_1_best_case) = ', torch.sigmoid(torch.tensor(metric_ft_1_best_case, dtype=torch.float32)))
+
+    sigmoid_metric_ft_1_best = torch.sigmoid(torch.tensor(metric_ft_1_best_case, dtype=torch.float32)).item()
+    sigmoid_metric_ft_1_worst = torch.sigmoid(torch.tensor(metric_ft_1, dtype=torch.float32)).item()
 
     print('\n')
     print('TO CALCULATE GT (C TILDE IN THE PAPER)')
@@ -241,6 +247,11 @@ def inspect_lstm(model):
     print('tanh(metric_ctilde_close worst case) = ',
           torch.tanh(torch.tensor(metric_ctilde_close_worst_case, dtype=torch.float32)))
 
+    tanh_metric_ctilde_open_best = torch.tanh(torch.tensor(metric_ctilde_open, dtype=torch.float32)).item()
+    tanh_metric_ctilde_open_worst = torch.tanh(torch.tensor(metric_ctilde_open_worst_case, dtype=torch.float32)).item()
+    tanh_metric_ctilde_close_best = torch.tanh(torch.tensor(metric_ctilde_close, dtype=torch.float32)).item()
+    tanh_metric_ctilde_close_worst = torch.tanh(torch.tensor(metric_ctilde_close_worst_case, dtype=torch.float32)).item()
+
     print('\n')
     print('TO CALCULATE OT')
     print('weight_io = ', weights_io)
@@ -254,11 +265,14 @@ def inspect_lstm(model):
     print('metric_ot = ', metric_ot)
     print('sigmoid(metric_ot) = ', torch.sigmoid(torch.tensor(metric_ot, dtype=torch.float32)))
     print('\n')
+    sigmoid_metric_ot = torch.sigmoid(torch.tensor(metric_ot, dtype=torch.float32)).item()
 
     return weights_if, weights_ii, weights_ig, weights_io, biases_if, biases_ii, biases_ig, biases_io, \
            weights_hf, weights_hi, weights_hg, weights_ho, biases_hf, biases_hi, biases_hg, biases_ho, \
            metric_ft_1, metric_ft_1_best_case, metric_it_1, metric_it_1_best_case, metric_ctilde_open, metric_ctilde_open_worst_case, \
-           metric_ctilde_close, metric_ctilde_close_worst_case, metric_ot
+           metric_ctilde_close, metric_ctilde_close_worst_case, metric_ot, sigmoid_metric_ft_1_best, sigmoid_metric_ft_1_worst, \
+           sigmoid_metric_it_1_best, sigmoid_metric_it_1_worst, tanh_metric_ctilde_open_best, tanh_metric_ctilde_open_worst, \
+           tanh_metric_ctilde_close_best, tanh_metric_ctilde_close_worst, sigmoid_metric_ot
 
 
 def inspect_rnn(model):
@@ -332,15 +346,15 @@ def inspect_model_parameters():
         metrics_ctilde_close_best_case = []
         metrics_ctilde_open_worst_case = []
         metrics_ctilde_close_worst_case = []
-        sigmoid_metric_ft_worst_case = []
-        sigmoid_metric_ft_best_case = []
-        sigmoid_metric_it_best_case = []
-        sigmoid_metric_it_worst_case = []
-        tanh_metric_ctilde_open_worst_case = []
-        tanh_metric_ctilde_open_best_case = []
-        tanh_metric_ctilde_close_worst_case = []
-        tanh_metric_ctilde_close_best_case = []
-        sigmoid_metric_ot = []
+        sigmoid_metrics_ft_worst_case = []
+        sigmoid_metrics_ft_best_case = []
+        sigmoid_metrics_it_best_case = []
+        sigmoid_metrics_it_worst_case = []
+        tanh_metrics_ctilde_open_worst_case = []
+        tanh_metrics_ctilde_open_best_case = []
+        tanh_metrics_ctilde_close_worst_case = []
+        tanh_metrics_ctilde_close_best_case = []
+        sigmoid_metrics_ot = []
 
     elif model_name=='VanillaReLURNN':
         weights_ih = []
@@ -392,7 +406,9 @@ def inspect_model_parameters():
                     weight_if, weight_ii, weight_ig, weight_io, bias_if, bias_ii, bias_ig, bias_io, \
                     weight_hf, weight_hi, weight_hg, weight_ho, bias_hf, bias_hi, bias_hg, bias_ho, \
                     metric_ft_1, metric_ft_1_best_case, metric_it_1, metric_it_1_best_case, metric_ctilde_open, metric_ctilde_open_worst_case, \
-                    metric_ctilde_close, metric_ctilde_close_worst_case, metric_ot = inspect_lstm(checkpoint_model)
+                    metric_ctilde_close, metric_ctilde_close_worst_case, metric_ot, sigmoid_metric_ft_1_best, sigmoid_metric_ft_1_worst, \
+           sigmoid_metric_it_1_best, sigmoid_metric_it_1_worst, tanh_metric_ctilde_open_best, tanh_metric_ctilde_open_worst, \
+           tanh_metric_ctilde_close_best, tanh_metric_ctilde_close_worst, sigmoid_metric_ot = inspect_lstm(checkpoint_model)
 
 
                     weights_if.append(weight_if)
@@ -420,6 +436,17 @@ def inspect_model_parameters():
                     metrics_ctilde_close_best_case.append(metric_ctilde_close)
                     metrics_ctilde_close_worst_case.append(metric_ctilde_close_worst_case)
                     metrics_ot.append(metric_ot)
+
+                    sigmoid_metrics_ft_best_case.append(sigmoid_metric_ft_1_best)
+                    sigmoid_metrics_ft_worst_case.append(sigmoid_metrics_ft_worst_case)
+                    sigmoid_metrics_it_best_case.append(sigmoid_metric_it_1_best)
+                    sigmoid_metrics_it_worst_case.append(sigmoid_metrics_it_worst_case)
+                    sigmoid_metrics_ot.append(sigmoid_metric_ot)
+                    tanh_metrics_ctilde_open_best_case.append(tanh_metric_ctilde_open_best)
+                    tanh_metrics_ctilde_open_worst_case.append(tanh_metric_ctilde_open_worst)
+                    tanh_metrics_ctilde_close_best_case.append(tanh_metric_ctilde_close_best)
+                    tanh_metrics_ctilde_close_worst_case.append(tanh_metric_ctilde_close_worst)
+
 
 
                 elif model_name == 'VanillaReLURNN':
@@ -453,7 +480,9 @@ def inspect_model_parameters():
             weight_if, weight_ii, weight_ig, weight_io, bias_if, bias_ii, bias_ig, bias_io, \
             weight_hf, weight_hi, weight_hg, weight_ho, bias_hf, bias_hi, bias_hg, bias_ho, \
             metric_ft_1, metric_ft_1_best_case, metric_it_1, metric_it_1_best_case, metric_ctilde_open, metric_ctilde_open_worst_case, \
-            metric_ctilde_close, metric_ctilde_close_worst_case, metric_ot = inspect_lstm(model)
+            metric_ctilde_close, metric_ctilde_close_worst_case, metric_ot, sigmoid_metric_ft_1_best, sigmoid_metric_ft_1_worst, \
+           sigmoid_metric_it_1_best, sigmoid_metric_it_1_worst, tanh_metric_ctilde_open_best, tanh_metric_ctilde_open_worst, \
+           tanh_metric_ctilde_close_best, tanh_metric_ctilde_close_worst, sigmoid_metric_ot = inspect_lstm(model)
 
             weights_if.append(weight_if)
             weights_ii.append(weight_ig)
@@ -480,6 +509,16 @@ def inspect_model_parameters():
             metrics_ctilde_close_best_case.append(metric_ctilde_close)
             metrics_ctilde_close_worst_case.append(metric_ctilde_close_worst_case)
             metrics_ot.append(metric_ot)
+
+            sigmoid_metrics_ft_best_case.append(sigmoid_metric_ft_1_best)
+            sigmoid_metrics_ft_worst_case.append(sigmoid_metrics_ft_worst_case)
+            sigmoid_metrics_it_best_case.append(sigmoid_metric_it_1_best)
+            sigmoid_metrics_it_worst_case.append(sigmoid_metrics_it_worst_case)
+            sigmoid_metrics_ot.append(sigmoid_metric_ot)
+            tanh_metrics_ctilde_open_best_case.append(tanh_metric_ctilde_open_best)
+            tanh_metrics_ctilde_open_worst_case.append(tanh_metric_ctilde_open_worst)
+            tanh_metrics_ctilde_close_best_case.append(tanh_metric_ctilde_close_best)
+            tanh_metrics_ctilde_close_worst_case.append(tanh_metric_ctilde_close_worst)
 
         # print('*************************************')
         # print('RUN ',run)
