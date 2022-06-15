@@ -261,6 +261,31 @@ def inspect_lstm(model):
            metric_ctilde_close, metric_ctilde_close_worst_case, metric_ot
 
 
+def inspect_rnn(model):
+    print(model)
+    for param in model.rnn.named_parameters():
+
+        if 'weight_ih' in param[0]:
+            weights_ih = param[1]
+        elif 'bias_ih' in param[0]:
+            biases_ih = param[1]
+        elif 'weight_hh' in param[0]:
+            weights_hh = param[1]
+        elif 'bias_hh' in param[0]:
+            biases_hh = param[1]
+
+    print('weight_ih = ', weights_ih)
+    print('bias_ih = ', biases_ih)
+    print('weight_hh = ', weights_hh)
+    print('bias_hh = ', biases_hh)
+
+    metric_weight_ratio = weights_ih[0]/weights_ih[1]
+    metric_total_ratio = (weights_ih[0]+biases_ih+biases_hh)/weights_ih[1]
+
+    return weights_ih, biases_ih, weights_hh, biases_hh
+
+
+
 def inspect_model_parameters():
     input_size = 2
     num_classes = 2
@@ -298,12 +323,13 @@ def inspect_model_parameters():
         biases_hg = []
         biases_ho = []
 
-        metrics_ft = []
-        metrics_it_1 = []
-        metrics_it_constant = []
+        metrics_ft_worst_case = []
+        metrics_ft_best_case = []
+        metrics_it_1_worst_case = []
+        metrics_it_1_best_case = []
         metrics_ot = []
-        metrics_ctilde_open = []
-        metrics_ctilde_close = []
+        metrics_ctilde_open_best_case = []
+        metrics_ctilde_close_best_case = []
         metrics_ctilde_open_worst_case = []
         metrics_ctilde_close_worst_case = []
 
@@ -367,6 +393,43 @@ def inspect_model_parameters():
                     biases_if.append(bias_if)
                     biases_ii.append(bias_ii)
                     biases_ig.append(bias_ig)
+                    biases_io.append(bias_io)
+                    weights_hf.append(weight_hf)
+                    weights_hi.append(weights_hi)
+                    weights_hg.append(weight_hg)
+                    weights_ho.append(weight_ho)
+                    biases_hf.append(bias_hf)
+                    biases_hi.append(bias_hi)
+                    biases_hg.append(bias_hg)
+                    biases_ho.append(bias_ho)
+                    metrics_ft_worst_case.append(metric_ft_1)
+                    metrics_ft_best_case.append(metric_ft_1_best_case)
+                    metrics_it_1_best_case.append(metric_it_1_best_case)
+                    metrics_it_1_worst_case.append(metric_it_1)
+                    metrics_ctilde_open_best_case.append(metric_ctilde_open)
+                    metrics_ctilde_open_worst_case.append(metric_ctilde_open_worst_case)
+                    metrics_ctilde_close_best_case.append(metric_ctilde_close)
+                    metrics_ctilde_close_worst_case.append(metric_ctilde_close_worst_case)
+                    metrics_ot.append(metric_ot)
+                elif model_name == 'VanillaReLURNN':
+
+                    for param in model.rnn.named_parameters():
+
+
+                        if 'weight_ih' in param[0]:
+                            weights_ih.append(param[1])
+                        elif 'bias_ih' in param[0]:
+                            biases_ih.append(param[1])
+                        elif 'weight_hh' in param[0]:
+                            weights_hh.append(param[1])
+                        elif 'bias_hh' in param[0]:
+                            biases_hh.append(param[1])
+
+                    print('weight_ih = ', weights_ih[run])
+                    print('bias_ih = ', biases_ih[run])
+                    print('weight_hh = ', weights_hh[run])
+                    print('bias_hh = ', biases_hh[run])
+
                     # finish appending the rest to the arrays, do the same for non checkpoints, and for RNNs
 
         mdl = modelname + 'run' + str(run) + '.pth'
@@ -374,38 +437,70 @@ def inspect_model_parameters():
                              output_activation)
         model.load_state_dict(torch.load(mdl))
         model.to(device)
+        if model_name=='VanillaLSTM':
+            print(model_name)
+            weight_if, weight_ii, weight_ig, weight_io, bias_if, bias_ii, bias_ig, bias_io, \
+            weight_hf, weight_hi, weight_hg, weight_ho, bias_hf, bias_hi, bias_hg, bias_ho, \
+            metric_ft_1, metric_ft_1_best_case, metric_it_1, metric_it_1_best_case, metric_ctilde_open, metric_ctilde_open_worst_case, \
+            metric_ctilde_close, metric_ctilde_close_worst_case, metric_ot = inspect_lstm(model)
+
+            weights_if.append(weight_if)
+            weights_ii.append(weight_ig)
+            weights_ig.append(weight_ig)
+            weights_io.append(weight_io)
+            biases_if.append(bias_if)
+            biases_ii.append(bias_ii)
+            biases_ig.append(bias_ig)
+            biases_io.append(bias_io)
+            weights_hf.append(weight_hf)
+            weights_hi.append(weights_hi)
+            weights_hg.append(weight_hg)
+            weights_ho.append(weight_ho)
+            biases_hf.append(bias_hf)
+            biases_hi.append(bias_hi)
+            biases_hg.append(bias_hg)
+            biases_ho.append(bias_ho)
+            metrics_ft_worst_case.append(metric_ft_1)
+            metrics_ft_best_case.append(metric_ft_1_best_case)
+            metrics_it_1_best_case.append(metric_it_1_best_case)
+            metrics_it_1_worst_case.append(metric_it_1)
+            metrics_ctilde_open_best_case.append(metric_ctilde_open)
+            metrics_ctilde_open_worst_case.append(metric_ctilde_open_worst_case)
+            metrics_ctilde_close_best_case.append(metric_ctilde_close)
+            metrics_ctilde_close_worst_case.append(metric_ctilde_close_worst_case)
+            metrics_ot.append(metric_ot)
 
         # print('*************************************')
         # print('RUN ',run)
         # print('*************************************')
-        if model_name=='VanillaReLURNN':
-            # print(model_name)
-            # print(model.rnn.Variables.weights)
-            # print(model.rnn.Variables.biases)
-            # weights = []
-            # biases = []
-
-            # print(model.rnn.named_parameters())
-            for param in model.rnn.named_parameters():
-                # if 'weight' in param[0]:
-                #     weights.append(param[1])
-                # elif 'bias' in param[0]:
-                #     biases.append(param[1])
-
-                if 'weight_ih' in param[0]:
-                    weights_ih.append(param[1])
-                elif 'bias_ih' in param[0]:
-                    biases_ih.append(param[1])
-                elif 'weight_hh' in param[0]:
-                    weights_hh.append(param[1])
-                elif 'bias_hh' in param[0]:
-                    biases_hh.append(param[1])
-
-
-            print('weight_ih = ',weights_ih[run])
-            print('bias_ih = ',biases_ih[run])
-            print('weight_hh = ',weights_hh[run])
-            print('bias_hh = ',biases_hh[run])
+        # if model_name=='VanillaReLURNN':
+        #     # print(model_name)
+        #     # print(model.rnn.Variables.weights)
+        #     # print(model.rnn.Variables.biases)
+        #     # weights = []
+        #     # biases = []
+        #
+        #     # print(model.rnn.named_parameters())
+        #     for param in model.rnn.named_parameters():
+        #         # if 'weight' in param[0]:
+        #         #     weights.append(param[1])
+        #         # elif 'bias' in param[0]:
+        #         #     biases.append(param[1])
+        #
+        #         if 'weight_ih' in param[0]:
+        #             weights_ih.append(param[1])
+        #         elif 'bias_ih' in param[0]:
+        #             biases_ih.append(param[1])
+        #         elif 'weight_hh' in param[0]:
+        #             weights_hh.append(param[1])
+        #         elif 'bias_hh' in param[0]:
+        #             biases_hh.append(param[1])
+        #
+        #
+        #     print('weight_ih = ',weights_ih[run])
+        #     print('bias_ih = ',biases_ih[run])
+        #     print('weight_hh = ',weights_hh[run])
+        #     print('bias_hh = ',biases_hh[run])
         # elif model_name=='VanillaLSTM':
         #     print(model_name)
         #     weights = []
@@ -424,8 +519,8 @@ def inspect_model_parameters():
             # print('RNN bias_ih = ',model.rnn.bias_ih_l)
             # print('RNN bias_hh = ',model.rnn.bias_hh_l)
 
-        elif model_name=='VanillaLSTM':
-            print(model_name)
+        # elif model_name=='VanillaLSTM':
+        #     print(model_name)
 
 
 
