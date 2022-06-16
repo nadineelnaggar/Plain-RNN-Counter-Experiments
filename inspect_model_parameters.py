@@ -582,49 +582,49 @@ def inspect_model_parameters():
 
     if model_name == 'VanillaLSTM':
         
-        df1['weights_if'] = weights_if
-        df1['biases_if'] = biases_if
-        df1['weights_ii'] = weights_ii
-        df1['biases_ii'] = biases_ii
-        df1['weights_ig'] = weights_ig
-        df1['biases_ig'] = biases_ig
-        df1['weights_io'] = weights_io
-        df1['biases_io'] = biases_io
-        df1['weights_hf'] = weights_hf
-        df1['biases_hf'] = biases_hf
-        df1['weights_hi'] = weights_hi
-        df1['biases_hi'] = biases_hi
-        df1['weights_hg'] = weights_hg
-        df1['biases_hg'] = biases_hg
-        df1['weights_ho'] = weights_ho
-        df1['biases_ho'] = biases_ho
-        df1['metrics_ft_worst_case']=metrics_ft_worst_case
-        df1['metrics_ft_best_case'] = metrics_ft_best_case
-        df1['metrics_it_1_best_case'] = metrics_it_1_best_case
-        df1['metrics_it_1_worst_case']= metrics_it_1_worst_case
-        df1['metrics_ctilde_open_best_case'] = metrics_ctilde_open_best_case
-        df1['metrics_ctilde_open_worst_case'] = metrics_ctilde_open_worst_case
-        df1['metrics_ctilde_close_best_case'] = metrics_ctilde_close_best_case
-        df1['metrics_ctilde_close_worst_case'] = metrics_ctilde_close_worst_case
-        df1['metrics_ot'] = metrics_ot
-        df1['sigmoid_metrics_ft_best_case'] = sigmoid_metrics_ft_best_case
-        df1['sigmoid_metrics_ft_worst_case'] = sigmoid_metrics_ft_worst_case
-        df1['sigmoid_metrics_it_best_case'] = sigmoid_metrics_it_best_case
-        df1['sigmoid_metrics_it_worst_case'] = sigmoid_metrics_it_worst_case
-        df1['sigmoid_metrics_ot'] = sigmoid_metrics_ot
-        df1['tanh_metrics_ctilde_open_best_case'] = tanh_metrics_ctilde_open_best_case
-        df1['tanh_metrics_ctilde_open_worst_case'] = tanh_metrics_ctilde_open_worst_case
-        df1['tanh_metrics_ctilde_close_best_case'] = tanh_metrics_ctilde_close_best_case
-        df1['tanh_metrics_ctilde_close_worst_case'] = tanh_metrics_ctilde_close_worst_case
+        df1['weights_if'] = weights_if.cpu()
+        df1['biases_if'] = biases_if.cpu()
+        df1['weights_ii'] = weights_ii.cpu()
+        df1['biases_ii'] = biases_ii.cpu()
+        df1['weights_ig'] = weights_ig.cpu()
+        df1['biases_ig'] = biases_ig.cpu()
+        df1['weights_io'] = weights_io.cpu()
+        df1['biases_io'] = biases_io.cpu()
+        df1['weights_hf'] = weights_hf.cpu()
+        df1['biases_hf'] = biases_hf.cpu()
+        df1['weights_hi'] = weights_hi.cpu()
+        df1['biases_hi'] = biases_hi.cpu()
+        df1['weights_hg'] = weights_hg.cpu()
+        df1['biases_hg'] = biases_hg.cpu()
+        df1['weights_ho'] = weights_ho.cpu()
+        df1['biases_ho'] = biases_ho.cpu()
+        df1['metrics_ft_worst_case']=metrics_ft_worst_case.cpu()
+        df1['metrics_ft_best_case'] = metrics_ft_best_case.cpu()
+        df1['metrics_it_1_best_case'] = metrics_it_1_best_case.cpu()
+        df1['metrics_it_1_worst_case']= metrics_it_1_worst_case.cpu()
+        df1['metrics_ctilde_open_best_case'] = metrics_ctilde_open_best_case.cpu()
+        df1['metrics_ctilde_open_worst_case'] = metrics_ctilde_open_worst_case.cpu()
+        df1['metrics_ctilde_close_best_case'] = metrics_ctilde_close_best_case.cpu()
+        df1['metrics_ctilde_close_worst_case'] = metrics_ctilde_close_worst_case.cpu()
+        df1['metrics_ot'] = metrics_ot.cpu()
+        df1['sigmoid_metrics_ft_best_case'] = sigmoid_metrics_ft_best_case.cpu()
+        df1['sigmoid_metrics_ft_worst_case'] = sigmoid_metrics_ft_worst_case.cpu()
+        df1['sigmoid_metrics_it_best_case'] = sigmoid_metrics_it_best_case.cpu()
+        df1['sigmoid_metrics_it_worst_case'] = sigmoid_metrics_it_worst_case.cpu()
+        df1['sigmoid_metrics_ot'] = sigmoid_metrics_ot.cpu()
+        df1['tanh_metrics_ctilde_open_best_case'] = tanh_metrics_ctilde_open_best_case.cpu()
+        df1['tanh_metrics_ctilde_open_worst_case'] = tanh_metrics_ctilde_open_worst_case.cpu()
+        df1['tanh_metrics_ctilde_close_best_case'] = tanh_metrics_ctilde_close_best_case.cpu()
+        df1['tanh_metrics_ctilde_close_worst_case'] = tanh_metrics_ctilde_close_worst_case.cpu()
 
     elif model_name=='VanillaReLURNN':
-        df1['weights_ih_0'] = weights_ih_0
-        df1['weights_ih_1'] = weights_ih_1
-        df1['biases_ih'] = biases_ih
-        df1['weights_hh'] = weights_hh
-        df1['biases_hh'] = biases_hh
-        df1['metrics_inc_dec'] = metrics_inc_dec
-        df1['metrics_hidden_weight'] = metrics_hidden_weight
+        df1['weights_ih_0'] = weights_ih_0.cpu()
+        df1['weights_ih_1'] = weights_ih_1.cpu()
+        df1['biases_ih'] = biases_ih.cpu()
+        df1['weights_hh'] = weights_hh.cpu()
+        df1['biases_hh'] = biases_hh.cpu()
+        df1['metrics_inc_dec'] = metrics_inc_dec.cpu()
+        df1['metrics_hidden_weight'] = metrics_hidden_weight.cpu()
 
     writer = pd.ExcelWriter(excel_name, engine='xlsxwriter')
 
