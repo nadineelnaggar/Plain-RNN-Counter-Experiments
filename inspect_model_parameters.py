@@ -267,8 +267,8 @@ def inspect_lstm(model):
     print('\n')
     sigmoid_metric_ot = torch.sigmoid(torch.tensor(metric_ot, dtype=torch.float32)).item()
 
-    return weights_if.cpu().detach().numpy(), weights_ii.cpu().detach().numpy(), weights_ig.cpu().detach().numpy(), weights_io.cpu().detach().numpy(), biases_if.cpu().detach().numpy(), biases_ii.cpu().detach().numpy(), biases_ig.cpu().detach().numpy(), biases_io.cpu().detach().numpy(), \
-           weights_hf.cpu().detach().numpy(), weights_hi.cpu().detach().numpy(), weights_hg.cpu().detach().numpy(), weights_ho.cpu().detach().numpy(), biases_hf.cpu().detach().numpy(), biases_hi.cpu().detach().numpy(), biases_hg.cpu().detach().numpy(), biases_ho.cpu().detach().numpy(), \
+    return weights_if.item().cpu().detach().numpy(), weights_ii.item().cpu().detach().numpy(), weights_ig.item().cpu().detach().numpy(), weights_io.item().cpu().detach().numpy(), biases_if.item().cpu().detach().numpy(), biases_ii.item().cpu().detach().numpy(), biases_ig.item().cpu().detach().numpy(), biases_io.item().cpu().detach().numpy(), \
+           weights_hf.item().cpu().detach().numpy(), weights_hi.item().cpu().detach().numpy(), weights_hg.item().cpu().detach().numpy(), weights_ho.item().cpu().detach().numpy(), biases_hf.item().cpu().detach().numpy(), biases_hi.item().cpu().detach().numpy(), biases_hg.item().cpu().detach().numpy(), biases_ho.item().cpu().detach().numpy(), \
            metric_ft_1, metric_ft_1_best_case, metric_it_1, metric_it_1_best_case, metric_ctilde_open, metric_ctilde_open_worst_case, \
            metric_ctilde_close, metric_ctilde_close_worst_case, metric_ot, sigmoid_metric_ft_1_best, sigmoid_metric_ft_1_worst, \
            sigmoid_metric_it_1_best, sigmoid_metric_it_1_worst, tanh_metric_ctilde_open_best, tanh_metric_ctilde_open_worst, \
@@ -299,7 +299,7 @@ def inspect_rnn(model):
     metric_hidden_weight = weights_hh.item()
 
 
-    return weights_ih[0].item().cpu(), weights_ih[1].item().cpu(), biases_ih.item().cpu(), weights_hh.item().cpu(), biases_hh.item().cpu(), metric_inc_dec_ratio.cpu(), metric_hidden_weight.cpu()
+    return weights_ih[0].item().item().cpu(), weights_ih[1].item().item().cpu(), biases_ih.item().item().cpu(), weights_hh.item().item().cpu(), biases_hh.item().item().cpu(), metric_inc_dec_ratio.item().cpu(), metric_hidden_weight.item().cpu()
 
 
 
