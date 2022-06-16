@@ -319,6 +319,10 @@ def inspect_model_parameters():
     inverse_avg_val_losses = []
     inverse_avg_long_val_losses = []
 
+    weights_output_0 = []
+    weights_output_1 = []
+    biases_output = []
+
     if model_name=='VanillaLSTM':
         weights_ii = []
         weights_if = []
@@ -409,6 +413,17 @@ def inspect_model_parameters():
                 checkpt = torch.load(checkpoint_path)
                 checkpoint_model.load_state_dict(checkpt['model_state_dict'])
                 checkpoint_model.to(device)
+
+                for param in checkpoint_model.fc2.named_parameters():
+                    if 'weight' in param[0]:
+                        output_weight = param[1]
+                        weights_output_0.append(output_weight[0].item())
+                        weights_output_1.append(output_weight[1].item())
+                    elif 'bias' in param[0]:
+                        output_bias = param[1]
+                        biases_output.append(output_bias.item())
+
+
                 if model_name == 'VanillaLSTM':
                     print(model_name)
                     weight_if, weight_ii, weight_ig, weight_io, bias_if, bias_ii, bias_ig, bias_io, \
@@ -504,6 +519,16 @@ def inspect_model_parameters():
                              output_activation)
         model.load_state_dict(torch.load(mdl))
         model.to(device)
+
+        for param in model.fc2.named_parameters():
+            if 'weight' in param[0]:
+                output_weight = param[1]
+                weights_output_0.append(output_weight[0].item())
+                weights_output_1.append(output_weight[1].item())
+            elif 'bias' in param[0]:
+                output_bias = param[1]
+                biases_output.append(output_bias.item())
+
         if model_name=='VanillaLSTM':
             print(model_name)
             weight_if, weight_ii, weight_ig, weight_io, bias_if, bias_ii, bias_ig, bias_io, \
@@ -616,6 +641,9 @@ def inspect_model_parameters():
         df1['tanh_metrics_ctilde_open_worst_case'] = tanh_metrics_ctilde_open_worst_case
         df1['tanh_metrics_ctilde_close_best_case'] = tanh_metrics_ctilde_close_best_case
         df1['tanh_metrics_ctilde_close_worst_case'] = tanh_metrics_ctilde_close_worst_case
+        df1['weights_output_0']=weights_output_0
+        df1['weights_output_1']=weights_output_1
+        df1['biases_output']=biases_output
 
     elif model_name=='VanillaReLURNN':
         df1['weights_ih_0'] = weights_ih_0
@@ -625,6 +653,9 @@ def inspect_model_parameters():
         df1['biases_hh'] = biases_hh
         df1['metrics_inc_dec'] = metrics_inc_dec
         df1['metrics_hidden_weight'] = metrics_hidden_weight
+        df1['weights_output_0'] = weights_output_0
+        df1['weights_output_1'] = weights_output_1
+        df1['biases_output'] = biases_output
 
     writer = pd.ExcelWriter(excel_name, engine='xlsxwriter')
 
