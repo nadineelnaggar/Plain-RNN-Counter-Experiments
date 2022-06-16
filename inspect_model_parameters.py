@@ -491,12 +491,12 @@ def inspect_model_parameters():
                     # finish appending the rest to the arrays, do the same for non checkpoints, and for RNNs
 
         runs.append(run)
-        avg_train_losses.append(losses_train[num_epochs])
-        inverse_avg_train_losses.append(1 / losses_train[num_epochs])
-        avg_val_losses.append(losses_val[num_epochs])
-        inverse_avg_val_losses.append(1 / losses_val[num_epochs])
-        avg_long_val_losses.append(losses_long_val[num_epochs])
-        inverse_avg_long_val_losses.append(1 / losses_long_val[num_epochs])
+        avg_train_losses.append(losses_train[num_epochs-1])
+        inverse_avg_train_losses.append(1 / losses_train[num_epochs-1])
+        avg_val_losses.append(losses_val[num_epochs-1])
+        inverse_avg_val_losses.append(1 / losses_val[num_epochs-1])
+        avg_long_val_losses.append(losses_long_val[num_epochs-1])
+        inverse_avg_long_val_losses.append(1 / losses_long_val[num_epochs-1])
         epochs.append(num_epochs)
         
         mdl = modelname + 'run' + str(run) + '.pth'
