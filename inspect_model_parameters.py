@@ -295,11 +295,11 @@ def inspect_rnn(model):
 
     # metric_weight_ratio = weights_ih[0]/weights_ih[1]
     # metric_total_ratio = (weights_ih[0]+biases_ih+biases_hh)/weights_ih[1]
-    metric_inc_dec_ratio = ((weights_ih[0]+biases_hh+biases_ih)/(weights_ih[1]+biases_ih+biases_hh)).item()
+    metric_inc_dec_ratio = ((weights_ih[0][0]+biases_hh+biases_ih)/(weights_ih[0][1]+biases_ih+biases_hh)).item()
     metric_hidden_weight = weights_hh.item()
 
 
-    return weights_ih[0].item().item().cpu(), weights_ih[1].item().item().cpu(), biases_ih.item().item().cpu(), weights_hh.item().item().cpu(), biases_hh.item().item().cpu(), metric_inc_dec_ratio.item().cpu(), metric_hidden_weight.item().cpu()
+    return weights_ih[0][0].item().item().cpu(), weights_ih[0][1].item().item().cpu(), biases_ih.item().item().cpu(), weights_hh.item().item().cpu(), biases_hh.item().item().cpu(), metric_inc_dec_ratio.item().cpu(), metric_hidden_weight.item().cpu()
 
 
 
