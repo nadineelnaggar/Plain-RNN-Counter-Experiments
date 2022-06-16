@@ -321,7 +321,8 @@ def inspect_model_parameters():
 
     weights_output_0 = []
     weights_output_1 = []
-    biases_output = []
+    biases_output_0 = []
+    biases_output_1 = []
 
     if model_name=='VanillaLSTM':
         weights_ii = []
@@ -421,8 +422,8 @@ def inspect_model_parameters():
                         weights_output_1.append(output_weight[1].item())
                     elif 'bias' in param[0]:
                         output_bias = param[1]
-                        biases_output.append(output_bias.item())
-
+                        biases_output_0.append(output_bias[0].item())
+                        biases_output_1.append(output_bias[1].item())
 
                 if model_name == 'VanillaLSTM':
                     print(model_name)
@@ -527,7 +528,8 @@ def inspect_model_parameters():
                 weights_output_1.append(output_weight[1].item())
             elif 'bias' in param[0]:
                 output_bias = param[1]
-                biases_output.append(output_bias.item())
+                biases_output_0.append(output_bias[0].item())
+                biases_output_1.append(output_bias[1].item())
 
         if model_name=='VanillaLSTM':
             print(model_name)
@@ -643,7 +645,8 @@ def inspect_model_parameters():
         df1['tanh_metrics_ctilde_close_worst_case'] = tanh_metrics_ctilde_close_worst_case
         df1['weights_output_0']=weights_output_0
         df1['weights_output_1']=weights_output_1
-        df1['biases_output']=biases_output
+        df1['biases_output_0']=biases_output_0
+        df1['biases_output_1'] = biases_output_1
 
     elif model_name=='VanillaReLURNN':
         df1['weights_ih_0'] = weights_ih_0
@@ -655,7 +658,8 @@ def inspect_model_parameters():
         df1['metrics_hidden_weight'] = metrics_hidden_weight
         df1['weights_output_0'] = weights_output_0
         df1['weights_output_1'] = weights_output_1
-        df1['biases_output'] = biases_output
+        df1['biases_output_0'] = biases_output_0
+        df1['biases_output_1'] = biases_output_1
 
     writer = pd.ExcelWriter(excel_name, engine='xlsxwriter')
 
