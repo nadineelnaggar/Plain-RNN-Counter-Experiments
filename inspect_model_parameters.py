@@ -199,7 +199,7 @@ def inspect_lstm(model):
     print('weight_hf = ', weights_hf)
     print('bias_hf = ', biases_hf)
 
-    metric_ft_1 = min(weights_if[0].item(), weights_if[1].item()) + biases_if.item() + biases_hf.item() - torch.abs(weights_hf[run]).item()
+    metric_ft_1 = min(weights_if[0].item(), weights_if[1].item()) + biases_if.item() + biases_hf.item() - torch.abs(weights_hf).item()
     # metrics_ft.append(metric_ft_1)
     print('metric_ft_1 = ', metric_ft_1)
     print('sigmoid(metric_ft_1) = ', torch.sigmoid(torch.tensor(metric_ft_1, dtype=torch.float32)))
