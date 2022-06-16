@@ -269,10 +269,10 @@ def inspect_lstm(model):
 
     return weights_if.cpu(), weights_ii.cpu(), weights_ig.cpu(), weights_io.cpu(), biases_if.cpu(), biases_ii.cpu(), biases_ig.cpu(), biases_io.cpu(), \
            weights_hf.cpu(), weights_hi.cpu(), weights_hg.cpu(), weights_ho.cpu(), biases_hf.cpu(), biases_hi.cpu(), biases_hg.cpu(), biases_ho.cpu(), \
-           metric_ft_1.cpu(), metric_ft_1_best_case.cpu(), metric_it_1.cpu(), metric_it_1_best_case.cpu(), metric_ctilde_open.cpu(), metric_ctilde_open_worst_case.cpu(), \
-           metric_ctilde_close.cpu(), metric_ctilde_close_worst_case.cpu(), metric_ot.cpu(), sigmoid_metric_ft_1_best.cpu(), sigmoid_metric_ft_1_worst.cpu(), \
-           sigmoid_metric_it_1_best.cpu(), sigmoid_metric_it_1_worst.cpu(), tanh_metric_ctilde_open_best.cpu(), tanh_metric_ctilde_open_worst.cpu(), \
-           tanh_metric_ctilde_close_best.cpu(), tanh_metric_ctilde_close_worst.cpu(), sigmoid_metric_ot.cpu()
+           metric_ft_1, metric_ft_1_best_case, metric_it_1, metric_it_1_best_case, metric_ctilde_open, metric_ctilde_open_worst_case, \
+           metric_ctilde_close, metric_ctilde_close_worst_case, metric_ot, sigmoid_metric_ft_1_best, sigmoid_metric_ft_1_worst, \
+           sigmoid_metric_it_1_best, sigmoid_metric_it_1_worst, tanh_metric_ctilde_open_best, tanh_metric_ctilde_open_worst, \
+           tanh_metric_ctilde_close_best, tanh_metric_ctilde_close_worst, sigmoid_metric_ot
 
 
 def inspect_rnn(model):
