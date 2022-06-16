@@ -267,8 +267,8 @@ def inspect_lstm(model):
     print('\n')
     sigmoid_metric_ot = torch.sigmoid(torch.tensor(metric_ot, dtype=torch.float32)).item()
 
-    return weights_if.cpu(), weights_ii.cpu(), weights_ig.cpu(), weights_io.cpu(), biases_if.cpu(), biases_ii.cpu(), biases_ig.cpu(), biases_io.cpu(), \
-           weights_hf.cpu(), weights_hi.cpu(), weights_hg.cpu(), weights_ho.cpu(), biases_hf.cpu(), biases_hi.cpu(), biases_hg.cpu(), biases_ho.cpu(), \
+    return weights_if.cpu().detach().numpy(), weights_ii.cpu().detach().numpy(), weights_ig.cpu().detach().numpy(), weights_io.cpu().detach().numpy(), biases_if.cpu().detach().numpy(), biases_ii.cpu().detach().numpy(), biases_ig.cpu().detach().numpy(), biases_io.cpu().detach().numpy(), \
+           weights_hf.cpu().detach().numpy(), weights_hi.cpu().detach().numpy(), weights_hg.cpu().detach().numpy(), weights_ho.cpu().detach().numpy(), biases_hf.cpu().detach().numpy(), biases_hi.cpu().detach().numpy(), biases_hg.cpu().detach().numpy(), biases_ho.cpu().detach().numpy(), \
            metric_ft_1, metric_ft_1_best_case, metric_it_1, metric_it_1_best_case, metric_ctilde_open, metric_ctilde_open_worst_case, \
            metric_ctilde_close, metric_ctilde_close_worst_case, metric_ot, sigmoid_metric_ft_1_best, sigmoid_metric_ft_1_worst, \
            sigmoid_metric_it_1_best, sigmoid_metric_it_1_worst, tanh_metric_ctilde_open_best, tanh_metric_ctilde_open_worst, \
