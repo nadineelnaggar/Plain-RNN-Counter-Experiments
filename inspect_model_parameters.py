@@ -497,7 +497,7 @@ def inspect_model_parameters():
         inverse_avg_val_losses.append(1 / losses_val[num_epochs-1])
         avg_long_val_losses.append(losses_long_val[num_epochs-1])
         inverse_avg_long_val_losses.append(1 / losses_long_val[num_epochs-1])
-        epochs.append(num_epochs)
+        epochs.append(num_epochs-1)
         
         mdl = modelname + 'run' + str(run) + '.pth'
         model = select_model(model_name, input_size, hidden_size, num_layers, batch_size, num_classes,
