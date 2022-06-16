@@ -76,9 +76,9 @@ elif runtime=='colab':
 
 prefix = path+'INFERENCE_'+dataset_type+'_'+str(checkpoint_step)+'checkpoint_step_upto'+str(num_checkpoints)+'checkpoints_'
 
-plot_train_loss = prefix+'log_inverse_avg_train_loss_FPF_linear_regression.png'
-plot_val_loss = prefix+'log_inverse_avg_val_loss_FPF_linear_regression.png'
-plot_long_loss = prefix+'_inverse_avg_long_loss_FPF_linear_regression.png'
+plot_train_loss = prefix+'LINEAR_REGRESSION_log_inverse_avg_train_loss_FPF.png'
+plot_val_loss = prefix+'LINEAR_REGRESSION_log_inverse_avg_val_loss_FPF.png'
+plot_long_loss = prefix+'LINEAR_REGRESSION_inverse_avg_long_loss_FPF.png'
 
 # excel_name_inference = path+ 'Dyck1_' + task + '_' + str(
 #         num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' +str(batch_size) +'_batch_size_'+'_' + str(
