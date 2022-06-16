@@ -160,10 +160,10 @@ def inspect_lstm(model):
 
         elif 'bias_hh' in param[0]:
             biases_hh = param[1]
-            biases_hi = biases_hh[0]
-            biases_hf = biases_hh[1]
-            biases_hg = biases_hh[2]
-            biases_ho = biases_hh[3]
+            biases_hi = biases_hh[0].item()
+            biases_hf = biases_hh[1].item()
+            biases_hg = biases_hh[2].item()
+            biases_ho = biases_hh[3].item()
 
         elif 'bias_ih' in param[0]:
             biases_ih = param[1]
