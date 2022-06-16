@@ -268,7 +268,7 @@ def inspect_lstm(model):
     sigmoid_metric_ot = torch.sigmoid(torch.tensor(metric_ot, dtype=torch.float32)).item()
 
     return weights_if.item().cpu().detach().numpy(), weights_ii.item().cpu().detach().numpy(), weights_ig.item().cpu().detach().numpy(), weights_io.item().cpu().detach().numpy(), biases_if.item().cpu().detach().numpy(), biases_ii.item().cpu().detach().numpy(), biases_ig.item().cpu().detach().numpy(), biases_io.item().cpu().detach().numpy(), \
-           weights_hf.item().cpu().detach().numpy().item(), weights_hi.item().cpu().detach().numpy(), weights_hg.item().cpu().detach().numpy(), weights_ho.item().cpu().detach().numpy(), biases_hf.item().cpu().detach().numpy(), biases_hi.item().cpu().detach().numpy(), biases_hg.item().cpu().detach().numpy(), biases_ho.item().cpu().detach().numpy(), \
+           weights_hf.item().cpu().detach().numpy(), weights_hi.item().cpu().detach().numpy(), weights_hg.item().cpu().detach().numpy(), weights_ho.item().cpu().detach().numpy(), biases_hf.item().cpu().detach().numpy(), biases_hi.item().cpu().detach().numpy(), biases_hg.item().cpu().detach().numpy(), biases_ho.item().cpu().detach().numpy(), \
            metric_ft_1, metric_ft_1_best_case, metric_it_1, metric_it_1_best_case, metric_ctilde_open, metric_ctilde_open_worst_case, \
            metric_ctilde_close, metric_ctilde_close_worst_case, metric_ot, sigmoid_metric_ft_1_best, sigmoid_metric_ft_1_worst, \
            sigmoid_metric_it_1_best, sigmoid_metric_it_1_worst, tanh_metric_ctilde_open_best, tanh_metric_ctilde_open_worst, \
