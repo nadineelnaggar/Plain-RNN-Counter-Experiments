@@ -150,6 +150,10 @@ def plot_linear_regression():
 
 
     res_train = stats.linregress(log_inverse_train_loss,fpfs)
+    print('r value for train = ',res_train.rvalue)
+    print('p value for train = ', res_train.pvalue)
+    print('coefficient value for train = ', res_train.slope)
+    print(res_train)
     plt.subplots()
     plt.plot(log_inverse_train_loss, fpfs, 'o', label='log of inverse train loss compared to Avg FPF')
     plt.plot(log_inverse_train_loss, res_train.intercept + res_train.slope*log_inverse_train_loss, 'r', label='fitted line')
@@ -161,6 +165,10 @@ def plot_linear_regression():
     plt.close()
 
     res_val = stats.linregress(log_inverse_val_loss, fpfs)
+    print('r value for val = ', res_val.rvalue)
+    print('p value for val = ', res_val.pvalue)
+    print('coefficient value for val = ', res_val.slope)
+    print(res_val)
     plt.subplots()
     plt.plot(log_inverse_val_loss, fpfs, 'o', label='log of inverse val loss compared to Avg FPF')
     plt.plot(log_inverse_val_loss, res_val.intercept + res_val.slope * log_inverse_val_loss, 'r',
@@ -173,6 +181,10 @@ def plot_linear_regression():
     plt.close()
 
     res_long = stats.linregress(log_inverse_long_loss, fpfs)
+    print('r value for long = ', res_long.rvalue)
+    print('p value for long = ', res_long.pvalue)
+    print('coefficient value for long = ', res_long.slope)
+    print(res_long)
     plt.subplots()
     plt.plot(log_inverse_long_loss, fpfs, 'o', label='log of inverse long validation loss compared to Avg FPF')
     plt.plot(log_inverse_long_loss, res_long.intercept + res_long.slope * log_inverse_long_loss, 'r',
