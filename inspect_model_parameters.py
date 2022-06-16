@@ -299,7 +299,7 @@ def inspect_rnn(model):
     metric_hidden_weight = weights_hh.item()
 
 
-    return weights_ih[0][0].item(), weights_ih[0][1].item(), biases_ih.item(), weights_hh.item(), biases_hh.item(), metric_inc_dec_ratio.item(), metric_hidden_weight.item()
+    return weights_ih[0][0].item(), weights_ih[0][1].item(), biases_ih.item(), weights_hh.item(), biases_hh.item(), metric_inc_dec_ratio, metric_hidden_weight
 
 
 
