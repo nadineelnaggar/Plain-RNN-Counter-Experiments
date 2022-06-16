@@ -179,7 +179,7 @@ def inspect_lstm(model):
     print('weight_hi = ', weights_hi)
     print('bias_hi = ', biases_hi)
 
-    metric_it_1 = min(weights_ii[0].item(), weights_ii[1].item()) + biases_ii.item() + biases_hi.item() - torch.abs(weights_hi[run]).item()
+    metric_it_1 = min(weights_ii[0].item(), weights_ii[1].item()) + biases_ii.item() + biases_hi.item() - torch.abs(weights_hi).item()
 
     # metrics_it_1.append(metric_it_1)
     print('metric_it_1 = ', metric_it_1)
