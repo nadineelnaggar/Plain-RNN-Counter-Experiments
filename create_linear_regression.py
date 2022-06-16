@@ -76,6 +76,9 @@ elif runtime=='colab':
 
 prefix = path+'INFERENCE_'+dataset_type+'_'+str(checkpoint_step)+'checkpoint_step_upto'+str(num_checkpoints)+'checkpoints_'
 
+plot_train_loss = prefix+'log_inverse_avg_train_loss_FPF_linear_regression.png'
+plot_val_loss = prefix+'log_inverse_avg_val_loss_FPF_linear_regression.png'
+plot_long_loss = prefix+'_inverse_avg_long_loss_FPF_linear_regression.png'
 
 # excel_name_inference = path+ 'Dyck1_' + task + '_' + str(
 #         num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' +str(batch_size) +'_batch_size_'+'_' + str(
@@ -151,7 +154,28 @@ def plot_linear_regression():
     plt.plot(log_inverse_train_loss, fpfs, 'o', label='log of inverse train loss compared to Avg FPF')
     plt.plot(log_inverse_train_loss, res_train.intercept + res_train.slope*log_inverse_train_loss, 'r', label='fitted line')
     plt.legend()
+    plt.savefig(plot_train_loss)
     plt.show()
+    plt.close()
 
+    res_val = stats.linregress(log_inverse_val_loss, fpfs)
+    plt.subplots()
+    plt.plot(log_inverse_val_loss, fpfs, 'o', label='log of inverse val loss compared to Avg FPF')
+    plt.plot(log_inverse_val_loss, res_val.intercept + res_val.slope * log_inverse_val_loss, 'r',
+             label='fitted line')
+    plt.legend()
+    plt.savefig(plot_val_loss)
+    plt.show()
+    plt.close()
 
+    res_long = stats.linregress(log_inverse_long_loss, fpfs)
+    plt.subplots()
+    plt.plot(log_inverse_long_loss, fpfs, 'o', label='log of inverse long loss compared to Avg FPF')
+    plt.plot(log_inverse_long_loss, res_long.intercept + res_long.slope * log_inverse_long_loss, 'r',
+             label='fitted line')
+    plt.legend()
+    plt.savefig(plot_long_loss)
+    plt.show()
+    plt.close()
+    
 plot_linear_regression()
