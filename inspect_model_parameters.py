@@ -522,7 +522,7 @@ def inspect_model_parameters():
             biases_ig.append(bias_ig)
             biases_io.append(bias_io)
             weights_hf.append(weight_hf)
-            weights_hi.append(weights_hi)
+            weights_hi.append(weight_hi)
             weights_hg.append(weight_hg)
             weights_ho.append(weight_ho)
             biases_hf.append(bias_hf)
