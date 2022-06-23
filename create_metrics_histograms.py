@@ -89,9 +89,9 @@ def read_sheets():
     return df
 
 frames=read_sheets()
-# print(frames.head())
-print(frames['first point of failure for each incorrect sequence'].head())
-print(len(frames['first point of failure for each incorrect sequence']))
+# # print(frames.head())
+# print(frames['first point of failure for each incorrect sequence'].head())
+# print(len(frames['first point of failure for each incorrect sequence']))
 
 def create_histograms_lstm_metrics():
     # different models, all sequences (one histogram per model)
@@ -103,7 +103,7 @@ def create_histograms_lstm_metrics():
     # txt = df['first point of failure for each incorrect sequence'][0]
     # all_fpf=[int(s) for s in txt.split(', ') if s.isdigit()]
 
-    avg_fpf = df['average first point of failure (2000 tokens)']
+    # avg_fpf = df['average first point of failure (2000 tokens)']
     
     metrics_ft_best_case = df['metrics_ft_best_case']
     metrics_ft_worst_case = df['metrics_ft_worst_case']
