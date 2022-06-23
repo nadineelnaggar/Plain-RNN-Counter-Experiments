@@ -212,7 +212,18 @@ def create_histograms_lstm_metrics():
 
 
 def create_histograms_relu_metrics():
-    pass
+    df = read_sheets()
+    metrics_inc_dec = df['metrics_inc_dec']
+    metrics_hidden_weight = df['metrics_hidden_weight']
+
+    plt.subplots()
+    plt.hist(metrics_inc_dec,alpha=0.5,label='increment:decrement')
+    plt.hist(metrics_hidden_weight,alpha=0.5,label='hidden weight')
+    plt.legend(loc='upper right')
+    plt.savefig(path+'_ReLURNN_histogram_metrics.png')
+    plt.show()
+    plt.close()
+
 
 
 if model_name=='VanillaLSTM':
