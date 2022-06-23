@@ -93,7 +93,7 @@ frames=read_sheets()
 print(frames['first point of failure for each incorrect sequence'].head())
 print(len(frames['first point of failure for each incorrect sequence']))
 
-def create_histograms_lstm():
+def create_histograms_lstm_metrics():
     # different models, all sequences (one histogram per model)
 
     df = read_sheets()
@@ -104,37 +104,118 @@ def create_histograms_lstm():
     # all_fpf=[int(s) for s in txt.split(', ') if s.isdigit()]
 
     avg_fpf = df['average first point of failure (2000 tokens)']
+    
+    metrics_ft_best_case = df['metrics_ft_best_case']
+    metrics_ft_worst_case = df['metrics_ft_worst_case']
+    metrics_it_best_case = df['metrics_it_1_best_case']
+    metrics_it_worst_case = df['metrics_it_1_worst_case']
+    metrics_ctilde_open_best_case = df['metrics_ctilde_open_best_case']
+    metrics_ctilde_open_worst_case = df['metrics_ctilde_open_worst_case']
+    metrics_ctilde_close_best_case = df['metrics_ctilde_close_best_case']
+    metrics_ctilde_close_worst_case = df['metrics_ctilde_close_worst_case']
+    metrics_ot = df['metrics_ot']
+    sigmoid_metrics_ft_best_case = df['sigmoid_metrics_ft_best_case']
+    sigmoid_metrics_ft_worst_case = df['sigmoid_metrics_ft_worst_case']
+    sigmoid_metrics_it_best_case = df['sigmoid_metrics_it_best_case']
+    sigmoid_metrics_it_worst_case = df['sigmoid_metrics_it_worst_case']
+    sigmoid_metrics_ot = df['sigmoid_metrics_ot']
+    tanh_metrics_ctilde_open_best_case = df['tanh_metrics_ctilde_open_best_case']
+    tanh_metrics_ctilde_open_worst_case = df['tanh_metrics_ctilde_open_worst_case']
+    tanh_metrics_ctilde_close_best_case = df['tanh_metrics_ctilde_close_best_case']
+    tanh_metrics_ctilde_close_worst_case = df['tanh_metrics_ctilde_close_worst_case']
+    
 
-    hist_bins = []
-    for i in range(1000):
-        hist_bins.append(i)
+    # hist_bins = []
+    # for i in range(1000):
+    #     hist_bins.append(i)
 
-    fpfs = []
-    for i in range(5):
-        max_depth = df['max depth for incorrect sequences (2000 tokens)'][i]
-        print(type(max_depth))
-        print(max_depth[:20])
-        txt = df['first point of failure for each incorrect sequence'][i]
-        txt = txt.replace('[', '')
-        txt = txt.replace(']', '')
-        all_fpf = [int(s) for s in txt.split(', ') if s.isdigit()]
-        plt.subplots()
-        bins = []
+    plt.subplots()
+    plt.hist(metrics_ft_best_case, alpha=0.5, label='best case')
+    plt.hist(metrics_ft_worst_case, alpha=0.5, label='worst case')
+    plt.legend(loc='upper right')
+    plt.savefig(path+"_"+model_name+'_'+'histogram_metrics_ft.png')
+    plt.show()
+    plt.close()
 
-        fpf = avg_fpf[i]
-        fpfs.append(fpf)
-        max_depths = max_depth[i]
-        # for k in range(len(fpfs)):
-        #     bins.append(k)
-        # for j in range(min(max_depth[j]), max(max_depth[j])+1):
-        #     if max_depth[j] not in bins:
-        #         bins.append(max_depth[j])
-        # plt.hist(x=max_depth[i], range=[0,1000])
-        # plt.hist(fpfs, bins=hist_bins,range=[0,max(max_depth[i])])
-        plt.hist(all_fpf, bins=range(0,2001,50))
-        plt.xlabel('First point of failure for each incorrect sequence')
-        plt.ylabel('Number of incorrect sequences')
-        # plt.savefig(path+'histogram one model multiple sequences '+str(i)+'.png')
-        plt.savefig(prefix + 'histogram one model multiple sequences ' + str(i) + '.png')
-        plt.show()
-        plt.close()
+    plt.subplots()
+    plt.hist(metrics_it_best_case, alpha=0.5, label='best case')
+    plt.hist(metrics_it_worst_case, alpha=0.5, label='worst case')
+    plt.legend(loc='upper right')
+    plt.savefig(path + "_" + model_name + '_' + 'histogram_metrics_it.png')
+    plt.show()
+    plt.close()
+
+    plt.subplots()
+    plt.hist(metrics_ctilde_open_best_case, alpha=0.5, label='best case')
+    plt.hist(metrics_ctilde_open_worst_case, alpha=0.5, label='worst case')
+    plt.legend(loc='upper right')
+    plt.savefig(path + "_" + model_name + '_' + 'histogram_metrics_ctilde_open.png')
+    plt.show()
+    plt.close()
+
+    plt.subplots()
+    plt.hist(metrics_ctilde_close_best_case, alpha=0.5)
+    plt.hist(metrics_ctilde_close_worst_case, alpha=0.5)
+    plt.legend(loc='upper right')
+    plt.savefig(path + "_" + model_name + '_' + 'histogram_metrics_ctilde_close.png')
+    plt.show()
+    plt.close()
+
+    plt.subplots()
+    plt.hist(metrics_ot, alpha=0.5)
+    # plt.hist(metrics_ctilde_close_worst_case, alpha=0.5)
+    plt.legend(loc='upper right')
+    plt.savefig(path + "_" + model_name + '_' + 'histogram_metrics_ot.png')
+    plt.show()
+    plt.close()
+#################################
+    plt.subplots()
+    plt.hist(sigmoid_metrics_ft_best_case, alpha=0.5, label='best case')
+    plt.hist(sigmoid_metrics_ft_worst_case, alpha=0.5, label='worst case')
+    plt.legend(loc='upper right')
+    plt.savefig(path + "_" + model_name + '_' + 'histogram_sigmoid_metrics_ft.png')
+    plt.show()
+    plt.close()
+
+    plt.subplots()
+    plt.hist(sigmoid_metrics_it_best_case, alpha=0.5, label='best case')
+    plt.hist(sigmoid_metrics_it_worst_case, alpha=0.5, label='worst case')
+    plt.legend(loc='upper right')
+    plt.savefig(path + "_" + model_name + '_' + 'histogram_sigmoid_metrics_it.png')
+    plt.show()
+    plt.close()
+    
+    plt.subplots()
+    plt.hist(sigmoid_metrics_ot, alpha=0.5)
+    # plt.hist(sigmoid_metrics_ctilde_close_worst_case, alpha=0.5)
+    plt.legend(loc='upper right')
+    plt.savefig(path + "_" + model_name + '_' + 'histogram_sigmoid_metrics_ot.png')
+    plt.show()
+    plt.close()
+
+    plt.subplots()
+    plt.hist(tanh_metrics_ctilde_open_best_case, alpha=0.5, label='best case')
+    plt.hist(tanh_metrics_ctilde_open_worst_case, alpha=0.5, label='worst case')
+    plt.legend(loc='upper right')
+    plt.savefig(path + "_" + model_name + '_' + 'histogram_tanh_metrics_ctilde_open.png')
+    plt.show()
+    plt.close()
+
+    plt.subplots()
+    plt.hist(tanh_metrics_ctilde_close_best_case, alpha=0.5)
+    plt.hist(tanh_metrics_ctilde_close_worst_case, alpha=0.5)
+    plt.legend(loc='upper right')
+    plt.savefig(path + "_" + model_name + '_' + 'histogram_tanh_metrics_ctilde_close.png')
+    plt.show()
+    plt.close()
+
+
+
+def create_histograms_relu_metrics():
+    pass
+
+
+if model_name=='VanillaLSTM':
+    create_histograms_lstm_metrics()
+elif model_name=='VanillaReLURNN':
+    create_histograms_relu_metrics()
