@@ -116,6 +116,7 @@ def create_histogram():
 
     if model_name == 'VanillaLSTM':
         print(df['avg training losses'][0].dtype)
+        print(df['avg training losses'][0])
         print(df.loc(df['avg training losses'] <= 10e-10).head())
         df = df.loc(df['avg training losses'] <= 10e-10)
         print(df.head())
