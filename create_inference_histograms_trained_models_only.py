@@ -115,7 +115,7 @@ def create_histogram():
     # df = read_sheets()
 
     if model_name == 'VanillaLSTM':
-        df = df.loc(df['avg training losses'] <= 10E-10)
+        df = df.loc(df['avg training losses'] <= 10e-10)
         print(df.head())
     elif model_name == 'VanillaReLURNN':
         df = df.loc(df['avg training losses'] <= 0.015)
