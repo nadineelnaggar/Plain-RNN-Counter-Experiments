@@ -115,10 +115,10 @@ def create_histogram():
     # df = read_sheets()
 
     if model_name == 'VanillaLSTM':
-        print(df['avg training losses'][20].dtype)
-        print(df['avg training losses'][20])
+        # print(df['avg training losses'][20].dtype)
+        # print(df['avg training losses'][20])
         df.drop(df[df['avg training losses'] > 10e-10].index, inplace=True)
-        print(df.head())
+        print(len(df))
         # print(df.loc(df['avg training losses'] <= 10e-10))
         # df = df.loc(df['avg training losses'] <= 10e-10)
         # print(df.head())
