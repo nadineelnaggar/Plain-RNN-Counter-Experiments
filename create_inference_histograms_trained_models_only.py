@@ -232,7 +232,7 @@ def create_histogram_one_sequence_multiple_models():
         timestep_depths = []
         max_depth, timestep_depth = get_timestep_depths(dataset.x[i])
         timestep_depths.append(timestep_depth)
-        for j in range(num_models-1):
+        for j in range(num_models):
             txt = df['first point of failure for each incorrect sequence'][j]
             txt = txt.replace('[','')
             txt = txt.replace(']','')
