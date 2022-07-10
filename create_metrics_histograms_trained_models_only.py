@@ -98,7 +98,8 @@ def create_histograms_lstm_metrics():
     # different models, all sequences (one histogram per model)
 
     df = read_sheets()
-    df = df.loc(df['avg training losses']<=10E-10)
+    # df = df.loc(df['avg training losses']<=10E-10)
+    df.drop(df[df['avg training losses'] > 10e-10].index, inplace=True)
     # max_depth = df['max depth for incorrect sequences (2000 tokens)'][0]
     # print(type(max_depth))
     # print(max_depth[:20])
@@ -213,7 +214,8 @@ def create_histograms_lstm_metrics():
 
 def create_histograms_relu_metrics():
     df = read_sheets()
-    df = df.loc(df['avg training losses']<=0.015)
+    # df = df.loc(df['avg training losses']<=0.015)
+    df.drop(df[df['avg training losses'] > 0.015].index, inplace=True)
     metrics_inc_dec = df['metrics_inc_dec']
     metrics_hidden_weight = df['metrics_hidden_weight']
 
