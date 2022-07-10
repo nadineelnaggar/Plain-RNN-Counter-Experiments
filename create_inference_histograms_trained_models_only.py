@@ -215,6 +215,7 @@ def create_histogram_one_sequence_multiple_models():
     
     
     num_models = len(df) #number of rows in the dataframe = number of models
+    print(num_models)
 
     #read relevant columns from the dataframe
 
