@@ -233,13 +233,14 @@ def create_histogram_one_sequence_multiple_models():
         max_depth, timestep_depth = get_timestep_depths(dataset.x[i])
         timestep_depths.append(timestep_depth)
         for j in range(num_models):
-            txt = df['first point of failure for each incorrect sequence'][j]
-            txt = txt.replace('[','')
-            txt = txt.replace(']','')
-            all_fpf = [int(s) for s in txt.split(', ') if s.isdigit()]
-            print('all_fpf = ',all_fpf)
-            print('len(all_fpf) = ',len(all_fpf))
             try:
+                txt = df['first point of failure for each incorrect sequence'][j]
+                txt = txt.replace('[','')
+                txt = txt.replace(']','')
+                all_fpf = [int(s) for s in txt.split(', ') if s.isdigit()]
+                print('all_fpf = ',all_fpf)
+                print('len(all_fpf) = ',len(all_fpf))
+            # try:
                 fpfs.append(all_fpf[i])
             except:
                 IndexError
