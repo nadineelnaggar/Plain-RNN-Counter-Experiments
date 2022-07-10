@@ -154,8 +154,8 @@ def create_histogram():
             fpf = avg_fpf[i]
             fpfs.append(fpf)
             max_depths = max_depth[i]
-        except:
-            IndexError
+        # except:
+        #     IndexError
         # for k in range(len(fpfs)):
         #     bins.append(k)
         # for j in range(min(max_depth[j]), max(max_depth[j])+1):
@@ -163,14 +163,16 @@ def create_histogram():
         #         bins.append(max_depth[j])
         # plt.hist(x=max_depth[i], range=[0,1000])
         # plt.hist(fpfs, bins=hist_bins,range=[0,max(max_depth[i])])
-        plt.subplots()
-        plt.hist(all_fpf, bins=range(0,2001,50))
-        plt.xlabel('First point of failure for each incorrect sequence')
-        plt.ylabel('Number of incorrect sequences')
-        # plt.savefig(path+'histogram one model multiple sequences '+str(i)+'_TRAINED_MODELS_ONLY.png')
-        plt.savefig(prefix + 'histogram one model multiple sequences ' + str(i) + '_TRAINED_MODELS_ONLY.png')
-        plt.show()
-        plt.close()
+            plt.subplots()
+            plt.hist(all_fpf, bins=range(0,2001,50))
+            plt.xlabel('First point of failure for each incorrect sequence')
+            plt.ylabel('Number of incorrect sequences')
+            # plt.savefig(path+'histogram one model multiple sequences '+str(i)+'_TRAINED_MODELS_ONLY.png')
+            plt.savefig(prefix + 'histogram one model multiple sequences ' + str(i) + '_TRAINED_MODELS_ONLY.png')
+            plt.show()
+            plt.close()
+        except:
+            IndexError
 
 # create_histogram()
 
