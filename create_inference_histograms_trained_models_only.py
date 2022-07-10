@@ -208,6 +208,7 @@ def create_histogram_one_sequence_multiple_models():
         # df = df.loc(df['avg training losses'] <= 10E-10)
         df.drop(df[df['avg training losses'] > 10e-10].index, inplace=True)
         print(df)
+        print(len(df))
     elif model_name=='VanillaReLURNN':
         # df = df.loc(df['avg training losses'] <= 0.015)
         df.drop(df[df['avg training losses'] > 0.015].index, inplace=True)
