@@ -126,6 +126,9 @@ def create_histogram():
         # df = df.loc(df['avg training losses'] <= 0.015)
         df.drop(df[df['avg training losses'] > 0.015].index, inplace=True)
         print(len(df))
+    elif model_name=='VanillaGRU':
+        # df = df.loc(df['avg training losses'] <= 0.015)
+        df.drop(df[df['avg training losses'] > 0.001].index, inplace=True)
     # max_depth = df['max depth for incorrect sequences (2000 tokens)'][0]
     # print(type(max_depth))
     # print(max_depth[:20])
@@ -219,6 +222,9 @@ def create_histogram_one_sequence_multiple_models():
     elif model_name=='VanillaReLURNN':
         # df = df.loc(df['avg training losses'] <= 0.015)
         df.drop(df[df['avg training losses'] > 0.015].index, inplace=True)
+    elif model_name=='VanillaGRU':
+        # df = df.loc(df['avg training losses'] <= 0.015)
+        df.drop(df[df['avg training losses'] > 0.001].index, inplace=True)
     
     
     num_models = len(df) #number of rows in the dataframe = number of models
