@@ -140,19 +140,22 @@ def create_histogram():
 
     fpfs = []
     for i in range(5):
-        max_depth = df['max depth for incorrect sequences (2000 tokens)'][i]
-        print(type(max_depth))
-        print(max_depth[:20])
-        txt = df['first point of failure for each incorrect sequence'][i]
-        txt = txt.replace('[', '')
-        txt = txt.replace(']', '')
-        all_fpf = [int(s) for s in txt.split(', ') if s.isdigit()]
-        plt.subplots()
-        bins = []
+        try:
+            max_depth = df['max depth for incorrect sequences (2000 tokens)'][i]
+            print(type(max_depth))
+            print(max_depth[:20])
+            txt = df['first point of failure for each incorrect sequence'][i]
+            txt = txt.replace('[', '')
+            txt = txt.replace(']', '')
+            all_fpf = [int(s) for s in txt.split(', ') if s.isdigit()]
+            # plt.subplots()
+            bins = []
 
-        fpf = avg_fpf[i]
-        fpfs.append(fpf)
-        max_depths = max_depth[i]
+            fpf = avg_fpf[i]
+            fpfs.append(fpf)
+            max_depths = max_depth[i]
+        except:
+            IndexError
         # for k in range(len(fpfs)):
         #     bins.append(k)
         # for j in range(min(max_depth[j]), max(max_depth[j])+1):
@@ -160,6 +163,7 @@ def create_histogram():
         #         bins.append(max_depth[j])
         # plt.hist(x=max_depth[i], range=[0,1000])
         # plt.hist(fpfs, bins=hist_bins,range=[0,max(max_depth[i])])
+        plt.subplots()
         plt.hist(all_fpf, bins=range(0,2001,50))
         plt.xlabel('First point of failure for each incorrect sequence')
         plt.ylabel('Number of incorrect sequences')
