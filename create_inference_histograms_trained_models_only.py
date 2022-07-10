@@ -123,8 +123,9 @@ def create_histogram():
         # df = df.loc(df['avg training losses'] <= 10e-10)
         # print(df.head())
     elif model_name == 'VanillaReLURNN':
-        df = df.loc(df['avg training losses'] <= 0.015)
-        
+        # df = df.loc(df['avg training losses'] <= 0.015)
+        df.drop(df[df['avg training losses'] > 0.015].index, inplace=True)
+        print(len(df))
     # max_depth = df['max depth for incorrect sequences (2000 tokens)'][0]
     # print(type(max_depth))
     # print(max_depth[:20])
@@ -288,7 +289,7 @@ def create_histogram_one_sequence_multiple_models():
     #     plt.show()
     #     plt.close()
 
-# create_histogram()
+create_histogram()
 create_histogram_one_sequence_multiple_models()
 
 modelname = path+ 'Dyck1_' + task + '_' + str(
