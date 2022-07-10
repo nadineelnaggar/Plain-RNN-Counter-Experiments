@@ -205,9 +205,11 @@ def create_histogram_one_sequence_multiple_models():
     df = read_sheets()
     
     if model_name=='VanillaLSTM':
-        df = df.loc(df['avg training losses'] <= 10E-10)
+        # df = df.loc(df['avg training losses'] <= 10E-10)
+        df.drop(df[df['avg training losses'] > 10e-10].index, inplace=True)
     elif model_name=='VanillaReLURNN':
-        df = df.loc(df['avg training losses'] <= 0.015)
+        # df = df.loc(df['avg training losses'] <= 0.015)
+        df.drop(df[df['avg training losses'] > 0.015].index, inplace=True)
     
     
     num_models = len(df) #number of rows in the dataframe = number of models
@@ -282,7 +284,7 @@ def create_histogram_one_sequence_multiple_models():
     #     plt.show()
     #     plt.close()
 
-create_histogram()
+# create_histogram()
 create_histogram_one_sequence_multiple_models()
 
 modelname = path+ 'Dyck1_' + task + '_' + str(
