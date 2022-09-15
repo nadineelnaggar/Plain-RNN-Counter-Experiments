@@ -109,9 +109,12 @@ Q_VAL = 0.25
 
 epsilon=0.5
 
-train_size = 10000
-test_size = 5000
-long_size = 5000
+# train_size = 10000
+# test_size = 5000
+# long_size = 5000
+train_size = 1000
+test_size = 500
+long_size = 500
 
 Dyck = DyckLanguage(NUM_PAR, P_VAL, Q_VAL)
 
