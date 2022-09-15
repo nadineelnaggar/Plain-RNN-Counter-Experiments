@@ -486,7 +486,7 @@ class NextTokenPredictionTrainDataset_SAMPLE(Dataset):
         self.y = []
         self.lengths = []
         # self.n_samples = xy.shape[0]
-        with open('Dyck1_Dataset_Suzgun_train_.txt', 'r') as f:
+        with open('Dyck1_Dataset_Suzgun_train_Shuffle.txt', 'r') as f:
             for line in f:
                 line = line.split(",")
                 sentence = line[0].strip()
@@ -531,7 +531,7 @@ class NextTokenPredictionShortTestDataset_SAMPLE(Dataset):
         self.y = []
         self.lengths = []
         # self.n_samples = xy.shape[0]
-        with open('Dyck1_Dataset_Suzgun_train_.txt', 'r') as f:
+        with open('Dyck1_Dataset_Suzgun_train_Shuffle.txt', 'r') as f:
             for line in f:
                 line = line.split(",")
                 sentence = line[0].strip()
@@ -566,7 +566,7 @@ class NextTokenPredictionValidationDataset_SAMPLE(Dataset):
         self.y = []
         self.lengths = []
         # self.n_samples = xy.shape[0]
-        with open('Dyck1_Dataset_Suzgun_train_.txt', 'r') as f:
+        with open('Dyck1_Dataset_Suzgun_train_Shuffle.txt', 'r') as f:
             for line in f:
                 line = line.split(",")
                 sentence = line[0].strip()
@@ -624,3 +624,8 @@ class NextTokenPredictionLongTestDataset_SAMPLE(Dataset):
 
     def __len__(self):
         return self.n_samples
+
+
+
+
+
