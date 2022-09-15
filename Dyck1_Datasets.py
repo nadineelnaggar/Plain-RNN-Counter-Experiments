@@ -475,3 +475,152 @@ class NextTokenPredictionDataset2000tokens_zigzag(Dataset):
 
     def __len__(self):
         return self.n_samples
+
+
+class NextTokenPredictionTrainDataset_SAMPLE(Dataset):
+    def __init__(self):
+        # xy = np.loadtxt('Dyck1_Dataset_Suzgun_train_.txt', delimiter=",")
+        # self.x = torch.from_numpy(xy[:,0])
+        # self.y = torch.from_numpy(xy[:, [1]])
+        self.x = []
+        self.y = []
+        self.lengths = []
+        # self.n_samples = xy.shape[0]
+        with open('Dyck1_Dataset_Suzgun_train_.txt', 'r') as f:
+            for line in f:
+                line = line.split(",")
+                sentence = line[0].strip()
+                label = line[1].strip()
+                self.x.append(sentence)
+                self.y.append(label)
+                self.lengths.append(len(sentence))
+
+        self.x = self.x[:1000]
+        self.y = self.y[:1000]
+
+        self.x_tensor = []
+        self.y_tensor = []
+        for i in range(len(self.x)):
+            self.x_tensor.append(encode_sentence_onehot(self.x[i]))
+            self.y_tensor.append(Dyck.lineToTensorSigmoid(self.y[i], max_len=50))
+
+        self.lengths = self.lengths[:1000]
+        self.n_samples = len(self.x)
+
+
+
+    def __getitem__(self, index):
+        # return self.x[index], self.y[index]
+        return {'x': self.x[index], 'y': self.y[index], 'length': self.lengths[index]}
+        # return {'x':encode_sentence_onehot(self.x[index]), 'y': Dyck.lineToTensorSigmoid(str(self.y[index]), max_len=50), 'length': self.lengths[index]}
+        # return {'x':self.x[index], 'y':self.y[index]}
+
+    def __len__(self):
+        return self.n_samples
+
+# dataset = NextTokenPredictionTrainDataset()
+# print(len(dataset))
+
+
+class NextTokenPredictionShortTestDataset_SAMPLE(Dataset):
+    def __init__(self):
+        # xy = np.loadtxt('Dyck1_Dataset_Suzgun_train_.txt', delimiter=",")
+        # self.x = torch.from_numpy(xy[:,0])
+        # self.y = torch.from_numpy(xy[:, [1]])
+        self.x = []
+        self.y = []
+        self.lengths = []
+        # self.n_samples = xy.shape[0]
+        with open('Dyck1_Dataset_Suzgun_train_.txt', 'r') as f:
+            for line in f:
+                line = line.split(",")
+                sentence = line[0].strip()
+                label = line[1].strip()
+                self.x.append(sentence)
+                self.y.append(label)
+                self.lengths.append(len(sentence))
+
+        self.x = self.x[10000:10500]
+        self.y = self.y[10000:10500]
+        self.lengths = self.lengths[10000:10500]
+        self.n_samples = len(self.x)
+
+
+
+    def __getitem__(self, index):
+        # return self.x[index], self.y[index]
+        return {'x': self.x[index], 'y': self.y[index], 'length': self.lengths[index]}
+
+    def __len__(self):
+        return self.n_samples
+# dataset_test = NextTokenPrediction_Short_Test_Dataset()
+# print(len(dataset_test))
+
+
+class NextTokenPredictionValidationDataset_SAMPLE(Dataset):
+    def __init__(self):
+        # xy = np.loadtxt('Dyck1_Dataset_Suzgun_train_.txt', delimiter=",")
+        # self.x = torch.from_numpy(xy[:,0])
+        # self.y = torch.from_numpy(xy[:, [1]])
+        self.x = []
+        self.y = []
+        self.lengths = []
+        # self.n_samples = xy.shape[0]
+        with open('Dyck1_Dataset_Suzgun_train_.txt', 'r') as f:
+            for line in f:
+                line = line.split(",")
+                sentence = line[0].strip()
+                label = line[1].strip()
+                self.x.append(sentence)
+                self.y.append(label)
+                self.lengths.append(sentence)
+
+        self.x = self.x[15000:]
+        self.y = self.y[15500:]
+        self.lengths = self.lengths[15000:15500]
+        self.n_samples = len(self.x)
+
+
+
+    def __getitem__(self, index):
+        # return self.x[index], self.y[index]
+        return {'x': self.x[index], 'y': self.y[index], 'length': self.lengths[index]}
+
+    def __len__(self):
+        return self.n_samples
+
+# dataset_val = NextTokenPrediction_Validation_Dataset()
+# print(len(dataset_val))
+
+
+class NextTokenPredictionLongTestDataset_SAMPLE(Dataset):
+    def __init__(self):
+        # xy = np.loadtxt('Dyck1_Dataset_Suzgun_train_.txt', delimiter=",")
+        # self.x = torch.from_numpy(xy[:,0])
+        # self.y = torch.from_numpy(xy[:, [1]])
+        self.x = []
+        self.y = []
+        self.lengths = []
+        # self.n_samples = xy.shape[0]
+        with open('Dyck1_Dataset_Suzgun_test_.txt', 'r') as f:
+            for line in f:
+                line = line.split(",")
+                sentence = line[0].strip()
+                label = line[1].strip()
+                self.x.append(sentence)
+                self.y.append(label)
+                self.lengths.append(len(sentence))
+
+        self.x = self.x[:500]
+        self.y = self.y[:500]
+        self.lengths = self.lengths[:500]
+        self.n_samples = len(self.x)
+
+
+
+    def __getitem__(self, index):
+        # return self.x[index], self.y[index]
+        return {'x':self.x[index], 'y':self.y[index], 'length':self.lengths[index]}
+
+    def __len__(self):
+        return self.n_samples

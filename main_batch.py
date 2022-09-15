@@ -13,7 +13,7 @@ import random
 from torch.utils.tensorboard import SummaryWriter
 # from tensorboardX import SummaryWriter
 from torch.utils.data import Dataset, DataLoader
-from Dyck1_Datasets import NextTokenPredictionLongTestDataset, NextTokenPredictionShortTestDataset, NextTokenPredictionTrainDataset, NextTokenPredictionValidationDataset
+from Dyck1_Datasets import NextTokenPredictionLongTestDataset, NextTokenPredictionShortTestDataset, NextTokenPredictionTrainDataset, NextTokenPredictionValidationDataset, NextTokenPredictionLongTestDataset_SAMPLE, NextTokenPredictionShortTestDataset_SAMPLE, NextTokenPredictionTrainDataset_SAMPLE, NextTokenPredictionValidationDataset_SAMPLE
 from torch.optim.lr_scheduler import StepLR
 import math
 import time
@@ -255,11 +255,17 @@ def collate_fn(batch):
     # return seq_tensor.to(device), labels_tensor.to(device), lengths_tensor.to(device)
     return sentences, labels, seq_tensor.to(device), labels_tensor.to(device), lengths_tensor
 
+#
+# train_dataset = NextTokenPredictionTrainDataset()
+# test_dataset = NextTokenPredictionShortTestDataset()
+# long_dataset = NextTokenPredictionLongTestDataset()
+# validation_dataset = NextTokenPredictionValidationDataset()
 
-train_dataset = NextTokenPredictionTrainDataset()
-test_dataset = NextTokenPredictionShortTestDataset()
-long_dataset = NextTokenPredictionLongTestDataset()
-validation_dataset = NextTokenPredictionValidationDataset()
+
+train_dataset = NextTokenPredictionTrainDataset_SAMPLE()
+test_dataset = NextTokenPredictionShortTestDataset_SAMPLE()
+long_dataset = NextTokenPredictionLongTestDataset_SAMPLE()
+validation_dataset = NextTokenPredictionValidationDataset_SAMPLE()
 
 train_loader = DataLoader(train_dataset,batch_size=batch_size, shuffle=shuffle_dataset, collate_fn=collate_fn)
 test_loader = DataLoader(test_dataset,batch_size=batch_size, shuffle=shuffle_dataset, collate_fn=collate_fn)
