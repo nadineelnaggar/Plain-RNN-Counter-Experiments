@@ -575,8 +575,8 @@ class NextTokenPredictionValidationDataset_SAMPLE(Dataset):
                 self.y.append(label)
                 self.lengths.append(sentence)
 
-        self.x = self.x[15000:]
-        self.y = self.y[15500:]
+        self.x = self.x[15000:15500]
+        self.y = self.y[15000:15500]
         self.lengths = self.lengths[15000:15500]
         self.n_samples = len(self.x)
 
