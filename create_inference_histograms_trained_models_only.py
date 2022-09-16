@@ -249,8 +249,8 @@ def create_histogram_one_sequence_multiple_models():
             new_bins.append(bins[i])
         elif bins[i] > 0:
             # new_bins.append(bins[i] - 2)
-            # new_bins.append(bins[i] - 1)
-            new_bins.append(bins[i])
+            new_bins.append(bins[i] - 1)
+            # new_bins.append(bins[i])
 
 
     for i in range(10):
