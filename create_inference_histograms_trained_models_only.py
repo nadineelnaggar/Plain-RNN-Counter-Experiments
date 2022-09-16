@@ -83,7 +83,7 @@ elif runtime=='colab':
 
 
 
-prefix = path+'INFERENCE_'+dataset_type+'_'+str(checkpoint_step)+'checkpoint_step_upto'+str(num_checkpoints)+'checkpoints_'
+prefix = path+model_name+'_INFERENCE_'+dataset_type+'_'+str(checkpoint_step)+'checkpoint_step_upto'+str(num_checkpoints)+'checkpoints_'
 
 
 # excel_name_inference = path+ 'Dyck1_' + task + '_' + str(
