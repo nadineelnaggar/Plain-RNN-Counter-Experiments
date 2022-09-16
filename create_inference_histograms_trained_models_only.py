@@ -251,7 +251,7 @@ def create_histogram_one_sequence_multiple_models():
             # new_bins.append(bins[i] - 2)
             new_bins.append(bins[i] - 1)
             # new_bins.append(bins[i])
-
+print(new_bins)
 
     for i in range(10):
         fpfs = []
