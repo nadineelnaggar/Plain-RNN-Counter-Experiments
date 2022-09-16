@@ -167,7 +167,8 @@ def create_histogram():
         # plt.hist(x=max_depth[i], range=[0,1000])
         # plt.hist(fpfs, bins=hist_bins,range=[0,max(max_depth[i])])
             plt.subplots()
-            plt.hist(all_fpf, bins=range(0,2001,50))
+            # plt.hist(all_fpf, bins=range(0,2001,50))
+            plt.hist(all_fpf, bins=range(0, 2001, 50))
             plt.xlabel('First point of failure for each incorrect sequence')
             plt.ylabel('Number of incorrect sequences')
             # plt.savefig(path+'histogram one model multiple sequences '+str(i)+'_TRAINED_MODELS_ONLY.png')
@@ -237,8 +238,16 @@ def create_histogram_one_sequence_multiple_models():
     avg_fpf = df['average first point of failure (2000 tokens)']
     # all_fpfs = df['first point of failure for each incorrect sequence']
 
+    bins = [*range(0, 2001, 50)]
 
-
+    new_bins = []
+    for i in range(len(bins)):
+        if bins[i] == 0:
+            new_bins.append(bins[i])
+        elif bins[i] > 0:
+            new_bins.append(bins[i] - 2)
+            new_bins.append(bins[i] - 1)
+            new_bins.append(bins[i])
 
 
     for i in range(10):
@@ -263,7 +272,11 @@ def create_histogram_one_sequence_multiple_models():
             #     fpfs.append(all_fpf[k])
         plt.subplots()
         # plt.plot(timestep_depth, color='red')
-        plt.hist(fpfs, bins=range(0, 2001, 50))
+        # bins = [0,48, 49, 98, 99, 198, 199, 200, 248, 249, ]
+        # bins = []
+
+        plt.hist(fpfs, bins=new_bins)
+        # plt.hist(fpfs, bins=range(0, 2001, 50))
         plt.plot([i for i in range(len(timestep_depth))], timestep_depth, color='red')
 
         plt.xlabel('First point of failure for each incorrect sequence')
