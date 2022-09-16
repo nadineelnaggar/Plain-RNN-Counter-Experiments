@@ -238,15 +238,15 @@ def create_histogram_one_sequence_multiple_models():
     avg_fpf = df['average first point of failure (2000 tokens)']
     # all_fpfs = df['first point of failure for each incorrect sequence']
 
-    bins = [*range(0, 2001, 50)]
+    bins = [*range(0, 2001, 20)]
 
     new_bins = []
     for i in range(len(bins)):
         if bins[i] == 0:
             new_bins.append(bins[i])
         elif bins[i] > 0:
-            new_bins.append(bins[i] - 2)
-            new_bins.append(bins[i] - 1)
+            # new_bins.append(bins[i] - 2)
+            # new_bins.append(bins[i] - 1)
             new_bins.append(bins[i])
 
 
