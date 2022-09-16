@@ -220,12 +220,15 @@ def create_histogram_one_sequence_multiple_models():
         df.drop(df[df['avg training losses'] > 10e-10].index, inplace=True)
         print(df)
         print(len(df))
+        bins = [*range(0, 2001, 10)]
     elif model_name=='VanillaReLURNN':
         # df = df.loc(df['avg training losses'] <= 0.015)
         df.drop(df[df['avg training losses'] > 0.015].index, inplace=True)
+        bins = [*range(0, 2001, 50)]
     elif model_name=='VanillaGRU':
         # df = df.loc(df['avg training losses'] <= 0.015)
         df.drop(df[df['avg training losses'] > 0.001].index, inplace=True)
+        bins = [*range(0, 2001, 10)]
     # print(len(df))
 
     
@@ -238,7 +241,7 @@ def create_histogram_one_sequence_multiple_models():
     avg_fpf = df['average first point of failure (2000 tokens)']
     # all_fpfs = df['first point of failure for each incorrect sequence']
 
-    bins = [*range(0, 2001, 10)]
+    # bins = [*range(0, 2001, 10)]
 
     new_bins = []
     for i in range(len(bins)):
