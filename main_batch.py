@@ -263,16 +263,16 @@ def collate_fn(batch):
     return sentences, labels, seq_tensor.to(device), labels_tensor.to(device), lengths_tensor
 
 #
-# train_dataset = NextTokenPredictionTrainDataset()
-# test_dataset = NextTokenPredictionShortTestDataset()
-# long_dataset = NextTokenPredictionLongTestDataset()
-# validation_dataset = NextTokenPredictionValidationDataset()
+train_dataset = NextTokenPredictionTrainDataset()
+test_dataset = NextTokenPredictionShortTestDataset()
+long_dataset = NextTokenPredictionLongTestDataset()
+validation_dataset = NextTokenPredictionValidationDataset()
 
 
-train_dataset = NextTokenPredictionTrainDataset_SAMPLE()
-test_dataset = NextTokenPredictionShortTestDataset_SAMPLE()
-long_dataset = NextTokenPredictionLongTestDataset_SAMPLE()
-validation_dataset = NextTokenPredictionValidationDataset_SAMPLE()
+# train_dataset = NextTokenPredictionTrainDataset_SAMPLE()
+# test_dataset = NextTokenPredictionShortTestDataset_SAMPLE()
+# long_dataset = NextTokenPredictionLongTestDataset_SAMPLE()
+# validation_dataset = NextTokenPredictionValidationDataset_SAMPLE()
 
 train_loader = DataLoader(train_dataset,batch_size=batch_size, shuffle=shuffle_dataset, collate_fn=collate_fn)
 test_loader = DataLoader(test_dataset,batch_size=batch_size, shuffle=shuffle_dataset, collate_fn=collate_fn)
