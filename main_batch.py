@@ -172,6 +172,10 @@ validation_log = path+ 'Dyck1_' + task + '_' + str(
         num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' +str(batch_size) +'_batch_size_'+'_' + str(
         hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
         num_epochs) + 'epochs_'+str(lr_scheduler_step)+"lr_scheduler_step_"+str(lr_scheduler_gamma)+"lr_scheduler_gamma_"+ str(num_runs)+'runs' + '_VALIDATION_LOG.txt'
+train_validation_log = path+ 'Dyck1_' + task + '_' + str(
+        num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' +str(batch_size) +'_batch_size_'+'_' + str(
+        hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
+        num_epochs) + 'epochs_'+str(lr_scheduler_step)+"lr_scheduler_step_"+str(lr_scheduler_gamma)+"lr_scheduler_gamma_"+ str(num_runs)+'runs' + '_TRAINING_SET_VALIDATION_LOG.txt'
 long_validation_log = path+ 'Dyck1_' + task + '_' + str(
         num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' +str(batch_size) +'_batch_size_'+'_' + str(
         hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
@@ -503,6 +507,9 @@ def train(model, loader, sum_writer, run=0):
     df1 = pd.DataFrame()
     print_flag = False
 
+    train_validation_accuracies = []
+    train_validation_losses = []
+
     validation_losses = []
     validation_accuracies = []
     lrs = []
@@ -662,6 +669,7 @@ def train(model, loader, sum_writer, run=0):
         # break
         accuracies.append(accuracy)
         losses.append(total_loss/len(train_dataset))
+        train_val_acc, train_val_loss = validate_model(model, train_loader, train_dataset, run, epoch)
         validation_acc, validation_loss = validate_model(model, validation_loader,validation_dataset, run, epoch)
         long_validation_acc, long_validation_loss = validate_model_long(model, long_loader, long_dataset, run, epoch)
         time_mins, time_secs = timeSince(start, epoch+1/num_epochs*100)
@@ -669,11 +677,11 @@ def train(model, loader, sum_writer, run=0):
         with open(train_log,'a') as f:
             f.write('Accuracy for epoch '+ str(epoch)+ '='+ str(round(accuracy,2))+ '%, avg train loss = '+
               str(total_loss / len(train_dataset))+
-              ' num_correct = '+ str(num_correct)+', val loss = '+ str(validation_loss) + ', val accuracy = '+ str(round(validation_acc,2))+ '%, long val loss = '+str(long_validation_loss)+', long val acc = '+str(round(long_validation_acc,4))+'%, time = '+str(time_mins[0])+'m '+str(round(time_mins[1],2))+'s \n')
+              ' num_correct = '+ str(num_correct)+', train val loss = '+train_val_loss+', train val acc = '+ str(round(train_val_acc,2))+'%, val loss = '+ str(validation_loss) + ', val accuracy = '+ str(round(validation_acc,2))+ '%, long val loss = '+str(long_validation_loss)+', long val acc = '+str(round(long_validation_acc,4))+'%, time = '+str(time_mins[0])+'m '+str(round(time_mins[1],2))+'s \n')
 
         print('Accuracy for epoch ', epoch, '=', round(accuracy,2), '%, avg train loss = ',
               total_loss / len(train_dataset),
-              ' num_correct = ', num_correct,', val loss = ', validation_loss, ', val accuracy = ', round(validation_acc,2), '%, long val loss = ',long_validation_loss, ', long val acc = ',round(long_validation_acc,4), '%, time = ',time_mins[0],'m ',round(time_mins[1],2),'s')
+              ' num_correct = ', num_correct,', train val loss = ', train_val_loss, ', train val accuracy = ', round(train_val_acc,2),'%, val loss = ', validation_loss, ', val accuracy = ', round(validation_acc,2), '%, long val loss = ',long_validation_loss, ', long val acc = ',round(long_validation_acc,4), '%, time = ',time_mins[0],'m ',round(time_mins[1],2),'s')
 
         # print('Accuracy for epoch ', epoch, '=', accuracy, '%, avg train loss = ',
         #       total_loss / len(train_dataset),
@@ -681,6 +689,8 @@ def train(model, loader, sum_writer, run=0):
         scheduler.step()
         validation_losses.append(validation_loss)
         validation_accuracies.append(validation_acc)
+        train_validation_losses.append(train_validation_losses)
+        train_validation_accuracies.append(train_val_acc)
         long_validation_losses.append(long_validation_loss)
         long_validation_accuracies.append(long_validation_acc)
         sum_writer.add_scalar('epoch_losses', total_loss/len(train_dataset),global_step=epoch)
@@ -712,6 +722,7 @@ def train(model, loader, sum_writer, run=0):
             checkpoint_lr_plot = modelname+'run'+str(run)+'_epoch'+str(epoch)+'_lrs.png'
             fig_loss, ax_loss = plt.subplots()
             plt.plot(epochs,losses, label='avg train loss')
+            plt.plot(epochs, train_validation_losses, label='avg train validation loss')
             plt.plot(epochs,validation_losses, label='avg validation loss')
             plt.plot(long_validation_losses, label='avg long validation loss')
             plt.xlabel('Epoch')
@@ -721,6 +732,7 @@ def train(model, loader, sum_writer, run=0):
             plt.close()
             fig_acc, ax_acc = plt.subplots()
             plt.plot(epochs, accuracies, label='train accuracies')
+            plt.plot(epochs, train_validation_accuracies, label='train validation accuracies')
             plt.plot(epochs, validation_accuracies,label='validation accuracies')
             plt.plot(epochs, long_validation_accuracies,label='long validation accuracies')
             plt.xlabel('Epoch')
@@ -741,6 +753,8 @@ def train(model, loader, sum_writer, run=0):
     df1['epoch'] = epochs
     df1['Training accuracies'] = accuracies
     df1['Average training losses'] = losses
+    df1['Train validation accuracies'] = train_validation_accuracies
+    df1['Average train validation losses'] = train_validation_losses
     df1['Average validation losses'] = validation_losses
     df1['Validation accuracies'] = validation_accuracies
     df1['Average long validation losses'] = long_validation_losses
@@ -794,10 +808,14 @@ def validate_model(model, loader, dataset, run, epoch):
     #     log_file=long_test_log
     #     ds = long_dataset
 
-    log_file = validation_log
-    dataset='Validation Set'
-    ds = validation_dataset
-
+    if loader==validation_loader:
+        log_file = validation_log
+        dataset='Validation Set'
+        ds = validation_dataset
+    elif loader==train_loader:
+        log_file = train_validation_log
+        dataset = 'Train Set'
+        ds = train_dataset
     criterion = nn.MSELoss()
 
     total_loss = 0
@@ -890,8 +908,13 @@ def validate_model(model, loader, dataset, run, epoch):
 
     accuracy = num_correct / len(ds) * 100
     with open(log_file, 'a') as f:
-        f.write('val accuracy for run'+str(run)+' epoch '+str(epoch)+' = ' + str(accuracy)+'%, val loss = '+str(loss.item()/len(ds)) + '\n')
+        if loader==validation_loader:
+
+            f.write('val accuracy for run'+str(run)+' epoch '+str(epoch)+' = ' + str(accuracy)+'%, val loss = '+str(loss.item()/len(ds)) + '\n')
     # print(''+dataset+' accuracy = '+ str(accuracy)+'% '+ 'avg loss = '+str(loss.item()/len(ds)))
+        elif loader==train_loader:
+            f.write('train val accuracy for run' + str(run) + ' epoch ' + str(epoch) + ' = ' + str(
+                accuracy) + '%, train val loss = ' + str(loss.item() / len(ds)) + '\n')
 
 
     return accuracy, loss.item()/len(ds)
