@@ -278,6 +278,7 @@ def create_histogram_one_sequence_multiple_models():
         plt.plot([i for i in range(879,1009)], timestep_depth[879:1009], color='red', alpha=0.5)
         new_bins = [*range(879,1009, 10)]
         plt.hist(fpfs, bins=new_bins)
+        print(timestep_depth[990:1000])
         # plt.hist(fpfs, bins=range(0, 2001, 50))
         # plt.plot([i for i in range(len(timestep_depth))], timestep_depth, color='red')
 
