@@ -278,9 +278,10 @@ def create_histogram_one_sequence_multiple_models():
         # bins = [0,48, 49, 98, 99, 198, 199, 200, 248, 249, ]
         # bins = []
 
+        plt.plot([i for i in range(len(timestep_depth))], timestep_depth, color='red')
         plt.hist(fpfs, bins=new_bins)
         # plt.hist(fpfs, bins=range(0, 2001, 50))
-        plt.plot([i for i in range(len(timestep_depth))], timestep_depth, color='red')
+        # plt.plot([i for i in range(len(timestep_depth))], timestep_depth, color='red')
 
         plt.xlabel('First point of failure for each incorrect sequence')
         plt.ylabel('Number of incorrect sequences')
