@@ -535,6 +535,7 @@ def main():
                 # test_accuracies.append(checkpoint_test_accuracy)
                 train_val_accuracies.append(train_val_acc_checkpoint)
                 train_val_losses.append(train_val_loss_checkpoint)
+                print('run ',run, ' epoch ',epoch,' train val loss = ',train_val_loss_checkpoint, 'train val acc = ', train_val_acc_checkpoint)
 
 
 
