@@ -16,7 +16,7 @@ from torch.utils.data import Dataset, DataLoader
 from Dyck1_Datasets import NextTokenPredictionLongTestDataset, NextTokenPredictionShortTestDataset, \
     NextTokenPredictionTrainDataset, NextTokenPredictionDataset102to500tokens,NextTokenPredictionDataset502to1000tokens, \
     NextTokenPredictionDataset990to1000tokens, NextTokenPredictionDataset2000tokens, \
-    NextTokenPredictionDataset2000tokens_nested, NextTokenPredictionDataset2000tokens_zigzag
+    NextTokenPredictionDataset2000tokens_nested, NextTokenPredictionDataset2000tokens_zigzag, NextTokenPredictionDataset1000tokens
 
 seed = 10
 torch.manual_seed(seed)
@@ -518,6 +518,8 @@ elif dataset_type=='zigzag':
 # elif dataset_type=='appended':
 elif dataset_type == 'concatenated':
     test_dataset=NextTokenPredictionDataset2000tokens()
+elif dataset_type == '1000token':
+    test_dataset=NextTokenPredictionDataset1000tokens()
 
 test_size=len(test_dataset)
 
