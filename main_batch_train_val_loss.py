@@ -72,7 +72,7 @@ batch_size = args.batch_size
 # load_model = args.load_model
 lr_scheduler_gamma = args.lr_scheduler_gamma
 lr_scheduler_step = args.lr_scheduler_step
-num_checkpoints = args.num_checkpoints
+# num_checkpoints = args.num_checkpoints
 # dataset_type = args.dataset_type
 
 
