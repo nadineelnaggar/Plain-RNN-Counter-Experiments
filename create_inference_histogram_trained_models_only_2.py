@@ -274,11 +274,16 @@ def create_histogram_one_sequence_multiple_models():
         # plt.plot(timestep_depth, color='red')
         # bins = [0,48, 49, 98, 99, 198, 199, 200, 248, 249, ]
         # bins = []
-
-        plt.plot([i for i in range(948,1009)], timestep_depth[948:1009], color='red', alpha=0.5)
-        new_bins = [*range(948,1009, 10)]
-        plt.hist(fpfs, bins=new_bins)
-        print(timestep_depth[990:1000])
+        if model_name=='VanillaLSTM':
+            plt.plot([i for i in range(948,1009)], timestep_depth[948:1009], color='red', alpha=0.5)
+            new_bins = [*range(948,1009, 10)]
+            plt.hist(fpfs, bins=new_bins)
+            print(timestep_depth[990:1000])
+        elif model_name=='VanillaGRU':
+            plt.plot([i for i in range(498, 609)], timestep_depth[498:609], color='red', alpha=0.5)
+            new_bins = [*range(498, 609, 10)]
+            plt.hist(fpfs, bins=new_bins)
+            print(timestep_depth[500:600])
         # plt.hist(fpfs, bins=range(0, 2001, 50))
         # plt.plot([i for i in range(len(timestep_depth))], timestep_depth, color='red')
 
