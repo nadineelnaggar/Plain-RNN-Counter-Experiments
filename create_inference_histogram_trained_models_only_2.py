@@ -280,10 +280,10 @@ def create_histogram_one_sequence_multiple_models():
             plt.hist(fpfs, bins=new_bins)
             print(timestep_depth[990:1000])
         elif model_name=='VanillaGRU':
-            plt.plot([i for i in range(0, 1000)], timestep_depth[0:1000], color='red', alpha=0.5)
-            new_bins = [*range(498, 609, 10)]
+            plt.plot([i for i in range(398, 600)], timestep_depth[398:600], color='red', alpha=0.5)
+            new_bins = [*range(398, 600, 10)]
             plt.hist(fpfs, bins=new_bins)
-            print(timestep_depth[0:1000])
+            print(timestep_depth[398:600])
         elif model_name=='VanillaReLURNN':
             plt.plot([i for i in range(948, 1009)], timestep_depth[948:1009], color='red', alpha=0.5)
             new_bins = [*range(948, 1009, 10)]
