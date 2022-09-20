@@ -289,7 +289,7 @@ def create_histogram_one_sequence_multiple_models():
 
         plt.xlabel('First point of failure for each incorrect sequence')
         plt.ylabel('Number of incorrect sequences')
-        plt.savefig(prefix + 'histogram one sequence multiple models ' + str(i) + '_TRAINED_MODELS_ONLY.png')
+        plt.savefig(prefix + 'histogram one sequence multiple models ' + str(i) + '_TRAINED_MODELS_ONLY_2.png')
         plt.show()
         plt.close()
         plt.subplots()
@@ -297,7 +297,7 @@ def create_histogram_one_sequence_multiple_models():
         plt.xlabel('Timestep')
         plt.ylabel('Stack Depths')
         # plt.savefig(path + 'timestep depth one sequence multiple models ' + str(i) + '_TRAINED_MODELS_ONLY.png')
-        plt.savefig(prefix + 'timestep depth one sequence multiple models ' + str(i) + '_TRAINED_MODELS_ONLY_2.png')
+        plt.savefig(prefix + 'timestep depth one sequence multiple models ' + str(i) + '_TRAINED_MODELS_ONLY.png')
         plt.show()
         plt.close()
 
