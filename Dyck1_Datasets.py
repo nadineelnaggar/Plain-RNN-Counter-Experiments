@@ -660,9 +660,90 @@ class NextTokenPredictionDataset1000tokens(Dataset):
         # self.x = self.x[:1000]
         # self.y = self.y[:1000]
         # self.lengths = self.lengths[:1000]
+        with open('Dyck1_Dataset_Suzgun_1000tokens.txt', 'r') as f:
+            for line in f:
+                line = line.split(",")
+                sentence = line[0].strip()
+                label = line[1].strip()
+                if len(sentence)==1000:
+                    if sentence not in self.x:
+                        self.x.append(sentence)
+                        self.y.append(label)
+                        self.lengths.append(len(sentence))
+
+        with open('Dyck1_Dataset_Suzgun_1000tokens_2.txt', 'r') as f:
+            for line in f:
+                line = line.split(",")
+                sentence = line[0].strip()
+                label = line[1].strip()
+                if len(sentence)==1000:
+                    if sentence not in self.x:
+                        self.x.append(sentence)
+                        self.y.append(label)
+                        self.lengths.append(len(sentence))
+
+        with open('Dyck1_Dataset_Suzgun_1000tokens_3.txt', 'r') as f:
+            for line in f:
+                line = line.split(",")
+                sentence = line[0].strip()
+                label = line[1].strip()
+                if len(sentence)==1000:
+                    if sentence not in self.x:
+                        self.x.append(sentence)
+                        self.y.append(label)
+                        self.lengths.append(len(sentence))
+
+        with open('Dyck1_Dataset_Suzgun_1000tokens_4.txt', 'r') as f:
+            for line in f:
+                line = line.split(",")
+                sentence = line[0].strip()
+                label = line[1].strip()
+                if len(sentence)==1000:
+                    if sentence not in self.x:
+                        self.x.append(sentence)
+                        self.y.append(label)
+                        self.lengths.append(len(sentence))
+
+        with open('Dyck1_Dataset_Suzgun_1000tokens_5.txt', 'r') as f:
+            for line in f:
+                line = line.split(",")
+                sentence = line[0].strip()
+                label = line[1].strip()
+                if len(sentence)==1000:
+                    if sentence not in self.x:
+                        self.x.append(sentence)
+                        self.y.append(label)
+                        self.lengths.append(len(sentence))
+
+        with open('Dyck1_Dataset_Suzgun_1000tokens_5 (1).txt', 'r') as f:
+            for line in f:
+                line = line.split(",")
+                sentence = line[0].strip()
+                label = line[1].strip()
+                if len(sentence)==1000:
+                    if sentence not in self.x:
+                        self.x.append(sentence)
+                        self.y.append(label)
+                        self.lengths.append(len(sentence))
+
+
+        with open('Dyck1_Dataset_Suzgun_1000tokens_6.txt', 'r') as f:
+            for line in f:
+                line = line.split(",")
+                sentence = line[0].strip()
+                label = line[1].strip()
+                if len(sentence)==1000:
+                    if sentence not in self.x:
+                        self.x.append(sentence)
+                        self.y.append(label)
+                        self.lengths.append(len(sentence))
 
         max_depths = []
         timestep_depths = []
+
+        self.x = self.x[:100]
+        self.y = self.y[:100]
+        self.lengths = self.lengths[:100]
 
 
 

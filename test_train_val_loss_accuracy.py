@@ -13,7 +13,7 @@ import random
 from torch.utils.tensorboard import SummaryWriter
 # from tensorboardX import SummaryWriter
 from torch.utils.data import Dataset, DataLoader
-from Dyck1_Datasets import NextTokenPredictionLongTestDataset, NextTokenPredictionShortTestDataset, NextTokenPredictionTrainDataset, NextTokenPredictionValidationDataset, NextTokenPredictionLongTestDataset_SAMPLE, NextTokenPredictionShortTestDataset_SAMPLE, NextTokenPredictionTrainDataset_SAMPLE, NextTokenPredictionValidationDataset_SAMPLE
+from Dyck1_Datasets import NextTokenPredictionLongTestDataset, NextTokenPredictionShortTestDataset, NextTokenPredictionTrainDataset, NextTokenPredictionValidationDataset, NextTokenPredictionLongTestDataset_SAMPLE, NextTokenPredictionShortTestDataset_SAMPLE, NextTokenPredictionTrainDataset_SAMPLE, NextTokenPredictionValidationDataset_SAMPLE, NextTokenPredictionDataset1000tokens
 from torch.optim.lr_scheduler import StepLR
 import math
 import time
@@ -81,3 +81,7 @@ for i in range(len(bins)):
 print(bins)
 
 print(new_bins)
+
+
+dataset = NextTokenPredictionDataset1000tokens()
+print(len(dataset))
