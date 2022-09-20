@@ -297,7 +297,7 @@ def create_histogram_one_sequence_multiple_models():
         plt.xlabel('Timestep')
         plt.ylabel('Stack Depths')
         # plt.savefig(path + 'timestep depth one sequence multiple models ' + str(i) + '_TRAINED_MODELS_ONLY.png')
-        plt.savefig(prefix + 'timestep depth one sequence multiple models ' + str(i) + '_TRAINED_MODELS_ONLY.png')
+        plt.savefig(prefix + 'timestep depth one sequence multiple models ' + str(i) + '_TRAINED_MODELS_ONLY_2.png')
         plt.show()
         plt.close()
 
