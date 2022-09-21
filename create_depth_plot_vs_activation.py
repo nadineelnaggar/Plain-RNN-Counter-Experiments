@@ -273,7 +273,8 @@ relu_model = VanillaReLURNN(input_size=2, hidden_size=1, num_layers=1, batch_siz
 
 """
 1. choose which models are needed of LSTM, RELU, GRU
-2. import them and run one zigzag sequence through them
+2. import them (load state dict) 
+3. run one zigzag sequence through them
 3. keep track of the output activation and store it in a list
 4. plot timestep depth of the sequence vs the output activation 
 5. save image
