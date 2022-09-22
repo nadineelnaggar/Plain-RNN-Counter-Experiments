@@ -30,9 +30,14 @@ lstm_best_corresponding_val_acc_per_run = []
 lstm_best_epoch_per_run = []
 lstm_run = []
 
+lstm_best_model_train_val_accuracies = []
+lstm_best_model_long_val_accuracies = []
+lstm_best_model_val_accuracies = []
+
 lstm_val_losses_10_epochs = []
 lstm_val_losses_15_epochs = []
 lstm_val_losses_20_epochs = []
+
 
 
 
@@ -66,6 +71,11 @@ for i in range(len(lstm_dfs)):
     plt.savefig('lstm_loss_plots_20_epochs_run'+str(i)+'.png')
     plt.close()
 
+    lstm_best_model_val_accuracies.append(float(row['Validation accuracies']))
+    lstm_best_model_train_val_accuracies.append(float(row['Train validation accuracies']))
+    lstm_best_model_long_val_accuracies.append(float(row['Long validation accuracies']))
+
+
 average_lstm_best_epoch = 0
 std_lstm_best_epoch = 0
 epoch_starting_1 = []
@@ -95,6 +105,11 @@ print('lstm average val loss at epoch 10 (assuming starting from 1) = ',np.mean(
 print('lstm average val loss at epoch 15 (assuming starting from 1) = ',np.mean(lstm_val_losses_15_epochs))
 print('lstm average val loss at epoch 20 (assuming starting from 1) = ',np.mean(lstm_val_losses_20_epochs))
 
+print('Train Accuracy = (avg, min, max)', np.mean(lstm_best_model_train_val_accuracies), np.min(lstm_best_model_train_val_accuracies), np.max(lstm_best_model_train_val_accuracies))
+print('Validation Accuracy = (avg, min, max)', np.mean(lstm_best_model_val_accuracies), np.min(lstm_best_model_val_accuracies), np.max(lstm_best_model_val_accuracies))
+print('Long Accuracy = (avg, min, max)', np.mean(lstm_best_model_long_val_accuracies), np.min(lstm_best_model_long_val_accuracies), np.max(lstm_best_model_long_val_accuracies))
+
+
 print('************************************')
 
 print('GRU')
@@ -114,6 +129,11 @@ gru_run = []
 gru_val_losses_10_epochs = []
 gru_val_losses_15_epochs = []
 gru_val_losses_20_epochs = []
+
+
+gru_best_model_train_val_accuracies = []
+gru_best_model_long_val_accuracies = []
+gru_best_model_val_accuracies = []
 
 for i in range(len(gru_dfs)):
     gru_run.append(i)
@@ -144,6 +164,10 @@ for i in range(len(gru_dfs)):
     plt.savefig('gru_loss_plots_20_epochs_run' + str(i) + '.png')
     plt.close()
 
+    gru_best_model_val_accuracies.append(float(row['Validation accuracies']))
+    gru_best_model_train_val_accuracies.append(float(row['Train validation accuracies']))
+    gru_best_model_long_val_accuracies.append(float(row['Long validation accuracies']))
+
 average_gru_best_epoch = 0
 std_gru_best_epoch = 0
 epoch_starting_1 = []
@@ -171,4 +195,7 @@ print('gru standard deviation of corresponding val accuracy across 10 rund of 20
 print('gru average val loss at epoch 10 (assuming starting from 1) = ',np.mean(gru_val_losses_10_epochs))
 print('gru average val loss at epoch 15 (assuming starting from 1) = ',np.mean(gru_val_losses_15_epochs))
 print('gru average val loss at epoch 20 (assuming starting from 1) = ',np.mean(gru_val_losses_20_epochs))
+print('Train Accuracy = (avg, min, max)', np.mean(gru_best_model_train_val_accuracies), np.min(gru_best_model_train_val_accuracies), np.max(gru_best_model_train_val_accuracies))
+print('Validation Accuracy = (avg, min, max)', np.mean(gru_best_model_val_accuracies), np.min(gru_best_model_val_accuracies), np.max(gru_best_model_val_accuracies))
+print('Long Accuracy = (avg, min, max)', np.mean(gru_best_model_long_val_accuracies), np.min(gru_best_model_long_val_accuracies), np.max(gru_best_model_long_val_accuracies))
 
