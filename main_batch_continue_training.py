@@ -546,7 +546,7 @@ def train(model, loader, sum_writer, run=0):
     # scheduler = StepLR(optimiser,step_size=30,gamma=0.3)
     scheduler = StepLR(optimiser, step_size=lr_scheduler_step, gamma=lr_scheduler_gamma)
 
-    for epoch in range(num_epochs):
+    for epoch in range(num_epochs,extra_epochs,1):
         # model.train()
         num_correct = 0
         num_correct_timesteps = 0
@@ -727,13 +727,13 @@ def train(model, loader, sum_writer, run=0):
             print('Final training accuracy = ', num_correct / len(train_dataset) * 100, '%')
             # print('**************************************************************************\n')
 
-        # if epoch%checkpoint_step==0:
-        #     checkpoint_path = checkpoint+'run'+str(run)+"_epoch"+str(epoch)+".pth"
-        #     torch.save({'run':run,
-        #                 'epoch':epoch,
-        #                 'model_state_dict':model.state_dict(),
-        #                 'optimiser_state_dict':optimiser.state_dict(),
-        #                 'loss':loss},checkpoint_path)
+        if epoch%checkpoint_step==0:
+            checkpoint_path = checkpoint+'run'+str(run)+"_epoch"+str(num_epochs+epoch)+".pth"
+            torch.save({'run':run,
+                        'epoch':num_epochs+epoch,
+                        'model_state_dict':model.state_dict(),
+                        'optimiser_state_dict':optimiser.state_dict(),
+                        'loss':loss},checkpoint_path)
             # checkpoint_loss_plot = modelname+'run'+str(run)+'_epoch'+str(epoch)+'_losses.png'
             # checkpoint_accuracy_plot = modelname+'run'+str(run)+'_epoch'+str(epoch)+'_accuracies.png'
             # checkpoint_lr_plot = modelname+'run'+str(run)+'_epoch'+str(epoch)+'_lrs.png'
