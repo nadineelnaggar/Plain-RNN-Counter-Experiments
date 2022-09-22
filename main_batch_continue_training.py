@@ -546,7 +546,7 @@ def train(model, loader, sum_writer, run=0):
     # scheduler = StepLR(optimiser,step_size=30,gamma=0.3)
     scheduler = StepLR(optimiser, step_size=lr_scheduler_step, gamma=lr_scheduler_gamma)
 
-    for epoch in range(num_epochs,extra_epochs,1):
+    for epoch in range(num_epochs,(num_epochs+extra_epochs),1):
         # model.train()
         num_correct = 0
         num_correct_timesteps = 0
