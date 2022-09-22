@@ -787,14 +787,14 @@ def train(model, loader, sum_writer, run=0):
     #                         'optimiser': use_optimiser}, {'Training accuracy': accuracy, 'Training loss': total_loss/len(train_dataset)},
     #                        {'Validation loss':validation_loss, 'Validation Accuracy':validation_acc})
 
-    sum_writer.add_hparams({'model_name':model.model_name,'dataset_size': len(train_dataset), 'num_epochs': num_epochs,
-                            'learning_rate': learning_rate, 'batch_size':batch_size,
-                            'optimiser': use_optimiser}, {'Training accuracy': accuracy, 'Training loss': total_loss/len(train_dataset)})
-
-    # sum_writer.add_graph(model, (Dyck.lineToTensor(X[0][0]), model.init_hidden()))
-    # sum_writer.add_graph(model, loader[0])
-    # sum_writer.add_graph(model, input_seq, length)
-    sum_writer.close()
+    # sum_writer.add_hparams({'model_name':model.model_name,'dataset_size': len(train_dataset), 'num_epochs': num_epochs,
+    #                         'learning_rate': learning_rate, 'batch_size':batch_size,
+    #                         'optimiser': use_optimiser}, {'Training accuracy': accuracy, 'Training loss': total_loss/len(train_dataset)})
+    #
+    # # sum_writer.add_graph(model, (Dyck.lineToTensor(X[0][0]), model.init_hidden()))
+    # # sum_writer.add_graph(model, loader[0])
+    # # sum_writer.add_graph(model, input_seq, length)
+    # sum_writer.close()
 
     # torch.save(model.state_dict(), modelname)
     # torch.save(optimiser.state_dict(), optimname)
