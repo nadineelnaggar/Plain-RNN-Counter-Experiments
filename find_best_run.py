@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import math
 
 
 def read_sheets(num_runs, excel_name):
@@ -64,9 +65,9 @@ for i in range(len(lstm_dfs)):
     lstm_best_corresponding_val_acc_per_run.append(float(row['Average validation losses']))
     # print('*********')
     plt.subplots()
-    plt.plot(lstm_dfs[i]['epoch'],lstm_dfs[i]['Average validation losses'], label='Validation loss')
-    plt.plot(lstm_dfs[i]['epoch'],lstm_dfs[i]['Average train validation losses'], label='Train loss')
-    plt.plot(lstm_dfs[i]['epoch'], lstm_dfs[i]['Average long validation losses'], label='Long validation loss')
+    plt.plot(lstm_dfs[i]['epoch'][2:],np.log(lstm_dfs[i]['Average validation losses'][2:]), label='Validation loss')
+    plt.plot(lstm_dfs[i]['epoch'][2:],np.log(lstm_dfs[i]['Average train validation losses'][2:]), label='Train loss')
+    plt.plot(lstm_dfs[i]['epoch'][2:], np.log(lstm_dfs[i]['Average long validation losses'][2:]), label='Long validation loss')
     plt.legend()
     plt.savefig('lstm_loss_plots_20_epochs_run'+str(i)+'.png')
     plt.close()
