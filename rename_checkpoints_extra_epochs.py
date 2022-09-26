@@ -76,8 +76,12 @@ num_bracket_pairs = 25
 
 length_bracket_pairs = 50
 
+input_size=2
+num_classes = 2
+output_activation='Sigmoid'
 
 
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 path = "/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_"+str(task)+"/Minibatch_Training/"+model_name+"/"\
        +str(batch_size)+"_batch_size/"+str(learning_rate)+"_learning_rate/"+str(num_epochs)+"_epochs/"\
@@ -103,9 +107,49 @@ checkpoint = path+ 'Dyck1_' + task + '_' + str(
         num_epochs) + 'epochs_'+str(lr_scheduler_step)+"lr_scheduler_step_"+str(lr_scheduler_gamma)+"lr_scheduler_gamma_"+ str(num_runs)+'runs' + '_CHECKPOINT_'
 
 
+def select_model(model_name, input_size, hidden_size, num_layers,batch_size, num_classes, output_activation):
+    if model_name=='VanillaLSTM':
+        selected_model = VanillaLSTM(input_size,hidden_size, num_layers, batch_size, num_classes, output_activation=output_activation)
+    elif model_name=='VanillaRNN':
+        selected_model = VanillaRNN(input_size, hidden_size, num_layers, batch_size, num_classes, output_activation=output_activation)
+    elif model_name=='VanillaGRU':
+        selected_model = VanillaGRU(input_size,hidden_size, num_layers, batch_size, num_classes, output_activation=output_activation)
+    elif model_name == 'VanillaReLURNN':
+        selected_model = VanillaReLURNN(input_size, hidden_size, num_layers, batch_size, num_classes, output_activation=output_activation)
+
+    return selected_model.to(device)
+    # return selected_model
+
+
 for run in range(num_runs):
     for epoch in range(num_epochs,(num_epochs+extra_epochs),1):
         if epoch%checkpoint_step==0:
-            checkpoint_path_old = checkpoint+'run'+str(run)+"_epoch"+str(epoch+num_epochs)+".pth"
+            # checkpoint_path = checkpoint + 'run' + str(run) + "_epoch" + str(epoch+num_epochs) + ".pth"
+            checkpoint_path_old = checkpoint + 'run' + str(run) + "_epoch" + str(epoch + num_epochs) + ".pth"
+            checkpoint_path = checkpoint + 'run' + str(run) + "_epoch" + str(epoch) + ".pth"
+            os.rename(checkpoint_path_old, checkpoint_path)
+            checkpoint_model = select_model(model_name, input_size, hidden_size, num_layers, batch_size, num_classes,
+                                            output_activation)
+
+            checkpt = torch.load(checkpoint_path)
+            checkpoint_model.load_state_dict(checkpt['model_state_dict'])
+            loss = checkpoint['loss']
+            checkpoint_model.to(device)
+            checkpt = torch.load(checkpoint_path)
+
+
+            criterion = nn.MSELoss()
+            # learning_rate = args.learning_rate
+            optimiser = optim.Adam(checkpoint_model.parameters(), lr=learning_rate)
+            # optimiser.zero_grad()
+            optimiser.load_state_dict(checkpt['optimiser_state_dict'])
+
+            torch.save({'run': run,
+                        'epoch': epoch,
+                        'model_state_dict': checkpoint_model.state_dict(),
+                        'optimiser_state_dict': optimiser.state_dict(),
+                        'loss': loss}, checkpoint_path)
+
+            # checkpoint_path_old = checkpoint+'run'+str(run)+"_epoch"+str(epoch+num_epochs)+".pth"
             checkpoint_path = checkpoint+'run'+str(run)+"_epoch"+str(epoch)+".pth"
-            os.rename(checkpoint_path_old,checkpoint_path)
+            # os.rename(checkpoint_path_old,checkpoint_path)
