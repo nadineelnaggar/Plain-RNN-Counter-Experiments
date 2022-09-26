@@ -127,7 +127,8 @@ for run in range(num_runs):
             # checkpoint_path = checkpoint + 'run' + str(run) + "_epoch" + str(epoch+num_epochs) + ".pth"
             checkpoint_path_old = checkpoint + 'run' + str(run) + "_epoch" + str(epoch + num_epochs) + ".pth"
             checkpoint_path = checkpoint + 'run' + str(run) + "_epoch" + str(epoch) + ".pth"
-            os.rename(checkpoint_path_old, checkpoint_path)
+            if os.path.exists(checkpoint_path_old)==True and os.path.exists(checkpoint_path)==False:
+                os.rename(checkpoint_path_old, checkpoint_path)
             checkpoint_model = select_model(model_name, input_size, hidden_size, num_layers, batch_size, num_classes,
                                             output_activation)
 
