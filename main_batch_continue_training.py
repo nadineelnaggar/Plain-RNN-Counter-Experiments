@@ -728,7 +728,7 @@ def train(model, loader, sum_writer, run=0):
             # print('**************************************************************************\n')
 
         if epoch%checkpoint_step==0:
-            checkpoint_path = checkpoint+'run'+str(run)+"_epoch"+str(num_epochs+epoch)+".pth"
+            checkpoint_path = checkpoint+'run'+str(run)+"_epoch"+str(epoch)+".pth"
             torch.save({'run':run,
                         'epoch':num_epochs+epoch,
                         'model_state_dict':model.state_dict(),
