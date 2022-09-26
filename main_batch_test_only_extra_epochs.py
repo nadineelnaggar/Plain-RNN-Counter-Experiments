@@ -511,12 +511,12 @@ def main():
             if epoch%checkpoint_step==0 and checkpoint_count<=num_checkpoints:
                 checkpoint_count+=1
                 runs.append(run)
-                avg_train_losses.append(losses_train[epoch])
-                inverse_avg_train_losses.append(1/losses_train[epoch])
-                avg_val_losses.append(losses_val[epoch])
-                inverse_avg_val_losses.append(1 / losses_val[epoch])
-                avg_long_val_losses.append(losses_long_val[epoch])
-                inverse_avg_long_val_losses.append(1 / losses_long_val[epoch])
+                avg_train_losses.append(losses_train[epoch-num_epochs])
+                inverse_avg_train_losses.append(1/losses_train[epoch-num_epochs])
+                avg_val_losses.append(losses_val[epoch-num_epochs])
+                inverse_avg_val_losses.append(1 / losses_val[epoch-num_epochs])
+                avg_long_val_losses.append(losses_long_val[epoch-num_epochs])
+                inverse_avg_long_val_losses.append(1 / losses_long_val[epoch-num_epochs])
                 epochs.append(epoch)
                 checkpoint_model = select_model(model_name,input_size,hidden_size,num_layers,batch_size,num_classes,output_activation)
                 # checkpoint_model.to(device)
