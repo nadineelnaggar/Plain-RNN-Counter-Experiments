@@ -20,7 +20,15 @@ def read_sheets(num_runs, excel_name):
 lstm_excel_path = '/Users/nadineelnaggar/Google Drive/PhD/EXPT_LOGS/Dyck1_NextTokenPrediction/Minibatch_Training/VanillaLSTM/1_batch_size/0.01_learning_rate/20_epochs/50_lr_scheduler_step/1.0_lr_scheduler_gamma/1_hidden_units/10_runs/shuffle_True/Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaLSTM_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_20epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_10runs_NEW.xlsx'
 gru_excel_path = '/Users/nadineelnaggar/Google Drive/PhD/EXPT_LOGS/Dyck1_NextTokenPrediction/Minibatch_Training/VanillaGRU/1_batch_size/0.001_learning_rate/20_epochs/50_lr_scheduler_step/1.0_lr_scheduler_gamma/1_hidden_units/10_runs/shuffle_True/Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaGRU_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.001_20epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_10runs.xlsx'
 
+lstm_excel_path_extra_epochs = '/Users/nadineelnaggar/Google Drive/PhD/EXPT_LOGS/Dyck1_NextTokenPrediction/Minibatch_Training/VanillaLSTM/1_batch_size/0.01_learning_rate/20_epochs/50_lr_scheduler_step/1.0_lr_scheduler_gamma/1_hidden_units/10_runs/shuffle_True/Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaLSTM_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_20epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_10runs_10extra_epochs.xlsx'
+gru_excel_path_extra_epochs = '/Users/nadineelnaggar/Google Drive/PhD/EXPT_LOGS/Dyck1_NextTokenPrediction/Minibatch_Training/VanillaGRU/1_batch_size/0.001_learning_rate/20_epochs/50_lr_scheduler_step/1.0_lr_scheduler_gamma/1_hidden_units/10_runs/shuffle_True/Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaGRU_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.001_20epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_10runs_10extra_epochs.xlsx'
+
+relu_excel_path = ''
+
+
+
 lstm_dfs = read_sheets(10,lstm_excel_path)
+lstm_dfs_extra_epochs = read_sheets(10, lstm_excel_path_extra_epochs)
 print(len(lstm_dfs[0]))
 
 print('*************')
@@ -38,8 +46,8 @@ lstm_best_model_val_accuracies = []
 lstm_val_losses_10_epochs = []
 lstm_val_losses_15_epochs = []
 lstm_val_losses_20_epochs = []
-
-
+lstm_val_losses_25_epochs = []
+lstm_val_losses_30_epochs = []
 
 
 
@@ -53,6 +61,11 @@ for i in range(len(lstm_dfs)):
     lstm_val_losses_10_epochs.append(float(val_losses[9]))
     lstm_val_losses_15_epochs.append(float(val_losses[14]))
     lstm_val_losses_20_epochs.append(float(val_losses[19]))
+    val_losses_extra = lstm_dfs_extra_epochs[i]['Average validation losses']
+    lstm_val_losses_25_epochs.append(float(val_losses_extra[4]))
+    lstm_val_losses_30_epochs.append(float(val_losses_extra[9]))
+
+
     min_val_loss = min(val_losses)
     # print(min_val_loss)
     row = lstm_dfs[i][lstm_dfs[i]['Average validation losses'] ==min_val_loss]
@@ -62,7 +75,7 @@ for i in range(len(lstm_dfs)):
     # print(float(row['Validation accuracies']))
     lstm_best_epoch_per_run.append(int(row['epoch']))
     lstm_best_val_loss_per_run.append(float(row['Average validation losses']))
-    lstm_best_corresponding_val_acc_per_run.append(float(row['Average validation losses']))
+    lstm_best_corresponding_val_acc_per_run.append(float(row['Validation accuracies']))
     # print('*********')
     plt.subplots()
     plt.plot(lstm_dfs[i]['epoch'][2:],np.log(lstm_dfs[i]['Average validation losses'][2:]), label='Validation loss')
@@ -75,6 +88,9 @@ for i in range(len(lstm_dfs)):
     lstm_best_model_val_accuracies.append(float(row['Validation accuracies']))
     lstm_best_model_train_val_accuracies.append(float(row['Train validation accuracies']))
     lstm_best_model_long_val_accuracies.append(float(row['Long validation accuracies']))
+
+
+
 
 
 average_lstm_best_epoch = 0
@@ -105,6 +121,8 @@ print('lstm standard deviation of corresponding val accuracy across 10 rund of 2
 print('lstm average val loss at epoch 10 (assuming starting from 1) = ',np.mean(lstm_val_losses_10_epochs))
 print('lstm average val loss at epoch 15 (assuming starting from 1) = ',np.mean(lstm_val_losses_15_epochs))
 print('lstm average val loss at epoch 20 (assuming starting from 1) = ',np.mean(lstm_val_losses_20_epochs))
+print('lstm average val loss at epoch 25 (assuming starting from 1) = ',np.mean(lstm_val_losses_25_epochs))
+print('lstm average val loss at epoch 30 (assuming starting from 1) = ',np.mean(lstm_val_losses_30_epochs))
 
 print('Train Accuracy = (avg, min, max)', np.mean(lstm_best_model_train_val_accuracies), np.min(lstm_best_model_train_val_accuracies), np.max(lstm_best_model_train_val_accuracies))
 print('Validation Accuracy = (avg, min, max)', np.mean(lstm_best_model_val_accuracies), np.min(lstm_best_model_val_accuracies), np.max(lstm_best_model_val_accuracies))
@@ -151,7 +169,7 @@ for i in range(len(gru_dfs)):
     # print(float(row['Validation accuracies']))
     gru_best_epoch_per_run.append(int(row['epoch']))
     gru_best_val_loss_per_run.append(float(row['Average validation losses']))
-    gru_best_corresponding_val_acc_per_run.append(float(row['Average validation losses']))
+    gru_best_corresponding_val_acc_per_run.append(float(row['Validation accuracies']))
     # print('*********')
 
     gru_val_losses = []
@@ -199,4 +217,6 @@ print('gru average val loss at epoch 20 (assuming starting from 1) = ',np.mean(g
 print('Train Accuracy = (avg, min, max)', np.mean(gru_best_model_train_val_accuracies), np.min(gru_best_model_train_val_accuracies), np.max(gru_best_model_train_val_accuracies))
 print('Validation Accuracy = (avg, min, max)', np.mean(gru_best_model_val_accuracies), np.min(gru_best_model_val_accuracies), np.max(gru_best_model_val_accuracies))
 print('Long Accuracy = (avg, min, max)', np.mean(gru_best_model_long_val_accuracies), np.min(gru_best_model_long_val_accuracies), np.max(gru_best_model_long_val_accuracies))
+
+
 
