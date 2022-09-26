@@ -133,7 +133,7 @@ for run in range(num_runs):
 
             checkpt = torch.load(checkpoint_path)
             checkpoint_model.load_state_dict(checkpt['model_state_dict'])
-            loss = checkpoint['loss']
+            loss = checkpt['loss']
             checkpoint_model.to(device)
             checkpt = torch.load(checkpoint_path)
 
