@@ -151,5 +151,5 @@ for run in range(num_runs):
                         'loss': loss}, checkpoint_path)
 
             # checkpoint_path_old = checkpoint+'run'+str(run)+"_epoch"+str(epoch+num_epochs)+".pth"
-            checkpoint_path = checkpoint+'run'+str(run)+"_epoch"+str(epoch)+".pth"
+            # checkpoint_path = checkpoint+'run'+str(run)+"_epoch"+str(epoch)+".pth"
             # os.rename(checkpoint_path_old,checkpoint_path)
