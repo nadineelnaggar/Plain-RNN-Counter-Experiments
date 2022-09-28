@@ -613,11 +613,189 @@ plt.savefig('relu_loss_plots_30_epochs.png')
 plt.close()
 
 
+plt.subplots()
+plt.plot(epochs,np.log10(min_validation_losses), label='Minimum validation loss')
+plt.plot(epochs, np.log10(max_validation_losses), label='Maximum validation loss')
+plt.plot(epochs, np.log10(avg_validation_losses), label='Avergage validation loss')
+plt.legend()
+plt.savefig('relu_loss_plots_30_epochs_LOGARITHMIC.png')
+plt.close()
+
 
 
 print('Train Accuracy = (avg, min, max)', np.mean(relu_best_model_train_val_accuracies), np.min(relu_best_model_train_val_accuracies), np.max(relu_best_model_train_val_accuracies))
 print('Validation Accuracy = (avg, min, max)', np.mean(relu_best_model_val_accuracies), np.min(relu_best_model_val_accuracies), np.max(relu_best_model_val_accuracies))
 print('Long Accuracy = (avg, min, max)', np.mean(relu_best_model_long_val_accuracies), np.min(relu_best_model_long_val_accuracies), np.max(relu_best_model_long_val_accuracies))
+
+
+print('************************************')
+
+lstm2_excel_path = '/Users/nadineelnaggar/Google Drive/PhD/EXPT_LOGS/Dyck1_NextTokenPrediction/Minibatch_Training/VanillaLSTM/1_batch_size/0.01_learning_rate/30_epochs/50_lr_scheduler_step/1.0_lr_scheduler_gamma/1_hidden_units/10_runs/shuffle_True/Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaLSTM_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_10runs.xlsx'
+
+
+
+lstm2_dfs = read_sheets(10,lstm2_excel_path)
+
+print(len(lstm2_dfs[0]))
+
+print('*************')
+print('lstm2')
+
+lstm2_best_val_loss_per_run = []
+lstm2_best_corresponding_val_acc_per_run = []
+lstm2_best_epoch_per_run = []
+lstm2_run = []
+
+lstm2_best_model_train_val_accuracies = []
+lstm2_best_model_long_val_accuracies = []
+lstm2_best_model_val_accuracies = []
+
+lstm2_val_losses_10_epochs = []
+lstm2_val_losses_15_epochs = []
+lstm2_val_losses_20_epochs = []
+lstm2_val_losses_25_epochs = []
+lstm2_val_losses_30_epochs = []
+
+
+
+for i in range(len(lstm2_dfs)):
+    lstm2_val_losses = []
+    lstm2_train_val_losses = []
+    lstm2_long_val_losses = []
+
+    lstm2_run.append(i)
+    val_losses = lstm2_dfs[i]['Average validation losses']
+    lstm2_val_losses_10_epochs.append(float(val_losses[9]))
+    lstm2_val_losses_15_epochs.append(float(val_losses[14]))
+    lstm2_val_losses_20_epochs.append(float(val_losses[19]))
+    lstm2_val_losses_25_epochs.append(float(val_losses[24]))
+    lstm2_val_losses_30_epochs.append(float(val_losses[29]))
+
+    all_lstm2_val_losses = []
+    all_lstm2_val_losses=list(np.log(lstm2_dfs[i]['Average validation losses'][2:]))
+    all_lstm2_epochs = list(lstm2_dfs[i]['epoch'][2:])
+    all_lstm2_train_losses = []
+    all_lstm2_train_losses = list(np.log(lstm2_dfs[i]['Average train validation losses'][2:]))
+    all_lstm2_long_losses = []
+    all_lstm2_long_losses = list(np.log(lstm2_dfs[i]['Average long validation losses'][2:]))
+
+
+    min_val_loss = min(val_losses)
+    # print(min_val_loss)
+    row = lstm2_dfs[i][lstm2_dfs[i]['Average validation losses'] ==min_val_loss]
+    # print(int(row['epoch']), row['Average validation losses'].item, row['Validation accuracies'].item)
+    # print(int(row['epoch']))
+    # print(float(row['Average validation losses']))
+    # print(float(row['Validation accuracies']))
+    lstm2_best_epoch_per_run.append(int(row['epoch']))
+    lstm2_best_val_loss_per_run.append(float(row['Average validation losses']))
+    lstm2_best_corresponding_val_acc_per_run.append(float(row['Validation accuracies']))
+    # print('*********')
+    plt.subplots()
+    plt.plot(lstm2_dfs[i]['epoch'][2:],np.log(lstm2_dfs[i]['Average validation losses'][2:]), label='Validation loss')
+    plt.plot(lstm2_dfs[i]['epoch'][2:],np.log(lstm2_dfs[i]['Average train validation losses'][2:]), label='Train loss')
+    plt.plot(lstm2_dfs[i]['epoch'][2:], np.log(lstm2_dfs[i]['Average long validation losses'][2:]), label='Long validation loss')
+    plt.legend()
+    plt.savefig('lstm2_loss_plots_30_epochs_run'+str(i)+'.png')
+    plt.close()
+
+    plt.subplots()
+    plt.plot(all_lstm2_epochs, all_lstm2_val_losses, label='Validation loss')
+    plt.plot(all_lstm2_epochs, all_lstm2_train_losses, label='Train loss')
+    plt.plot(all_lstm2_epochs, all_lstm2_long_losses, label='Long validation loss')
+    plt.legend()
+    plt.savefig('lstm2_loss_plots_30_epochs_run'+str(i)+'.png')
+    plt.close()
+
+
+    lstm2_best_model_val_accuracies.append(float(row['Validation accuracies']))
+    lstm2_best_model_train_val_accuracies.append(float(row['Train validation accuracies']))
+    lstm2_best_model_long_val_accuracies.append(float(row['Long validation accuracies']))
+
+
+
+
+
+average_lstm2_best_epoch = 0
+std_lstm2_best_epoch = 0
+epoch_starting_1 = []
+for epoch in lstm2_best_epoch_per_run:
+    # print(epoch)
+    # epoch+=1
+    # print(epoch)
+    # print("***************")
+    epoch_starting_1.append(epoch+1)
+    average_lstm2_best_epoch+=(epoch+1)
+print('lstm2 best epoch per run (starting from 0) = ',lstm2_best_epoch_per_run)
+print('lstm2 best epoch per run (starting from 1) = ',epoch_starting_1)
+average_lstm2_best_epoch=average_lstm2_best_epoch/len(lstm2_best_epoch_per_run)
+print('lstm2 average best epoch across 10 runs of 20 epochs = ',average_lstm2_best_epoch,' (assuming epoch starts at 1)')
+std_lstm2_best_epoch=np.std(epoch_starting_1)
+print('lstm2 standard deviation of best epoch across 10 runs of 20 epochs = ',std_lstm2_best_epoch, '(assuming epoch starts at 1)')
+average_lstm2_best_val_loss = np.mean(lstm2_best_val_loss_per_run)
+print('lstm2 average lowest val loss across 10 runs of 20 epochs = ',average_lstm2_best_val_loss)
+std_lstm2_best_val_loss = np.std(lstm2_best_val_loss_per_run)
+print('lstm2 standard deviation of lowest val loss across 10 runs of 20 epochs = ',std_lstm2_best_val_loss)
+average_lstm2_best_val_accuracy = np.mean(lstm2_best_corresponding_val_acc_per_run)
+print('lstm2 average corresponding val accuracy across 10 runs of 20 epochs = ',average_lstm2_best_val_accuracy)
+std_lstm2_best_val_accuracy = np.std(lstm2_best_corresponding_val_acc_per_run)
+print('lstm2 standard deviation of corresponding val accuracy across 10 rund of 20 epochs = ',std_lstm2_best_val_accuracy)
+
+print('lstm2 average val loss at epoch 10 (assuming starting from 1) = ',np.mean(lstm2_val_losses_10_epochs))
+print('lstm2 average val loss at epoch 15 (assuming starting from 1) = ',np.mean(lstm2_val_losses_15_epochs))
+print('lstm2 average val loss at epoch 20 (assuming starting from 1) = ',np.mean(lstm2_val_losses_20_epochs))
+print('lstm2 average val loss at epoch 25 (assuming starting from 1) = ',np.mean(lstm2_val_losses_25_epochs))
+print('lstm2 average val loss at epoch 30 (assuming starting from 1) = ',np.mean(lstm2_val_losses_30_epochs))
+
+print('lstm2 average val loss change from epoch 10 to epoch 15 = ',(np.mean(lstm2_val_losses_10_epochs)-np.mean(lstm2_val_losses_15_epochs))/np.mean(lstm2_val_losses_10_epochs) * 100,'%')
+print('lstm2 average val loss change from epoch 15 to epoch 20 = ',(np.mean(lstm2_val_losses_15_epochs)-np.mean(lstm2_val_losses_20_epochs))/np.mean(lstm2_val_losses_15_epochs) * 100,'%')
+print('lstm2 average val loss change from epoch 20 to epoch 25 = ',(np.mean(lstm2_val_losses_20_epochs)-np.mean(lstm2_val_losses_25_epochs))/np.mean(lstm2_val_losses_20_epochs) * 100,'%')
+print('lstm2 average val loss change from epoch 25 to epoch 30 = ',(np.mean(lstm2_val_losses_25_epochs)-np.mean(lstm2_val_losses_30_epochs))/np.mean(lstm2_val_losses_25_epochs) * 100,'%')
+
+min_validation_losses = []
+max_validation_losses = []
+avg_validation_losses = []
+std_validation_losses = []
+
+epochs = [i for i in range(1,30, 1)]
+
+
+for j in range(1,30,1):
+    losses = []
+    for i in range(len(lstm2_dfs)):
+        losses.append(lstm2_dfs[i]['Average validation losses'][j])
+
+
+    min_validation_losses.append(min(losses))
+    max_validation_losses.append(max(losses))
+    avg_validation_losses.append(np.mean(losses))
+    std_validation_losses.append(np.std(losses))
+
+
+
+
+
+plt.subplots()
+plt.plot(epochs[10:],min_validation_losses[10:], label='Minimum validation loss')
+plt.plot(epochs[10:], max_validation_losses[10:], label='Maximum validation loss')
+plt.plot(epochs[10:], avg_validation_losses[10:], label='Avergage validation loss')
+plt.legend()
+plt.savefig('lstm2_loss_plots_30_epochs.png')
+plt.close()
+
+
+
+plt.subplots()
+plt.plot(epochs,np.log10(min_validation_losses), label='Minimum validation loss', color='red', linestyle='dashed')
+plt.plot(epochs, np.log10(max_validation_losses), label='Maximum validation loss', color='green', linestyle='dotted')
+plt.plot(epochs, np.log10(avg_validation_losses), label='Avergage validation loss', color='blue')
+plt.legend()
+plt.savefig('lstm2_loss_plots_30_epochs_LOGARITHMIC.png')
+plt.close()
+
+print('Train Accuracy = (avg, min, max)', np.mean(lstm2_best_model_train_val_accuracies), np.min(lstm2_best_model_train_val_accuracies), np.max(lstm2_best_model_train_val_accuracies))
+print('Validation Accuracy = (avg, min, max)', np.mean(lstm2_best_model_val_accuracies), np.min(lstm2_best_model_val_accuracies), np.max(lstm2_best_model_val_accuracies))
+print('Long Accuracy = (avg, min, max)', np.mean(lstm2_best_model_long_val_accuracies), np.min(lstm2_best_model_long_val_accuracies), np.max(lstm2_best_model_long_val_accuracies))
 
 
 print('************************************')
