@@ -614,10 +614,14 @@ plt.close()
 
 
 plt.subplots()
-plt.plot(epochs,np.log10(min_validation_losses), label='Minimum validation loss')
-plt.plot(epochs, np.log10(max_validation_losses), label='Maximum validation loss')
-plt.plot(epochs, np.log10(avg_validation_losses), label='Avergage validation loss')
-plt.legend()
+plt.rcParams['font.size'] = '12'
+plt.plot(epochs,np.log10(min_validation_losses), label='Minimum validation loss', color='red', linestyle='dashed')
+plt.plot(epochs, np.log10(max_validation_losses), label='Maximum validation loss', color='green', linestyle='dotted')
+plt.plot(epochs, np.log10(avg_validation_losses), label='Average validation loss', color='blue')
+plt.ylabel('Decimal log of the validation loss', fontsize=14)
+plt.xlabel('Epoch', fontsize=14)
+plt.title('Progression of the validation loss during training\n for ReLU models', fontsize=16)
+plt.legend(prop={'size':12})
 plt.savefig('relu_loss_plots_30_epochs_LOGARITHMIC.png')
 plt.close()
 
@@ -786,16 +790,22 @@ plt.close()
 
 
 plt.subplots()
+plt.rcParams['font.size'] = '12'
 plt.plot(epochs,np.log10(min_validation_losses), label='Minimum validation loss', color='red', linestyle='dashed')
 plt.plot(epochs, np.log10(max_validation_losses), label='Maximum validation loss', color='green', linestyle='dotted')
 plt.plot(epochs, np.log10(avg_validation_losses), label='Avergage validation loss', color='blue')
-plt.legend()
+plt.ylabel('Decimal log of the validation loss', fontsize=14)
+plt.xlabel('Epoch', fontsize=14)
+plt.title('Progression of the validation loss during training\n for LSTM models', fontsize=16)
+plt.legend(prop={'size':12})
 plt.savefig('lstm2_loss_plots_30_epochs_LOGARITHMIC.png')
 plt.close()
 
 print('Train Accuracy = (avg, min, max)', np.mean(lstm2_best_model_train_val_accuracies), np.min(lstm2_best_model_train_val_accuracies), np.max(lstm2_best_model_train_val_accuracies))
 print('Validation Accuracy = (avg, min, max)', np.mean(lstm2_best_model_val_accuracies), np.min(lstm2_best_model_val_accuracies), np.max(lstm2_best_model_val_accuracies))
 print('Long Accuracy = (avg, min, max)', np.mean(lstm2_best_model_long_val_accuracies), np.min(lstm2_best_model_long_val_accuracies), np.max(lstm2_best_model_long_val_accuracies))
+
+
 
 
 print('************************************')

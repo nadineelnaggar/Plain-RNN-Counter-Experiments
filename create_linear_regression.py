@@ -76,16 +76,21 @@ elif runtime=='colab':
 
 prefix = path+'INFERENCE_'+dataset_type+'_'+str(checkpoint_step)+'checkpoint_step_upto'+str(num_checkpoints)+'checkpoints_'
 
-plot_train_loss = prefix+'LINEAR_REGRESSION_log_inverse_avg_train_loss_FPF.png'
-plot_val_loss = prefix+'LINEAR_REGRESSION_log_inverse_avg_val_loss_FPF.png'
-plot_long_loss = prefix+'LINEAR_REGRESSION_inverse_avg_long_loss_FPF.png'
+# plot_train_loss = prefix+'LINEAR_REGRESSION_log_inverse_avg_train_loss_FPF.png'
+# plot_val_loss = prefix+'LINEAR_REGRESSION_log_inverse_avg_val_loss_FPF.png'
+# plot_long_loss = prefix+'LINEAR_REGRESSION_inverse_avg_long_loss_FPF.png'
+
+plot_train_loss = prefix+'LINEAR_REGRESSION_log_inverse_avg_train_loss_FPF_EVERY_5_EPOCHS_GOOD_MODELS_ONLY.png'
+plot_val_loss = prefix+'LINEAR_REGRESSION_log_inverse_avg_val_loss_FPF_EVERY_5_EPOCHS_GOOD_MODELS_ONLY.png'
+plot_long_loss = prefix+'LINEAR_REGRESSION_inverse_avg_long_loss_FPF_EVERY_5_EPOCHS_GOOD_MODELS_ONLY.png'
 
 # excel_name_inference = path+ 'Dyck1_' + task + '_' + str(
 #         num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' +str(batch_size) +'_batch_size_'+'_' + str(
 #         hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
 #         num_epochs) + 'epochs_'+str(lr_scheduler_step)+"lr_scheduler_step_"+str(lr_scheduler_gamma)+"lr_scheduler_gamma_"+ str(num_runs)+'runs_'+str(checkpoint_step)+"checkpoint_step_"+str(num_checkpoints)+"checkpoints" + 'INFERENCE.xlsx'
 
-excel_name_inference=prefix+'EXCEL INFERENCE.xlsx'
+# excel_name_inference=prefix+'EXCEL INFERENCE.xlsx'
+excel_name_inference=prefix+'EXCEL INFERENCE CHECKPOINTS ONLY GOOD MODELS.xlsx'
 
 def read_sheets():
     sheet_name='Sheet1'
@@ -155,11 +160,14 @@ def plot_linear_regression():
     print('coefficient value for train = ', res_train.slope)
     print(res_train)
     plt.subplots()
+    plt.rcParams['font.size'] = '12'
     plt.plot(log_inverse_train_loss, fpfs, 'o', label='Negative log train loss compared to Avg FPF')
     plt.plot(log_inverse_train_loss, res_train.intercept + res_train.slope*log_inverse_train_loss, 'r', label='fitted line')
-    plt.legend()
-    plt.xlabel('Negative log train loss')
-    plt.ylabel('Average FPF')
+    # plt.legend()
+    plt.xlabel('Negative log train loss', fontsize=14)
+    plt.ylabel('Average FPF', fontsize=14)
+    # plt.title('Correlation and linear regression for the', fontsize=16)
+    plt.legend(prop={'size': 12})
     plt.savefig(plot_train_loss)
     plt.show()
     plt.close()
@@ -170,12 +178,14 @@ def plot_linear_regression():
     print('coefficient value for val = ', res_val.slope)
     print(res_val)
     plt.subplots()
+    plt.rcParams['font.size'] = '12'
     plt.plot(log_inverse_val_loss, fpfs, 'o', label='Negative log val loss compared to Avg FPF')
     plt.plot(log_inverse_val_loss, res_val.intercept + res_val.slope * log_inverse_val_loss, 'r',
              label='fitted line')
-    plt.legend()
-    plt.xlabel('Negative log validation loss')
-    plt.ylabel('Average FPF')
+    # plt.legend()
+    plt.xlabel('Negative log validation loss', fontsize=14)
+    plt.ylabel('Average FPF', fontsize=14)
+    plt.legend(prop={'size': 12})
     plt.savefig(plot_val_loss)
     plt.show()
     plt.close()
@@ -186,12 +196,14 @@ def plot_linear_regression():
     print('coefficient value for long = ', res_long.slope)
     print(res_long)
     plt.subplots()
+    plt.rcParams['font.size'] = '12'
     plt.plot(log_inverse_long_loss, fpfs, 'o', label='negative log validation loss compared to Avg FPF')
     plt.plot(log_inverse_long_loss, res_long.intercept + res_long.slope * log_inverse_long_loss, 'r',
              label='fitted line')
-    plt.legend()
-    plt.xlabel('Negative log long validation loss')
-    plt.ylabel('Average FPF')
+    # plt.legend()
+    plt.xlabel('Negative log long validation loss', fontsize=14)
+    plt.ylabel('Average FPF', fontsize=14)
+    plt.legend(prop={'size': 12})
     plt.savefig(plot_long_loss)
     plt.show()
     plt.close()
