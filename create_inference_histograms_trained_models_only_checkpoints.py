@@ -294,7 +294,8 @@ def create_histogram_one_sequence_multiple_models():
         # plt.plot([i for i in range(len(timestep_depth))], timestep_depth, color='red')
 
         plt.xlabel('First point of failure')
-        plt.ylabel('Number of models')
+        # plt.ylabel('Number of models')
+        plt.legend()
         plt.savefig(prefix + 'histogram one sequence multiple models ' + str(i) + '_CHECKPOINTS_ONLY_GOOD_MODELS_ZOOMED_IN.png')
         plt.show()
         plt.close()
@@ -330,7 +331,8 @@ def create_histogram_one_sequence_multiple_models():
         # plt.plot([i for i in range(len(timestep_depth))], timestep_depth, color='red')
 
         plt.xlabel('First point of failure')
-        plt.ylabel('Number of models')
+        # plt.ylabel('Number of models')
+        plt.legend()
         plt.savefig(
             prefix + 'histogram one sequence multiple models ' + str(i) + '_CHECKPOINTS_ONLY_GOOD_MODELS_FULL_HISTOGRAM.png')
         plt.show()
