@@ -156,6 +156,7 @@ def plot_linear_regression():
 
     res_train = stats.linregress(log_inverse_train_loss,fpfs)
     print('r value for train = ',res_train.rvalue)
+    print('r squared for train = ', res_train.r_value*res_train.r_value)
     print('p value for train = ', res_train.pvalue)
     print('coefficient value for train = ', res_train.slope)
     print(res_train)
@@ -175,6 +176,7 @@ def plot_linear_regression():
 
     res_val = stats.linregress(log_inverse_val_loss, fpfs)
     print('r value for val = ', res_val.rvalue)
+    print('r squared for val = ', res_val.r_value*res_val.r_value)
     print('p value for val = ', res_val.pvalue)
     print('coefficient value for val = ', res_val.slope)
     print(res_val)
@@ -194,6 +196,7 @@ def plot_linear_regression():
 
     res_long = stats.linregress(log_inverse_long_loss, fpfs)
     print('r value for long = ', res_long.rvalue)
+    print('r squared for long = ', res_long.r_value * res_long.r_value)
     print('p value for long = ', res_long.pvalue)
     print('coefficient value for long = ', res_long.slope)
     print(res_long)
