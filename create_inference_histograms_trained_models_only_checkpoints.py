@@ -216,17 +216,17 @@ def create_histogram_one_sequence_multiple_models():
 
     if model_name == 'VanillaLSTM':
         # df = df.loc(df['avg training losses'] <= 10E-10)
-        df.drop(df[df['avg training losses'] > 10e-10].index, inplace=True)
+        # df.drop(df[df['avg training losses'] > 10e-10].index, inplace=True)
         print(df)
         print(len(df))
         bins = [*range(0, 2001, 10)]
     elif model_name == 'VanillaReLURNN':
         # df = df.loc(df['avg training losses'] <= 0.015)
-        df.drop(df[df['avg training losses'] > 0.015].index, inplace=True)
+        # df.drop(df[df['avg training losses'] > 0.015].index, inplace=True)
         bins = [*range(0, 2001, 50)]
     elif model_name == 'VanillaGRU':
         # df = df.loc(df['avg training losses'] <= 0.015)
-        df.drop(df[df['avg training losses'] > 0.001].index, inplace=True)
+        # df.drop(df[df['avg training losses'] > 0.001].index, inplace=True)
         bins = [*range(0, 2001, 10)]
     # print(len(df))
 
@@ -275,37 +275,65 @@ def create_histogram_one_sequence_multiple_models():
         # bins = [0,48, 49, 98, 99, 198, 199, 200, 248, 249, ]
         # bins = []
         if model_name=='VanillaLSTM':
-            plt.plot([i for i in range(948,1009)], timestep_depth[948:1009], color='red', alpha=0.5)
+            plt.plot([i for i in range(948,1009)], timestep_depth[948:1009], color='red', alpha=0.5, label='Bracket Count')
             new_bins = [*range(948,1009, 10)]
-            plt.hist(fpfs, bins=new_bins)
+            plt.hist(fpfs, bins=new_bins, label='Number of models')
             print(timestep_depth[990:1000])
         elif model_name=='VanillaGRU':
-            plt.plot([i for i in range(398, 600)], timestep_depth[398:600], color='red', alpha=0.5)
+            plt.plot([i for i in range(398, 600)], timestep_depth[398:600], color='red', alpha=0.5, label='Bracket Count')
             new_bins = [*range(398, 600, 10)]
-            plt.hist(fpfs, bins=new_bins)
+            plt.hist(fpfs, bins=new_bins, label='Number of models')
             print(timestep_depth[398:600])
         elif model_name=='VanillaReLURNN':
-            plt.plot([i for i in range(948, 1009)], timestep_depth[948:1009], color='red', alpha=0.5)
+            plt.plot([i for i in range(948, 1009)], timestep_depth[948:1009], color='red', alpha=0.5, label='Bracket Count')
             new_bins = [*range(948, 1009, 10)]
-            plt.hist(fpfs, bins=new_bins)
+            plt.hist(fpfs, bins=new_bins, label='Number of models')
             print(timestep_depth[990:1000])
         # plt.hist(fpfs, bins=range(0, 2001, 50))
         # plt.plot([i for i in range(len(timestep_depth))], timestep_depth, color='red')
 
         plt.xlabel('First point of failure')
         plt.ylabel('Number of models')
-        plt.savefig(prefix + 'histogram one sequence multiple models ' + str(i) + '_TRAINED_MODELS_ONLY_2.png')
+        plt.savefig(prefix + 'histogram one sequence multiple models ' + str(i) + '_CHECKPOINTS_ONLY_GOOD_MODELS_ZOOMED_IN.png')
         plt.show()
         plt.close()
+        # plt.subplots()
+        # plt.plot([i for i in range(len(timestep_depth))], timestep_depth, color='red')
+        # plt.xlabel('Timestep')
+        # plt.ylabel('Stack Depths')
+        # # plt.savefig(path + 'timestep depth one sequence multiple models ' + str(i) + '_TRAINED_MODELS_ONLY.png')
+        # plt.savefig(prefix + 'timestep depth one sequence multiple models ' + str(i) + '_TRAINED_MODELS_ONLY.png')
+        # plt.show()
+        # plt.close()
         plt.subplots()
-        plt.plot([i for i in range(len(timestep_depth))], timestep_depth, color='red')
-        plt.xlabel('Timestep')
-        plt.ylabel('Stack Depths')
-        # plt.savefig(path + 'timestep depth one sequence multiple models ' + str(i) + '_TRAINED_MODELS_ONLY.png')
-        plt.savefig(prefix + 'timestep depth one sequence multiple models ' + str(i) + '_TRAINED_MODELS_ONLY.png')
+
+        if model_name == 'VanillaLSTM':
+            plt.plot([i for i in range(0, 2001, 1)], timestep_depth, color='red', alpha=0.5,
+                     label='Bracket Count')
+            new_bins = [*range(0, 2001, 10)]
+            plt.hist(fpfs, bins=new_bins, label='Number of models')
+            # print(timestep_depth[990:1000])
+        elif model_name == 'VanillaGRU':
+            plt.plot([i for i in range(0, 2001, 1)], timestep_depth, color='red', alpha=0.5,
+                     label='Bracket Count')
+            new_bins = [*range(0, 2001, 10)]
+            plt.hist(fpfs, bins=new_bins, label='Number of models')
+            # print(timestep_depth[398:600])
+        elif model_name == 'VanillaReLURNN':
+            plt.plot([i for i in range(0, 2001, 1)], timestep_depth, color='red', alpha=0.5,
+                     label='Bracket Count')
+            new_bins = [*range(0, 2001, 10)]
+            plt.hist(fpfs, bins=new_bins, label='Number of models')
+            # print(timestep_depth[990:1000])
+        # plt.hist(fpfs, bins=range(0, 2001, 50))
+        # plt.plot([i for i in range(len(timestep_depth))], timestep_depth, color='red')
+
+        plt.xlabel('First point of failure')
+        plt.ylabel('Number of models')
+        plt.savefig(
+            prefix + 'histogram one sequence multiple models ' + str(i) + '_CHECKPOINTS_ONLY_GOOD_MODELS_FULL_HISTOGRAM.png')
         plt.show()
         plt.close()
-
     # for i in range(5):
     #     max_depth = df['max depth for incorrect sequences (2000 tokens)'][i]
     #     # print(type(max_depth))
