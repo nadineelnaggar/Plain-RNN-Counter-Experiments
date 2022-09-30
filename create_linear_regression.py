@@ -161,7 +161,8 @@ def plot_linear_regression():
     print(res_train)
     plt.subplots()
     plt.rcParams['font.size'] = '12'
-    plt.plot(log_inverse_train_loss, fpfs, 'o', label='Negative log train loss compared to Avg FPF')
+    # plt.plot(log_inverse_train_loss, fpfs, 'o', label='Negative log train loss compared to Avg FPF')
+    plt.plot(log_inverse_train_loss, fpfs, 'o', label='Models at different stages of training')
     plt.plot(log_inverse_train_loss, res_train.intercept + res_train.slope*log_inverse_train_loss, 'r', label='fitted line')
     # plt.legend()
     plt.xlabel('Negative log train loss', fontsize=14)
@@ -179,7 +180,8 @@ def plot_linear_regression():
     print(res_val)
     plt.subplots()
     plt.rcParams['font.size'] = '12'
-    plt.plot(log_inverse_val_loss, fpfs, 'o', label='Negative log val loss compared to Avg FPF')
+    # plt.plot(log_inverse_val_loss, fpfs, 'o', label='Negative log val loss compared to Avg FPF')
+    plt.plot(log_inverse_val_loss, fpfs, 'o', label='Models at different stages of training')
     plt.plot(log_inverse_val_loss, res_val.intercept + res_val.slope * log_inverse_val_loss, 'r',
              label='fitted line')
     # plt.legend()
@@ -197,7 +199,8 @@ def plot_linear_regression():
     print(res_long)
     plt.subplots()
     plt.rcParams['font.size'] = '12'
-    plt.plot(log_inverse_long_loss, fpfs, 'o', label='negative log validation loss compared to Avg FPF')
+    # plt.plot(log_inverse_long_loss, fpfs, 'o', label='negative log validation loss compared to Avg FPF')
+    plt.plot(log_inverse_long_loss, fpfs, 'o', label='Models at different stages of training')
     plt.plot(log_inverse_long_loss, res_long.intercept + res_long.slope * log_inverse_long_loss, 'r',
              label='fitted line')
     # plt.legend()
