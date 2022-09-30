@@ -308,19 +308,19 @@ def create_histogram_one_sequence_multiple_models():
         plt.subplots()
 
         if model_name == 'VanillaLSTM':
-            plt.plot([i for i in range(0, 2001, 1)], timestep_depth, color='red', alpha=0.5,
+            plt.plot([i for i in range(0, 2000, 1)], timestep_depth, color='red', alpha=0.5,
                      label='Bracket Count')
             new_bins = [*range(0, 2001, 10)]
             plt.hist(fpfs, bins=new_bins, label='Number of models')
             # print(timestep_depth[990:1000])
         elif model_name == 'VanillaGRU':
-            plt.plot([i for i in range(0, 2001, 1)], timestep_depth, color='red', alpha=0.5,
+            plt.plot([i for i in range(0, 2000, 1)], timestep_depth, color='red', alpha=0.5,
                      label='Bracket Count')
             new_bins = [*range(0, 2001, 10)]
             plt.hist(fpfs, bins=new_bins, label='Number of models')
             # print(timestep_depth[398:600])
         elif model_name == 'VanillaReLURNN':
-            plt.plot([i for i in range(0, 2001, 1)], timestep_depth, color='red', alpha=0.5,
+            plt.plot([i for i in range(0, 2000, 1)], timestep_depth, color='red', alpha=0.5,
                      label='Bracket Count')
             new_bins = [*range(0, 2001, 10)]
             plt.hist(fpfs, bins=new_bins, label='Number of models')
