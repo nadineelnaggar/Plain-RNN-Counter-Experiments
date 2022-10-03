@@ -810,3 +810,132 @@ print('Long Accuracy = (avg, min, max)', np.mean(lstm2_best_model_long_val_accur
 
 
 print('************************************')
+
+gru_excel_path = '/Users/nadineelnaggar/Desktop/Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaGRU_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.001_20epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_10runs_ALL EPOCHS.xlsx'
+
+
+gru_dfs = read_sheets(10,gru_excel_path)
+gru_dfs_extra_epochs = read_sheets(10, gru_excel_path_extra_epochs)
+print(len(gru_dfs[0]))
+
+print('*************')
+print('GRU')
+
+gru_best_val_loss_per_run = []
+gru_best_corresponding_val_acc_per_run = []
+gru_best_epoch_per_run = []
+gru_run = []
+
+gru_best_model_train_val_accuracies = []
+gru_best_model_long_val_accuracies = []
+gru_best_model_val_accuracies = []
+
+gru_val_losses_10_epochs = []
+gru_val_losses_15_epochs = []
+gru_val_losses_20_epochs = []
+gru_val_losses_25_epochs = []
+gru_val_losses_30_epochs = []
+
+
+
+for i in range(len(gru_dfs)):
+    gru_val_losses = []
+    gru_train_val_losses = []
+    gru_long_val_losses = []
+
+    gru_run.append(i)
+    val_losses = gru_dfs[i]['Average validation losses']
+    gru_val_losses_10_epochs.append(float(val_losses[9]))
+    gru_val_losses_15_epochs.append(float(val_losses[14]))
+    gru_val_losses_20_epochs.append(float(val_losses[19]))
+    # val_losses_extra = gru_dfs_extra_epochs[i]['Average validation losses']
+    gru_val_losses_25_epochs.append(float(val_losses[24]))
+    gru_val_losses_30_epochs.append(float(val_losses[29]))
+
+    all_gru_val_losses = []
+    all_gru_val_losses = list(np.log(gru_dfs[i]['Average validation losses'][2:])) + list(
+        np.log(gru_dfs_extra_epochs[i]['Average validation losses']))
+    all_gru_epochs = list(gru_dfs[i]['epoch'][2:]) + list(gru_dfs_extra_epochs[i]['epoch'])
+    all_gru_train_losses = []
+    all_gru_train_losses = list(np.log(gru_dfs[i]['Average train validation losses'][2:])) + list(
+        np.log(gru_dfs_extra_epochs[i]['Average train validation losses']))
+    all_gru_long_losses = []
+    all_gru_long_losses = list(np.log(gru_dfs[i]['Average long validation losses'][2:])) + list(
+        np.log(gru_dfs_extra_epochs[i]['Average long validation losses']))
+
+    min_val_loss = min(val_losses)
+    # print(min_val_loss)
+    row = gru_dfs[i][gru_dfs[i]['Average validation losses'] ==min_val_loss]
+    # print(int(row['epoch']), row['Average validation losses'].item, row['Validation accuracies'].item)
+    # print(int(row['epoch']))
+    # print(float(row['Average validation losses']))
+    # print(float(row['Validation accuracies']))
+    gru_best_epoch_per_run.append(int(row['epoch']))
+    gru_best_val_loss_per_run.append(float(row['Average validation losses']))
+    gru_best_corresponding_val_acc_per_run.append(float(row['Validation accuracies']))
+    # print('*********')
+    plt.subplots()
+    plt.plot(gru_dfs[i]['epoch'][2:],np.log(gru_dfs[i]['Average validation losses'][2:]), label='Validation loss')
+    plt.plot(gru_dfs[i]['epoch'][2:],np.log(gru_dfs[i]['Average train validation losses'][2:]), label='Train loss')
+    plt.plot(gru_dfs[i]['epoch'][2:], np.log(gru_dfs[i]['Average long validation losses'][2:]), label='Long validation loss')
+    plt.legend()
+    plt.savefig('gru2_loss_plots_20_epochs_run'+str(i)+'.png')
+    plt.close()
+
+    plt.subplots()
+    plt.plot(all_gru_epochs, all_gru_val_losses, label='Validation loss')
+    plt.plot(all_gru_epochs, all_gru_train_losses, label='Train loss')
+    plt.plot(all_gru_epochs, all_gru_long_losses, label='Long validation loss')
+    plt.legend()
+    plt.savefig('gru2_loss_plots_30_epochs_run' + str(i) + '.png')
+    plt.close()
+
+    gru_best_model_val_accuracies.append(float(row['Validation accuracies']))
+    gru_best_model_train_val_accuracies.append(float(row['Train validation accuracies']))
+    gru_best_model_long_val_accuracies.append(float(row['Long validation accuracies']))
+
+
+print(len(gru_dfs[0]))
+
+
+average_gru_best_epoch = 0
+std_gru_best_epoch = 0
+epoch_starting_1 = []
+for epoch in gru_best_epoch_per_run:
+    # print(epoch)
+    # epoch+=1
+    # print(epoch)
+    # print("***************")
+    epoch_starting_1.append(epoch+1)
+    average_gru_best_epoch+=(epoch+1)
+print('gru best epoch per run (starting from 0) = ',gru_best_epoch_per_run)
+print('gru best epoch per run (starting from 1) = ',epoch_starting_1)
+average_gru_best_epoch=average_gru_best_epoch/len(gru_best_epoch_per_run)
+print('gru average best epoch across 10 runs of 30 epochs = ',average_gru_best_epoch,' (assuming epoch starts at 1)')
+std_gru_best_epoch=np.std(epoch_starting_1)
+print('gru standard deviation of best epoch across 10 runs of 30 epochs = ',std_gru_best_epoch, '(assuming epoch starts at 1)')
+average_gru_best_val_loss = np.mean(gru_best_val_loss_per_run)
+print('gru average lowest val loss across 10 runs of 30 epochs = ',average_gru_best_val_loss)
+std_gru_best_val_loss = np.std(gru_best_val_loss_per_run)
+print('gru standard deviation of lowest val loss across 10 runs of 30 epochs = ',std_gru_best_val_loss)
+average_gru_best_val_accuracy = np.mean(gru_best_corresponding_val_acc_per_run)
+print('gru average corresponding val accuracy across 10 runs of 30 epochs = ',average_gru_best_val_accuracy)
+std_gru_best_val_accuracy = np.std(gru_best_corresponding_val_acc_per_run)
+print('gru standard deviation of corresponding val accuracy across 10 rund of 30 epochs = ',std_gru_best_val_accuracy)
+
+print('gru average val loss at epoch 10 (assuming starting from 1) = ',np.mean(gru_val_losses_10_epochs))
+print('gru average val loss at epoch 15 (assuming starting from 1) = ',np.mean(gru_val_losses_15_epochs))
+print('gru average val loss at epoch 20 (assuming starting from 1) = ',np.mean(gru_val_losses_20_epochs))
+print('gru average val loss at epoch 25 (assuming starting from 1) = ',np.mean(gru_val_losses_25_epochs))
+print('gru average val loss at epoch 30 (assuming starting from 1) = ',np.mean(gru_val_losses_30_epochs))
+print('gru average val loss change from epoch 10 to epoch 15 = ',(np.mean(gru_val_losses_10_epochs)-np.mean(gru_val_losses_15_epochs))/np.mean(gru_val_losses_10_epochs) * 100,'%')
+print('gru average val loss change from epoch 15 to epoch 20 = ',(np.mean(gru_val_losses_15_epochs)-np.mean(gru_val_losses_20_epochs))/np.mean(gru_val_losses_15_epochs) * 100,'%')
+print('gru average val loss change from epoch 20 to epoch 25 = ',(np.mean(gru_val_losses_20_epochs)-np.mean(gru_val_losses_25_epochs))/np.mean(gru_val_losses_20_epochs) * 100,'%')
+print('gru average val loss change from epoch 25 to epoch 30 = ',(np.mean(gru_val_losses_25_epochs)-np.mean(gru_val_losses_30_epochs))/np.mean(gru_val_losses_25_epochs) * 100,'%')
+
+
+
+print('Train Accuracy = (avg, min, max)', np.mean(gru_best_model_train_val_accuracies), np.min(gru_best_model_train_val_accuracies), np.max(gru_best_model_train_val_accuracies))
+print('Validation Accuracy = (avg, min, max)', np.mean(gru_best_model_val_accuracies), np.min(gru_best_model_val_accuracies), np.max(gru_best_model_val_accuracies))
+print('Long Accuracy = (avg, min, max)', np.mean(gru_best_model_long_val_accuracies), np.min(gru_best_model_long_val_accuracies), np.max(gru_best_model_long_val_accuracies))
+
