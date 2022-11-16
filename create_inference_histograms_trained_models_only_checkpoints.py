@@ -368,7 +368,7 @@ def create_histogram_one_sequence_multiple_models():
         # plt.hist(fpfs, bins=range(0, 2001, 50))
         # plt.plot([i for i in range(len(timestep_depth))], timestep_depth, color='red')
 
-        plt.xlabel('First point of failure')
+        plt.xlabel('First point of failure', fontsize=16)
         # plt.ylabel('Number of models')
         plt.legend(loc='upper left',prop={'size': 14})
         plt.savefig(
@@ -406,7 +406,7 @@ def create_histogram_one_sequence_multiple_models():
         # plt.hist(fpfs, bins=range(0, 2001, 50))
         # plt.plot([i for i in range(len(timestep_depth))], timestep_depth, color='red')
 
-        plt.xlabel('First point of failure')
+        plt.xlabel('First point of failure', fontsize=16)
         # plt.ylabel('Number of models')
         plt.legend(prop={'size': 14})
         plt.savefig(
