@@ -84,6 +84,12 @@ plot_train_loss = prefix+'LINEAR_REGRESSION_log_inverse_avg_train_loss_FPF_EVERY
 plot_val_loss = prefix+'LINEAR_REGRESSION_log_inverse_avg_val_loss_FPF_EVERY_5_EPOCHS_GOOD_MODELS_ONLY.png'
 plot_long_loss = prefix+'LINEAR_REGRESSION_inverse_avg_long_loss_FPF_EVERY_5_EPOCHS_GOOD_MODELS_ONLY.png'
 
+
+plot_train_loss_large_font = prefix+'LINEAR_REGRESSION_log_inverse_avg_train_loss_FPF_EVERY_5_EPOCHS_GOOD_MODELS_ONLY_LARGE_FONT.png'
+plot_val_loss_large_font = prefix+'LINEAR_REGRESSION_log_inverse_avg_val_loss_FPF_EVERY_5_EPOCHS_GOOD_MODELS_ONLY_LARGE_FONT.png'
+plot_long_loss_large_font = prefix+'LINEAR_REGRESSION_inverse_avg_long_loss_FPF_EVERY_5_EPOCHS_GOOD_MODELS_ONLY_LARGE_FONT.png'
+
+
 # excel_name_inference = path+ 'Dyck1_' + task + '_' + str(
 #         num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' +str(batch_size) +'_batch_size_'+'_' + str(
 #         hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
@@ -174,6 +180,21 @@ def plot_linear_regression():
     plt.show()
     plt.close()
 
+    plt.subplots()
+    plt.rcParams['font.size'] = '16'
+    # plt.plot(log_inverse_train_loss, fpfs, 'o', label='Negative log train loss compared to Avg FPF')
+    plt.plot(log_inverse_train_loss, fpfs, 'o', label='Models at different stages of training')
+    plt.plot(log_inverse_train_loss, res_train.intercept + res_train.slope * log_inverse_train_loss, 'r',
+             label='fitted line')
+    # plt.legend()
+    plt.xlabel('Negative log train loss', fontsize=16)
+    plt.ylabel('Average FPF', fontsize=16)
+    # plt.title('Correlation and linear regression for the', fontsize=16)
+    plt.legend(prop={'size': 16})
+    plt.savefig(plot_train_loss_large_font, bbox_inches='tight', pad_inches=0)
+    plt.show()
+    plt.close()
+
     res_val = stats.linregress(log_inverse_val_loss, fpfs)
     print('r value for val = ', res_val.rvalue)
     print('r squared for val = ', res_val.rvalue*res_val.rvalue)
@@ -194,6 +215,20 @@ def plot_linear_regression():
     plt.show()
     plt.close()
 
+    plt.subplots()
+    plt.rcParams['font.size'] = '16'
+    # plt.plot(log_inverse_val_loss, fpfs, 'o', label='Negative log val loss compared to Avg FPF')
+    plt.plot(log_inverse_val_loss, fpfs, 'o', label='Models at different stages of training')
+    plt.plot(log_inverse_val_loss, res_val.intercept + res_val.slope * log_inverse_val_loss, 'r',
+             label='fitted line')
+    # plt.legend()
+    plt.xlabel('Negative log validation loss', fontsize=16)
+    plt.ylabel('Average FPF', fontsize=16)
+    plt.legend(prop={'size': 16})
+    plt.savefig(plot_val_loss_large_font,bbox_inches='tight', pad_inches=0)
+    plt.show()
+    plt.close()
+
     res_long = stats.linregress(log_inverse_long_loss, fpfs)
     print('r value for long = ', res_long.rvalue)
     print('r squared for long = ', res_long.rvalue * res_long.rvalue)
@@ -211,6 +246,20 @@ def plot_linear_regression():
     plt.ylabel('Average FPF', fontsize=14)
     plt.legend(prop={'size': 12})
     plt.savefig(plot_long_loss)
+    plt.show()
+    plt.close()
+
+    plt.subplots()
+    plt.rcParams['font.size'] = '16'
+    # plt.plot(log_inverse_long_loss, fpfs, 'o', label='negative log validation loss compared to Avg FPF')
+    plt.plot(log_inverse_long_loss, fpfs, 'o', label='Models at different stages of training')
+    plt.plot(log_inverse_long_loss, res_long.intercept + res_long.slope * log_inverse_long_loss, 'r',
+             label='fitted line')
+    # plt.legend()
+    plt.xlabel('Negative log long validation loss', fontsize=16)
+    plt.ylabel('Average FPF', fontsize=16)
+    plt.legend(prop={'size': 16})
+    plt.savefig(plot_long_loss_large_font, bbox_inches='tight', pad_inches=0)
     plt.show()
     plt.close()
     
