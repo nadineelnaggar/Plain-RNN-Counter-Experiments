@@ -370,7 +370,7 @@ def create_histogram_one_sequence_multiple_models():
 
         plt.xlabel('First point of failure')
         # plt.ylabel('Number of models')
-        plt.legend(prop={'size': 14})
+        plt.legend(loc='upper left',prop={'size': 14})
         plt.savefig(
             prefix + 'histogram one sequence multiple models ' + str(i) + '_CHECKPOINTS_ONLY_GOOD_MODELS_ZOOMED_IN_LARGE_FONT.png', bbox_inches='tight', pad_inches=0.05)
         plt.show()
