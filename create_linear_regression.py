@@ -190,8 +190,8 @@ def plot_linear_regression():
     plt.xlabel('Negative log train loss', fontsize=16)
     plt.ylabel('Average FPF', fontsize=16)
     # plt.title('Correlation and linear regression for the', fontsize=16)
-    plt.legend(prop={'size': 16})
-    plt.savefig(plot_train_loss_large_font, bbox_inches='tight', pad_inches=0)
+    plt.legend(prop={'size': 14})
+    plt.savefig(plot_train_loss_large_font, bbox_inches='tight', pad_inches=0.05)
     plt.show()
     plt.close()
 
@@ -224,8 +224,8 @@ def plot_linear_regression():
     # plt.legend()
     plt.xlabel('Negative log validation loss', fontsize=16)
     plt.ylabel('Average FPF', fontsize=16)
-    plt.legend(prop={'size': 16})
-    plt.savefig(plot_val_loss_large_font,bbox_inches='tight', pad_inches=0)
+    plt.legend(prop={'size': 14})
+    plt.savefig(plot_val_loss_large_font,bbox_inches='tight', pad_inches=0.05)
     plt.show()
     plt.close()
 
@@ -258,8 +258,8 @@ def plot_linear_regression():
     # plt.legend()
     plt.xlabel('Negative log long validation loss', fontsize=16)
     plt.ylabel('Average FPF', fontsize=16)
-    plt.legend(prop={'size': 16})
-    plt.savefig(plot_long_loss_large_font, bbox_inches='tight', pad_inches=0)
+    plt.legend(prop={'size': 14})
+    plt.savefig(plot_long_loss_large_font, bbox_inches='tight', pad_inches=0.05)
     plt.show()
     plt.close()
     
