@@ -372,7 +372,7 @@ def create_histogram_one_sequence_multiple_models():
         # plt.ylabel('Number of models')
         plt.legend()
         plt.savefig(
-            prefix + 'histogram one sequence multiple models ' + str(i) + '_CHECKPOINTS_ONLY_GOOD_MODELS_ZOOMED_IN_LARGE_FONT.png')
+            prefix + 'histogram one sequence multiple models ' + str(i) + '_CHECKPOINTS_ONLY_GOOD_MODELS_ZOOMED_IN_LARGE_FONT.png', bbox_inches='tight', pad_inches=0)
         plt.show()
         plt.close()
         # plt.subplots()
@@ -411,7 +411,7 @@ def create_histogram_one_sequence_multiple_models():
         plt.legend()
         plt.savefig(
             prefix + 'histogram one sequence multiple models ' + str(
-                i) + '_CHECKPOINTS_ONLY_GOOD_MODELS_FULL_HISTOGRAM_LARGE_FONT.png')
+                i) + '_CHECKPOINTS_ONLY_GOOD_MODELS_FULL_HISTOGRAM_LARGE_FONT.png', bbox_inches='tight', pad_inches=0)
         plt.show()
         plt.close()
     # for i in range(5):
