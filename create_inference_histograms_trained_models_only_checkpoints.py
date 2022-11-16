@@ -337,6 +337,83 @@ def create_histogram_one_sequence_multiple_models():
             prefix + 'histogram one sequence multiple models ' + str(i) + '_CHECKPOINTS_ONLY_GOOD_MODELS_FULL_HISTOGRAM.png')
         plt.show()
         plt.close()
+
+
+
+        #########################################
+
+        plt.subplots()
+        plt.rcParams['font.size'] = '16'
+        # plt.plot(timestep_depth, color='red')
+        # bins = [0,48, 49, 98, 99, 198, 199, 200, 248, 249, ]
+        # bins = []
+        if model_name == 'VanillaLSTM':
+            plt.plot([i for i in range(500, 1009)], timestep_depth[500:1009], color='red', alpha=0.5,
+                     label='Bracket Count')
+            new_bins = [*range(500, 1009, 10)]
+            plt.hist(fpfs * 10, bins=new_bins, label='Model histogram x10')
+            # print(timestep_depth[500:1000])
+        elif model_name == 'VanillaGRU':
+            plt.plot([i for i in range(500, 1009)], timestep_depth[500:1009], color='red', alpha=0.5,
+                     label='Bracket Count')
+            new_bins = [*range(500, 1009, 10)]
+            plt.hist(fpfs * 10, bins=new_bins, label='Model histogram x10')
+            # print(timestep_depth[500:1009])
+        elif model_name == 'VanillaReLURNN':
+            plt.plot([i for i in range(500, 1009)], timestep_depth[500:1009], color='red', alpha=0.5,
+                     label='Bracket Count')
+            new_bins = [*range(500, 1009, 10)]
+            plt.hist(fpfs * 10, bins=new_bins, label='Model histogram x10')
+            # print(timestep_depth[990:1000])
+        # plt.hist(fpfs, bins=range(0, 2001, 50))
+        # plt.plot([i for i in range(len(timestep_depth))], timestep_depth, color='red')
+
+        plt.xlabel('First point of failure')
+        # plt.ylabel('Number of models')
+        plt.legend()
+        plt.savefig(
+            prefix + 'histogram one sequence multiple models ' + str(i) + '_CHECKPOINTS_ONLY_GOOD_MODELS_ZOOMED_IN_LARGE_FONT.png')
+        plt.show()
+        plt.close()
+        # plt.subplots()
+        # plt.plot([i for i in range(len(timestep_depth))], timestep_depth, color='red')
+        # plt.xlabel('Timestep')
+        # plt.ylabel('Stack Depths')
+        # # plt.savefig(path + 'timestep depth one sequence multiple models ' + str(i) + '_TRAINED_MODELS_ONLY.png')
+        # plt.savefig(prefix + 'timestep depth one sequence multiple models ' + str(i) + '_TRAINED_MODELS_ONLY.png')
+        # plt.show()
+        # plt.close()
+        plt.subplots()
+        plt.rcParams['font.size'] = '16'
+        if model_name == 'VanillaLSTM':
+            plt.plot([i for i in range(0, 2000, 1)], timestep_depth, color='red', alpha=0.5,
+                     label='Bracket Count')
+            new_bins = [*range(0, 2001, 10)]
+            plt.hist(fpfs * 10, bins=new_bins, label='Model histogram x10')
+            # print(timestep_depth[990:1000])
+        elif model_name == 'VanillaGRU':
+            plt.plot([i for i in range(0, 2000, 1)], timestep_depth, color='red', alpha=0.5,
+                     label='Bracket Count')
+            new_bins = [*range(0, 2001, 10)]
+            plt.hist(fpfs * 10, bins=new_bins, label='Model histogram x10')
+            # print(timestep_depth[398:600])
+        elif model_name == 'VanillaReLURNN':
+            plt.plot([i for i in range(0, 2000, 1)], timestep_depth, color='red', alpha=0.5,
+                     label='Bracket Count')
+            new_bins = [*range(0, 2001, 10)]
+            plt.hist(fpfs * 10, bins=new_bins, label='Model histogram x10')
+            # print(timestep_depth[990:1000])
+        # plt.hist(fpfs, bins=range(0, 2001, 50))
+        # plt.plot([i for i in range(len(timestep_depth))], timestep_depth, color='red')
+
+        plt.xlabel('First point of failure')
+        # plt.ylabel('Number of models')
+        plt.legend()
+        plt.savefig(
+            prefix + 'histogram one sequence multiple models ' + str(
+                i) + '_CHECKPOINTS_ONLY_GOOD_MODELS_FULL_HISTOGRAM_LARGE_FONT.png')
+        plt.show()
+        plt.close()
     # for i in range(5):
     #     max_depth = df['max depth for incorrect sequences (2000 tokens)'][i]
     #     # print(type(max_depth))
