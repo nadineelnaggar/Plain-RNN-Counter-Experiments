@@ -181,16 +181,16 @@ def plot_linear_regression():
     plt.close()
 
     plt.subplots()
-    plt.rcParams['font.size'] = '16'
+    plt.rcParams['font.size'] = '20'
     # plt.plot(log_inverse_train_loss, fpfs, 'o', label='Negative log train loss compared to Avg FPF')
     plt.plot(log_inverse_train_loss, fpfs, 'o', label='Models at different stages of training')
     plt.plot(log_inverse_train_loss, res_train.intercept + res_train.slope * log_inverse_train_loss, 'r',
              label='fitted line')
     # plt.legend()
-    plt.xlabel('Negative log train loss', fontsize=16)
-    plt.ylabel('Average FPF', fontsize=16)
+    plt.xlabel('Negative log train loss', fontsize=20)
+    plt.ylabel('Average FPF', fontsize=20)
     # plt.title('Correlation and linear regression for the', fontsize=16)
-    plt.legend(prop={'size': 14})
+    plt.legend(prop={'size': 20},loc='lower right')
     plt.savefig(plot_train_loss_large_font, bbox_inches='tight', pad_inches=0.05)
     plt.show()
     plt.close()
@@ -216,15 +216,15 @@ def plot_linear_regression():
     plt.close()
 
     plt.subplots()
-    plt.rcParams['font.size'] = '16'
+    plt.rcParams['font.size'] = '20'
     # plt.plot(log_inverse_val_loss, fpfs, 'o', label='Negative log val loss compared to Avg FPF')
-    plt.plot(log_inverse_val_loss, fpfs, 'o', label='Models at different stages of training')
+    plt.plot(log_inverse_val_loss, fpfs, 'o', label='Models')
     plt.plot(log_inverse_val_loss, res_val.intercept + res_val.slope * log_inverse_val_loss, 'r',
              label='fitted line')
     # plt.legend()
-    plt.xlabel('Negative log validation loss', fontsize=16)
-    plt.ylabel('Average FPF', fontsize=16)
-    plt.legend(prop={'size': 14})
+    plt.xlabel('Negative log validation loss', fontsize=20)
+    plt.ylabel('Average FPF', fontsize=20)
+    plt.legend(prop={'size': 20},loc='lower right')
     plt.savefig(plot_val_loss_large_font,bbox_inches='tight', pad_inches=0.05)
     plt.show()
     plt.close()
@@ -250,15 +250,15 @@ def plot_linear_regression():
     plt.close()
 
     plt.subplots()
-    plt.rcParams['font.size'] = '16'
+    plt.rcParams['font.size'] = '20'
     # plt.plot(log_inverse_long_loss, fpfs, 'o', label='negative log validation loss compared to Avg FPF')
-    plt.plot(log_inverse_long_loss, fpfs, 'o', label='Models at different stages of training')
+    plt.plot(log_inverse_long_loss, fpfs, 'o', label='Models')
     plt.plot(log_inverse_long_loss, res_long.intercept + res_long.slope * log_inverse_long_loss, 'r',
              label='fitted line')
     # plt.legend()
-    plt.xlabel('Negative log long validation loss', fontsize=16)
-    plt.ylabel('Average FPF', fontsize=16)
-    plt.legend(prop={'size': 14})
+    plt.xlabel('Negative log long validation loss', fontsize=20)
+    plt.ylabel('Average FPF', fontsize=20)
+    plt.legend(prop={'size': 20},loc='lower right')
     plt.savefig(plot_long_loss_large_font, bbox_inches='tight', pad_inches=0.05)
     plt.show()
     plt.close()
