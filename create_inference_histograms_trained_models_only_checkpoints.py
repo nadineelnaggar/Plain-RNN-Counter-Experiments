@@ -343,7 +343,7 @@ def create_histogram_one_sequence_multiple_models():
         #########################################
 
         plt.subplots()
-        plt.rcParams['font.size'] = '16'
+        plt.rcParams['font.size'] = '20'
         # plt.plot(timestep_depth, color='red')
         # bins = [0,48, 49, 98, 99, 198, 199, 200, 248, 249, ]
         # bins = []
@@ -368,9 +368,9 @@ def create_histogram_one_sequence_multiple_models():
         # plt.hist(fpfs, bins=range(0, 2001, 50))
         # plt.plot([i for i in range(len(timestep_depth))], timestep_depth, color='red')
 
-        plt.xlabel('First point of failure', fontsize=16)
+        plt.xlabel('First point of failure', fontsize=20)
         # plt.ylabel('Number of models')
-        plt.legend(loc='upper left',prop={'size': 14})
+        plt.legend(loc='upper left',prop={'size': 20})
         plt.savefig(
             prefix + 'histogram one sequence multiple models ' + str(i) + '_CHECKPOINTS_ONLY_GOOD_MODELS_ZOOMED_IN_LARGE_FONT.png', bbox_inches='tight', pad_inches=0.05)
         plt.show()
@@ -384,7 +384,7 @@ def create_histogram_one_sequence_multiple_models():
         # plt.show()
         # plt.close()
         plt.subplots()
-        plt.rcParams['font.size'] = '16'
+        plt.rcParams['font.size'] = '20'
         if model_name == 'VanillaLSTM':
             plt.plot([i for i in range(0, 2000, 1)], timestep_depth, color='red', alpha=0.5,
                      label='Bracket Count')
@@ -406,9 +406,9 @@ def create_histogram_one_sequence_multiple_models():
         # plt.hist(fpfs, bins=range(0, 2001, 50))
         # plt.plot([i for i in range(len(timestep_depth))], timestep_depth, color='red')
 
-        plt.xlabel('First point of failure', fontsize=16)
+        plt.xlabel('First point of failure', fontsize=20)
         # plt.ylabel('Number of models')
-        plt.legend(prop={'size': 14})
+        plt.legend(prop={'size': 20})
         plt.savefig(
             prefix + 'histogram one sequence multiple models ' + str(
                 i) + '_CHECKPOINTS_ONLY_GOOD_MODELS_FULL_HISTOGRAM_LARGE_FONT.png', bbox_inches='tight', pad_inches=0.05)
