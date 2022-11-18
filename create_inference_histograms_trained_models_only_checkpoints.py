@@ -343,7 +343,8 @@ def create_histogram_one_sequence_multiple_models():
         #########################################
 
         plt.subplots()
-        plt.rcParams.update['font.size'] = '20'
+        plt.rcParams['font.size'] = '20'
+        plt.rcParams.update({'font.size': 20})
         # plt.plot(timestep_depth, color='red')
         # bins = [0,48, 49, 98, 99, 198, 199, 200, 248, 249, ]
         # bins = []
@@ -384,7 +385,8 @@ def create_histogram_one_sequence_multiple_models():
         # plt.show()
         # plt.close()
         plt.subplots()
-        plt.rcParams.update['font.size'] = '20'
+        plt.rcParams['font.size'] = '20'
+        plt.rcParams.update({'font.size': 20})
         if model_name == 'VanillaLSTM':
             plt.plot([i for i in range(0, 2000, 1)], timestep_depth, color='red', alpha=0.5,
                      label='Bracket Count')
