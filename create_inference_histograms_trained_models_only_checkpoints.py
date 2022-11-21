@@ -352,19 +352,19 @@ def create_histogram_one_sequence_multiple_models():
             plt.plot([i for i in range(500, 1009)], timestep_depth[500:1009], color='red', alpha=0.5,
                      label='Bracket Count')
             new_bins = [*range(500, 1009, 10)]
-            plt.hist(fpfs * 10, bins=new_bins, label='Model histogram x10')
+            plt.hist(fpfs * 10, bins=new_bins, label='Models x10')
             # print(timestep_depth[500:1000])
         elif model_name == 'VanillaGRU':
             plt.plot([i for i in range(500, 1009)], timestep_depth[500:1009], color='red', alpha=0.5,
                      label='Bracket Count')
             new_bins = [*range(500, 1009, 10)]
-            plt.hist(fpfs * 10, bins=new_bins, label='Model histogram x10')
+            plt.hist(fpfs * 10, bins=new_bins, label='Models x10')
             # print(timestep_depth[500:1009])
         elif model_name == 'VanillaReLURNN':
             plt.plot([i for i in range(500, 1009)], timestep_depth[500:1009], color='red', alpha=0.5,
                      label='Bracket Count')
             new_bins = [*range(500, 1009, 10)]
-            plt.hist(fpfs * 10, bins=new_bins, label='Model histogram x10')
+            plt.hist(fpfs * 10, bins=new_bins, label='Models x10')
             # print(timestep_depth[990:1000])
         # plt.hist(fpfs, bins=range(0, 2001, 50))
         # plt.plot([i for i in range(len(timestep_depth))], timestep_depth, color='red')
@@ -393,19 +393,19 @@ def create_histogram_one_sequence_multiple_models():
             plt.plot([i for i in range(0, 2000, 1)], timestep_depth, color='red', alpha=0.5,
                      label='Bracket Count')
             new_bins = [*range(0, 2001, 10)]
-            plt.hist(fpfs * 10, bins=new_bins, label='Model histogram x10')
+            plt.hist(fpfs * 10, bins=new_bins, label='Models x10')
             # print(timestep_depth[990:1000])
         elif model_name == 'VanillaGRU':
             plt.plot([i for i in range(0, 2000, 1)], timestep_depth, color='red', alpha=0.5,
                      label='Bracket Count')
             new_bins = [*range(0, 2001, 10)]
-            plt.hist(fpfs * 10, bins=new_bins, label='Model histogram x10')
+            plt.hist(fpfs * 10, bins=new_bins, label='Models x10')
             # print(timestep_depth[398:600])
         elif model_name == 'VanillaReLURNN':
             plt.plot([i for i in range(0, 2000, 1)], timestep_depth, color='red', alpha=0.5,
                      label='Bracket Count')
             new_bins = [*range(0, 2001, 10)]
-            plt.hist(fpfs * 10, bins=new_bins, label='Model histogram x10')
+            plt.hist(fpfs * 10, bins=new_bins, label='Models x10')
             # print(timestep_depth[990:1000])
         # plt.hist(fpfs, bins=range(0, 2001, 50))
         # plt.plot([i for i in range(len(timestep_depth))], timestep_depth, color='red')
