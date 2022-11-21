@@ -628,9 +628,9 @@ plt.close()
 
 plt.subplots()
 plt.rcParams['font.size'] = '16'
-plt.plot(epochs, np.log10(min_validation_losses), label='Minimum validation loss', color='red', linestyle='dashed')
-plt.plot(epochs, np.log10(max_validation_losses), label='Maximum validation loss', color='green', linestyle='dotted')
-plt.plot(epochs, np.log10(avg_validation_losses), label='Average validation loss', color='blue')
+plt.plot(epochs, np.log10(min_validation_losses), label='Minimum', color='red', linestyle='dashed')
+plt.plot(epochs, np.log10(max_validation_losses), label='Maximum', color='green', linestyle='dotted')
+plt.plot(epochs, np.log10(avg_validation_losses), label='Average', color='blue')
 # plt.ylabel('Decimal log of the validation loss', fontsize=14)
 plt.ylabel('Validation loss (log)', fontsize=16)
 plt.xlabel('Epoch', fontsize=16)
