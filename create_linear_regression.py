@@ -183,7 +183,7 @@ def plot_linear_regression():
     plt.subplots()
     plt.rcParams['font.size'] = '20'
     # plt.plot(log_inverse_train_loss, fpfs, 'o', label='Negative log train loss compared to Avg FPF')
-    plt.plot(log_inverse_train_loss, fpfs, 'o', label='Models at different stages of training')
+    plt.plot(log_inverse_train_loss, fpfs, 'o', label='Models')
     plt.plot(log_inverse_train_loss, res_train.intercept + res_train.slope * log_inverse_train_loss, 'r',
              label='fitted line')
     # plt.legend()
