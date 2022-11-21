@@ -185,7 +185,7 @@ def plot_linear_regression():
     # plt.plot(log_inverse_train_loss, fpfs, 'o', label='Negative log train loss compared to Avg FPF')
     plt.plot(log_inverse_train_loss, fpfs, 'o', label='Models')
     plt.plot(log_inverse_train_loss, res_train.intercept + res_train.slope * log_inverse_train_loss, 'r',
-             label='fitted line')
+             label='Fitted line')
     # plt.legend()
     plt.xlabel('Negative log train loss', fontsize=20)
     plt.ylabel('Average FPF', fontsize=20)
@@ -223,7 +223,7 @@ def plot_linear_regression():
     # plt.plot(log_inverse_val_loss, fpfs, 'o', label='Negative log val loss compared to Avg FPF')
     plt.plot(log_inverse_val_loss, fpfs, 'o', label='Models')
     plt.plot(log_inverse_val_loss, res_val.intercept + res_val.slope * log_inverse_val_loss, 'r',
-             label='fitted line')
+             label='Fitted line')
     # plt.legend()
     plt.xlabel('Negative log validation loss', fontsize=20)
     plt.ylabel('Average FPF', fontsize=20)
@@ -259,7 +259,7 @@ def plot_linear_regression():
     # plt.plot(log_inverse_long_loss, fpfs, 'o', label='negative log validation loss compared to Avg FPF')
     plt.plot(log_inverse_long_loss, fpfs, 'o', label='Models')
     plt.plot(log_inverse_long_loss, res_long.intercept + res_long.slope * log_inverse_long_loss, 'r',
-             label='fitted line')
+             label='Fitted line')
     # plt.legend()
     plt.xlabel('Negative log long validation loss', fontsize=20)
     plt.ylabel('Average FPF', fontsize=20)
