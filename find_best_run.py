@@ -101,7 +101,7 @@ for i in range(len(lstm_dfs)):
     plt.plot(all_lstm_epochs, all_lstm_train_losses, label='Train loss')
     plt.plot(all_lstm_epochs, all_lstm_long_losses, label='Long validation loss')
     plt.legend()
-    plt.savefig('lstm_loss_plots_30_epochs_run'+str(i)+'.png')
+    plt.savefig('lstm_loss_plots_30_epochs_run'+str(i)+'.png', bbox_inches='tight', pad_inches=0.05)
     plt.close()
 
 
@@ -638,7 +638,7 @@ plt.xticks(fontsize=16)
 plt.yticks(fontsize=16)
 # plt.title('Progression of the validation loss during training\n for ReLU models', fontsize=16)
 plt.legend(prop={'size': 16})
-plt.savefig('relu_loss_plots_30_epochs_LOGARITHMIC_LARGE_FONT.png')
+plt.savefig('relu_loss_plots_30_epochs_LOGARITHMIC_LARGE_FONT.png', bbox_inches='tight', pad_inches=0.05)
 plt.close()
 
 print('Train Accuracy = (avg, min, max)', np.mean(relu_best_model_train_val_accuracies), np.min(relu_best_model_train_val_accuracies), np.max(relu_best_model_train_val_accuracies))
@@ -826,7 +826,7 @@ plt.xlabel('Epoch', fontsize=16)
 plt.legend(prop={'size': 16})
 plt.xticks(fontsize=16)
 plt.yticks(fontsize=16)
-plt.savefig('lstm2_loss_plots_30_epochs_LOGARITHMIC_LARGE_FONT.png')
+plt.savefig('lstm2_loss_plots_30_epochs_LOGARITHMIC_LARGE_FONT.png', bbox_inches='tight', pad_inches=0.05)
 plt.close()
 
 print('Train Accuracy = (avg, min, max)', np.mean(lstm2_best_model_train_val_accuracies), np.min(lstm2_best_model_train_val_accuracies), np.max(lstm2_best_model_train_val_accuracies))
