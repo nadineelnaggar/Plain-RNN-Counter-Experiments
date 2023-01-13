@@ -12,3 +12,4 @@ model=VanillaLSTM(input_size=2,hidden_size=1,num_layers=1,batch_size=1,output_si
 model.load_state_dict(torch.load(model_name))
 model.to(device)
 print(model)
+print(model.parameters())
