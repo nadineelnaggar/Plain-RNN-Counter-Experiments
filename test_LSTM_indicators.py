@@ -76,9 +76,35 @@ def calculate_lstm_indicators(seq):
     c_values=[]
     h_values = []
     h_prev_values = []
+    a_b_ratios = []
+    i_t_values = []
+
 
     #tokenise sequence
     #input the tokens one at a time and calculate the parameters and store in arrays
+
+    tokens = [char for char in seq]
+
+    for i in range(len(tokens)):
+        a = 0
+        b = 0
+        c = 0
+        h = 0
+        h_prev = h_prev_values[i]
+
+        tok = tokens[i]
+        if tok == '(':
+            #write calculations here
+            pass
+        elif tok == ')':
+            #write calculations here
+            pass
+
+    #calculate the average a, b, and a_b_ratio
+    #calculate the average i_t value (recurrent weight)
+
+
+
 
 
 
