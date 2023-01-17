@@ -72,21 +72,21 @@ def calculate_lstm_indicators(seq):
     
     
     print('weights_if = ',weights_if)
-    print('weights_if = ', weights_ig)
-    print('weights_if = ', weights_io)
-    print('weights_if = ', weights_ii)
+    print('weights_ig = ', weights_ig)
+    print('weights_io = ', weights_io)
+    print('weights_ii = ', weights_ii)
     print('biases_if = ', biases_if)
-    print('biases_if = ', biases_ig)
-    print('biases_if = ', biases_io)
-    print('biases_if = ', biases_ii)
+    print('biases_ig = ', biases_ig)
+    print('biases_io = ', biases_io)
+    print('biases_ii = ', biases_ii)
     print('weights_hf = ', weights_hf)
-    print('weights_hf = ', weights_hg)
-    print('weights_hf = ', weights_ho)
-    print('weights_hf = ', weights_hi)
+    print('weights_hg = ', weights_hg)
+    print('weights_ho = ', weights_ho)
+    print('weights_hi = ', weights_hi)
     print('biases_hf = ', biases_hf)
-    print('biases_hf = ', biases_hg)
-    print('biases_hf = ', biases_ho)
-    print('biases_hf = ', biases_hi)
+    print('biases_hg = ', biases_hg)
+    print('biases_ho = ', biases_ho)
+    print('biases_hi = ', biases_hi)
     
     
     a_values = []
