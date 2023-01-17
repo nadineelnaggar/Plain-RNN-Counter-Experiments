@@ -69,8 +69,26 @@ def extract_lstm_weights():
 def calculate_lstm_indicators(seq):
     weights_if, weights_ii, weights_ig, weights_io, biases_if, biases_ii, biases_ig, biases_io, \
         weights_hf, weights_hi, weights_hg, weights_ho, biases_hf, biases_hi, biases_hg, biases_ho = extract_lstm_weights()
-
-
+    
+    
+    print('weights_if = ',weights_if)
+    print('weights_if = ', weights_ig)
+    print('weights_if = ', weights_io)
+    print('weights_if = ', weights_ii)
+    print('biases_if = ', biases_if)
+    print('biases_if = ', biases_ig)
+    print('biases_if = ', biases_io)
+    print('biases_if = ', biases_ii)
+    print('weights_hf = ', weights_hf)
+    print('weights_hf = ', weights_hg)
+    print('weights_hf = ', weights_ho)
+    print('weights_hf = ', weights_hi)
+    print('biases_hf = ', biases_hf)
+    print('biases_hf = ', biases_hg)
+    print('biases_hf = ', biases_ho)
+    print('biases_hf = ', biases_hi)
+    
+    
     a_values = []
     b_values = []
     c_values=[]
