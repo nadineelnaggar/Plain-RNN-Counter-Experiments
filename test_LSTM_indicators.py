@@ -123,7 +123,7 @@ def calculate_lstm_indicators(seq):
 
 
 
-
+calculate_lstm_indicators('()()')
 
 
 def inspect_lstm(model):
