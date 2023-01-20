@@ -99,19 +99,34 @@ if model_type=='ReLU':
         model.to(device)
 
         for param in model.rnn.named_parameters():
-            if 'weight' in param[0]:
-                print('parameter name = ',param[0])
-                print('weight = ',param[1])
-                print(param[1][0][0].item())
-                # print(param[1][0][1])
-            elif 'bias' in param[0]:
-                print('parameter name = ',param[0])
-                print('bias = ',param[1])
-                print(param[1][0].item())
+            # if 'weight' in param[0]:
+            #     print('parameter name = ',param[0])
+            #     print('weight = ',param[1])
+            #     print(param[1][0][0].item())
+            #     # print(param[1][0][1])
+            # elif 'bias' in param[0]:
+            #     print('parameter name = ',param[0])
+            #     print('bias = ',param[1])
+            #     print(param[1][0].item())
+            if 'weight_ih_10' in param[0]:
+                weights_a.append(param[1][0][0].item())
+                weights_b.append(param[1][0][1].item())
+            elif 'weight_hh_10' in param[0]:
+                weights_u.append(param[1][0][0].item())
+            elif 'bias_ih_10' in param[0]:
+                biases_input.append(param[1][0][0].item())
+            elif 'bias_hh_10' in param[0]:
+                biases_u.append(param[1][0][0].item())
+
 
             # if 'weight_ih_10' in param[0]:
 
 
+    print('len weights a = ',len(weights_a))
+    print('len weights b = ',len(weights_b))
+    print('len weights u = ',len(weights_u))
+    print('len biases input = ',len(biases_input))
+    print('len biases u = ',len(biases_u))
         # print('relu input weight = ',model.rnn.weight_ih)
         # print('relu input bias = ',model.bias_ih)
         # print('relu hidden weight = ',model.rnn.weight_hh)
