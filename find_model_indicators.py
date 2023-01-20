@@ -93,10 +93,10 @@ if model_type=='ReLU':
         model.load_state_dict(checkpt['model_state_dict'])
         model.to(device)
 
-        print('relu input weight = ',model.rnn.weight_ih_l)
-        print('relu input bias = ',model.bias_ih_l)
-        print('relu hidden weight = ',model.rnn.weight_hh_l)
-        print('relu_hidden_bias = ',model.rnn.bias_hh_l)
+        print('relu input weight = ',model.rnn.weight_ih)
+        print('relu input bias = ',model.bias_ih)
+        print('relu hidden weight = ',model.rnn.weight_hh)
+        print('relu_hidden_bias = ',model.rnn.bias_hh)
 
 
 
