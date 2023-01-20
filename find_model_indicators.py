@@ -81,6 +81,8 @@ if model_type=='ReLU':
         checkpoints.append(relu_checkpoint_prefix_3 + '_run' + str(best_runs_5runs_30epochs[i]) + '_epoch20.pth')
         checkpoints.append(relu_checkpoint_prefix_3 + '_run' + str(best_runs_5runs_30epochs[i]) + '_epoch25.pth')
 
+    a_values = []
+    b_values = []
     ab_ratios = []
     u_values = []
     weights_a = []
@@ -130,6 +132,20 @@ if model_type=='ReLU':
     print('len weights u = ',len(weights_u))
     print('len biases input = ',len(biases_input))
     print('len biases u = ',len(biases_u))
+
+    for i in range(len(weights_a)):
+        ab_ratio = 0
+        a_value = weights_a[i]+biases_u[i]+biases_input[i]
+        b_value = weights_b[i]+biases_u[i]+biases_input[i]
+        ab_ratio=a_value/b_value
+        ab_ratios.append(ab_ratio)
+        a_values.append(a_value)
+        b_values.append(b_value)
+        u_values.append(weights_u[i])
+
+
+    print(ab_ratios)
+    print(u_values)
 
 
 
