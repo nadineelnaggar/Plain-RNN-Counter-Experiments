@@ -147,11 +147,11 @@ if model_type=='ReLU':
     print(ab_ratios)
     print(u_values)
     plt.subplots()
-    plt.hist(ab_ratios, bins=20)
+    plt.hist(ab_ratios, bins=100)
     plt.savefig('histogram_ab_ratio.png')
     plt.show()
     plt.subplots()
-    plt.hist(u_values, bins=20)
+    plt.hist(u_values, bins=100)
     plt.savefig('histogram_u_values.png')
     plt.show()
 
