@@ -103,7 +103,7 @@ if model_type=='ReLU':
                 print('parameter name = ',param[0])
                 print('weight = ',param[1])
                 print(param[1][0][0])
-                print(param[1][0][1])
+                # print(param[1][0][1])
             elif 'bias' in param[0]:
                 print('parameter name = ',param[0])
                 print('bias = ',param[1])
