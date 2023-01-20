@@ -109,9 +109,9 @@ if model_type=='ReLU':
             #     print('bias = ',param[1])
             #     print(param[1][0].item())
             if 'weight_ih' in param[0]:
-                print(param[0])
-                print(param[1][0][0].item())
-                print(param[1][0][1].item())
+                # print(param[0])
+                # print(param[1][0][0].item())
+                # print(param[1][0][1].item())
                 weights_a.append(param[1][0][0].item())
                 weights_b.append(param[1][0][1].item())
             elif 'weight_hh' in param[0]:
