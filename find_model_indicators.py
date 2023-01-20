@@ -127,10 +127,7 @@ if model_type=='ReLU':
     print('len weights u = ',len(weights_u))
     print('len biases input = ',len(biases_input))
     print('len biases u = ',len(biases_u))
-        # print('relu input weight = ',model.rnn.weight_ih)
-        # print('relu input bias = ',model.bias_ih)
-        # print('relu hidden weight = ',model.rnn.weight_hh)
-        # print('relu_hidden_bias = ',model.rnn.bias_hh)
+
 
 
 
