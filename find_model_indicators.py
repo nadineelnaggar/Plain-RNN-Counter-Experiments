@@ -147,31 +147,31 @@ if model_type=='ReLU':
     print(ab_ratios)
     print(u_values)
     plt.subplots()
-    plt.hist(ab_ratios)
+    plt.hist(ab_ratios, bins=20)
     plt.savefig('histogram_ab_ratio.png')
     plt.show()
     plt.subplots()
-    plt.hist(u_values)
+    plt.hist(u_values, bins=20)
     plt.savefig('histogram_u_values.png')
     plt.show()
 
-    relu_dfs_1 = read_sheets(10, relu_excel_path)  # 10 runs, 50 epochs
-    relu_dfs_2 = read_sheets(20, relu_excel_path_2)  # 20 runs, 30 epochs
-    relu_dfs_3 = read_sheets(5, relu_excel_path_3)  # 5 runs, 30 epochs
-
-    relu_dfs = []
-    relu_dfs.append(relu_dfs_1[4])
-    relu_dfs.append(relu_dfs_1[5])
-    relu_dfs.append(relu_dfs_1[8])
-    relu_dfs.append(relu_dfs_2[4])
-    relu_dfs.append(relu_dfs_2[5])
-    relu_dfs.append(relu_dfs_2[8])
-    relu_dfs.append(relu_dfs_2[10])
-    relu_dfs.append(relu_dfs_2[12])
-    relu_dfs.append(relu_dfs_3[0])
-    relu_dfs.append(relu_dfs_3[3])
-
-    print(len(relu_dfs))
+    # relu_dfs_1 = read_sheets(10, relu_excel_path)  # 10 runs, 50 epochs
+    # relu_dfs_2 = read_sheets(20, relu_excel_path_2)  # 20 runs, 30 epochs
+    # relu_dfs_3 = read_sheets(5, relu_excel_path_3)  # 5 runs, 30 epochs
+    #
+    # relu_dfs = []
+    # relu_dfs.append(relu_dfs_1[4])
+    # relu_dfs.append(relu_dfs_1[5])
+    # relu_dfs.append(relu_dfs_1[8])
+    # relu_dfs.append(relu_dfs_2[4])
+    # relu_dfs.append(relu_dfs_2[5])
+    # relu_dfs.append(relu_dfs_2[8])
+    # relu_dfs.append(relu_dfs_2[10])
+    # relu_dfs.append(relu_dfs_2[12])
+    # relu_dfs.append(relu_dfs_3[0])
+    # relu_dfs.append(relu_dfs_3[3])
+    #
+    # print(len(relu_dfs))
 
 
 
