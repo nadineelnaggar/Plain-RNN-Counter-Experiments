@@ -566,7 +566,7 @@ class VanillaReLURNN_NoBias(nn.Module):
         self.nb_tags = len(self.vocab)-1
         self.rnn = nn.RNN(input_size, hidden_size, num_layers=num_layers, nonlinearity='relu', bias=False)
         # self.lstm = nn.LSTM(input_size, hidden_size)
-        self.fc2 = nn.Linear(hidden_size, output_size)
+        self.fc2 = nn.Linear(hidden_size, output_size, bias=False) #output size 1 for this layer to work without bias
         self.sigmoid = nn.Sigmoid()
 
     def forward(self, x, length):
