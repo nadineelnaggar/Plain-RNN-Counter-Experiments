@@ -108,14 +108,17 @@ if model_type=='ReLU':
             #     print('parameter name = ',param[0])
             #     print('bias = ',param[1])
             #     print(param[1][0].item())
-            if 'weight_ih_10' in param[0]:
+            if 'weight_ih' in param[0]:
+                print(param[0])
+                print(param[1][0][0].item())
+                print(param[1][0][1].item())
                 weights_a.append(param[1][0][0].item())
                 weights_b.append(param[1][0][1].item())
-            elif 'weight_hh_10' in param[0]:
+            elif 'weight_hh' in param[0]:
                 weights_u.append(param[1][0][0].item())
-            elif 'bias_ih_10' in param[0]:
+            elif 'bias_ih' in param[0]:
                 biases_input.append(param[1][0][0].item())
-            elif 'bias_hh_10' in param[0]:
+            elif 'bias_hh' in param[0]:
                 biases_u.append(param[1][0][0].item())
 
 
