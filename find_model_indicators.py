@@ -83,6 +83,11 @@ if model_type=='ReLU':
 
     ab_ratios = []
     u_values = []
+    weights_a = []
+    weights_b = []
+    biases_input = []
+    weights_u = []
+    biases_u = []
 
 
     for i in range(len(checkpoints)):
@@ -95,8 +100,10 @@ if model_type=='ReLU':
 
         for param in model.rnn.named_parameters():
             if 'weight' in param[0]:
+                print('parameter name = ',param[0])
                 print('weight = ',param[1])
             elif 'bias' in param[0]:
+                print('parameter name = ',param[0])
                 print('bias = ',param[1])
 
         # print('relu input weight = ',model.rnn.weight_ih)
