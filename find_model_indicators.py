@@ -117,9 +117,9 @@ if model_type=='ReLU':
             elif 'weight_hh' in param[0]:
                 weights_u.append(param[1][0][0].item())
             elif 'bias_ih' in param[0]:
-                biases_input.append(param[1][0][0].item())
+                biases_input.append(param[1][0].item())
             elif 'bias_hh' in param[0]:
-                biases_u.append(param[1][0][0].item())
+                biases_u.append(param[1][0].item())
 
 
             # if 'weight_ih_10' in param[0]:
