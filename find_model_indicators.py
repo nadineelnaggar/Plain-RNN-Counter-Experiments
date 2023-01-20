@@ -102,9 +102,15 @@ if model_type=='ReLU':
             if 'weight' in param[0]:
                 print('parameter name = ',param[0])
                 print('weight = ',param[1])
+                print(param[1][0])
+                print(param[1][1])
             elif 'bias' in param[0]:
                 print('parameter name = ',param[0])
                 print('bias = ',param[1])
+                print(param[1][0])
+
+            # if 'weight_ih_10' in param[0]:
+
 
         # print('relu input weight = ',model.rnn.weight_ih)
         # print('relu input bias = ',model.bias_ih)
