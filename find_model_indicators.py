@@ -15,9 +15,9 @@ parser.add_argument('--model_type',type=str, help='type of model, LSTM, ReLU')
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
-relu_excel_path = '/Users/nadineelnaggar/Google Drive/PhD/EXPT_LOGS/Dyck1_NextTokenPrediction/Minibatch_Training/VanillaReLURNN/1_batch_size/0.01_learning_rate/50_epochs/50_lr_scheduler_step/1.0_lr_scheduler_gamma/1_hidden_units/10_runs/shuffle_True/Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaReLURNN_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_50epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_10runs_NEW.xlsx'
-relu_excel_path_2 = '/Users/nadineelnaggar/Google Drive/PhD/EXPT_LOGS/Dyck1_NextTokenPrediction/Minibatch_Training/VanillaReLURNN/1_batch_size/0.01_learning_rate/30_epochs/50_lr_scheduler_step/1.0_lr_scheduler_gamma/1_hidden_units/20_runs/shuffle_True/Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaReLURNN_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_20runs.xlsx'
-relu_excel_path_3 = '/Users/nadineelnaggar/Google Drive/PhD/EXPT_LOGS/Dyck1_NextTokenPrediction/Minibatch_Training/VanillaReLURNN/1_batch_size/0.01_learning_rate/30_epochs/50_lr_scheduler_step/1.0_lr_scheduler_gamma/1_hidden_units/5_runs/shuffle_True/Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaReLURNN_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_5runs.xlsx'
+relu_excel_path = '/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_NextTokenPrediction/Minibatch_Training/VanillaReLURNN/1_batch_size/0.01_learning_rate/50_epochs/50_lr_scheduler_step/1.0_lr_scheduler_gamma/1_hidden_units/10_runs/shuffle_True/Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaReLURNN_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_50epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_10runs_NEW.xlsx'
+relu_excel_path_2 = '/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_NextTokenPrediction/Minibatch_Training/VanillaReLURNN/1_batch_size/0.01_learning_rate/30_epochs/50_lr_scheduler_step/1.0_lr_scheduler_gamma/1_hidden_units/20_runs/shuffle_True/Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaReLURNN_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_20runs.xlsx'
+relu_excel_path_3 = '/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_NextTokenPrediction/Minibatch_Training/VanillaReLURNN/1_batch_size/0.01_learning_rate/30_epochs/50_lr_scheduler_step/1.0_lr_scheduler_gamma/1_hidden_units/5_runs/shuffle_True/Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaReLURNN_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_5runs.xlsx'
 
 
 def read_sheets(num_runs, excel_name):
@@ -78,6 +78,23 @@ def getReLUModels():
     # extract the excel sheets corresponding to the good runs
     # pass
 
+    relu_dfs_1 = read_sheets(10, relu_excel_path)  # 10 runs, 50 epochs
+    relu_dfs_2 = read_sheets(20, relu_excel_path_2)  # 20 runs, 30 epochs
+    relu_dfs_3 = read_sheets(5, relu_excel_path_3)  # 5 runs, 30 epochs
+    relu_dfs = []
+    relu_dfs.append(relu_dfs_1[4])
+    relu_dfs.append(relu_dfs_1[5])
+    relu_dfs.append(relu_dfs_1[8])
+    relu_dfs.append(relu_dfs_2[4])
+    relu_dfs.append(relu_dfs_2[5])
+    relu_dfs.append(relu_dfs_2[8])
+    relu_dfs.append(relu_dfs_2[10])
+    relu_dfs.append(relu_dfs_2[12])
+    relu_dfs.append(relu_dfs_3[0])
+    relu_dfs.append(relu_dfs_3[3])
+
+    return checkpoints, relu_dfs
+
 
 def extractModelIndicators():
 
@@ -88,44 +105,46 @@ def extractModelIndicators():
         output_activation='Sigmoid'
 
 
-        best_runs_10runs_50epochs = [4, 5, 8]
-        best_runs_20runs_30epochs = [4, 5, 8, 10, 12]
-        best_runs_5runs_30epochs = [0, 3]
-        checkpoints = []
+        # best_runs_10runs_50epochs = [4, 5, 8]
+        # best_runs_20runs_30epochs = [4, 5, 8, 10, 12]
+        # best_runs_5runs_30epochs = [0, 3]
+        # checkpoints = []
+        #
+        # relu_prefix_1 = '/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_NextTokenPrediction/Minibatch_Training/VanillaReLURNN/1_batch_size/0.01_learning_rate/50_epochs/50_lr_scheduler_step/1.0_lr_scheduler_gamma/1_hidden_units/10_runs/shuffle_True/'
+        # relu_prefix_2 = '/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_NextTokenPrediction/Minibatch_Training/VanillaReLURNN/1_batch_size/0.01_learning_rate/30_epochs/50_lr_scheduler_step/1.0_lr_scheduler_gamma/1_hidden_units/20_runs/shuffle_True/'
+        # relu_prefix_3 = '/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_NextTokenPrediction/Minibatch_Training/VanillaReLURNN/1_batch_size/0.01_learning_rate/30_epochs/50_lr_scheduler_step/1.0_lr_scheduler_gamma/1_hidden_units/5_runs/shuffle_True/'
+        #
+        # relu_checkpoint_prefix_1 = relu_prefix_1+'Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaReLURNN_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_50epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_10runs_CHECKPOINT'
+        # relu_checkpoint_prefix_2 = relu_prefix_2+'Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaReLURNN_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_20runs_CHECKPOINT'
+        # relu_checkpoint_prefix_3 = relu_prefix_3+'Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaReLURNN_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_5runs_CHECKPOINT'
+        #
+        #
+        #
+        # for i in range(len(best_runs_10runs_50epochs)):
+        #     checkpoints.append(relu_checkpoint_prefix_1 + '_run' + str(best_runs_10runs_50epochs[i])+'_epoch0.pth')
+        #     checkpoints.append(relu_checkpoint_prefix_1 + '_run' + str(best_runs_10runs_50epochs[i]) + '_epoch5.pth')
+        #     checkpoints.append(relu_checkpoint_prefix_1 + '_run' + str(best_runs_10runs_50epochs[i]) + '_epoch10.pth')
+        #     checkpoints.append(relu_checkpoint_prefix_1 + '_run' + str(best_runs_10runs_50epochs[i]) + '_epoch15.pth')
+        #     checkpoints.append(relu_checkpoint_prefix_1 + '_run' + str(best_runs_10runs_50epochs[i]) + '_epoch20.pth')
+        #     checkpoints.append(relu_checkpoint_prefix_1 + '_run' + str(best_runs_10runs_50epochs[i]) + '_epoch25.pth')
+        #
+        # for i in range(len(best_runs_20runs_30epochs)):
+        #     checkpoints.append(relu_checkpoint_prefix_2 + '_run' + str(best_runs_20runs_30epochs[i])+'_epoch0.pth')
+        #     checkpoints.append(relu_checkpoint_prefix_2 + '_run' + str(best_runs_20runs_30epochs[i]) + '_epoch5.pth')
+        #     checkpoints.append(relu_checkpoint_prefix_2 + '_run' + str(best_runs_20runs_30epochs[i]) + '_epoch10.pth')
+        #     checkpoints.append(relu_checkpoint_prefix_2 + '_run' + str(best_runs_20runs_30epochs[i]) + '_epoch15.pth')
+        #     checkpoints.append(relu_checkpoint_prefix_2 + '_run' + str(best_runs_20runs_30epochs[i]) + '_epoch20.pth')
+        #     checkpoints.append(relu_checkpoint_prefix_2 + '_run' + str(best_runs_20runs_30epochs[i]) + '_epoch25.pth')
+        #
+        # for i in range(len(best_runs_5runs_30epochs)):
+        #     checkpoints.append(relu_checkpoint_prefix_3 + '_run' + str(best_runs_5runs_30epochs[i])+'_epoch0.pth')
+        #     checkpoints.append(relu_checkpoint_prefix_3 + '_run' + str(best_runs_5runs_30epochs[i]) + '_epoch5.pth')
+        #     checkpoints.append(relu_checkpoint_prefix_3 + '_run' + str(best_runs_5runs_30epochs[i]) + '_epoch10.pth')
+        #     checkpoints.append(relu_checkpoint_prefix_3 + '_run' + str(best_runs_5runs_30epochs[i]) + '_epoch15.pth')
+        #     checkpoints.append(relu_checkpoint_prefix_3 + '_run' + str(best_runs_5runs_30epochs[i]) + '_epoch20.pth')
+        #     checkpoints.append(relu_checkpoint_prefix_3 + '_run' + str(best_runs_5runs_30epochs[i]) + '_epoch25.pth')
 
-        relu_prefix_1 = '/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_NextTokenPrediction/Minibatch_Training/VanillaReLURNN/1_batch_size/0.01_learning_rate/50_epochs/50_lr_scheduler_step/1.0_lr_scheduler_gamma/1_hidden_units/10_runs/shuffle_True/'
-        relu_prefix_2 = '/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_NextTokenPrediction/Minibatch_Training/VanillaReLURNN/1_batch_size/0.01_learning_rate/30_epochs/50_lr_scheduler_step/1.0_lr_scheduler_gamma/1_hidden_units/20_runs/shuffle_True/'
-        relu_prefix_3 = '/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_NextTokenPrediction/Minibatch_Training/VanillaReLURNN/1_batch_size/0.01_learning_rate/30_epochs/50_lr_scheduler_step/1.0_lr_scheduler_gamma/1_hidden_units/5_runs/shuffle_True/'
-
-        relu_checkpoint_prefix_1 = relu_prefix_1+'Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaReLURNN_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_50epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_10runs_CHECKPOINT'
-        relu_checkpoint_prefix_2 = relu_prefix_2+'Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaReLURNN_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_20runs_CHECKPOINT'
-        relu_checkpoint_prefix_3 = relu_prefix_3+'Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaReLURNN_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_5runs_CHECKPOINT'
-
-
-
-        for i in range(len(best_runs_10runs_50epochs)):
-            checkpoints.append(relu_checkpoint_prefix_1 + '_run' + str(best_runs_10runs_50epochs[i])+'_epoch0.pth')
-            checkpoints.append(relu_checkpoint_prefix_1 + '_run' + str(best_runs_10runs_50epochs[i]) + '_epoch5.pth')
-            checkpoints.append(relu_checkpoint_prefix_1 + '_run' + str(best_runs_10runs_50epochs[i]) + '_epoch10.pth')
-            checkpoints.append(relu_checkpoint_prefix_1 + '_run' + str(best_runs_10runs_50epochs[i]) + '_epoch15.pth')
-            checkpoints.append(relu_checkpoint_prefix_1 + '_run' + str(best_runs_10runs_50epochs[i]) + '_epoch20.pth')
-            checkpoints.append(relu_checkpoint_prefix_1 + '_run' + str(best_runs_10runs_50epochs[i]) + '_epoch25.pth')
-
-        for i in range(len(best_runs_20runs_30epochs)):
-            checkpoints.append(relu_checkpoint_prefix_2 + '_run' + str(best_runs_20runs_30epochs[i])+'_epoch0.pth')
-            checkpoints.append(relu_checkpoint_prefix_2 + '_run' + str(best_runs_20runs_30epochs[i]) + '_epoch5.pth')
-            checkpoints.append(relu_checkpoint_prefix_2 + '_run' + str(best_runs_20runs_30epochs[i]) + '_epoch10.pth')
-            checkpoints.append(relu_checkpoint_prefix_2 + '_run' + str(best_runs_20runs_30epochs[i]) + '_epoch15.pth')
-            checkpoints.append(relu_checkpoint_prefix_2 + '_run' + str(best_runs_20runs_30epochs[i]) + '_epoch20.pth')
-            checkpoints.append(relu_checkpoint_prefix_2 + '_run' + str(best_runs_20runs_30epochs[i]) + '_epoch25.pth')
-
-        for i in range(len(best_runs_5runs_30epochs)):
-            checkpoints.append(relu_checkpoint_prefix_3 + '_run' + str(best_runs_5runs_30epochs[i])+'_epoch0.pth')
-            checkpoints.append(relu_checkpoint_prefix_3 + '_run' + str(best_runs_5runs_30epochs[i]) + '_epoch5.pth')
-            checkpoints.append(relu_checkpoint_prefix_3 + '_run' + str(best_runs_5runs_30epochs[i]) + '_epoch10.pth')
-            checkpoints.append(relu_checkpoint_prefix_3 + '_run' + str(best_runs_5runs_30epochs[i]) + '_epoch15.pth')
-            checkpoints.append(relu_checkpoint_prefix_3 + '_run' + str(best_runs_5runs_30epochs[i]) + '_epoch20.pth')
-            checkpoints.append(relu_checkpoint_prefix_3 + '_run' + str(best_runs_5runs_30epochs[i]) + '_epoch25.pth')
+        checkpoints = getReLUModels()
 
         a_values = []
         b_values = []
