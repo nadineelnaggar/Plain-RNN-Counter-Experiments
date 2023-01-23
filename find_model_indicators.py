@@ -5,6 +5,8 @@ import matplotlib.pyplot as plt
 import argparse
 from models_batch import VanillaLSTM, VanillaReLURNN
 import os
+import scipy
+
 
 
 
@@ -35,13 +37,7 @@ args = parser.parse_args()
 
 model_type = args.model_type
 
-if model_type=='ReLU':
-    input_size = 2
-    hidden_size = 1
-    num_classes = 2
-    output_activation='Sigmoid'
-
-
+def getReLUModels():
     best_runs_10runs_50epochs = [4, 5, 8]
     best_runs_20runs_30epochs = [4, 5, 8, 10, 12]
     best_runs_5runs_30epochs = [0, 3]
@@ -51,128 +47,184 @@ if model_type=='ReLU':
     relu_prefix_2 = '/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_NextTokenPrediction/Minibatch_Training/VanillaReLURNN/1_batch_size/0.01_learning_rate/30_epochs/50_lr_scheduler_step/1.0_lr_scheduler_gamma/1_hidden_units/20_runs/shuffle_True/'
     relu_prefix_3 = '/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_NextTokenPrediction/Minibatch_Training/VanillaReLURNN/1_batch_size/0.01_learning_rate/30_epochs/50_lr_scheduler_step/1.0_lr_scheduler_gamma/1_hidden_units/5_runs/shuffle_True/'
 
-    relu_checkpoint_prefix_1 = relu_prefix_1+'Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaReLURNN_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_50epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_10runs_CHECKPOINT'
-    relu_checkpoint_prefix_2 = relu_prefix_2+'Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaReLURNN_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_20runs_CHECKPOINT'
-    relu_checkpoint_prefix_3 = relu_prefix_3+'Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaReLURNN_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_5runs_CHECKPOINT'
-
-
+    relu_checkpoint_prefix_1 = relu_prefix_1 + 'Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaReLURNN_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_50epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_10runs_CHECKPOINT'
+    relu_checkpoint_prefix_2 = relu_prefix_2 + 'Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaReLURNN_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_20runs_CHECKPOINT'
+    relu_checkpoint_prefix_3 = relu_prefix_3 + 'Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaReLURNN_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_5runs_CHECKPOINT'
 
     for i in range(len(best_runs_10runs_50epochs)):
-        checkpoints.append(relu_checkpoint_prefix_1 + '_run' + str(best_runs_10runs_50epochs[i])+'_epoch0.pth')
+        checkpoints.append(relu_checkpoint_prefix_1 + '_run' + str(best_runs_10runs_50epochs[i]) + '_epoch0.pth')
         checkpoints.append(relu_checkpoint_prefix_1 + '_run' + str(best_runs_10runs_50epochs[i]) + '_epoch5.pth')
         checkpoints.append(relu_checkpoint_prefix_1 + '_run' + str(best_runs_10runs_50epochs[i]) + '_epoch10.pth')
         checkpoints.append(relu_checkpoint_prefix_1 + '_run' + str(best_runs_10runs_50epochs[i]) + '_epoch15.pth')
         checkpoints.append(relu_checkpoint_prefix_1 + '_run' + str(best_runs_10runs_50epochs[i]) + '_epoch20.pth')
         checkpoints.append(relu_checkpoint_prefix_1 + '_run' + str(best_runs_10runs_50epochs[i]) + '_epoch25.pth')
-    
+
     for i in range(len(best_runs_20runs_30epochs)):
-        checkpoints.append(relu_checkpoint_prefix_2 + '_run' + str(best_runs_20runs_30epochs[i])+'_epoch0.pth')
+        checkpoints.append(relu_checkpoint_prefix_2 + '_run' + str(best_runs_20runs_30epochs[i]) + '_epoch0.pth')
         checkpoints.append(relu_checkpoint_prefix_2 + '_run' + str(best_runs_20runs_30epochs[i]) + '_epoch5.pth')
         checkpoints.append(relu_checkpoint_prefix_2 + '_run' + str(best_runs_20runs_30epochs[i]) + '_epoch10.pth')
         checkpoints.append(relu_checkpoint_prefix_2 + '_run' + str(best_runs_20runs_30epochs[i]) + '_epoch15.pth')
         checkpoints.append(relu_checkpoint_prefix_2 + '_run' + str(best_runs_20runs_30epochs[i]) + '_epoch20.pth')
         checkpoints.append(relu_checkpoint_prefix_2 + '_run' + str(best_runs_20runs_30epochs[i]) + '_epoch25.pth')
-    
+
     for i in range(len(best_runs_5runs_30epochs)):
-        checkpoints.append(relu_checkpoint_prefix_3 + '_run' + str(best_runs_5runs_30epochs[i])+'_epoch0.pth')
+        checkpoints.append(relu_checkpoint_prefix_3 + '_run' + str(best_runs_5runs_30epochs[i]) + '_epoch0.pth')
         checkpoints.append(relu_checkpoint_prefix_3 + '_run' + str(best_runs_5runs_30epochs[i]) + '_epoch5.pth')
         checkpoints.append(relu_checkpoint_prefix_3 + '_run' + str(best_runs_5runs_30epochs[i]) + '_epoch10.pth')
         checkpoints.append(relu_checkpoint_prefix_3 + '_run' + str(best_runs_5runs_30epochs[i]) + '_epoch15.pth')
         checkpoints.append(relu_checkpoint_prefix_3 + '_run' + str(best_runs_5runs_30epochs[i]) + '_epoch20.pth')
         checkpoints.append(relu_checkpoint_prefix_3 + '_run' + str(best_runs_5runs_30epochs[i]) + '_epoch25.pth')
 
-    a_values = []
-    b_values = []
-    ab_ratios = []
-    u_values = []
-    weights_a = []
-    weights_b = []
-    biases_input = []
-    weights_u = []
-    biases_u = []
+    # extract the excel sheets corresponding to the good runs
+    # pass
 
 
-    for i in range(len(checkpoints)):
-        checkpt = torch.load(checkpoints[i])
-        model = VanillaReLURNN(input_size, hidden_size, num_layers=1, batch_size=1, output_size=num_classes,
-                               output_activation=output_activation)
+def extractModelIndicators():
 
-        model.load_state_dict(checkpt['model_state_dict'])
-        model.to(device)
-
-        for param in model.rnn.named_parameters():
-            # if 'weight' in param[0]:
-            #     print('parameter name = ',param[0])
-            #     print('weight = ',param[1])
-            #     print(param[1][0][0].item())
-            #     # print(param[1][0][1])
-            # elif 'bias' in param[0]:
-            #     print('parameter name = ',param[0])
-            #     print('bias = ',param[1])
-            #     print(param[1][0].item())
-            if 'weight_ih' in param[0]:
-                # print(param[0])
-                # print(param[1][0][0].item())
-                # print(param[1][0][1].item())
-                weights_a.append(param[1][0][0].item())
-                weights_b.append(param[1][0][1].item())
-            elif 'weight_hh' in param[0]:
-                weights_u.append(param[1][0][0].item())
-            elif 'bias_ih' in param[0]:
-                biases_input.append(param[1][0].item())
-            elif 'bias_hh' in param[0]:
-                biases_u.append(param[1][0].item())
+    if model_type=='ReLU':
+        input_size = 2
+        hidden_size = 1
+        num_classes = 2
+        output_activation='Sigmoid'
 
 
-            # if 'weight_ih_10' in param[0]:
+        best_runs_10runs_50epochs = [4, 5, 8]
+        best_runs_20runs_30epochs = [4, 5, 8, 10, 12]
+        best_runs_5runs_30epochs = [0, 3]
+        checkpoints = []
+
+        relu_prefix_1 = '/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_NextTokenPrediction/Minibatch_Training/VanillaReLURNN/1_batch_size/0.01_learning_rate/50_epochs/50_lr_scheduler_step/1.0_lr_scheduler_gamma/1_hidden_units/10_runs/shuffle_True/'
+        relu_prefix_2 = '/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_NextTokenPrediction/Minibatch_Training/VanillaReLURNN/1_batch_size/0.01_learning_rate/30_epochs/50_lr_scheduler_step/1.0_lr_scheduler_gamma/1_hidden_units/20_runs/shuffle_True/'
+        relu_prefix_3 = '/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_NextTokenPrediction/Minibatch_Training/VanillaReLURNN/1_batch_size/0.01_learning_rate/30_epochs/50_lr_scheduler_step/1.0_lr_scheduler_gamma/1_hidden_units/5_runs/shuffle_True/'
+
+        relu_checkpoint_prefix_1 = relu_prefix_1+'Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaReLURNN_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_50epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_10runs_CHECKPOINT'
+        relu_checkpoint_prefix_2 = relu_prefix_2+'Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaReLURNN_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_20runs_CHECKPOINT'
+        relu_checkpoint_prefix_3 = relu_prefix_3+'Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaReLURNN_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_5runs_CHECKPOINT'
 
 
-    print('len weights a = ',len(weights_a))
-    print('len weights b = ',len(weights_b))
-    print('len weights u = ',len(weights_u))
-    print('len biases input = ',len(biases_input))
-    print('len biases u = ',len(biases_u))
 
-    for i in range(len(weights_a)):
-        ab_ratio = 0
-        a_value = weights_a[i]+biases_u[i]+biases_input[i]
-        b_value = weights_b[i]+biases_u[i]+biases_input[i]
-        ab_ratio=a_value/b_value
-        ab_ratios.append(ab_ratio)
-        a_values.append(a_value)
-        b_values.append(b_value)
-        u_values.append(weights_u[i])
+        for i in range(len(best_runs_10runs_50epochs)):
+            checkpoints.append(relu_checkpoint_prefix_1 + '_run' + str(best_runs_10runs_50epochs[i])+'_epoch0.pth')
+            checkpoints.append(relu_checkpoint_prefix_1 + '_run' + str(best_runs_10runs_50epochs[i]) + '_epoch5.pth')
+            checkpoints.append(relu_checkpoint_prefix_1 + '_run' + str(best_runs_10runs_50epochs[i]) + '_epoch10.pth')
+            checkpoints.append(relu_checkpoint_prefix_1 + '_run' + str(best_runs_10runs_50epochs[i]) + '_epoch15.pth')
+            checkpoints.append(relu_checkpoint_prefix_1 + '_run' + str(best_runs_10runs_50epochs[i]) + '_epoch20.pth')
+            checkpoints.append(relu_checkpoint_prefix_1 + '_run' + str(best_runs_10runs_50epochs[i]) + '_epoch25.pth')
+
+        for i in range(len(best_runs_20runs_30epochs)):
+            checkpoints.append(relu_checkpoint_prefix_2 + '_run' + str(best_runs_20runs_30epochs[i])+'_epoch0.pth')
+            checkpoints.append(relu_checkpoint_prefix_2 + '_run' + str(best_runs_20runs_30epochs[i]) + '_epoch5.pth')
+            checkpoints.append(relu_checkpoint_prefix_2 + '_run' + str(best_runs_20runs_30epochs[i]) + '_epoch10.pth')
+            checkpoints.append(relu_checkpoint_prefix_2 + '_run' + str(best_runs_20runs_30epochs[i]) + '_epoch15.pth')
+            checkpoints.append(relu_checkpoint_prefix_2 + '_run' + str(best_runs_20runs_30epochs[i]) + '_epoch20.pth')
+            checkpoints.append(relu_checkpoint_prefix_2 + '_run' + str(best_runs_20runs_30epochs[i]) + '_epoch25.pth')
+
+        for i in range(len(best_runs_5runs_30epochs)):
+            checkpoints.append(relu_checkpoint_prefix_3 + '_run' + str(best_runs_5runs_30epochs[i])+'_epoch0.pth')
+            checkpoints.append(relu_checkpoint_prefix_3 + '_run' + str(best_runs_5runs_30epochs[i]) + '_epoch5.pth')
+            checkpoints.append(relu_checkpoint_prefix_3 + '_run' + str(best_runs_5runs_30epochs[i]) + '_epoch10.pth')
+            checkpoints.append(relu_checkpoint_prefix_3 + '_run' + str(best_runs_5runs_30epochs[i]) + '_epoch15.pth')
+            checkpoints.append(relu_checkpoint_prefix_3 + '_run' + str(best_runs_5runs_30epochs[i]) + '_epoch20.pth')
+            checkpoints.append(relu_checkpoint_prefix_3 + '_run' + str(best_runs_5runs_30epochs[i]) + '_epoch25.pth')
+
+        a_values = []
+        b_values = []
+        ab_ratios = []
+        u_values = []
+        weights_a = []
+        weights_b = []
+        biases_input = []
+        weights_u = []
+        biases_u = []
 
 
-    print(ab_ratios)
-    print(u_values)
-    plt.subplots()
-    plt.hist(ab_ratios, bins=100)
-    plt.savefig('histogram_ab_ratio.png')
-    plt.show()
-    plt.subplots()
-    plt.hist(u_values, bins=100)
-    plt.savefig('histogram_u_values.png')
-    plt.show()
+        for i in range(len(checkpoints)):
+            checkpt = torch.load(checkpoints[i])
+            model = VanillaReLURNN(input_size, hidden_size, num_layers=1, batch_size=1, output_size=num_classes,
+                                   output_activation=output_activation)
 
-    # relu_dfs_1 = read_sheets(10, relu_excel_path)  # 10 runs, 50 epochs
-    # relu_dfs_2 = read_sheets(20, relu_excel_path_2)  # 20 runs, 30 epochs
-    # relu_dfs_3 = read_sheets(5, relu_excel_path_3)  # 5 runs, 30 epochs
-    #
-    # relu_dfs = []
-    # relu_dfs.append(relu_dfs_1[4])
-    # relu_dfs.append(relu_dfs_1[5])
-    # relu_dfs.append(relu_dfs_1[8])
-    # relu_dfs.append(relu_dfs_2[4])
-    # relu_dfs.append(relu_dfs_2[5])
-    # relu_dfs.append(relu_dfs_2[8])
-    # relu_dfs.append(relu_dfs_2[10])
-    # relu_dfs.append(relu_dfs_2[12])
-    # relu_dfs.append(relu_dfs_3[0])
-    # relu_dfs.append(relu_dfs_3[3])
-    #
-    # print(len(relu_dfs))
+            model.load_state_dict(checkpt['model_state_dict'])
+            model.to(device)
 
+            for param in model.rnn.named_parameters():
+                # if 'weight' in param[0]:
+                #     print('parameter name = ',param[0])
+                #     print('weight = ',param[1])
+                #     print(param[1][0][0].item())
+                #     # print(param[1][0][1])
+                # elif 'bias' in param[0]:
+                #     print('parameter name = ',param[0])
+                #     print('bias = ',param[1])
+                #     print(param[1][0].item())
+                if 'weight_ih' in param[0]:
+                    # print(param[0])
+                    # print(param[1][0][0].item())
+                    # print(param[1][0][1].item())
+                    weights_a.append(param[1][0][0].item())
+                    weights_b.append(param[1][0][1].item())
+                elif 'weight_hh' in param[0]:
+                    weights_u.append(param[1][0][0].item())
+                elif 'bias_ih' in param[0]:
+                    biases_input.append(param[1][0].item())
+                elif 'bias_hh' in param[0]:
+                    biases_u.append(param[1][0].item())
+
+
+                # if 'weight_ih_10' in param[0]:
+
+
+        print('len weights a = ',len(weights_a))
+        print('len weights b = ',len(weights_b))
+        print('len weights u = ',len(weights_u))
+        print('len biases input = ',len(biases_input))
+        print('len biases u = ',len(biases_u))
+
+        for i in range(len(weights_a)):
+            ab_ratio = 0
+            a_value = weights_a[i]+biases_u[i]+biases_input[i]
+            b_value = weights_b[i]+biases_u[i]+biases_input[i]
+            ab_ratio=a_value/b_value
+            ab_ratios.append(ab_ratio)
+            a_values.append(a_value)
+            b_values.append(b_value)
+            u_values.append(weights_u[i])
+
+
+        print(ab_ratios)
+        print(u_values)
+        plt.subplots()
+        plt.hist(ab_ratios, bins=100)
+        plt.savefig('histogram_ab_ratio.png')
+        plt.show()
+        plt.subplots()
+        plt.hist(u_values, bins=100)
+        plt.savefig('histogram_u_values.png')
+        plt.show()
+
+        # relu_dfs_1 = read_sheets(10, relu_excel_path)  # 10 runs, 50 epochs
+        # relu_dfs_2 = read_sheets(20, relu_excel_path_2)  # 20 runs, 30 epochs
+        # relu_dfs_3 = read_sheets(5, relu_excel_path_3)  # 5 runs, 30 epochs
+        #
+        # relu_dfs = []
+        # relu_dfs.append(relu_dfs_1[4])
+        # relu_dfs.append(relu_dfs_1[5])
+        # relu_dfs.append(relu_dfs_1[8])
+        # relu_dfs.append(relu_dfs_2[4])
+        # relu_dfs.append(relu_dfs_2[5])
+        # relu_dfs.append(relu_dfs_2[8])
+        # relu_dfs.append(relu_dfs_2[10])
+        # relu_dfs.append(relu_dfs_2[12])
+        # relu_dfs.append(relu_dfs_3[0])
+        # relu_dfs.append(relu_dfs_3[3])
+        #
+        # print(len(relu_dfs))
+
+    elif model_type=='LSTM':
+        pass
+
+
+def createLinearRegression():
+    pass
 
 
 
