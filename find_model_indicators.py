@@ -6,6 +6,7 @@ import argparse
 from models_batch import VanillaLSTM, VanillaReLURNN
 import os
 import scipy
+from scipy import stats
 
 
 
@@ -18,6 +19,12 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 relu_excel_path = '/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_NextTokenPrediction/Minibatch_Training/VanillaReLURNN/1_batch_size/0.01_learning_rate/50_epochs/50_lr_scheduler_step/1.0_lr_scheduler_gamma/1_hidden_units/10_runs/shuffle_True/Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaReLURNN_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_50epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_10runs_NEW.xlsx'
 relu_excel_path_2 = '/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_NextTokenPrediction/Minibatch_Training/VanillaReLURNN/1_batch_size/0.01_learning_rate/30_epochs/50_lr_scheduler_step/1.0_lr_scheduler_gamma/1_hidden_units/20_runs/shuffle_True/Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaReLURNN_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_20runs.xlsx'
 relu_excel_path_3 = '/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_NextTokenPrediction/Minibatch_Training/VanillaReLURNN/1_batch_size/0.01_learning_rate/30_epochs/50_lr_scheduler_step/1.0_lr_scheduler_gamma/1_hidden_units/5_runs/shuffle_True/Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaReLURNN_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_5runs.xlsx'
+
+relu_prefix_1 = '/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_NextTokenPrediction/Minibatch_Training/VanillaReLURNN/1_batch_size/0.01_learning_rate/50_epochs/50_lr_scheduler_step/1.0_lr_scheduler_gamma/1_hidden_units/10_runs/shuffle_True/'
+relu_prefix_2 = '/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_NextTokenPrediction/Minibatch_Training/VanillaReLURNN/1_batch_size/0.01_learning_rate/30_epochs/50_lr_scheduler_step/1.0_lr_scheduler_gamma/1_hidden_units/20_runs/shuffle_True/'
+relu_prefix_3 = '/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_NextTokenPrediction/Minibatch_Training/VanillaReLURNN/1_batch_size/0.01_learning_rate/30_epochs/50_lr_scheduler_step/1.0_lr_scheduler_gamma/1_hidden_units/5_runs/shuffle_True/'
+
+excel_name = relu_prefix_2+'INFERENCE_1000token_1checkpoint_step_upto5000checkpoints_EXCEL INFERENCE CHECKPOINTS ONLY GOOD MODELS WITH INDICATORS.xlsx'
 
 
 def read_sheets(num_runs, excel_name):
@@ -43,9 +50,9 @@ def getReLUModels():
     best_runs_5runs_30epochs = [0, 3]
     checkpoints = []
 
-    relu_prefix_1 = '/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_NextTokenPrediction/Minibatch_Training/VanillaReLURNN/1_batch_size/0.01_learning_rate/50_epochs/50_lr_scheduler_step/1.0_lr_scheduler_gamma/1_hidden_units/10_runs/shuffle_True/'
-    relu_prefix_2 = '/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_NextTokenPrediction/Minibatch_Training/VanillaReLURNN/1_batch_size/0.01_learning_rate/30_epochs/50_lr_scheduler_step/1.0_lr_scheduler_gamma/1_hidden_units/20_runs/shuffle_True/'
-    relu_prefix_3 = '/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_NextTokenPrediction/Minibatch_Training/VanillaReLURNN/1_batch_size/0.01_learning_rate/30_epochs/50_lr_scheduler_step/1.0_lr_scheduler_gamma/1_hidden_units/5_runs/shuffle_True/'
+    # relu_prefix_1 = '/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_NextTokenPrediction/Minibatch_Training/VanillaReLURNN/1_batch_size/0.01_learning_rate/50_epochs/50_lr_scheduler_step/1.0_lr_scheduler_gamma/1_hidden_units/10_runs/shuffle_True/'
+    # relu_prefix_2 = '/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_NextTokenPrediction/Minibatch_Training/VanillaReLURNN/1_batch_size/0.01_learning_rate/30_epochs/50_lr_scheduler_step/1.0_lr_scheduler_gamma/1_hidden_units/20_runs/shuffle_True/'
+    # relu_prefix_3 = '/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_NextTokenPrediction/Minibatch_Training/VanillaReLURNN/1_batch_size/0.01_learning_rate/30_epochs/50_lr_scheduler_step/1.0_lr_scheduler_gamma/1_hidden_units/5_runs/shuffle_True/'
 
     relu_checkpoint_prefix_1 = relu_prefix_1 + 'Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaReLURNN_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_50epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_10runs_CHECKPOINT'
     relu_checkpoint_prefix_2 = relu_prefix_2 + 'Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaReLURNN_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_20runs_CHECKPOINT'
@@ -78,22 +85,26 @@ def getReLUModels():
     # extract the excel sheets corresponding to the good runs
     # pass
 
-    relu_dfs_1 = read_sheets(10, relu_excel_path)  # 10 runs, 50 epochs
-    relu_dfs_2 = read_sheets(20, relu_excel_path_2)  # 20 runs, 30 epochs
-    relu_dfs_3 = read_sheets(5, relu_excel_path_3)  # 5 runs, 30 epochs
-    relu_dfs = []
-    relu_dfs.append(relu_dfs_1[4])
-    relu_dfs.append(relu_dfs_1[5])
-    relu_dfs.append(relu_dfs_1[8])
-    relu_dfs.append(relu_dfs_2[4])
-    relu_dfs.append(relu_dfs_2[5])
-    relu_dfs.append(relu_dfs_2[8])
-    relu_dfs.append(relu_dfs_2[10])
-    relu_dfs.append(relu_dfs_2[12])
-    relu_dfs.append(relu_dfs_3[0])
-    relu_dfs.append(relu_dfs_3[3])
+    # relu_dfs_1 = read_sheets(10, relu_excel_path)  # 10 runs, 50 epochs
+    # relu_dfs_2 = read_sheets(20, relu_excel_path_2)  # 20 runs, 30 epochs
+    # relu_dfs_3 = read_sheets(5, relu_excel_path_3)  # 5 runs, 30 epochs
+    # relu_dfs = []
+    # relu_dfs.append(relu_dfs_1[4])
+    # relu_dfs.append(relu_dfs_1[5])
+    # relu_dfs.append(relu_dfs_1[8])
+    # relu_dfs.append(relu_dfs_2[4])
+    # relu_dfs.append(relu_dfs_2[5])
+    # relu_dfs.append(relu_dfs_2[8])
+    # relu_dfs.append(relu_dfs_2[10])
+    # relu_dfs.append(relu_dfs_2[12])
+    # relu_dfs.append(relu_dfs_3[0])
+    # relu_dfs.append(relu_dfs_3[3])
 
-    return checkpoints, relu_dfs
+    # excel_name = relu_prefix_2+'INFERENCE_1000token_1checkpoint_step_upto5000checkpoints_EXCEL INFERENCE CHECKPOINTS ONLY GOOD MODELS WITH INDICATORS.xlsx'
+
+    df = pd.read_excel(excel_name, sheet_name='Sheet1')
+
+    return checkpoints, df
 
 
 def extractModelIndicators():
@@ -144,7 +155,7 @@ def extractModelIndicators():
         #     checkpoints.append(relu_checkpoint_prefix_3 + '_run' + str(best_runs_5runs_30epochs[i]) + '_epoch20.pth')
         #     checkpoints.append(relu_checkpoint_prefix_3 + '_run' + str(best_runs_5runs_30epochs[i]) + '_epoch25.pth')
 
-        checkpoints = getReLUModels()
+        checkpoints, df = getReLUModels()
 
         a_values = []
         b_values = []
@@ -213,12 +224,149 @@ def extractModelIndicators():
         print(u_values)
         plt.subplots()
         plt.hist(ab_ratios, bins=100)
-        plt.savefig('histogram_ab_ratio.png')
+        plt.savefig(relu_prefix_2+'INDICATORS_histogram_ab_ratio.png')
         plt.show()
         plt.subplots()
         plt.hist(u_values, bins=100)
-        plt.savefig('histogram_u_values.png')
+        plt.savefig(relu_prefix_2+'INDICATORS_histogram_u_values.png')
         plt.show()
+
+        fpfs = df['average first point of failure (2000 tokens)']
+        val_losses = df['avg validation losses']
+        log_val_losses = df['log of avg validation losses']
+        neg_log_val_losses = df['log of inverse avg validation losses']
+        
+        res_ab_ratio_val_loss = stats.linregress(ab_ratios,val_losses)
+        res_ab_ratio_log_val_loss = stats.linregress(ab_ratios,log_val_losses)
+        res_ab_ratio_neg_log_val_loss=stats.linregress(ab_ratios,neg_log_val_losses)
+        res_ab_ratio_fpfs = stats.linregress(ab_ratios,fpfs)
+        
+        print('AB_RATIO LINEAR REGRESSION WITH VAL LOSS')
+        print('r value = ',res_ab_ratio_val_loss.rvalue)
+        print('p value = ',res_ab_ratio_val_loss.pvalue)
+        print('slope = ',res_ab_ratio_val_loss.slope)
+        print('intercept = ',res_ab_ratio_val_loss.intercept)
+        print('AB_RATIO LINEAR REGRESSION WITH LOG VAL LOSS')
+        print('r value = ', res_ab_ratio_log_val_loss.rvalue)
+        print('p value = ', res_ab_ratio_log_val_loss.pvalue)
+        print('slope = ', res_ab_ratio_log_val_loss.slope)
+        print('intercept = ', res_ab_ratio_log_val_loss.intercept)
+        print('AB_RATIO LINEAR REGRESSION WITH NEGATIVE LOG VAL LOSS')
+        print('r value = ', res_ab_ratio_neg_log_val_loss.rvalue)
+        print('p value = ', res_ab_ratio_neg_log_val_loss.pvalue)
+        print('slope = ', res_ab_ratio_neg_log_val_loss.slope)
+        print('intercept = ', res_ab_ratio_neg_log_val_loss.intercept)
+        print('AB_RATIO LINEAR REGRESSION WITH AVERAGE FPF')
+        print('r value = ', res_ab_ratio_fpfs.rvalue)
+        print('p value = ', res_ab_ratio_fpfs.pvalue)
+        print('slope = ', res_ab_ratio_fpfs.slope)
+        print('intercept = ', res_ab_ratio_fpfs.intercept)
+
+        res_u_value_val_loss = stats.linregress(u_values, val_losses)
+        res_u_value_log_val_loss = stats.linregress(u_values, log_val_losses)
+        res_u_value_neg_log_val_loss = stats.linregress(u_values, neg_log_val_losses)
+        res_u_value_fpfs = stats.linregress(u_values, fpfs)
+
+        print('U_VALUE LINEAR REGRESSION WITH VAL LOSS')
+        print('r value = ', res_u_value_val_loss.rvalue)
+        print('p value = ', res_u_value_val_loss.pvalue)
+        print('slope = ', res_u_value_val_loss.slope)
+        print('intercept = ', res_u_value_val_loss.intercept)
+        print('U_VALUE LINEAR REGRESSION WITH LOG VAL LOSS')
+        print('r value = ', res_u_value_log_val_loss.rvalue)
+        print('p value = ', res_u_value_log_val_loss.pvalue)
+        print('slope = ', res_u_value_log_val_loss.slope)
+        print('intercept = ', res_u_value_log_val_loss.intercept)
+        print('U_VALUE LINEAR REGRESSION WITH NEGATIVE LOG VAL LOSS')
+        print('r value = ', res_u_value_neg_log_val_loss.rvalue)
+        print('p value = ', res_u_value_neg_log_val_loss.pvalue)
+        print('slope = ', res_u_value_neg_log_val_loss.slope)
+        print('intercept = ', res_u_value_neg_log_val_loss.intercept)
+        print('U_VALUE LINEAR REGRESSION WITH AVERAGE FPF')
+        print('r value = ', res_u_value_fpfs.rvalue)
+        print('p value = ', res_u_value_fpfs.pvalue)
+        print('slope = ', res_u_value_fpfs.slope)
+        print('intercept = ', res_u_value_fpfs.intercept)
+        
+        
+        plt.subplots()
+        plt.plot(val_losses,ab_ratios,'o',label='Models')
+        plt.plot(val_losses,res_ab_ratio_val_loss.intercept+res_ab_ratio_val_loss.slope*val_losses,'r',label='Fitted Line')
+        plt.savefig(relu_prefix_2+'INDICATORS_linear_regression_ab_values_val_losses.png')
+
+        plt.subplots()
+        plt.plot(log_val_losses, ab_ratios, 'o', label='Models')
+        plt.plot(log_val_losses, res_ab_ratio_log_val_loss.intercept + res_ab_ratio_log_val_loss.slope * log_val_losses, 'r',
+                 label='Fitted Line')
+        plt.savefig(relu_prefix_2 + 'INDICATORS_linear_regression_ab_values_log_val_losses.png')
+
+        plt.subplots()
+        plt.plot(neg_log_val_losses, ab_ratios, 'o', label='Models')
+        plt.plot(neg_log_val_losses, res_ab_ratio_neg_log_val_loss.intercept + res_ab_ratio_neg_log_val_loss.slope * neg_log_val_losses,
+                 'r',
+                 label='Fitted Line')
+        plt.savefig(relu_prefix_2 + 'INDICATORS_linear_regression_ab_values_neg_log_val_losses.png')
+
+        plt.subplots()
+        plt.plot(fpfs, ab_ratios, 'o', label='Models')
+        plt.plot(fpfs, res_ab_ratio_val_loss.intercept + res_ab_ratio_val_loss.slope * fpfs, 'r',
+                 label='Fitted Line')
+        plt.savefig(relu_prefix_2 + 'INDICATORS_linear_regression_ab_values_val_losses.png')
+        
+        
+        ####################################
+
+        plt.subplots()
+        plt.plot(val_losses, u_values, 'o', label='Models')
+        plt.plot(val_losses, res_u_value_val_loss.intercept + res_u_value_val_loss.slope * val_losses, 'r',
+                 label='Fitted Line')
+        plt.savefig(relu_prefix_2 + 'INDICATORS_linear_regression_u_values_val_losses.png')
+
+        plt.subplots()
+        plt.plot(log_val_losses, u_values, 'o', label='Models')
+        plt.plot(log_val_losses, res_u_value_log_val_loss.intercept + res_u_value_log_val_loss.slope * log_val_losses,
+                 'r',
+                 label='Fitted Line')
+        plt.savefig(relu_prefix_2 + 'INDICATORS_linear_regression_u_values_log_val_losses.png')
+
+        plt.subplots()
+        plt.plot(neg_log_val_losses, u_values, 'o', label='Models')
+        plt.plot(neg_log_val_losses,
+                 res_u_value_neg_log_val_loss.intercept + res_u_value_neg_log_val_loss.slope * neg_log_val_losses,
+                 'r',
+                 label='Fitted Line')
+        plt.savefig(relu_prefix_2 + 'INDICATORS_linear_regression_u_values_neg_log_val_losses.png')
+
+        plt.subplots()
+        plt.plot(fpfs, u_values, 'o', label='Models')
+        plt.plot(fpfs, res_u_value_val_loss.intercept + res_u_value_val_loss.slope * fpfs, 'r',
+                 label='Fitted Line')
+        plt.savefig(relu_prefix_2 + 'INDICATORS_linear_regression_u_values_val_losses.png')
+        
+
+        if 'weights_a' not in df.columns:
+            df['weights_a'] = weights_a
+        if 'weights_b' not in df.columns:
+            df['weights_b'] = weights_b
+        if 'biases_input' not in df.columns:
+            df['biases_input']=biases_input
+        if 'biases_u' not in df.columns:
+            df['biases_u']=biases_u
+        if 'a_values' not in df.columns:
+            df['a_values'] = a_values
+        if 'b_values' not in df.columns:
+            df['b_values']=b_values
+        if 'ab_ratios' not in df.columns:
+            df['ab_ratios']=ab_ratios
+        if 'weights_u' not in df.columns:
+            df['weights_u'] = weights_u
+        if 'u_values' not in df.columns:
+            df['u_values'] = u_values
+
+        writer = pd.ExcelWriter(excel_name, engine='xlsxwriter')
+
+        df.to_excel(writer, index=False)
+        writer.save()
 
         # relu_dfs_1 = read_sheets(10, relu_excel_path)  # 10 runs, 50 epochs
         # relu_dfs_2 = read_sheets(20, relu_excel_path_2)  # 20 runs, 30 epochs
@@ -238,12 +386,23 @@ def extractModelIndicators():
         #
         # print(len(relu_dfs))
 
-    elif model_type=='LSTM':
-        pass
+    # elif model_type=='LSTM':
+    #     pass
+
+    # return df
 
 
-def createLinearRegression():
-    pass
+# def createLinearRegression(df):
+#     fpfs = df['average first point of failure (2000 tokens)']
+#     ab_ratios = df['ab_ratios']
+#     u_values = df['u_values']
+#     val_losses = df['avg validation losses']
+#     log_val_losses = df['log of avg validation losses']
+#     neg_log_val_losses = df['log of inverse avg validation losses']
+    
+
+
+
 
 
 
