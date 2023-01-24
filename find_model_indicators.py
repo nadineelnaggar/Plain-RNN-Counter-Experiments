@@ -356,6 +356,53 @@ def extractModelIndicators():
         plt.savefig(relu_prefix_2 + 'INDICATORS_linear_regression_u_values_val_losses.png')
         plt.close()
         
+        
+        filename = relu_prefix_2+'INDICATORS_VALUES.txt'
+        with open(filename,'w') as f:
+            f.write('')
+        
+        with open(filename,'a') as f:
+            f.write('AB_RATIO LINEAR REGRESSION WITH VAL LOSS'+'\n')
+            f.write('r value = '+str(res_ab_ratio_val_loss.rvalue)+'\n')
+            f.write('p value = '+str(res_ab_ratio_val_loss.pvalue)+'\n')
+            f.write('slope = '+ str(res_ab_ratio_val_loss.slope)+ '\n')
+            f.write('intercept = '+ str(res_ab_ratio_val_loss.intercept)+ '\n')
+            f.write('AB_RATIO LINEAR REGRESSION WITH LOG VAL LOSS'+ '\n')
+            f.write('r value = '+ str(res_ab_ratio_log_val_loss.rvalue)+ '\n')
+            f.write('p value = '+ str(res_ab_ratio_log_val_loss.pvalue)+ '\n')
+            f.write('slope = '+ str(res_ab_ratio_log_val_loss.slope)+ '\n')
+            f.write('intercept = '+ str(res_ab_ratio_log_val_loss.intercept)+ '\n')
+            f.write('AB_RATIO LINEAR REGRESSION WITH NEGATIVE LOG VAL LOSS'+ '\n')
+            f.write('r value = '+ str(res_ab_ratio_neg_log_val_loss.rvalue)+ '\n')
+            f.write('p value = '+ str(res_ab_ratio_neg_log_val_loss.pvalue)+ '\n')
+            f.write('slope = '+ str(res_ab_ratio_neg_log_val_loss.slope)+ '\n')
+            f.write('intercept = '+ str(res_ab_ratio_neg_log_val_loss.intercept)+ '\n')
+            f.write('AB_RATIO LINEAR REGRESSION WITH AVERAGE FPF'+ '\n')
+            f.write('r value = '+ str(res_ab_ratio_fpfs.rvalue)+ '\n')
+            f.write('p value = '+ str(res_ab_ratio_fpfs.pvalue)+ '\n')
+            f.write('slope = '+ str(res_ab_ratio_fpfs.slope)+ '\n')
+            f.write('intercept = '+ str(res_ab_ratio_fpfs.intercept)+ '\n')
+
+            f.write('U_VALUE LINEAR REGRESSION WITH VAL LOSS'+ '\n')
+            f.write('r value = '+ str(res_u_value_val_loss.rvalue)+ '\n')
+            f.write('p value = '+ str(res_u_value_val_loss.pvalue)+ '\n')
+            f.write('slope = '+ str(res_u_value_val_loss.slope)+ '\n')
+            f.write('intercept = '+ str(res_u_value_val_loss.intercept)+ '\n')
+            f.write('U_VALUE LINEAR REGRESSION WITH LOG VAL LOSS'+ '\n')
+            f.write('r value = '+ str(res_u_value_log_val_loss.rvalue)+ '\n')
+            f.write('p value = '+ str(res_u_value_log_val_loss.pvalue)+ '\n')
+            f.write('slope = '+ str(res_u_value_log_val_loss.slope)+ '\n')
+            f.write('intercept = '+ str(res_u_value_log_val_loss.intercept)+ '\n')
+            f.write('U_VALUE LINEAR REGRESSION WITH NEGATIVE LOG VAL LOSS'+ '\n')
+            f.write('r value = '+ str(res_u_value_neg_log_val_loss.rvalue)+ '\n')
+            f.write('p value = '+ str(res_u_value_neg_log_val_loss.pvalue)+ '\n')
+            f.write('slope = '+ str(res_u_value_neg_log_val_loss.slope)+ '\n')
+            f.write('intercept = '+ str(res_u_value_neg_log_val_loss.intercept)+ '\n')
+            f.write('U_VALUE LINEAR REGRESSION WITH AVERAGE FPF'+ '\n')
+            f.write('r value = '+ str(res_u_value_fpfs.rvalue)+ '\n')
+            f.write('p value = '+ str(res_u_value_fpfs.pvalue)+ '\n')
+            f.write('slope = '+ str(res_u_value_fpfs.slope)+ '\n')
+            f.write('intercept = '+ str(res_u_value_fpfs.intercept)+ '\n')
 
         if 'weights_a' not in df.columns:
             df['weights_a'] = weights_a
