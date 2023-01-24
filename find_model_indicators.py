@@ -461,7 +461,7 @@ def extractModelIndicators():
 #     neg_log_val_losses = df['log of inverse avg validation losses']
     
 
-
+extractModelIndicators()
 
 
 
