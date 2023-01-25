@@ -262,6 +262,16 @@ def extractModelIndicators():
         print('slope = ', res_ab_ratio_fpfs.slope)
         print('intercept = ', res_ab_ratio_fpfs.intercept)
 
+
+        u_values_dev = []
+        ab_ratios_dev = []
+
+        for i in range(len(ab_ratios)):
+            u_dev = abs(u_values[i]-1)
+            u_values_dev.append(u_dev)
+            ab_dev = abs(ab_ratios[i]--1)
+            ab_ratios_dev.append(ab_dev)
+
         res_u_value_val_loss = stats.linregress(u_values, val_losses)
         res_u_value_log_val_loss = stats.linregress(u_values, log_val_losses)
         res_u_value_neg_log_val_loss = stats.linregress(u_values, neg_log_val_losses)
@@ -381,6 +391,166 @@ def extractModelIndicators():
         plt.close()
         
         
+        ######################
+        res_u_value_val_loss = stats.linregress(u_values, val_losses)
+        res_u_value_log_val_loss = stats.linregress(u_values, log_val_losses)
+        res_u_value_neg_log_val_loss = stats.linregress(u_values, neg_log_val_losses)
+        res_u_value_fpfs = stats.linregress(u_values, fpfs)
+
+        print('U_VALUE LINEAR REGRESSION WITH VAL LOSS')
+        print('r value = ', res_u_value_val_loss.rvalue)
+        print('p value = ', res_u_value_val_loss.pvalue)
+        print('slope = ', res_u_value_val_loss.slope)
+        print('intercept = ', res_u_value_val_loss.intercept)
+        print('U_VALUE LINEAR REGRESSION WITH LOG VAL LOSS')
+        print('r value = ', res_u_value_log_val_loss.rvalue)
+        print('p value = ', res_u_value_log_val_loss.pvalue)
+        print('slope = ', res_u_value_log_val_loss.slope)
+        print('intercept = ', res_u_value_log_val_loss.intercept)
+        print('U_VALUE LINEAR REGRESSION WITH NEGATIVE LOG VAL LOSS')
+        print('r value = ', res_u_value_neg_log_val_loss.rvalue)
+        print('p value = ', res_u_value_neg_log_val_loss.pvalue)
+        print('slope = ', res_u_value_neg_log_val_loss.slope)
+        print('intercept = ', res_u_value_neg_log_val_loss.intercept)
+        print('U_VALUE LINEAR REGRESSION WITH AVERAGE FPF')
+        print('r value = ', res_u_value_fpfs.rvalue)
+        print('p value = ', res_u_value_fpfs.pvalue)
+        print('slope = ', res_u_value_fpfs.slope)
+        print('intercept = ', res_u_value_fpfs.intercept)
+
+        plt.subplots()
+        plt.plot(val_losses, ab_ratios_dev, 'o', label='Models')
+        # plt.plot(val_losses,res_ab_ratio_val_loss.intercept+res_ab_ratio_val_loss.slope*val_losses,'r',label='Fitted Line')
+        plt.xlabel('Validation Loss')
+        plt.ylabel('AB Ratio')
+        plt.legend()
+        plt.savefig(relu_prefix_2 + 'INDICATORS_linear_regression_ab_values_dev_val_losses.png')
+        plt.close()
+
+        plt.subplots()
+        plt.plot(log_val_losses, ab_ratios_dev, 'o', label='Models')
+        # plt.plot(log_val_losses, res_ab_ratio_log_val_loss.intercept + res_ab_ratio_log_val_loss.slope * log_val_losses, 'r',
+        #          label='Fitted Line')
+        plt.xlabel('Log Validation Loss')
+        plt.ylabel('AB Ratio')
+        plt.legend()
+        plt.savefig(relu_prefix_2 + 'INDICATORS_linear_regression_ab_values_dev_log_val_losses.png')
+        plt.close()
+
+        plt.subplots()
+        plt.plot(neg_log_val_losses, ab_ratios_dev, 'o', label='Models')
+        # plt.plot(neg_log_val_losses, res_ab_ratio_neg_log_val_loss.intercept + res_ab_ratio_neg_log_val_loss.slope * neg_log_val_losses,
+        #          'r',
+        #          label='Fitted Line')
+        plt.xlabel('Negative Log Validation Loss')
+        plt.ylabel('AB Ratio')
+        plt.legend()
+        plt.savefig(relu_prefix_2 + 'INDICATORS_linear_regression_ab_values_dev_neg_log_val_losses.png')
+        plt.close()
+
+        plt.subplots()
+        plt.plot(fpfs, ab_ratios_dev, 'o', label='Models')
+        # plt.plot(fpfs, res_ab_ratio_val_loss.intercept + res_ab_ratio_val_loss.slope * fpfs, 'r',
+        #          label='Fitted Line')
+        plt.xlabel('Average FPF')
+        plt.ylabel('AB Ratio')
+        plt.legend()
+        plt.savefig(relu_prefix_2 + 'INDICATORS_linear_regression_ab_values_dev_val_losses.png')
+        plt.close()
+
+        ####################################
+
+        plt.subplots()
+        plt.plot(val_losses, u_values_dev, 'o', label='Models')
+        # plt.plot(val_losses, res_u_values_dev_val_loss.intercept + res_u_values_dev_val_loss.slope * val_losses, 'r',
+        #          label='Fitted Line')
+        plt.xlabel('Validation Loss')
+        plt.ylabel('Recurrent Weight U')
+        plt.legend()
+        plt.savefig(relu_prefix_2 + 'INDICATORS_linear_regression_u_values_devs_val_losses.png')
+        plt.close()
+
+        plt.subplots()
+        plt.plot(log_val_losses, u_values_dev, 'o', label='Models')
+        # plt.plot(log_val_losses, res_u_values_dev_log_val_loss.intercept + res_u_values_dev_log_val_loss.slope * log_val_losses,
+        #          'r',
+        #          label='Fitted Line')
+        plt.xlabel('Log Validation Loss')
+        plt.ylabel('Recurrent Weight U')
+        plt.legend()
+        plt.savefig(relu_prefix_2 + 'INDICATORS_linear_regression_u_values_devs_log_val_losses.png')
+        plt.close()
+
+        plt.subplots()
+        plt.plot(neg_log_val_losses, u_values_dev, 'o', label='Models')
+        # plt.plot(neg_log_val_losses,
+        #          res_u_values_dev_neg_log_val_loss.intercept + res_u_values_dev_neg_log_val_loss.slope * neg_log_val_losses,
+        #          'r',
+        #          label='Fitted Line')
+        plt.xlabel('Negative Log Validation Loss')
+        plt.ylabel('Recurrent Weight U')
+        plt.legend()
+        plt.savefig(relu_prefix_2 + 'INDICATORS_linear_regression_u_values_devs_neg_log_val_losses.png')
+        plt.close()
+
+        plt.subplots()
+        plt.plot(fpfs, u_values_dev, 'o', label='Models')
+        # plt.plot(fpfs, res_u_values_dev_fpfs.intercept + res_u_values_dev_fpfs.slope * fpfs, 'r',
+        #          label='Fitted Line')
+        plt.xlabel('Average FPF')
+        plt.ylabel('Recurrent Weight U')
+        plt.legend()
+        plt.savefig(relu_prefix_2 + 'INDICATORS_linear_regression_u_values_devs_val_losses.png')
+        plt.close()
+
+        filename = relu_prefix_2 + 'INDICATORS_values_devs_dev.txt'
+        with open(filename, 'w') as f:
+            f.write('')
+
+        with open(filename, 'a') as f:
+            f.write('AB_RATIO LINEAR REGRESSION WITH VAL LOSS' + '\n')
+            f.write('r value = ' + str(res_ab_ratio_val_loss.rvalue) + '\n')
+            f.write('p value = ' + str(res_ab_ratio_val_loss.pvalue) + '\n')
+            f.write('slope = ' + str(res_ab_ratio_val_loss.slope) + '\n')
+            f.write('intercept = ' + str(res_ab_ratio_val_loss.intercept) + '\n')
+            f.write('AB_RATIO LINEAR REGRESSION WITH LOG VAL LOSS' + '\n')
+            f.write('r value = ' + str(res_ab_ratio_log_val_loss.rvalue) + '\n')
+            f.write('p value = ' + str(res_ab_ratio_log_val_loss.pvalue) + '\n')
+            f.write('slope = ' + str(res_ab_ratio_log_val_loss.slope) + '\n')
+            f.write('intercept = ' + str(res_ab_ratio_log_val_loss.intercept) + '\n')
+            f.write('AB_RATIO LINEAR REGRESSION WITH NEGATIVE LOG VAL LOSS' + '\n')
+            f.write('r value = ' + str(res_ab_ratio_neg_log_val_loss.rvalue) + '\n')
+            f.write('p value = ' + str(res_ab_ratio_neg_log_val_loss.pvalue) + '\n')
+            f.write('slope = ' + str(res_ab_ratio_neg_log_val_loss.slope) + '\n')
+            f.write('intercept = ' + str(res_ab_ratio_neg_log_val_loss.intercept) + '\n')
+            f.write('AB_RATIO LINEAR REGRESSION WITH AVERAGE FPF' + '\n')
+            f.write('r value = ' + str(res_ab_ratio_fpfs.rvalue) + '\n')
+            f.write('p value = ' + str(res_ab_ratio_fpfs.pvalue) + '\n')
+            f.write('slope = ' + str(res_ab_ratio_fpfs.slope) + '\n')
+            f.write('intercept = ' + str(res_ab_ratio_fpfs.intercept) + '\n')
+
+            f.write('U_values_dev LINEAR REGRESSION WITH VAL LOSS' + '\n')
+            f.write('r value = ' + str(res_u_values_dev_val_loss.rvalue) + '\n')
+            f.write('p value = ' + str(res_u_values_dev_val_loss.pvalue) + '\n')
+            f.write('slope = ' + str(res_u_values_dev_val_loss.slope) + '\n')
+            f.write('intercept = ' + str(res_u_values_dev_val_loss.intercept) + '\n')
+            f.write('U_values_dev LINEAR REGRESSION WITH LOG VAL LOSS' + '\n')
+            f.write('r value = ' + str(res_u_values_dev_log_val_loss.rvalue) + '\n')
+            f.write('p value = ' + str(res_u_values_dev_log_val_loss.pvalue) + '\n')
+            f.write('slope = ' + str(res_u_values_dev_log_val_loss.slope) + '\n')
+            f.write('intercept = ' + str(res_u_values_dev_log_val_loss.intercept) + '\n')
+            f.write('U_values_dev LINEAR REGRESSION WITH NEGATIVE LOG VAL LOSS' + '\n')
+            f.write('r value = ' + str(res_u_values_dev_neg_log_val_loss.rvalue) + '\n')
+            f.write('p value = ' + str(res_u_values_dev_neg_log_val_loss.pvalue) + '\n')
+            f.write('slope = ' + str(res_u_values_dev_neg_log_val_loss.slope) + '\n')
+            f.write('intercept = ' + str(res_u_values_dev_neg_log_val_loss.intercept) + '\n')
+            f.write('U_values_dev LINEAR REGRESSION WITH AVERAGE FPF' + '\n')
+            f.write('r value = ' + str(res_u_values_dev_fpfs.rvalue) + '\n')
+            f.write('p value = ' + str(res_u_values_dev_fpfs.pvalue) + '\n')
+            f.write('slope = ' + str(res_u_values_dev_fpfs.slope) + '\n')
+            f.write('intercept = ' + str(res_u_values_dev_fpfs.intercept) + '\n')
+        ###############################
+
         filename = relu_prefix_2+'INDICATORS_VALUES.txt'
         with open(filename,'w') as f:
             f.write('')
