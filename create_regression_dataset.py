@@ -14,6 +14,7 @@ with open('Dyck1_Dataset_Suzgun_train_.txt', 'r') as f:
 
 
 
+
 def getTimestepDepths():
     for j in range(len(x)):
         elem = x[j]
