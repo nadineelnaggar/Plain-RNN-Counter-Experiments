@@ -351,7 +351,7 @@ def extractModelIndicators():
 
         plt.subplots()
         plt.plot(fpfs, u_values, 'o', label='Models')
-        plt.plot(fpfs, res_u_value_val_loss.intercept + res_u_value_val_loss.slope * fpfs, 'r',
+        plt.plot(fpfs, res_u_value_fpfs.intercept + res_u_value_fpfs.slope * fpfs, 'r',
                  label='Fitted Line')
         plt.savefig(relu_prefix_2 + 'INDICATORS_linear_regression_u_values_val_losses.png')
         plt.close()
