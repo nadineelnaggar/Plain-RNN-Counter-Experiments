@@ -292,6 +292,9 @@ def extractModelIndicators():
         plt.subplots()
         plt.plot(val_losses,ab_ratios,'o',label='Models')
         plt.plot(val_losses,res_ab_ratio_val_loss.intercept+res_ab_ratio_val_loss.slope*val_losses,'r',label='Fitted Line')
+        plt.xlabel('Validation Loss')
+        plt.ylabel('AB Ratio')
+        plt.legend()
         plt.savefig(relu_prefix_2+'INDICATORS_linear_regression_ab_values_val_losses.png')
         plt.close()
 
@@ -300,6 +303,9 @@ def extractModelIndicators():
         plt.plot(log_val_losses, ab_ratios, 'o', label='Models')
         plt.plot(log_val_losses, res_ab_ratio_log_val_loss.intercept + res_ab_ratio_log_val_loss.slope * log_val_losses, 'r',
                  label='Fitted Line')
+        plt.xlabel('Log Validation Loss')
+        plt.ylabel('AB Ratio')
+        plt.legend()
         plt.savefig(relu_prefix_2 + 'INDICATORS_linear_regression_ab_values_log_val_losses.png')
         plt.close()
 
@@ -309,6 +315,9 @@ def extractModelIndicators():
         plt.plot(neg_log_val_losses, res_ab_ratio_neg_log_val_loss.intercept + res_ab_ratio_neg_log_val_loss.slope * neg_log_val_losses,
                  'r',
                  label='Fitted Line')
+        plt.xlabel('Negative Log Validation Loss')
+        plt.ylabel('AB Ratio')
+        plt.legend()
         plt.savefig(relu_prefix_2 + 'INDICATORS_linear_regression_ab_values_neg_log_val_losses.png')
         plt.close()
 
@@ -317,6 +326,9 @@ def extractModelIndicators():
         plt.plot(fpfs, ab_ratios, 'o', label='Models')
         plt.plot(fpfs, res_ab_ratio_val_loss.intercept + res_ab_ratio_val_loss.slope * fpfs, 'r',
                  label='Fitted Line')
+        plt.xlabel('Average FPF')
+        plt.ylabel('AB Ratio')
+        plt.legend()
         plt.savefig(relu_prefix_2 + 'INDICATORS_linear_regression_ab_values_val_losses.png')
         plt.close()
         
@@ -326,6 +338,9 @@ def extractModelIndicators():
         plt.plot(val_losses, u_values, 'o', label='Models')
         plt.plot(val_losses, res_u_value_val_loss.intercept + res_u_value_val_loss.slope * val_losses, 'r',
                  label='Fitted Line')
+        plt.xlabel('Validation Loss')
+        plt.ylabel('Recurrent Weight U')
+        plt.legend()
         plt.savefig(relu_prefix_2 + 'INDICATORS_linear_regression_u_values_val_losses.png')
         plt.close()
 
@@ -335,6 +350,9 @@ def extractModelIndicators():
         plt.plot(log_val_losses, res_u_value_log_val_loss.intercept + res_u_value_log_val_loss.slope * log_val_losses,
                  'r',
                  label='Fitted Line')
+        plt.xlabel('Log Validation Loss')
+        plt.ylabel('Recurrent Weight U')
+        plt.legend()
         plt.savefig(relu_prefix_2 + 'INDICATORS_linear_regression_u_values_log_val_losses.png')
         plt.close()
 
@@ -345,6 +363,9 @@ def extractModelIndicators():
                  res_u_value_neg_log_val_loss.intercept + res_u_value_neg_log_val_loss.slope * neg_log_val_losses,
                  'r',
                  label='Fitted Line')
+        plt.xlabel('Negative Log Validation Loss')
+        plt.ylabel('Recurrent Weight U')
+        plt.legend()
         plt.savefig(relu_prefix_2 + 'INDICATORS_linear_regression_u_values_neg_log_val_losses.png')
         plt.close()
 
@@ -353,6 +374,9 @@ def extractModelIndicators():
         plt.plot(fpfs, u_values, 'o', label='Models')
         plt.plot(fpfs, res_u_value_fpfs.intercept + res_u_value_fpfs.slope * fpfs, 'r',
                  label='Fitted Line')
+        plt.xlabel('Average FPF')
+        plt.ylabel('Recurrent Weight U')
+        plt.legend()
         plt.savefig(relu_prefix_2 + 'INDICATORS_linear_regression_u_values_val_losses.png')
         plt.close()
         
