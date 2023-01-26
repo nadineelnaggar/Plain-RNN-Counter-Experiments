@@ -811,5 +811,14 @@ class NextTokenPredictionDataset1000tokens(Dataset):
         return max_depth, timestep_depths
 
 
+class Dyck1RegressionDataset(Dataset):
+    def __int__(self):
+        pass
+    def __getitem__(self, item):
+        pass
+
+    def __len__(self):
+        pass
+
 
 
