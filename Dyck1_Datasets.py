@@ -813,7 +813,9 @@ class NextTokenPredictionDataset1000tokens(Dataset):
 
 class Dyck1RegressionDataset(Dataset):
     def __int__(self):
-        pass
+        self.x = []
+        self.y = []
+        # pass
     def __getitem__(self, item):
         pass
 
