@@ -16,8 +16,19 @@ with open('Dyck1_Dataset_Suzgun_train_.txt', 'r') as f:
 
 
 def getTimestepDepths():
-    for j in range(len(x)):
+    # for j in range(len(x)):
+    for j in range(3):
         elem = x[j]
         depth = 0
+        print(elem)
         for i in range(len(elem)):
-            pass
+            print(elem[i])
+            if elem[i] == '(':
+                depth+=1
+            elif elem[i]==')':
+                depth-=1
+            print(depth)
+
+        # break
+
+getTimestepDepths()
