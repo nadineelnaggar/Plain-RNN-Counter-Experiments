@@ -166,6 +166,11 @@ def extractModelIndicators():
         biases_input = []
         weights_u = []
         biases_u = []
+        u_values_dev = []
+        ab_ratios_dev = []
+
+
+
 
 
         for i in range(len(checkpoints)):
@@ -214,10 +219,17 @@ def extractModelIndicators():
             a_value = weights_a[i]+biases_u[i]+biases_input[i]
             b_value = weights_b[i]+biases_u[i]+biases_input[i]
             ab_ratio=a_value/b_value
-            ab_ratios.append(ab_ratio)
-            a_values.append(a_value)
-            b_values.append(b_value)
-            u_values.append(weights_u[i])
+            u_dev = abs(weights_u[i] - 1)
+
+            ab_dev = abs(ab_ratio - -1)
+            if ab_dev<=0.3 and u_dev<=0.1:
+                ab_ratios_dev.append(ab_dev)
+                u_values_dev.append(u_dev)
+
+                ab_ratios.append(ab_ratio)
+                a_values.append(a_value)
+                b_values.append(b_value)
+                u_values.append(weights_u[i])
 
 
         print(ab_ratios)
@@ -263,14 +275,14 @@ def extractModelIndicators():
         print('intercept = ', res_ab_ratio_fpfs.intercept)
 
 
-        u_values_dev = []
-        ab_ratios_dev = []
-
-        for i in range(len(ab_ratios)):
-            u_dev = abs(u_values[i]-1)
-            u_values_dev.append(u_dev)
-            ab_dev = abs(ab_ratios[i]--1)
-            ab_ratios_dev.append(ab_dev)
+        # u_values_dev = []
+        # ab_ratios_dev = []
+        #
+        # for i in range(len(ab_ratios)):
+        #     u_dev = abs(u_values[i]-1)
+        #     u_values_dev.append(u_dev)
+        #     ab_dev = abs(ab_ratios[i]--1)
+        #     ab_ratios_dev.append(ab_dev)
 
         res_u_value_val_loss = stats.linregress(u_values, val_losses)
         res_u_value_log_val_loss = stats.linregress(u_values, log_val_losses)
@@ -303,7 +315,7 @@ def extractModelIndicators():
         plt.plot(ab_ratios, val_losses, 'o', label='Models')
         plt.ylabel('Validation Loss')
         plt.xlabel('AB Ratio')
-        plt.xlim(-0.7)
+        # plt.xlim(-0.7)
         # plt.plot(val_losses,ab_ratios,'o',label='Models')
         # # plt.plot(val_losses,res_ab_ratio_val_loss.intercept+res_ab_ratio_val_loss.slope*val_losses,'r',label='Fitted Line')
         # plt.xlabel('Validation Loss')
@@ -317,7 +329,7 @@ def extractModelIndicators():
         plt.plot(ab_ratios, log_val_losses, 'o', label='Models')
         plt.ylabel('Log Validation Loss')
         plt.xlabel('AB Ratio')
-        plt.xlim(-0.7)
+        # plt.xlim(-0.7)
         # plt.plot(log_val_losses, ab_ratios, 'o', label='Models')
         # # plt.plot(log_val_losses, res_ab_ratio_log_val_loss.intercept + res_ab_ratio_log_val_loss.slope * log_val_losses, 'r',
         # #          label='Fitted Line')
@@ -332,7 +344,7 @@ def extractModelIndicators():
         plt.plot(ab_ratios, neg_log_val_losses, 'o', label='Models')
         plt.ylabel('Negative Log Validation Loss')
         plt.xlabel('AB Ratio')
-        plt.xlim(-0.7)
+        # plt.xlim(-0.7)
         # plt.plot(neg_log_val_losses, ab_ratios, 'o', label='Models')
         # # plt.plot(neg_log_val_losses, res_ab_ratio_neg_log_val_loss.intercept + res_ab_ratio_neg_log_val_loss.slope * neg_log_val_losses,
         # #          'r',
@@ -348,7 +360,7 @@ def extractModelIndicators():
         plt.plot(ab_ratios, fpfs, 'o', label='Models')
         plt.ylabel('Average FPF')
         plt.xlabel('AB Ratio')
-        plt.xlim(-0.7)
+        # plt.xlim(-0.7)
         # plt.plot(fpfs, ab_ratios, 'o', label='Models')
         # # plt.plot(fpfs, res_ab_ratio_val_loss.intercept + res_ab_ratio_val_loss.slope * fpfs, 'r',
         # #          label='Fitted Line')
@@ -364,7 +376,7 @@ def extractModelIndicators():
         plt.plot(u_values, val_losses, 'o', label='Models')
         plt.ylabel('Validation Loss')
         plt.xlabel('Recurrent Weight U')
-        plt.xlim(1.1)
+        # plt.xlim(1.1)
         # plt.plot(val_losses, u_values, 'o', label='Models')
         # plt.plot(val_losses, res_u_value_val_loss.intercept + res_u_value_val_loss.slope * val_losses, 'r',
         #          label='Fitted Line')
@@ -379,7 +391,7 @@ def extractModelIndicators():
         plt.plot(u_values, log_val_losses, 'o', label='Models')
         plt.ylabel('Log Validation Loss')
         plt.xlabel('Recurrent Weight U')
-        plt.xlim(1.1)
+        # plt.xlim(1.1)
         # plt.plot(log_val_losses, u_values, 'o', label='Models')
         # # plt.plot(log_val_losses, res_u_value_log_val_loss.intercept + res_u_value_log_val_loss.slope * log_val_losses,
         # #          'r',
@@ -395,7 +407,7 @@ def extractModelIndicators():
         plt.plot(u_values, neg_log_val_losses, 'o', label='Models')
         plt.ylabel('Negative Log Validation Loss')
         plt.xlabel('Recurrent Weight U')
-        plt.xlim(1.1)
+        # plt.xlim(1.1)
         # plt.plot(neg_log_val_losses, u_values, 'o', label='Models')
         # # plt.plot(neg_log_val_losses,
         # #          res_u_value_neg_log_val_loss.intercept + res_u_value_neg_log_val_loss.slope * neg_log_val_losses,
@@ -412,7 +424,7 @@ def extractModelIndicators():
         plt.plot(u_values, fpfs, 'o', label='Models')
         plt.ylabel('Average FPF')
         plt.xlabel('Recurrent Weight U')
-        plt.xlim(1.1)
+        # plt.xlim(1.1)
         # plt.plot(fpfs, u_values, 'o', label='Models')
         # # plt.plot(fpfs, res_u_value_fpfs.intercept + res_u_value_fpfs.slope * fpfs, 'r',
         # #          label='Fitted Line')
@@ -454,7 +466,7 @@ def extractModelIndicators():
         plt.plot(ab_ratios_dev, val_losses, 'o', label='Models')
         plt.ylabel('Validation Loss')
         plt.xlabel('AB Ratio')
-        plt.xlim(0.3)
+        # plt.xlim(0.3)
         # plt.plot(val_losses, ab_ratios_dev, 'o', label='Models')
         # # plt.plot(val_losses,res_ab_ratio_val_loss.intercept+res_ab_ratio_val_loss.slope*val_losses,'r',label='Fitted Line')
         # plt.xlabel('Validation Loss')
@@ -467,7 +479,7 @@ def extractModelIndicators():
         plt.plot(ab_ratios_dev, log_val_losses, 'o', label='Models')
         plt.ylabel('Log Validation Loss')
         plt.xlabel('AB Ratio')
-        plt.xlim(0.3)
+        # plt.xlim(0.3)
         # plt.plot(log_val_losses, ab_ratios_dev, 'o', label='Models')
         # # plt.plot(log_val_losses, res_ab_ratio_log_val_loss.intercept + res_ab_ratio_log_val_loss.slope * log_val_losses, 'r',
         # #          label='Fitted Line')
@@ -481,7 +493,7 @@ def extractModelIndicators():
         plt.plot(ab_ratios_dev, neg_log_val_losses, 'o', label='Models')
         plt.ylabel('Negative Log Validation Loss')
         plt.xlabel('AB Ratio')
-        plt.xlim(0.3)
+        # plt.xlim(0.3)
         # plt.plot(neg_log_val_losses, ab_ratios_dev, 'o', label='Models')
         # # plt.plot(neg_log_val_losses, res_ab_ratio_neg_log_val_loss.intercept + res_ab_ratio_neg_log_val_loss.slope * neg_log_val_losses,
         # #          'r',
@@ -496,7 +508,7 @@ def extractModelIndicators():
         plt.plot(ab_ratios_dev, fpfs, 'o', label='Models')
         plt.ylabel('Average FPF')
         plt.xlabel('AB Ratio')
-        plt.xlim(0.3)
+        # plt.xlim(0.3)
         # plt.plot(fpfs, ab_ratios_dev, 'o', label='Models')
         # # plt.plot(fpfs, res_ab_ratio_val_loss.intercept + res_ab_ratio_val_loss.slope * fpfs, 'r',
         # #          label='Fitted Line')
@@ -512,7 +524,7 @@ def extractModelIndicators():
         plt.plot(u_values_dev, val_losses, 'o', label='Models')
         plt.ylabel('Validation Loss')
         plt.xlabel('Recurrent Weight U')
-        plt.xlim(0.1)
+        # plt.xlim(0.1)
         # plt.plot(val_losses, u_values_dev, 'o', label='Models')
         # # plt.plot(val_losses, res_u_values_dev_val_loss.intercept + res_u_values_dev_val_loss.slope * val_losses, 'r',
         # #          label='Fitted Line')
@@ -526,7 +538,7 @@ def extractModelIndicators():
         plt.plot(u_values_dev, log_val_losses, 'o', label='Models')
         plt.ylabel('Log Validation Loss')
         plt.xlabel('Recurrent Weight U')
-        plt.xlim(0.1)
+        # plt.xlim(0.1)
         # plt.plot(log_val_losses, u_values_dev, 'o', label='Models')
         # # plt.plot(log_val_losses, res_u_values_dev_log_val_loss.intercept + res_u_values_dev_log_val_loss.slope * log_val_losses,
         # #          'r',
@@ -541,7 +553,7 @@ def extractModelIndicators():
         plt.plot(u_values_dev, neg_log_val_losses, 'o', label='Models')
         plt.ylabel('Negative Log Validation Loss')
         plt.xlabel('Recurrent Weight U')
-        plt.xlim(0.1)
+        # plt.xlim(0.1)
         # plt.plot(neg_log_val_losses, u_values_dev, 'o', label='Models')
         # # plt.plot(neg_log_val_losses,
         # #          res_u_values_dev_neg_log_val_loss.intercept + res_u_values_dev_neg_log_val_loss.slope * neg_log_val_losses,
@@ -557,7 +569,7 @@ def extractModelIndicators():
         plt.plot(u_values_dev, fpfs, 'o', label='Models')
         plt.ylabel('Average FPF')
         plt.xlabel('Recurrent Weight U')
-        plt.xlim(0.1)
+        # plt.xlim(0.1)
         # plt.plot(fpfs, u_values_dev, 'o', label='Models')
         # # plt.plot(fpfs, res_u_values_dev_fpfs.intercept + res_u_values_dev_fpfs.slope * fpfs, 'r',
         # #          label='Fitted Line')
