@@ -291,7 +291,7 @@ def extractModelIndicators():
         writer.save()
 
 def plotModelIndicators():
-    df = getReLUModels()
+    _,df = getReLUModels()
     ab_ratios = df['ab_ratios']
     u_values = df['u_values']
     ab_ratios_dev = df['ab_ratios_dev']
