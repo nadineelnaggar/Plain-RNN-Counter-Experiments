@@ -168,6 +168,10 @@ def extractModelIndicators():
         biases_u = []
         u_values_dev = []
         ab_ratios_dev = []
+        fpfs = df['average first point of failure (2000 tokens)']
+        val_losses = df['avg validation losses']
+        log_val_losses = df['log of avg validation losses']
+        neg_log_val_losses = df['log of inverse avg validation losses']
 
 
 
@@ -230,6 +234,13 @@ def extractModelIndicators():
                 a_values.append(a_value)
                 b_values.append(b_value)
                 u_values.append(weights_u[i])
+            else:
+                del fpfs[i]
+                del val_losses[i]
+                del log_val_losses[i]
+                del neg_log_val_losses[i]
+
+
 
 
         print(ab_ratios)
@@ -243,10 +254,10 @@ def extractModelIndicators():
         plt.savefig(relu_prefix_2+'INDICATORS_histogram_u_values.png')
         plt.show()
 
-        fpfs = df['average first point of failure (2000 tokens)']
-        val_losses = df['avg validation losses']
-        log_val_losses = df['log of avg validation losses']
-        neg_log_val_losses = df['log of inverse avg validation losses']
+        # fpfs = df['average first point of failure (2000 tokens)']
+        # val_losses = df['avg validation losses']
+        # log_val_losses = df['log of avg validation losses']
+        # neg_log_val_losses = df['log of inverse avg validation losses']
         
         res_ab_ratio_val_loss = stats.linregress(ab_ratios,val_losses)
         res_ab_ratio_log_val_loss = stats.linregress(ab_ratios,log_val_losses)
