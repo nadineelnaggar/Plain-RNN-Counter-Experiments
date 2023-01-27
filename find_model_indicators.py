@@ -302,8 +302,27 @@ def plotModelIndicators():
     neg_log_val_losses = df['log of inverse avg validation losses']
 
 
-    print(ab_ratios)
-    print(u_values)
+    for i in range(len(ab_ratios)):
+        ab_dev = ab_ratios_dev[i]
+        u_dev = u_values_dev[i]
+        if ab_dev > 0.3 and u_dev > 0.1:
+            del ab_ratios_dev[i]
+            del u_values_dev[i]
+            del ab_ratios[i]
+            del u_values[i]
+            del fpfs[i]
+            del val_losses[i]
+            del log_val_losses[i]
+            del neg_log_val_losses[i]
+
+
+    # print('ab_ratios = ',ab_ratios)
+    print('len(ab_ratios) = ',len(ab_ratios))
+    print('len(ab_ratios_dev) = ', len(ab_ratios_dev))
+    # print('u_values = ',u_values)
+    print('len(u_values) = ',len(u_values))
+
+def other():
     plt.subplots()
     plt.hist(ab_ratios, bins=100)
     plt.savefig(relu_prefix_2+'INDICATORS_histogram_ab_ratio.png')
@@ -317,7 +336,6 @@ def plotModelIndicators():
     # val_losses = df['avg validation losses']
     # log_val_losses = df['log of avg validation losses']
     # neg_log_val_losses = df['log of inverse avg validation losses']
-
     res_ab_ratio_val_loss = stats.linregress(ab_ratios,val_losses)
     res_ab_ratio_log_val_loss = stats.linregress(ab_ratios,log_val_losses)
     res_ab_ratio_neg_log_val_loss=stats.linregress(ab_ratios,neg_log_val_losses)
@@ -756,7 +774,7 @@ def plotModelIndicators():
 #     neg_log_val_losses = df['log of inverse avg validation losses']
     
 
-extractModelIndicators()
+# extractModelIndicators()
 plotModelIndicators()
 
 
