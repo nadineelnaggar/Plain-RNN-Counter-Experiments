@@ -811,11 +811,33 @@ class NextTokenPredictionDataset1000tokens(Dataset):
         return max_depth, timestep_depths
 
 
-class Dyck1RegressionDataset(Dataset):
+class Dyck1RegressionDataset_train(Dataset):
     def __int__(self):
         self.x = []
         self.y = []
+        self.lengths = []
         # pass
+
+        with open('Dyck1_Dataset_Suzgun_train_.txt', 'r') as f:
+            for line in f:
+                line = line.split(",")
+                sentence = line[0].strip()
+                label = line[1].strip()
+                self.x.append(sentence)
+                # y.append(label)
+                self.lengths.append(len(self.x))
+
+        for j in range(len(self.x)):
+            elem = self.x[j]
+            depth = 0
+            print(elem)
+            for i in range(len(elem)):
+                print(elem[i])
+                if elem[i] == '(':
+                    depth += 1
+                elif elem[i] == ')':
+                    depth -= 1
+                print(depth)
     def __getitem__(self, item):
         pass
 

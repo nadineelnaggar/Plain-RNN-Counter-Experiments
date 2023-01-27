@@ -1,6 +1,7 @@
 x = []
 y = []
 lengths = []
+timestep_depths = []
 
 
 with open('Dyck1_Dataset_Suzgun_train_.txt', 'r') as f:
@@ -20,6 +21,7 @@ def getTimestepDepths():
     for j in range(3):
         elem = x[j]
         depth = 0
+        depth_timestep = []
         print(elem)
         for i in range(len(elem)):
             print(elem[i])
@@ -28,7 +30,12 @@ def getTimestepDepths():
             elif elem[i]==')':
                 depth-=1
             print(depth)
+            depth_timestep.append(depth)
 
+        print(depth_timestep)
+        timestep_depths.append(depth_timestep)
+        print(timestep_depths[j])
         # break
+    print(timestep_depths)
 
 getTimestepDepths()
