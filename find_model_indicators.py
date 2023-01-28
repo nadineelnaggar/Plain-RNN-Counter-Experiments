@@ -1,6 +1,8 @@
 import torch
 import torch.nn as nn
 import pandas as pd
+import matplotlib as mpl
+# mpl.use('tkagg')
 import matplotlib.pyplot as plt
 import argparse
 from models_batch import VanillaLSTM, VanillaReLURNN
@@ -322,15 +324,15 @@ def plotModelIndicators():
     # print('u_values = ',u_values)
     print('len(u_values) = ',len(u_values))
 
-def other():
+# def other():
     plt.subplots()
     plt.hist(ab_ratios, bins=100)
     plt.savefig(relu_prefix_2+'INDICATORS_histogram_ab_ratio.png')
-    plt.show()
+    # plt.show()
     plt.subplots()
     plt.hist(u_values, bins=100)
     plt.savefig(relu_prefix_2+'INDICATORS_histogram_u_values.png')
-    plt.show()
+    # plt.show()
 
     # fpfs = df['average first point of failure (2000 tokens)']
     # val_losses = df['avg validation losses']
