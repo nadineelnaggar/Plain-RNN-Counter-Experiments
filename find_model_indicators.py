@@ -1,8 +1,8 @@
 import torch
 import torch.nn as nn
 import pandas as pd
-import matplotlib as mpl
-# mpl.use('tkagg')
+# import matplotlib as mpl
+# # mpl.use('tkagg')
 import matplotlib.pyplot as plt
 import argparse
 from models_batch import VanillaLSTM, VanillaReLURNN
