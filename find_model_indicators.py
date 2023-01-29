@@ -9,6 +9,8 @@ from models_batch import VanillaLSTM, VanillaReLURNN
 import os
 import scipy
 from scipy import stats
+from mpl_toolkits import mplot3d
+import numpy as np
 
 
 
@@ -763,6 +765,35 @@ def plotModelIndicators():
         f.write('p value = '+ str(res_u_value_fpfs.pvalue)+ '\n')
         f.write('slope = '+ str(res_u_value_fpfs.slope)+ '\n')
         f.write('intercept = '+ str(res_u_value_fpfs.intercept)+ '\n')
+
+    #3D Plots
+    fig = plt.figure()
+    ax = plt.axes(projection='3d')
+    z1 = neg_log_val_losses
+    x = u_values_dev
+    y = ab_ratios_dev
+    ax.scatter(x,y,z1)
+    ax.set_xlabel('deviation in U values')
+    ax.set_ylabel('deviation in AB ratio')
+    ax.set_zlabel('negative log validation loss')
+    plt.savefig(relu_prefix_2+'INDICATORS_3D_deviations_neg_log_val_loss.png')
+    plt.show()
+    plt.close()
+
+    fig = plt.figure()
+    ax = plt.axes(projection='3d')
+    z1 = fpfs
+    x = u_values_dev
+    y = ab_ratios_dev
+    ax.scatter(x, y, z1)
+    ax.set_xlabel('deviation in U values')
+    ax.set_ylabel('deviation in AB ratio')
+    ax.set_zlabel('Average FPFs')
+    plt.savefig(relu_prefix_2+'INDICATORS_3D_deviations_FPF.png')
+    plt.show()
+    plt.close()
+
+
 
 
 
