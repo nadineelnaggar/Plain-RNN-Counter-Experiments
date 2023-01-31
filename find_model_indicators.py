@@ -595,6 +595,9 @@ def plotModelIndicators():
     print('slope = ', res_u_value_dev_fpfs.slope)
     print('intercept = ', res_u_value_dev_fpfs.intercept)
 
+    # print('slope type = ',type(res_u_value_dev_neg_log_val_loss.slope))
+    # print(type(u_values_dev))
+
     plt.subplots()
     plt.plot(ab_ratios_dev, val_losses, 'o', label='Models')
     plt.ylabel('Validation Loss')
@@ -640,6 +643,7 @@ def plotModelIndicators():
 
     plt.subplots()
     plt.plot(ab_ratios_dev, fpfs, 'o', label='Models')
+    plt.plot(ab_ratios_dev, res_ab_ratio_dev_fpfs.intercept+ res_ab_ratio_dev_fpfs.slope*ab_ratios_dev,'r', label='Fitted Line')
     plt.ylabel('Average FPF')
     plt.xlabel('AB Ratio')
     # plt.xlim(0.3)
@@ -704,6 +708,7 @@ def plotModelIndicators():
 
     plt.subplots()
     plt.plot(u_values_dev, fpfs, 'o', label='Models')
+    plt.plot(u_values_dev,res_u_value_dev_fpfs.intercept+res_ab_ratio_dev_fpfs.slope*u_values_dev)
     plt.ylabel('Average FPF')
     plt.xlabel('Recurrent Weight U')
     # plt.xlim(0.1)
@@ -843,7 +848,7 @@ def plotModelIndicators():
     u_values_dev_list = u_values_dev.to_list()
 
     for i in range(len(ab_ratios_dev)):
-        euclidean_distance = np.sqrt((ab_ratios_dev_list[i]**2)+(u_values_dev_list[i]**2))
+        euclidean_distance = math.sqrt((ab_ratios_dev_list[i]**2)+(u_values_dev_list[i]**2))
         euclidean_distances.append(euclidean_distance)
 
 
@@ -854,6 +859,7 @@ def plotModelIndicators():
         # euclidean_distances.append(euclidean_distance)
     # print('euclidean_distances = ',euclidean_distances)
     # print(len(euclidean_distances))
+    print('euclidean distances = ',euclidean_distances)
 
     res_euclidean_neg_log_val_loss = stats.linregress(euclidean_distances,neg_log_val_losses)
     res_euclidean_fpf = stats.linregress(euclidean_distances,fpfs)
@@ -870,11 +876,14 @@ def plotModelIndicators():
     print('slope = ',res_euclidean_fpf.slope)
     print('intercept = ',res_euclidean_fpf.intercept)
 
+    # print('slope type = ',type(res_euclidean_fpf.slope))
+
 
 
     plt.subplots()
     plt.plot(euclidean_distances,neg_log_val_losses, 'o', label='Models')
-    plt.plot(euclidean_distances, res_euclidean_neg_log_val_loss.slope*euclidean_distances+res_euclidean_neg_log_val_loss.intercept)
+    plt.plot(euclidean_distances, res_euclidean_neg_log_val_loss.intercept + res_euclidean_neg_log_val_loss.slope*pd.Series(euclidean_distances) ,'r',label='Fitted Line')
+    # plt.plot(euclidean_distances, res_euclidean_neg_log_val_loss.slope*euclidean_distances + res_euclidean_neg_log_val_loss.intercept)
     plt.xlabel('Euclidean Distance')
     plt.ylabel('negative log validation loss')
     plt.legend()
@@ -884,12 +893,15 @@ def plotModelIndicators():
 
     plt.subplots()
     plt.plot(euclidean_distances, fpfs, 'o', label='Models')
+    plt.plot(euclidean_distances,res_euclidean_fpf.intercept + res_euclidean_fpf.slope*pd.Series(euclidean_distances),'r',label='Fitted Line')
     plt.xlabel('Euclidean Distance')
     plt.ylabel('Average FPFs')
     plt.legend()
     plt.savefig(relu_prefix_2 + 'INDICATORS_euclidean_distance_fpfs.png')
     plt.show()
     plt.close()
+
+
 
 
 
