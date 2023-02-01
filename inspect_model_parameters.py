@@ -326,9 +326,17 @@ def inspect_model_parameters():
 
     if model_name=='VanillaLSTM':
         weights_ii = []
+        weights_ii_0 = []
+        weights_ii_1 = []
         weights_if = []
+        weights_if_0 = []
+        weights_if_1 = []
         weights_ig = []
+        weights_ig_0 = []
+        weights_ig_1 = []
         weights_io = []
+        weights_io_0 = []
+        weights_io_1 = []
 
         biases_ii = []
         biases_if = []
@@ -436,9 +444,17 @@ def inspect_model_parameters():
 
 
                     weights_if.append(weight_if)
-                    weights_ii.append(weight_ig)
+                    weights_if_0.append(weights_if[0])
+                    weights_if_1.append(weights_if[1])
+                    weights_ii.append(weight_ii)
+                    weights_ii_0.append(weights_ii[0])
+                    weights_ii_1.append(weights_ii[1])
                     weights_ig.append(weight_ig)
+                    weights_ig_0.append(weights_ig[0])
+                    weights_ig_1.append(weights_ig[1])
                     weights_io.append(weight_io)
+                    weights_io_0.append(weights_io[0])
+                    weights_io_1.append(weights_io[1])
                     biases_if.append(bias_if)
                     biases_ii.append(bias_ii)
                     biases_ig.append(bias_ig)
@@ -541,9 +557,17 @@ def inspect_model_parameters():
             tanh_metric_ctilde_close_best, tanh_metric_ctilde_close_worst, sigmoid_metric_ot = inspect_lstm(model)
 
             weights_if.append(weight_if)
-            weights_ii.append(weight_ig)
+            weights_if_0.append(weights_if[0])
+            weights_if_1.append(weights_if[1])
+            weights_ii.append(weight_ii)
+            weights_ii_0.append(weights_ii[0])
+            weights_ii_1.append(weights_ii[1])
             weights_ig.append(weight_ig)
+            weights_if_0.append(weights_if[0])
+            weights_if_1.append(weights_if[1])
             weights_io.append(weight_io)
+            weights_io_0.append(weights_io[0])
+            weights_io_1.append(weights_io[1])
             biases_if.append(bias_if)
             biases_ii.append(bias_ii)
             biases_ig.append(bias_ig)
