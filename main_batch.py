@@ -44,6 +44,7 @@ parser.add_argument('--num_epochs', type=int, help='number of training epochs')
 parser.add_argument('--num_runs', type=int, help='number of training runs')
 parser.add_argument('--checkpoint_step', type=int, help='checkpoint step', default=0)
 parser.add_argument('--shuffle_dataset',type=bool,default=False)
+parser.add_argument('--output_size',type=int,default=2,help='how many output neurons, 1 or 2?')
 
 
 
@@ -61,6 +62,7 @@ batch_size = args.batch_size
 # load_model = args.load_model
 lr_scheduler_step = args.lr_scheduler_step
 lr_scheduler_gamma = args.lr_scheduler_gamma
+output_size = args.output_size
 
 checkpoint_step = int(num_epochs/4)
 if args.checkpoint_step!=0:
