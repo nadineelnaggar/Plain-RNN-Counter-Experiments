@@ -171,6 +171,24 @@ class DyckLanguage():
                         binary_code -= (2 ** base)
         return tensor
 
+    def lineToTensorSigmoidOneNeuron(self, line, max_len=50):
+        # tensor = torch.zeros(len(line), self.n_letters)
+        # max_len = 50
+        tensor = torch.zeros(max_len, self.n_letters)
+        for li, letter in enumerate(line):
+            for elt in self.openpar:
+                tensor[li][self.letterToIndex(elt)] = 1.0
+
+            binary_code = ord(letter) - init_ascii
+
+            if binary_code > 0:
+                for base in range(len(self.closepar) - 1, -1, -1):
+                    if binary_code - (2 ** base) >= 0:
+                        tensor[li][self.letterToIndex(self.closepar[base])] = 1.0
+                        binary_code -= (2 ** base)
+        return tensor
+
+
     def batchToTensorSigmoid(self, batch, lengths, batch_size=1, max_len=50):
         tensors = torch.tensor([])
         # print('batch = ',batch)
