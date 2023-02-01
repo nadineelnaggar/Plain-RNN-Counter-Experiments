@@ -634,12 +634,20 @@ def inspect_model_parameters():
     if model_name == 'VanillaLSTM':
         
         df1['weights_if'] = weights_if
+        df['weights_if_0']=weights_if_0
+        df['weights_if_1'] = weights_if_1
         df1['biases_if'] = biases_if
         df1['weights_ii'] = weights_ii
+        df['weights_ii_0'] = weights_ii_0
+        df['weights_ii_1'] = weights_ii_1
         df1['biases_ii'] = biases_ii
         df1['weights_ig'] = weights_ig
+        df['weights_ig_0'] = weights_ig_0
+        df['weights_ig_1'] = weights_ig_1
         df1['biases_ig'] = biases_ig
         df1['weights_io'] = weights_io
+        df['weights_io_0'] = weights_io_0
+        df['weights_io_1'] = weights_io_1
         df1['biases_io'] = biases_io
         df1['weights_hf'] = weights_hf
         df1['biases_hf'] = biases_hf
