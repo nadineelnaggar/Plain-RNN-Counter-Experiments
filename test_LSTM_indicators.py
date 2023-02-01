@@ -7,23 +7,25 @@ import numpy
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 if os.path.exists('/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_NextTokenPrediction/Minibatch_Training/VanillaLSTM/1_batch_size/0.01_learning_rate/20_epochs/50_lr_scheduler_step/1.0_lr_scheduler_gamma/1_hidden_units/10_runs/shuffle_True/Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaLSTM_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_20epochs_10runs_MODEL_run9.pth'):
-    model_name = '/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_NextTokenPrediction/Minibatch_Training/VanillaLSTM/1_batch_size/0.01_learning_rate/20_epochs/50_lr_scheduler_step/1.0_lr_scheduler_gamma/1_hidden_units/10_runs/shuffle_True/Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaLSTM_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_20epochs_10runs_MODEL_run9.pth'
+    prefix = '/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_NextTokenPrediction/Minibatch_Training/VanillaLSTM/1_batch_size/0.01_learning_rate/20_epochs/50_lr_scheduler_step/1.0_lr_scheduler_gamma/1_hidden_units/10_runs/shuffle_True/'
+    # model_name = '/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_NextTokenPrediction/Minibatch_Training/VanillaLSTM/1_batch_size/0.01_learning_rate/20_epochs/50_lr_scheduler_step/1.0_lr_scheduler_gamma/1_hidden_units/10_runs/shuffle_True/Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaLSTM_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_20epochs_10runs_MODEL_run9.pth'
 elif os.path.exists('/Users/nadineelnaggar/Google Drive/PhD/EXPT_LOGS/Dyck1_NextTokenPrediction/Minibatch_Training/VanillaLSTM/1_batch_size/0.01_learning_rate/20_epochs/50_lr_scheduler_step/1.0_lr_scheduler_gamma/1_hidden_units/10_runs/shuffle_True/Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaLSTM_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_20epochs_10runs_MODEL_run9.pth'):
-    model_name = '/Users/nadineelnaggar/Google Drive/PhD/EXPT_LOGS/Dyck1_NextTokenPrediction/Minibatch_Training/VanillaLSTM/1_batch_size/0.01_learning_rate/20_epochs/50_lr_scheduler_step/1.0_lr_scheduler_gamma/1_hidden_units/10_runs/shuffle_True/Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaLSTM_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_20epochs_10runs_MODEL_run9.pth'
+    prefix = '/Users/nadineelnaggar/Google Drive/PhD/EXPT_LOGS/Dyck1_NextTokenPrediction/Minibatch_Training/VanillaLSTM/1_batch_size/0.01_learning_rate/20_epochs/50_lr_scheduler_step/1.0_lr_scheduler_gamma/1_hidden_units/10_runs/shuffle_True/'
+    # model_name = '/Users/nadineelnaggar/Google Drive/PhD/EXPT_LOGS/Dyck1_NextTokenPrediction/Minibatch_Training/VanillaLSTM/1_batch_size/0.01_learning_rate/20_epochs/50_lr_scheduler_step/1.0_lr_scheduler_gamma/1_hidden_units/10_runs/shuffle_True/Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaLSTM_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_20epochs_10runs_MODEL_run9.pth'
 
-model=VanillaLSTM(input_size=2,hidden_size=1,num_layers=1,batch_size=1,output_size=2,output_activation='Sigmoid')
+# model=VanillaLSTM(input_size=2,hidden_size=1,num_layers=1,batch_size=1,output_size=2,output_activation='Sigmoid')
 
-model.load_state_dict(torch.load(model_name))
-model.to(device)
+# model.load_state_dict(torch.load(model_name))
+# model.to(device)
 # print(model)
 # print(model.parameters())
-
-
+num_runs = 10
+num_epochs=30
 
 # a_values = []
 # b_values = []
 
-def extract_lstm_weights():
+def extract_lstm_weights(model):
     for param in model.lstm.named_parameters():
         if 'weight_hh' in param[0]:
             weights_hh = param[1]
@@ -64,6 +66,62 @@ def extract_lstm_weights():
     
     return weights_if.cpu().detach().numpy(), weights_ii.cpu().detach().numpy(), weights_ig.cpu().detach().numpy(), weights_io.cpu().detach().numpy(), biases_if.item(), biases_ii.item(), biases_ig.item(), biases_io.item(), \
            weights_hf.item(), weights_hi.item(), weights_hg.item(), weights_ho.item(), biases_hf.item(), biases_hi.item(), biases_hg.item(), biases_ho.item()
+
+def extract_lstm_weights_all_models():
+    model = VanillaLSTM(input_size=2, hidden_size=1, num_layers=1, batch_size=1, output_size=2,
+                        output_activation='Sigmoid')
+
+    weights_all_if = []
+    weights_all_ii = []
+    weights_all_ig = []
+    weights_all_io = []
+    biases_all_if = []
+    biases_all_ii = []
+    biases_all_ig = []
+    biases_all_io = []
+
+    weights_all_hf = []
+    weights_all_hi = []
+    weights_all_hg = []
+    weights_all_ho = []
+    biases_all_hf = []
+    biases_all_hi = []
+    biases_all_hg = []
+    biases_all_ho = []
+    
+    
+    for run in range(num_runs):
+        for epoch in range(num_epochs):
+            
+            model_name = prefix+'Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaLSTM_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_10runs_CHECKPOINT_run'+str(run)+'_epoch'+str(epoch)+'.pth'
+
+            model.load_state_dict(torch.load(model_name)['model_state_dict'])
+            model.to(device)
+            weights_if, weights_ii, weights_ig, weights_io, biases_if, biases_ii, biases_ig, biases_io, \
+                weights_hf, weights_hi, weights_hg, weights_ho, biases_hf, biases_hi, biases_hg, biases_ho = extract_lstm_weights(model)
+            
+            weights_all_if.append(weights_if)
+            weights_all_ii.append(weights_ii)
+            weights_all_ig.append(weights_all_ig)
+            weights_all_io.append(weights_io)
+            biases_all_if.append(biases_if)
+            biases_all_ii.append(biases_ii)
+            biases_all_ig.append(biases_all_ig)
+            biases_all_io.append(biases_io)
+
+            weights_all_hf.append(weights_hf)
+            weights_all_hi.append(weights_hi)
+            weights_all_hg.append(weights_all_hg)
+            weights_all_ho.append(weights_ho)
+            biases_all_hf.append(biases_hf)
+            biases_all_hi.append(biases_hi)
+            biases_all_hg.append(biases_all_hg)
+            biases_all_ho.append(biases_ho)
+            
+
+
+def extract_lstm_weights_checkpoints():
+    pass
 
 
 def calculate_lstm_indicators(seq):
