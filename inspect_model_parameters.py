@@ -444,6 +444,7 @@ def inspect_model_parameters():
 
 
                     weights_if.append(weight_if)
+                    print('weight_if = ', weight_if)
                     print('weight_if_0 = ', weight_if[0])
                     print('weight_if_1 = ', weight_if[1])
                     weights_if_0.append(weight_if[0])
