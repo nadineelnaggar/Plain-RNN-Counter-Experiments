@@ -1094,6 +1094,9 @@ def test_model(model, loader, dataset):
     #         output_seq[j] = out
     for i, (sentences, labels, input_seq, target_seq, length) in enumerate(loader):
         output_seq = model(input_seq.to(device), length)
+        # output_seq2, abr_seq, u_seq = model2(input_seq.to(device), length)
+        #diff_seq = output_seq - output_seq2
+        #max(diff_seq)
         # output_seq[i] = out
 
         # with open(log_file, 'a') as f:
