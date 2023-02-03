@@ -1157,7 +1157,8 @@ def lstm_cell(input, hidden, w_ih, w_hh, b_ih, b_hh, w_out, b_out):
     cy = (forgetgate * cx) + (ingate * cellgate)
     hy = outgate * torch.tanh(cy)
 
-    outt = torch.mm(hy,w_out)+b_out
+    # outt = torch.mm(hy,w_out)+b_out
+    outt = (hy * w_out) + b_out
     outt = torch.sigmoid(outt)
 
     return hy, cy, ingate, forgetgate, cellgate, outgate, outt
@@ -1271,14 +1272,14 @@ def inspect_lstm(model):
     return weights_ih, weights_hh, biases_ih, biases_hh, output_weight, output_bias
 
 
-model_path = '/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_NextTokenPrediction/Minibatch_Training/VanillaLSTM/1_batch_size/0.01_learning_rate/30_epochs/50_lr_scheduler_step/1.0_lr_scheduler_gamma/1_hidden_units/10_runs/shuffle_True/Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaLSTM_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_10runs_CHECKPOINT_run9_epoch29.pth'
+# model_path = '/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_NextTokenPrediction/Minibatch_Training/VanillaLSTM/1_batch_size/0.01_learning_rate/30_epochs/50_lr_scheduler_step/1.0_lr_scheduler_gamma/1_hidden_units/10_runs/shuffle_True/Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaLSTM_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_10runs_CHECKPOINT_run9_epoch29.pth'
+#
+#
+# model1 = VanillaLSTM(input_size=2, hidden_size=1, num_layers=1, output_size=2, output_activation='Sigmoid', batch_size=1)
+# model1.load_state_dict(torch.load(model_path)['model_state_dict'])
+# model1.to(device)
 
-
-model1 = VanillaLSTM(input_size=2, hidden_size=1, num_layers=1, output_size=2, output_activation='Sigmoid', batch_size=1)
-model1.load_state_dict(torch.load(model_path)['model_state_dict'])
-model1.to(device)
-
-weight_ih, weight_hh, bias_ih, bias_hh, weight_output, bias_output = inspect_lstm(model1)
+# weight_ih, weight_hh, bias_ih, bias_hh, weight_output, bias_output = inspect_lstm(model1)
 
 weight_ih = torch.tensor([[1.6979,  1.4880],
         [4.1016,  1.5668],
@@ -1291,6 +1292,10 @@ weight_hh = torch.tensor([[-1.8054],
 bias_ih = torch.tensor([0.8732,  1.3285, -0.6736,  0.9035], dtype=torch.float32)
 bias_hh = torch.tensor([1.9848,  1.1635, -0.1913,  1.5920], dtype=torch.float32)
 
+output_weight =  torch.tensor([[ -2.5410],
+        [-30.0839]], dtype=torch.float32)
+output_bias =  torch.tensor([12.3202, -10.1679], dtype=torch.float32)
+
 print('weight_ih = ',weight_ih)
 print('weight_hh = ',weight_hh)
 print('bias_ih = ',bias_ih)
@@ -1299,16 +1304,17 @@ print('weight_ih.shape = ',weight_ih.shape)
 print('weight_hh.shape = ',weight_hh.shape)
 print('bias_ih.shape = ', bias_ih.shape)
 print('bias_hh.shape = ',bias_hh.shape)
-print('output_weight = ', weight_output)
-print('output_bias = ', bias_output)
+print('output_weight = ', output_weight)
+print('output_bias = ', output_bias)
 
-h_prev = (torch.zeros(1,len(inputt[0]),1).to(device), torch.zeros(1,len(inputt[0]),1).to(device))
+# h_prev = (torch.zeros(1,len(inputt[0]),1).to(device), torch.zeros(1,len(inputt[0]),1).to(device))
 # h_prev = (torch.zeros(1,1,1).to(device), torch.zeros(1,1,1).to(device))
+h_prev = (torch.zeros(1,1).to(device), torch.zeros(1,1).to(device))
 # print('h_prev.shape = ',h_prev.shape)
 out_selfmade_model = torch.zeros(1,len(inputt[0]),2).to(device)
 
 
-print(lstm_cell(inputt[0][0], h_prev, weight_ih, weight_hh, bias_ih, bias_hh, ))
+print(lstm_cell(inputt[0][0].unsqueeze(dim=0), h_prev, weight_ih, weight_hh, bias_ih, bias_hh, output_weight,output_bias))
 
 
 # for i in range(len(inputt[0])):
