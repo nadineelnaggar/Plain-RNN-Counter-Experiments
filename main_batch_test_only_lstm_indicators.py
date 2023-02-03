@@ -1208,7 +1208,7 @@ inputt = torch.tensor([[[1., 0.],
          [0., 1.],
          [0., 1.],
          [0., 1.],
-         [0., 1.]]], dtype=torch.float32)
+         [0., 1.]]], dtype=torch.float32).to(device)
 
 print(inputt.shape)
 
@@ -1277,9 +1277,9 @@ model1.load_state_dict(torch.load(model_path)['model_state_dict'])
 model1.to(device)
 
 weight_ih, weight_hh, bias_ih, bias_hh, weight_output, bias_output = inspect_lstm(model1)
-h_prev = (torch.zeros(1,len(inputt[0])), torch.zeros(1,len(inputt[0])))
+h_prev = (torch.zeros(1,len(inputt[0])), torch.zeros(1,len(inputt[0]))).to(device)
 
-out_selfmade_model = torch.zeros(1,len(inputt[0]),2)
+out_selfmade_model = torch.zeros(1,len(inputt[0]),2).to(device)
 
 for i in range(len(inputt[0])):
     print('*********************************************************************')
