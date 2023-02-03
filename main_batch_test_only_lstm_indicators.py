@@ -1291,6 +1291,6 @@ for i in range(len(inputt[0])):
     print('sigmoid_output = ',sigmoid_output)
 
 
-
+print(model1(inputt, len(inputt[0])))
 
 
