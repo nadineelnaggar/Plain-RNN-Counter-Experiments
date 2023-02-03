@@ -1308,10 +1308,10 @@ out_selfmade_model = torch.zeros(1,len(inputt[0]),2).to(device)
 #     out_selfmade_model[0][i] = sigmoid_output
 
 
-out_existing_model = model1(inputt, len(inputt[0]))
-print(out_existing_model)
+# out_existing_model = model1(inputt, len(inputt[0]))
+# print(out_existing_model)
 
-if out_selfmade_model==out_existing_model:
-    print('CORRECT')
+# if out_selfmade_model==out_existing_model:
+#     print('CORRECT')
 
 
