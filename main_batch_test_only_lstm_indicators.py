@@ -1277,7 +1277,7 @@ model1.load_state_dict(torch.load(model_path)['model_state_dict'])
 model1.to(device)
 
 weight_ih, weight_hh, bias_ih, bias_hh, weight_output, bias_output = inspect_lstm(model1)
-h_prev = (torch.zeros(1,len(inputt[0]),1).to(device), torch.zeros(1,len(inputt[0]),1).to(device))
+h_prev = (torch.zeros(1,len(inputt[0])).to(device), torch.zeros(1,len(inputt[0])).to(device))
 
 out_selfmade_model = torch.zeros(1,len(inputt[0]),2).to(device)
 
@@ -1285,7 +1285,7 @@ for i in range(len(inputt[0])):
     print('*********************************************************************')
     print(inputt[0][i])
     print('h_prev = ',h_prev)
-    h, c, it, ft, ctilde, ot, sigmoid_output = lstm_cell(torch.unsqueeze(inputt[0][i],dim=1), h_prev, weight_ih, weight_hh, bias_ih, bias_hh, weight_output,bias_output)
+    h, c, it, ft, ctilde, ot, sigmoid_output = lstm_cell(torch.unsqueeze(inputt[0][i],dim=1).unsqueeze(dim=1), h_prev, weight_ih, weight_hh, bias_ih, bias_hh, weight_output,bias_output)
     print('h_t = ',h)
     print('c_t = ',c)
     print('c_tilde = ',ctilde)
