@@ -1279,7 +1279,7 @@ model1.to(device)
 weight_ih, weight_hh, bias_ih, bias_hh, weight_output, bias_output = inspect_lstm(model1)
 print('weight_ih.shape = ',weight_ih.shape)
 print('weight_hh.shape = ',weight_hh.shape)
-h_prev = (torch.zeros(1,len(inputt[0])).to(device), torch.zeros(1,len(inputt[0])).to(device))
+h_prev = (torch.zeros(1,len(inputt[0]),1).to(device), torch.zeros(1,len(inputt[0]),1).to(device))
 # print('h_prev.shape = ',h_prev.shape)
 out_selfmade_model = torch.zeros(1,len(inputt[0]),2).to(device)
 
