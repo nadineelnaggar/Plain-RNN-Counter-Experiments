@@ -1278,7 +1278,9 @@ model1.to(device)
 
 weight_ih, weight_hh, bias_ih, bias_hh, weight_output, bias_output = inspect_lstm(model1)
 h_prev = (torch.zeros(1,len(inputt[0])), torch.zeros(1,len(inputt[0])))
-out_selfmade_model = torch.tensor(1,len(inputt[0]),2)
+
+out_selfmade_model = torch.zeros(1,len(inputt[0]),2)
+
 for i in range(len(inputt[0])):
     print('*********************************************************************')
     print(inputt[0][i])
