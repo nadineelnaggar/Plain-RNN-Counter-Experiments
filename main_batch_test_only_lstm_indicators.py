@@ -1283,12 +1283,13 @@ h_prev = (torch.zeros(1,len(inputt[0]),1).to(device), torch.zeros(1,len(inputt[0
 # print('h_prev.shape = ',h_prev.shape)
 out_selfmade_model = torch.zeros(1,len(inputt[0]),2).to(device)
 
+
 for i in range(len(inputt[0])):
     print('*********************************************************************')
     print(inputt[0][i])
     print('inputt[0][i].shape = ', inputt[0][i].shape)
     print('h_prev = ',h_prev)
-    h, c, it, ft, ctilde, ot, sigmoid_output = lstm_cell(inputt[0][i].unsqueeze(dim=1), h_prev, weight_ih, weight_hh, bias_ih, bias_hh, weight_output,bias_output)
+    h, c, it, ft, ctilde, ot, sigmoid_output = lstm_cell(inputt[0][i].unsqueeze(dim=1), h_prev, weight_ih.unsqueeze(dim=1), weight_hh, bias_ih, bias_hh, weight_output,bias_output)
     print('h_t = ',h)
     print('c_t = ',c)
     print('c_tilde = ',ctilde)
