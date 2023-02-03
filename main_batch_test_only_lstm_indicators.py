@@ -1296,7 +1296,7 @@ for i in range(len(inputt[0])):
     print(inputt[0][i])
     print('inputt[0][i].shape = ', inputt[0][i].shape)
     print('h_prev = ',h_prev)
-    h, c, it, ft, ctilde, ot, sigmoid_output = lstm_cell(inputt[0][i].unsqueeze(dim=0).unsqueeze(dim=0), h_prev, weight_ih, weight_hh, bias_ih, bias_hh, weight_output, bias_output)
+    h, c, it, ft, ctilde, ot, sigmoid_output = lstm_cell(inputt[0][i].unsqueeze(dim=0), h_prev, weight_ih, weight_hh, bias_ih.unsqueeze(dim=0), bias_hh.unsqueeze(dim=0), weight_output, bias_output)
     print('h_t = ',h)
     print('c_t = ',c)
     print('c_tilde = ',ctilde)
