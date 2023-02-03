@@ -24,6 +24,10 @@ seed = 10
 torch.manual_seed(seed)
 np.random.seed(seed)
 
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+
+
 #
 # """
 # Steps:
@@ -1136,8 +1140,7 @@ np.random.seed(seed)
 
 # def lstm_cell(input: Tensor, hidden: Tuple[Tensor, Tensor], w_ih: Tensor,
 #               w_hh: Tensor, b_ih: Tensor, b_hh: Tensor) -> Tuple[Tensor, Tensor]:
-def lstm_cell(input, hidden, w_ih,
-              w_hh, b_ih, b_hh):
+def lstm_cell(input, hidden, w_ih, w_hh, b_ih, b_hh, w_out, b_out):
     hx, cx = hidden
     print('hx = ',hx)
     print('cx = ',cx)
@@ -1154,9 +1157,12 @@ def lstm_cell(input, hidden, w_ih,
     cy = (forgetgate * cx) + (ingate * cellgate)
     hy = outgate * torch.tanh(cy)
 
-    return hy, cy, ingate, forgetgate, cellgate, outgate
+    outt = torch.mm(hy,w_out)+b_out
+    outt = torch.sigmoid(outt)
 
-print(lstm_cell(torch.tensor([[1,0]],dtype=torch.float32), (torch.tensor([[0],[0],[0],[0]],dtype=torch.float32), torch.tensor([[0],[0],[0],[0]],dtype=torch.float32)), torch.tensor([[1,1],[1,1],[1,1],[1,1]], dtype=torch.float32), torch.tensor([[1],[1],[1],[1]],dtype=torch.float32), torch.tensor([[1],[1],[1],[1]],dtype=torch.float32), torch.tensor([[1],[1],[1],[1]],dtype=torch.float32)))
+    return hy, cy, ingate, forgetgate, cellgate, outgate, outt
+
+# print(lstm_cell(torch.tensor([[1,0]],dtype=torch.float32), (torch.tensor([[0],[0],[0],[0]],dtype=torch.float32), torch.tensor([[0],[0],[0],[0]],dtype=torch.float32)), torch.tensor([[1,1],[1,1],[1,1],[1,1]], dtype=torch.float32), torch.tensor([[1],[1],[1],[1]],dtype=torch.float32), torch.tensor([[1],[1],[1],[1]],dtype=torch.float32), torch.tensor([[1],[1],[1],[1]],dtype=torch.float32)))
 
 
 inputt = torch.tensor([[[1., 0.],
@@ -1204,7 +1210,87 @@ inputt = torch.tensor([[[1., 0.],
          [0., 1.],
          [0., 1.]]], dtype=torch.float32)
 
+print(inputt.shape)
 
-weights_ih = torch.tensor([[4.101598, 1.5668163],[4.101598, 1.5668163], [-1.7835047, 4.8268037], [5.7168097, -0.62931436]], dtype=torch.float32)
+# weights_ih = torch.tensor([[4.101598, 1.5668163],[4.101598, 1.5668163], [-1.7835047, 4.8268037], [5.7168097, -0.62931436]], dtype=torch.float32)
+
+
+def inspect_lstm(model):
+    print(model)
+
+    for param in model.lstm.named_parameters():
+        if 'weight_hh' in param[0]:
+            weights_hh = param[1]
+            weights_hi = weights_hh[0]
+            weights_hf=weights_hh[1]
+            weights_hg = weights_hh[2]
+            weights_ho = weights_hh[3]
+
+
+
+        elif 'weight_ih' in param[0]:
+            weights_ih = param[1]
+            weights_ii = weights_ih[0]
+            weights_if = weights_ih[1]
+            weights_ig = weights_ih[2]
+            weights_io = weights_ih[3]
+
+        elif 'bias_ih' in param[0]:
+            biases_ih = param[1]
+            biases_ii = biases_ih[0]
+            biases_if = biases_ih[1]
+            biases_ig = biases_ih[2]
+            biases_io = biases_ih[3]
+
+        elif 'bias_hh' in param[0]:
+            biases_hh = param[1]
+            biases_hi = biases_hh[0]
+            biases_hf = biases_hh[1]
+            biases_hg = biases_hh[2]
+            biases_ho = biases_hh[3]
+
+        elif 'bias_ih' in param[0]:
+            biases_ih = param[1]
+            biases_ii = biases_ih[0]
+            biases_if = biases_ih[1]
+            biases_ig = biases_ih[2]
+            biases_io = biases_ih[3]
+
+    for param in model.fc2.named_parameters():
+        if 'weight' in param[0]:
+            output_weight = param[1]
+            # weights_output_0.append(output_weight[0].item())
+            # weights_output_1.append(output_weight[1].item())
+        elif 'bias' in param[0]:
+            output_bias = param[1]
+            # biases_output_0.append(output_bias[0].item())
+            # biases_output_1.append(output_bias[1].item())
+
+    return weights_ih, weights_hh, biases_ih, biases_hh, output_weight, output_bias
+
+
+model_path = '/Users/nadineelnaggar/Google Drive/PhD/EXPT_LOGS/Dyck1_NextTokenPrediction/Minibatch_Training/VanillaLSTM/1_batch_size/0.01_learning_rate/30_epochs/50_lr_scheduler_step/1.0_lr_scheduler_gamma/1_hidden_units/10_runs/shuffle_True/Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaLSTM_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_10runs_CHECKPOINT_run9_epoch29.pth'
+
+
+model1 = VanillaLSTM(input_size=2, hidden_size=1, num_layers=1, output_size=2, output_activation='Sigmoid')
+model1.load_state_dict(torch.load(model_path)['model_state_dict'])
+model1.to(device)
+
+weight_ih, weight_hh, bias_ih, bias_hh, weight_output, bias_output = inspect_lstm(model1)
+h_prev = (torch.zeros(1,len(inputt[0])), torch.zeros(1,len(inputt[0])))
+for i in range(len(inputt[0])):
+    print('*********************************************************************')
+    print(inputt[0][i])
+    print('h_prev = ',h_prev)
+    h, c, it, ft, ctilde, ot, sigmoid_output = lstm_cell(inputt[0][i], h_prev, weight_ih, weight_hh, bias_ih, bias_hh, weight_output,bias_output)
+    print('h_t = ',h)
+    print('c_t = ',c)
+    print('c_tilde = ',ctilde)
+    print('o_t = ',ot)
+    h_prev = (h,c)
+    print('sigmoid_output = ',sigmoid_output)
+
+
+
 
 
