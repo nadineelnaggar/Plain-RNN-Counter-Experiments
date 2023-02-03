@@ -1285,7 +1285,7 @@ for i in range(len(inputt[0])):
     print('*********************************************************************')
     print(inputt[0][i])
     print('h_prev = ',h_prev)
-    h, c, it, ft, ctilde, ot, sigmoid_output = lstm_cell(torch.unsqueeze(inputt[0][i], dim=1), h_prev, weight_ih, weight_hh, bias_ih, bias_hh, weight_output,bias_output)
+    h, c, it, ft, ctilde, ot, sigmoid_output = lstm_cell(torch.cat((inputt[0][i], inputt[0][i], inputt[0][i], inputt[0][i]), dim=0), h_prev, weight_ih, weight_hh, bias_ih, bias_hh, weight_output,bias_output)
     print('h_t = ',h)
     print('c_t = ',c)
     print('c_tilde = ',ctilde)
