@@ -1142,10 +1142,10 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 #               w_hh: Tensor, b_ih: Tensor, b_hh: Tensor) -> Tuple[Tensor, Tensor]:
 def lstm_cell(input, hidden, w_ih, w_hh, b_ih, b_hh, w_out, b_out):
     hx, cx = hidden
-    print('hx = ',hx)
-    print('cx = ',cx)
+    # print('hx = ',hx)
+    # print('cx = ',cx)
     gates = torch.mm(input, w_ih.t()) + torch.mm(hx, w_hh.t()) + b_ih + b_hh
-    print(gates)
+    # print(gates)
 
     ingate, forgetgate, cellgate, outgate = gates.chunk(4, 1)
 
@@ -1157,8 +1157,8 @@ def lstm_cell(input, hidden, w_ih, w_hh, b_ih, b_hh, w_out, b_out):
     cy = (forgetgate * cx) + (ingate * cellgate)
     hy = outgate * torch.tanh(cy)
 
-    # outt = torch.mm(hy,w_out)+b_out
-    outt = (hy * w_out) + b_out
+    outt = torch.mm(hy,w_out.t())+b_out
+    # outt = (hy * w_out) + b_out
     outt = torch.sigmoid(outt)
 
     return hy, cy, ingate, forgetgate, cellgate, outgate, outt
@@ -1168,7 +1168,7 @@ def lstm_cell(input, hidden, w_ih, w_hh, b_ih, b_hh, w_out, b_out):
 # print(lstm_cell(torch.tensor([[1,0]],dtype=torch.float32).to(device), (torch.tensor([[0]],dtype=torch.float32).to(device), torch.tensor([[0]],dtype=torch.float32).to(device)), torch.tensor([[1,1]], dtype=torch.float32).to(device), torch.tensor([[1]],dtype=torch.float32).to(device), torch.tensor([[1],[1],[1],[1]],dtype=torch.float32).to(device), torch.tensor([[1],[1],[1],[1]],dtype=torch.float32).to(device), torch.tensor([[1,1]], dtype=torch.float32).to(device), torch.tensor([1],dtype=torch.float32).to(device)))
 
 
-inputt = torch.tensor([[[1., 0.],
+input1 = torch.tensor([[[1., 0.],
          [1., 0.],
          [0., 1.],
          [1., 0.],
@@ -1213,7 +1213,7 @@ inputt = torch.tensor([[[1., 0.],
          [0., 1.],
          [0., 1.]]], dtype=torch.float32).to(device)
 
-print(inputt.shape)
+print(input1.shape)
 
 # weights_ih = torch.tensor([[4.101598, 1.5668163],[4.101598, 1.5668163], [-1.7835047, 4.8268037], [5.7168097, -0.62931436]], dtype=torch.float32)
 
@@ -1309,33 +1309,89 @@ print('output_bias = ', output_bias)
 
 # h_prev = (torch.zeros(1,len(inputt[0]),1).to(device), torch.zeros(1,len(inputt[0]),1).to(device))
 # h_prev = (torch.zeros(1,1,1).to(device), torch.zeros(1,1,1).to(device))
-h_prev = (torch.zeros(1,1).to(device), torch.zeros(1,1).to(device))
-# print('h_prev.shape = ',h_prev.shape)
-out_selfmade_model = torch.zeros(1,len(inputt[0]),2).to(device)
+# h_prev = (torch.zeros(1,1).to(device), torch.zeros(1,1).to(device))
+# # print('h_prev.shape = ',h_prev.shape)
+# out_selfmade_model = torch.zeros(1,len(inputt[0]),2).to(device)
 
 
-print(lstm_cell(inputt[0][0].unsqueeze(dim=0), h_prev, weight_ih, weight_hh, bias_ih, bias_hh, output_weight,output_bias))
+# print(lstm_cell(inputt[0][0].unsqueeze(dim=0), h_prev, weight_ih, weight_hh, bias_ih, bias_hh, output_weight,output_bias))
 
 
-# for i in range(len(inputt[0])):
-#     print('*********************************************************************')
-#     print(inputt[0][i])
-#     print('inputt[0][i].shape = ', inputt[0][i].shape)
-#     print('h_prev = ',h_prev)
-#     h, c, it, ft, ctilde, ot, sigmoid_output = lstm_cell(inputt[0][i].unsqueeze(dim=0), h_prev, weight_ih, weight_hh, bias_ih, bias_hh, weight_output, bias_output)
-#     print('h_t = ',h)
-#     print('c_t = ',c)
-#     print('c_tilde = ',ctilde)
-#     print('o_t = ',ot)
-#     h_prev = (h,c)
-#     print('sigmoid_output = ',sigmoid_output)
-#     out_selfmade_model[0][i] = sigmoid_output
+print('*********************************************************************')
 
+def seqToSelfMadeLSTM(input):
+    h_prev = (torch.zeros(1, 1).to(device), torch.zeros(1, 1).to(device))
+    # print('h_prev.shape = ',h_prev.shape)
+    out_selfmade_model = torch.zeros(1, len(input[0]), 2).to(device)
+    ht_values = []
+    ct_values = []
+    it_values = []
+    ft_values = []
+    ctilde_values = []
+    ot_values = []
+    h_prev_values = []
+    for i in range(len(input[0])):
+        # print('*********************************************************************')
+        # print(inputt[0][i])
+        # print('inputt[0][i].shape = ', inputt[0][i].shape)
+        # print('h_prev = ',h_prev)
+        h, c, it, ft, ctilde, ot, sigmoid_output = lstm_cell(input[0][i].unsqueeze(dim=0), h_prev, weight_ih, weight_hh, bias_ih, bias_hh, output_weight, output_bias)
+        # print('h_t = ',h)
+        # print('c_t = ',c)
+        # print('c_tilde = ',ctilde)
+        # print('o_t = ',ot)
+        h_prev = (h,c)
+        # print('sigmoid_output = ',sigmoid_output)
+        out_selfmade_model[0][i] = sigmoid_output
+
+    print('out_selfmade_model = ',out_selfmade_model)
 
 # out_existing_model = model1(inputt, len(inputt[0]))
 # print(out_existing_model)
 
 # if out_selfmade_model==out_existing_model:
 #     print('CORRECT')
+# print(seqToSelfMadeLSTM(input1))
+seqToSelfMadeLSTM(input1)
 
 
+input2 = torch.tensor([[[1., 0.],
+         [1., 0.],
+         [1., 0.],
+         [0., 1.],
+         [1., 0.],
+         [1., 0.],
+         [1., 0.],
+         [0., 1.],
+         [0., 1.],
+         [1., 0.],
+         [1., 0.],
+         [1., 0.],
+         [1., 0.],
+         [1., 0.],
+         [0., 1.],
+         [0., 1.],
+         [0., 1.],
+         [1., 0.],
+         [0., 1.],
+         [1., 0.],
+         [1., 0.],
+         [1., 0.],
+         [1., 0.],
+         [0., 1.],
+         [0., 1.],
+         [0., 1.],
+         [0., 1.],
+         [0., 1.],
+         [0., 1.],
+         [1., 0.],
+         [0., 1.],
+         [0., 1.],
+         [0., 1.],
+         [0., 1.]]], dtype=torch.float32)
+
+print('************************************************')
+
+# print(seqToSelfMadeLSTM(input2))
+
+seqToSelfMadeLSTM(input2)
