@@ -1281,7 +1281,7 @@ print('weight_ih.shape = ',weight_ih.shape)
 print('weight_hh.shape = ',weight_hh.shape)
 print('bias_ih.shape = ', bias_ih.shape)
 print('bias_hh.shape = ',bias_hh.shape)
-h_prev = (torch.zeros(1,len(inputt[0]),1).to(device), torch.zeros(1,len(inputt[0]),1).to(device))
+h_prev = (torch.zeros(1,len(inputt[0]),1).unsqueeze().to(device), torch.zeros(1,len(inputt[0]),1).unsqueeze().to(device))
 # print('h_prev.shape = ',h_prev.shape)
 out_selfmade_model = torch.zeros(1,len(inputt[0]),2).to(device)
 
