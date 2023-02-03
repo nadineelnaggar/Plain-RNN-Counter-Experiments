@@ -1279,6 +1279,18 @@ model1.load_state_dict(torch.load(model_path)['model_state_dict'])
 model1.to(device)
 
 weight_ih, weight_hh, bias_ih, bias_hh, weight_output, bias_output = inspect_lstm(model1)
+
+weight_ih = torch.tensor([[1.6979,  1.4880],
+        [4.1016,  1.5668],
+        [-1.7835,  4.8268],
+        [5.7168, -0.6293]],dtype=torch.float32)
+weight_hh = torch.tensor([[-1.8054],
+        [-4.4326],
+        [0.4888],
+        [-5.3106]], dtype=torch.float32)
+bias_ih = torch.tensor([0.8732,  1.3285, -0.6736,  0.9035], dtype=torch.float32)
+bias_hh = torch.tensor([1.9848,  1.1635, -0.1913,  1.5920], dtype=torch.float32)
+
 print('weight_ih = ',weight_ih)
 print('weight_hh = ',weight_hh)
 print('bias_ih = ',bias_ih)
@@ -1287,10 +1299,16 @@ print('weight_ih.shape = ',weight_ih.shape)
 print('weight_hh.shape = ',weight_hh.shape)
 print('bias_ih.shape = ', bias_ih.shape)
 print('bias_hh.shape = ',bias_hh.shape)
+print('output_weight = ', weight_output)
+print('output_bias = ', bias_output)
+
 h_prev = (torch.zeros(1,len(inputt[0]),1).to(device), torch.zeros(1,len(inputt[0]),1).to(device))
 # h_prev = (torch.zeros(1,1,1).to(device), torch.zeros(1,1,1).to(device))
 # print('h_prev.shape = ',h_prev.shape)
 out_selfmade_model = torch.zeros(1,len(inputt[0]),2).to(device)
+
+
+print(lstm_cell(inputt[0][0], h_prev, weight_ih, weight_hh, bias_ih, bias_hh, ))
 
 
 # for i in range(len(inputt[0])):
