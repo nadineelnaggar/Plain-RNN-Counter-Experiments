@@ -1162,9 +1162,9 @@ def lstm_cell(input, hidden, w_ih, w_hh, b_ih, b_hh, w_out, b_out):
 
     return hy, cy, ingate, forgetgate, cellgate, outgate, outt
 
-print(lstm_cell(torch.tensor([[1,0]],dtype=torch.float32).to(device), (torch.tensor([[0],[0],[0],[0]],dtype=torch.float32).to(device), torch.tensor([[0],[0],[0],[0]],dtype=torch.float32).to(device)), torch.tensor([[1,1],[1,1],[1,1],[1,1]], dtype=torch.float32).to(device), torch.tensor([[1],[1],[1],[1]],dtype=torch.float32).to(device), torch.tensor([[1],[1],[1],[1]],dtype=torch.float32).to(device), torch.tensor([[1],[1],[1],[1]],dtype=torch.float32).to(device), torch.tensor([[1,1]], dtype=torch.float32).to(device), torch.tensor([1],dtype=torch.float32).to(device)))
-print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
-print(lstm_cell(torch.tensor([[1,0]],dtype=torch.float32).to(device), (torch.tensor([[0]],dtype=torch.float32).to(device), torch.tensor([[0]],dtype=torch.float32).to(device)), torch.tensor([[1,1],[1,1],[1,1],[1,1]], dtype=torch.float32).to(device), torch.tensor([[1],[1],[1],[1]],dtype=torch.float32).to(device), torch.tensor([[1],[1],[1],[1]],dtype=torch.float32).to(device), torch.tensor([[1],[1],[1],[1]],dtype=torch.float32).to(device), torch.tensor([[1,1]], dtype=torch.float32).to(device), torch.tensor([1],dtype=torch.float32).to(device)))
+# print(lstm_cell(torch.tensor([[1,0]],dtype=torch.float32).to(device), (torch.tensor([[0],[0],[0],[0]],dtype=torch.float32).to(device), torch.tensor([[0],[0],[0],[0]],dtype=torch.float32).to(device)), torch.tensor([[1,1],[1,1],[1,1],[1,1]], dtype=torch.float32).to(device), torch.tensor([[1],[1],[1],[1]],dtype=torch.float32).to(device), torch.tensor([[1],[1],[1],[1]],dtype=torch.float32).to(device), torch.tensor([[1],[1],[1],[1]],dtype=torch.float32).to(device), torch.tensor([[1,1]], dtype=torch.float32).to(device), torch.tensor([1],dtype=torch.float32).to(device)))
+# print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
+# print(lstm_cell(torch.tensor([[1,0]],dtype=torch.float32).to(device), (torch.tensor([[0]],dtype=torch.float32).to(device), torch.tensor([[0]],dtype=torch.float32).to(device)), torch.tensor([[1,1]], dtype=torch.float32).to(device), torch.tensor([[1]],dtype=torch.float32).to(device), torch.tensor([[1],[1],[1],[1]],dtype=torch.float32).to(device), torch.tensor([[1],[1],[1],[1]],dtype=torch.float32).to(device), torch.tensor([[1,1]], dtype=torch.float32).to(device), torch.tensor([1],dtype=torch.float32).to(device)))
 
 
 inputt = torch.tensor([[[1., 0.],
@@ -1293,19 +1293,19 @@ h_prev = (torch.zeros(1,len(inputt[0]),1).to(device), torch.zeros(1,len(inputt[0
 out_selfmade_model = torch.zeros(1,len(inputt[0]),2).to(device)
 
 
-for i in range(len(inputt[0])):
-    print('*********************************************************************')
-    print(inputt[0][i])
-    print('inputt[0][i].shape = ', inputt[0][i].shape)
-    print('h_prev = ',h_prev)
-    h, c, it, ft, ctilde, ot, sigmoid_output = lstm_cell(inputt[0][i].unsqueeze(dim=0), h_prev, weight_ih, weight_hh, bias_ih, bias_hh, weight_output, bias_output)
-    print('h_t = ',h)
-    print('c_t = ',c)
-    print('c_tilde = ',ctilde)
-    print('o_t = ',ot)
-    h_prev = (h,c)
-    print('sigmoid_output = ',sigmoid_output)
-    out_selfmade_model[0][i] = sigmoid_output
+# for i in range(len(inputt[0])):
+#     print('*********************************************************************')
+#     print(inputt[0][i])
+#     print('inputt[0][i].shape = ', inputt[0][i].shape)
+#     print('h_prev = ',h_prev)
+#     h, c, it, ft, ctilde, ot, sigmoid_output = lstm_cell(inputt[0][i].unsqueeze(dim=0), h_prev, weight_ih, weight_hh, bias_ih, bias_hh, weight_output, bias_output)
+#     print('h_t = ',h)
+#     print('c_t = ',c)
+#     print('c_tilde = ',ctilde)
+#     print('o_t = ',ot)
+#     h_prev = (h,c)
+#     print('sigmoid_output = ',sigmoid_output)
+#     out_selfmade_model[0][i] = sigmoid_output
 
 
 out_existing_model = model1(inputt, len(inputt[0]))
