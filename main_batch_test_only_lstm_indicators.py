@@ -1278,6 +1278,7 @@ model1.to(device)
 
 weight_ih, weight_hh, bias_ih, bias_hh, weight_output, bias_output = inspect_lstm(model1)
 h_prev = (torch.zeros(1,len(inputt[0])), torch.zeros(1,len(inputt[0])))
+out_selfmade_model = torch.tensor(1,len(inputt[0]),2)
 for i in range(len(inputt[0])):
     print('*********************************************************************')
     print(inputt[0][i])
@@ -1289,8 +1290,12 @@ for i in range(len(inputt[0])):
     print('o_t = ',ot)
     h_prev = (h,c)
     print('sigmoid_output = ',sigmoid_output)
+    out_selfmade_model[0][i] = sigmoid_output
 
 
-print(model1(inputt, len(inputt[0])))
+out_existing_model = model1(inputt, len(inputt[0]))
+print(out_existing_model)
 
+if out_selfmade_model==out_existing_model:
+    print('CORRECT')
 
