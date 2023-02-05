@@ -1330,6 +1330,7 @@ def seqToSelfMadeLSTM(input):
     ctilde_values = []
     ot_values = []
     h_prev_values = []
+    sigmoid_output_values = []
     for i in range(len(input[0])):
         # print('*********************************************************************')
         # print(inputt[0][i])
@@ -1340,11 +1341,23 @@ def seqToSelfMadeLSTM(input):
         # print('c_t = ',c)
         # print('c_tilde = ',ctilde)
         # print('o_t = ',ot)
+        h_prev_values.append(h_prev)
         h_prev = (h,c)
         # print('sigmoid_output = ',sigmoid_output)
         out_selfmade_model[0][i] = sigmoid_output
+        ht_values.append(h)
+        ct_values.append(c)
+        ctilde_values.append(ctilde)
+        it_values.append(it)
+        ft_values.append(ft)
+        ot_values.append(ot)
+        sigmoid_output_values.append(sigmoid_output)
+
+
 
     print('out_selfmade_model = ',out_selfmade_model)
+
+    return h_prev_values, out_selfmade_model, sigmoid_output_values, it_values, ft_values, ct_values, ctilde_values, ot_values, ht_values
 
 # out_existing_model = model1(inputt, len(inputt[0]))
 # print(out_existing_model)
@@ -1352,7 +1365,7 @@ def seqToSelfMadeLSTM(input):
 # if out_selfmade_model==out_existing_model:
 #     print('CORRECT')
 # print(seqToSelfMadeLSTM(input1))
-seqToSelfMadeLSTM(input1)
+_=seqToSelfMadeLSTM(input1)
 
 
 input2 = torch.tensor([[[1., 0.],
@@ -1394,4 +1407,4 @@ print('************************************************')
 
 # print(seqToSelfMadeLSTM(input2))
 
-seqToSelfMadeLSTM(input2)
+_=seqToSelfMadeLSTM(input2)
