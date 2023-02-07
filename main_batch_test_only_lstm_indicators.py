@@ -965,6 +965,12 @@ def seqToSelfMadeLSTM(input):
     ot_values = []
     h_prev_values = []
     sigmoid_output_values = []
+    ab_ratio_values = []
+    a_values = []
+    b_values = []
+    u_values = []
+    ab_ratio_average = 0
+    u_value_average = 0
     for i in range(len(input[0])):
         # print('*********************************************************************')
         # print(inputt[0][i])
@@ -975,6 +981,11 @@ def seqToSelfMadeLSTM(input):
         # print('c_t = ',c)
         # print('c_tilde = ',ctilde)
         # print('o_t = ',ot)
+
+        u_value = ft.item()
+        a_value = 0
+        b_value = 0
+
         h_prev_values.append(h_prev)
         h_prev = (h,c)
         # print('sigmoid_output = ',sigmoid_output)
@@ -1106,3 +1117,5 @@ print(compareLSTMModelResults(out_selfmade_model_1,out_readymade_model_1))
 
 diff_flag_1, diff_tensor_1, diff_threshold_bool_tensor_1 = compareLSTMModelResults(out_selfmade_model_1,out_readymade_model_1)
 print(diff_flag_1)
+
+
