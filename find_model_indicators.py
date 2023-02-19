@@ -13,7 +13,12 @@ from scipy import stats
 from mpl_toolkits import mplot3d
 import numpy as np
 import math
-
+import sklearn
+import statsmodels.api as sm
+import statsmodels.formula.api as smf
+import seaborn as sns
+import scipy
+import pandas.util.testing as tm
 
 
 
@@ -917,10 +922,38 @@ def plotModelIndicators():
     
 
 # extractModelIndicators()
-plotModelIndicators()
+# plotModelIndicators()
 
 
+def create_2DLinearRegression(par):
 
+    _, df = getReLUModels()
+    neg_log_losses = df['log of inverse avg validation losses']
+    # fpfs = df[]
+
+    print('par = ',par)
+    if par=='NegLogLoss':
+        Y=df['log of inverse avg validation losses']
+        # X = df[['ab_ratios_dev', 'u_values_dev']]
+        # # pass
+        # X = sm.add_constant(X)
+        # reg_res = sm.OLS(Y, X).fit()
+        # print(reg_res.summary())
+    if par=='FPF':
+        Y=df['average first point of failure (2000 tokens)']
+        X = df[['ab_ratios_dev', 'u_values_dev']]
+        # pass
+        # X = sm.add_constant(X)
+        # reg_res = sm.OLS(Y, X).fit()
+        # print(reg_res.summary())
+    X=df[['ab_ratios_dev', 'u_values_dev']]
+    # pass
+    X = sm.add_constant(X)
+    reg_res = sm.OLS(Y,X).fit()
+    print(reg_res.summary())
+
+create_2DLinearRegression('NegLogLoss')
+create_2DLinearRegression('FPF')
 
 
 
