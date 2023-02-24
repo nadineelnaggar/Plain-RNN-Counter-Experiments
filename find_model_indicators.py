@@ -906,6 +906,9 @@ def plotModelIndicators():
     plt.show()
     plt.close()
 
+    neg_log_fpfs = -1*np.log(fpfs)
+    res_euclidean_neg_log_fpf = stats.linregress(euclidean_distances)
+
 
 
 
@@ -939,21 +942,55 @@ def create_2DLinearRegression(par):
         # X = sm.add_constant(X)
         # reg_res = sm.OLS(Y, X).fit()
         # print(reg_res.summary())
-    if par=='FPF':
+    elif par=='FPF':
         Y=df['average first point of failure (2000 tokens)']
-        X = df[['ab_ratios_dev', 'u_values_dev']]
+        # X = df[['ab_ratios_dev', 'u_values_dev']]
         # pass
         # X = sm.add_constant(X)
         # reg_res = sm.OLS(Y, X).fit()
         # print(reg_res.summary())
+    elif par=='NegLogFPF':
+        Y = -1*np.log(df['average first point of failure (2000 tokens)'])
+    elif par=='Loss':
+        Y = df['avg validation losses']
+    elif par == 'epowNegFPF':
+        Y = np.exp(-1*df['average first point of failure (2000 tokens)'])
+
     X=df[['ab_ratios_dev', 'u_values_dev']]
     # pass
     X = sm.add_constant(X)
     reg_res = sm.OLS(Y,X).fit()
     print(reg_res.summary())
 
+def create2DCustomRegression():
+    _, df = getReLUModels()
+    df['avg_fpfs'] = df['average first point of failure (2000 tokens)']
+    df['ab_ratios_dev_squared'] = df['ab_ratios_dev']**2
+    df['u_values_dev_squared'] = df['u_values_dev']**2
+    df['ePowNegFPF'] = np.exp(-1*df['avg_fpfs'])
+    df['ab_u_combined'] = df['ab_ratios_dev']*df['u_values_dev']
+    # mod = smf.ols(formula='ePowNegFPF ~ np.sqrt(ab_ratios_dev_squared + u_values_dev_squared)', data=df)
+    mod = smf.ols(formula='ePowNegFPF ~ ab_ratios_dev + u_values_dev + ab_u_combined', data=df)
+    res=mod.fit()
+    print(res.summary())
+
+
+
+    # pass
+# def scaledEuclidean():
+#     _, df = getReLUModels()
+#     ab_ratios_dev = df['ab_ratios_dev']
+#     u_dev = df['u_values_dev']
+
+
+
 create_2DLinearRegression('NegLogLoss')
 create_2DLinearRegression('FPF')
+create_2DLinearRegression('NegLogFPF')
+create_2DLinearRegression('Loss')
+create_2DLinearRegression('epowNegFPF')
+
+create2DCustomRegression()
 
 
-
+# print(0.25--1)
