@@ -9,7 +9,7 @@ import random
 from torch.utils.tensorboard import SummaryWriter
 # from tensorboardX import SummaryWriter
 from torch.utils.data import Dataset, DataLoader
-from Dyck1_Datasets import NextTokenPredictionValidationDataset, NextTokenPredictionDataset1000tokens
+from Dyck1_Datasets import NextTokenPredictionValidationDataset, NextTokenPredictionDataset1000tokens, NextTokenPredictionDataset2000tokens_zigzag
 from torch.optim.lr_scheduler import StepLR
 import math
 import time
@@ -171,6 +171,9 @@ validation_loader = DataLoader(validation_dataset,batch_size=batch_size, shuffle
 
 long_dataset = NextTokenPredictionDataset1000tokens()
 long_loader = DataLoader(long_dataset,batch_size=1, shuffle=shuffle_dataset,collate_fn=collate_fn)
+
+zigzag_dataset = NextTokenPredictionDataset2000tokens_zigzag()
+zigzag_loader = DataLoader(zigzag_dataset, batch_size=1, shuffle=shuffle_dataset, collate_fn=collate_fn)
 
 # devs_a = [-0.5, -0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4, 0.5]
 # devs_b = [-0.5, -0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4, 0.5]
@@ -358,6 +361,8 @@ def test_model(model, loader, dataset):
         ds = validation_dataset
     elif dataset=='long':
         ds = long_dataset
+    elif dataset=='zigzag':
+        ds=zigzag_dataset
 
     correct_guesses = []
     incorrect_guesses = []
@@ -536,6 +541,20 @@ def main():
     long_timestep_depths_correct_guesses = []
     long_max_depths_incorrect_guesses = []
     long_timestep_depths_incorrect_guesses = []
+    
+    
+    zigzag_test_accuracies = []
+    zigzag_losses = []
+    zigzag_correct = []
+    zigzag_correct_lengths = []
+    zigzag_incorrect = []
+    zigzag_incorrect_lengths = []
+    zigzag_incorrect_first_fail = []
+    zigzag_avg_point_of_failure_short = []
+    zigzag_max_depths_correct_guesses = []
+    zigzag_timestep_depths_correct_guesses = []
+    zigzag_max_depths_incorrect_guesses = []
+    zigzag_timestep_depths_incorrect_guesses = []
 
     # val_accuracies = []
     # val_losses = []
@@ -625,6 +644,8 @@ def main():
         print('long accuracy = ',long_accuracy)
         # print('long correct guesses = ',long_correct_guesses)
         print('long fpf = ',long_avg_first_fail_point)
+        
+
 
         long_test_accuracies.append(long_accuracy)
         long_losses.append(long_loss)
@@ -640,6 +661,24 @@ def main():
         long_timestep_depths_incorrect_guesses.append(long_timestep_depth_incorrect)
 
 
+        zigzag_accuracy, zigzag_loss, zigzag_correct_guesses, zigzag_correct_guesses_length, zigzag_incorrect_guesses, zigzag_incorrect_guesses_length, zigzag_incorrect_guesses_first_fail, zigzag_avg_first_fail_point, zigzag_max_depth_correct, zigzag_timestep_depth_correct, zigzag_max_depth_incorrect, zigzag_timestep_depth_incorrect = test_model(model, zigzag_loader, 'zigzag')
+        print('zigzag accuracy = ',zigzag_accuracy)
+        # print('zigzag correct guesses = ',zigzag_correct_guesses)
+        print('zigzag fpf = ',zigzag_avg_first_fail_point)
+        
+        
+        zigzag_test_accuracies.append(zigzag_accuracy)
+        zigzag_losses.append(zigzag_loss)
+        zigzag_correct.append(zigzag_correct_guesses)
+        zigzag_correct_lengths.append(zigzag_correct_guesses_length)
+        zigzag_incorrect.append(zigzag_incorrect_guesses)
+        zigzag_incorrect_lengths.append(zigzag_incorrect_guesses_length)
+        zigzag_incorrect_first_fail.append(zigzag_incorrect_guesses_first_fail)
+        zigzag_avg_point_of_failure_short.append(zigzag_avg_first_fail_point)
+        zigzag_max_depths_correct_guesses.append(zigzag_max_depth_correct)
+        zigzag_max_depths_incorrect_guesses.append(zigzag_max_depth_incorrect)
+        zigzag_timestep_depths_correct_guesses.append(zigzag_timestep_depth_correct)
+        zigzag_timestep_depths_incorrect_guesses.append(zigzag_timestep_depth_incorrect)
 
     df = pd.DataFrame()
     df['model_a_weights'] = model_a_weights
@@ -678,6 +717,20 @@ def main():
     df['long_timestep_depths_correct_guesses']=long_timestep_depths_correct_guesses
     df['long_max_depths_incorrect_guesses']=long_max_depths_incorrect_guesses
     df['long_timestep_depths_incorrect_guesses']=long_timestep_depths_incorrect_guesses
+    df['zigzag_test_accuracies'] = zigzag_test_accuracies
+    df['zigzag_losses'] = zigzag_losses
+    df['log_zigzag_losses'] = np.log(zigzag_losses)
+    df['neg_log_zigzag_losses'] = -1 * np.log(zigzag_losses)
+    df['zigzag_correct_guesses'] = zigzag_correct
+    df['zigzag_correct_guesses_lengths'] = zigzag_correct_lengths
+    df['zigzag_incorrect_guesses'] = zigzag_incorrect
+    df['zigzag_incorrect_guesses_lengths'] = zigzag_incorrect_lengths
+    df['zigzag_incorrect_guesses_first_fail'] = zigzag_incorrect_first_fail
+    df['zigzag_avg_point_of_failure'] = zigzag_avg_point_of_failure_short
+    df['zigzag_max_depths_correct_guesses'] = zigzag_max_depths_correct_guesses
+    df['zigzag_timestep_depths_correct_guesses'] = zigzag_timestep_depths_correct_guesses
+    df['zigzag_max_depths_incorrect_guesses'] = zigzag_max_depths_incorrect_guesses
+    df['zigzag_timestep_depths_incorrect_guesses'] = zigzag_timestep_depths_incorrect_guesses
 
     writer = pd.ExcelWriter(excel_name, engine='xlsxwriter')
 
