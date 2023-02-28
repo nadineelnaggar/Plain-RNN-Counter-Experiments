@@ -905,9 +905,14 @@ def plotModelIndicators():
     plt.savefig(relu_prefix_2 + 'INDICATORS_euclidean_distance_fpfs.png')
     plt.show()
     plt.close()
+    #
+    # neg_log_fpfs = -1*np.log(fpfs)
+    # res_euclidean_neg_log_fpf = stats.linregress(euclidean_distances)
 
-    neg_log_fpfs = -1*np.log(fpfs)
-    res_euclidean_neg_log_fpf = stats.linregress(euclidean_distances)
+    plt.subplots()
+    plt.hist(euclidean_distances, bins=100)
+    plt.xlabel('Euclidean Distance')
+    plt.savefig(relu_prefix_2+'INDICATORS_histogram_euclidean_distances.png')
 
 
 
@@ -923,6 +928,70 @@ def plotModelIndicators():
 #     log_val_losses = df['log of avg validation losses']
 #     neg_log_val_losses = df['log of inverse avg validation losses']
     
+
+def plot_model_indicators_good_models():
+    _, df = getReLUModels()
+    df1 = df.loc[df['avg validation losses']<1e-6]
+    df2 = df.loc[df['average first point of failure (2000 tokens)']>700]
+
+    df3 = df.nsmallest(5, 'avg validation losses')
+    df4 = df.nlargest(5,'average first point of failure (2000 tokens)')
+    print(df3)
+    print(df4)
+    # annotations = []
+    # for i in range(len(df3)):
+    #     annotation = '('+df3['average validaion']
+    fig, ax=plt.subplots()
+    plt.plot(df3['ab_ratios'],df3['u_values'],'o',label='Models')
+    # plt.text(df3['ab_ratios']+0.3, df3['u_values']+0.3, df3[''])
+    plt.xlabel('AB Ratio')
+    plt.ylabel('U Value')
+    plt.legend()
+
+    annotations = []
+    for i in range(len(df3)):
+        annotation = '('+str(round(df3['avg validation losses'].iloc[i],8))+', '+str(round(df3['average first point of failure (2000 tokens)'].iloc[i],2))+')'
+        annotations.append(annotation)
+    # for i in value(len(df3)):
+    #     ax.annotate(df3['avg validation losses'][i], (df3['ab_ratios'][i],df3['u_values'][i]))
+
+    print(annotations)
+
+    for i, txt in enumerate(annotations):
+        ax.annotate(txt, (df3['ab_ratios'].iloc[i],df3['u_values'].iloc[i]))
+
+    plt.savefig(relu_prefix_2+'INDICATORS_scatter_plots_best_5_models_selected_by_avg_val_loss.png')
+    plt.show()
+    plt.close()
+
+    fig, ax = plt.subplots()
+    plt.plot(df4['ab_ratios'], df4['u_values'], 'o', label='Models')
+
+    plt.xlabel('AB Ratio')
+    plt.ylabel('U Value')
+    plt.legend()
+
+    annotations = []
+    for i in range(len(df4)):
+        annotation = '(' + str(round(df4['avg validation losses'].iloc[i], 8)) + ', ' + str(
+            round(df4['average first point of failure (2000 tokens)'].iloc[i], 2)) + ')'
+        annotations.append(annotation)
+    # for i in value(len(df3)):
+    #     ax.annotate(df3['avg validation losses'][i], (df3['ab_ratios'][i],df3['u_values'][i]))
+
+    print(annotations)
+
+    for i, txt in enumerate(annotations):
+        ax.annotate(txt, (df4['ab_ratios'].iloc[i], df4['u_values'].iloc[i]))
+
+    plt.savefig(relu_prefix_2 + 'INDICATORS_scatter_plots_best_5_models_selected_by_fpf.png')
+    plt.show()
+    plt.close()
+
+
+
+
+plot_model_indicators_good_models()
 
 # extractModelIndicators()
 # plotModelIndicators()
