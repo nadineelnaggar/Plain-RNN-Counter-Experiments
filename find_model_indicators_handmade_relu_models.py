@@ -45,10 +45,11 @@ def correlate_model_indicators():
     print('intercept = ',res_dev_signed_ab_ratio_fpf.intercept)
     print('slope = ',res_dev_signed_ab_ratio_fpf.slope)
 
-    plt.subplots()
+    fig, ax=plt.subplots()
     df1=df.loc[df['model_u_devs']==0]
     plt.plot(df1['model_ab_ratios_devs_signed'],
              df1['long_avg_point_of_failure'], 'o', label='Models')
+    plt.axvline(x=0, color='r')
 
     # plt.plot(1,color='r')
 
@@ -56,6 +57,8 @@ def correlate_model_indicators():
     # plt.plot(df.loc[df['model_u_devs']==0]['model_ab_ratios_devs_signed'], res_dev_signed_ab_ratio_fpf.intercept+(res_dev_signed_ab_ratio_fpf.slope*df.loc[df['model_u_devs']==0]['model_ab_ratios_devs_signed']),label='Fitted Line')
     plt.xlabel('AB Ratio Deviations (Signed)')
     plt.ylabel('Average FPF')
+    y_labels = [700, 750, 800, 850, 900, 950, 1000]
+    ax.set_yticks(y_labels)
     plt.legend()
     plt.savefig(prefix+'INDICATORS_handmade_models_linear_regression_signed_ab_ratios_fpf.png')
     plt.close()
@@ -204,13 +207,16 @@ def correlate_model_indicators():
     print('intercept = ', res_dev_signed_ab_ratio_val_loss.intercept)
     print('slope = ', res_dev_signed_ab_ratio_val_loss.slope)
 
-    plt.subplots()
+    fig, ax=plt.subplots()
     df1 = df.loc[df['model_u_devs'] == 0]
     plt.plot(df1['model_ab_ratios_devs_signed'], df1['val_losses'], 'o', label='Models')
     # plt.plot(df1['model_a_devs'], df1['val_losses'], 'o', c='r', label='Models1')
     # plt.plot(df.loc[df['model_u_devs']==0]['model_ab_ratios_devs_signed'], res_dev_signed_ab_ratio_val_loss.intercept + (res_dev_signed_ab_ratio_val_loss.slope * df.loc[df['model_u_devs']==0]['model_ab_ratios_devs_signed']), label='Fitted Line')
+    plt.axvline(x=0, color='r')
     plt.xlabel('AB Ratio Deviations (Signed)')
     plt.ylabel('Average Validation Loss')
+    y_labels = [0.017, 0.0175, 0.018, 0.0185, 0.019, 0.0195, 0.02, 0.0205, 0.021, 0.0215, 0.022]
+    ax.set_yticks(y_labels)
     plt.legend()
     plt.savefig(prefix + 'INDICATORS_handmade_models_linear_regression_signed_ab_ratios_val_loss.png')
     plt.close()
@@ -329,7 +335,7 @@ def correlate_model_indicators():
     print('intercept = ', res_dev_signed_u_value_fpf.intercept)
     print('slope = ', res_dev_signed_u_value_fpf.slope)
 
-    plt.subplots()
+    fig, ax=plt.subplots()
     df1 = df.loc[df['model_a_devs'] == 0]
     plt.plot(df1['model_u_devs'],
              df1['long_avg_point_of_failure'], 'o', label='Models')
@@ -337,8 +343,11 @@ def correlate_model_indicators():
     # plt.plot(df.loc[df['model_ab_ratios_devs_absolute']==0]['model_u_devs'], df.loc[df['model_ab_ratios_devs_absolute']==0]['long_avg_point_of_failure'], 'o', label='Models')
     # plt.plot(df.loc[df['model_ab_ratios_devs_absolute']==0]['model_u_devs'], res_dev_signed_u_value_fpf.intercept + (
     #             res_dev_signed_u_value_fpf.slope * df.loc[df['model_ab_ratios_devs_absolute']==0]['model_u_devs']), label='Fitted Line')
+    plt.axvline(x=0, color='r')
     plt.xlabel('U Value Deviations (Signed)')
     plt.ylabel('Average FPF')
+    y_labels = [700, 750, 800, 850, 900, 950, 1000]
+    ax.set_yticks(y_labels)
     plt.legend()
     plt.savefig(prefix + 'INDICATORS_handmade_models_linear_regression_signed_u_value_fpf.png')
     plt.close()
@@ -497,13 +506,17 @@ def correlate_model_indicators():
     print('intercept = ', res_dev_signed_u_value_val_loss.intercept)
     print('slope = ', res_dev_signed_u_value_val_loss.slope)
 
-    plt.subplots()
+    fig, ax=plt.subplots()
     df1 = df.loc[df['model_a_devs'] == 0]
     plt.plot(df1['model_u_devs'], df1['val_losses'], 'o', label='Models')
     # plt.plot(df.loc[df['model_a_devs']==0]['model_u_devs'], res_dev_signed_u_value_val_loss.intercept + (
     #             res_dev_signed_u_value_val_loss.slope * df.loc[df['model_a_devs']==0]['model_u_devs']), label='Fitted Line')
+    plt.axvline(x=0, color='r')
     plt.xlabel('U Value Deviations (Signed)')
     plt.ylabel('Average Validation Loss')
+    # y_labels = [0.017, 0.0172, 0.0174, 0.0176, 0.0178, 0.018, 0.0182, 0.0184, 0.0186, 0.0188, 0.019, 0.0192, 0.0194, 0.0196, 0.0198, 0.02, 0.0202, 0.0204]
+    y_labels = [0.017, 0.0175, 0.018, 0.0185, 0.019, 0.0195, 0.02, 0.0205, 0.021, 0.0215, 0.022]
+    ax.set_yticks(y_labels)
     plt.legend()
     plt.savefig(prefix + 'INDICATORS_handmade_models_linear_regression_signed_u_value_val_loss.png')
     plt.close()
