@@ -7,6 +7,7 @@ from scipy import stats
 import torch
 import os
 import matplotlib.pyplot as plt
+from matplotlib.patches import Rectangle
 import statsmodels.api as sm
 import statsmodels.formula.api as smf
 import seaborn as sns
@@ -48,6 +49,8 @@ def correlate_model_indicators():
     df1=df.loc[df['model_u_devs']==0]
     plt.plot(df1['model_ab_ratios_devs_signed'],
              df1['long_avg_point_of_failure'], 'o', label='Models')
+
+    # plt.plot(1,color='r')
 
     # plt.plot(df.loc[df['model_u_devs']==0]['model_ab_ratios_devs_signed'], df.loc[df['model_u_devs']==0]['long_avg_point_of_failure'], 'o', label='Models')
     # plt.plot(df.loc[df['model_u_devs']==0]['model_ab_ratios_devs_signed'], res_dev_signed_ab_ratio_fpf.intercept+(res_dev_signed_ab_ratio_fpf.slope*df.loc[df['model_u_devs']==0]['model_ab_ratios_devs_signed']),label='Fitted Line')
@@ -659,13 +662,99 @@ def correlate2d_model_indicators(par):
 
 
 
-# def correlate_model_indicators_check():
-#     df1 = df.loc[df['model_u_devs']==0]
-#     print(df1)
-#     print(len(df1))
+def correlate_model_indicators_check():
+    df1 = df.loc[df['model_u_devs']==0]
+    print(df1)
+    print(len(df1))
+
+def create_heatmap():
+    df1=df[['model_a_devs', 'model_u_devs', 'val_losses']]
+    x = pd.DataFrame(df1['model_a_devs'].unique())
+    heatmap_pt = pd.pivot_table(df1, values='val_losses', index=['model_u_devs'], columns='model_a_devs')
+    # headmap_pt
+    fig, ax = plt.subplots()
+    sns.set()
+    ax=sns.heatmap(heatmap_pt, xticklabels=True, yticklabels=True)
+    ax.invert_yaxis()
+    plt.xlabel('AB Ratio Deviations')
+    plt.ylabel('U Value Deviations')
+    plt.axvline(x=5.5, color='g')
+    plt.axhline(y=5.5, color='g')
+    # plt.xticks(rotation=90)
+    # plt.xticks()
+    # plt.yticks()
+    plt.subplots_adjust(bottom=0.175, left=0.15)
+    plt.savefig(prefix + 'INDICATORS_handmade_models_heatmap_devs_val_loss.png')
+    plt.show()
+    # fig.close()
+
+    df1 = df[['model_a_devs', 'model_u_devs', 'long_avg_point_of_failure']]
+    x = pd.DataFrame(df1['model_a_devs'].unique())
+    heatmap_pt = pd.pivot_table(df1, values='long_avg_point_of_failure', index=['model_u_devs'], columns='model_a_devs')
+    # headmap_pt
+    fig, ax = plt.subplots()
+    sns.set()
+    ax = sns.heatmap(heatmap_pt, xticklabels=True, yticklabels=True)
+    ax.invert_yaxis()
+    plt.xlabel('AB Ratio Deviations')
+    plt.ylabel('U Value Deviations')
+    rect = Rectangle((5, 5), 1, 1, linewidth=1, edgecolor='w', fill=True, facecolor='w')
+    ax.add_patch(rect)
+    plt.axvline(x=5.5, color='g')
+    plt.axhline(y=5.5, color='g')
+    # plt.xticks()
+    # plt.yticks()
+    # plt.xticks(rotation=90)
+    plt.subplots_adjust(bottom=0.175, left=0.15)
+    plt.savefig(prefix+'INDICATORS_handmade_models_heatmap_devs_fpf.png')
+    plt.show()
+
+    df1=df[['model_u_weights', 'long_avg_point_of_failure']]
+    df1['ab_ratios'] = df['model_a_weights']/df['model_b_weights']
+    x = pd.DataFrame(df1['ab_ratios'].unique())
+    heatmap_pt=pd.pivot_table(df1, values='long_avg_point_of_failure', index=['model_u_weights'], columns='ab_ratios')
+    fig, ax = plt.subplots()
+    sns.set()
+    ax = sns.heatmap(heatmap_pt, xticklabels=True, yticklabels=True)
+    ax.invert_yaxis()
+    # plt.xticks(rotation=90)
+    plt.xlabel('AB Ratio')
+    plt.ylabel('U Value')
+    rect = Rectangle((5,5), 1,1,linewidth=1,edgecolor='w', fill=True, facecolor='w')
+    ax.add_patch(rect)
+    plt.axvline(x=5.5, color='g')
+    plt.axhline(y=5.5, color='g')
+    plt.subplots_adjust(bottom=0.175, left=0.15)
+    plt.savefig(prefix + 'INDICATORS_handmade_models_heatmap_fpf.png')
+    plt.show()
+
+    df1=df[['model_u_weights', 'val_losses']]
+    df1['ab_ratios'] = df['model_a_weights']/df['model_b_weights']
+    x = pd.DataFrame(df1['ab_ratios'].unique())
+    heatmap_pt=pd.pivot_table(df1, values='val_losses', index=['model_u_weights'], columns='ab_ratios')
+    fig, ax = plt.subplots()
+    sns.set()
+    ax = sns.heatmap(heatmap_pt, xticklabels=True, yticklabels=True)
+    ax.invert_yaxis()
+    # plt.xticks(rotation=90)
+    plt.xlabel('AB Ratio')
+    plt.ylabel('U Value')
+
+    plt.axvline(x=5.5, color='g')
+    plt.axhline(y=5.5, color='g')
+    plt.subplots_adjust(bottom=0.175, left=0.15)
+    plt.savefig(prefix + 'INDICATORS_handmade_models_heatmap_val_loss.png')
+    plt.show()
+
+
+
+    # plt.subplots()
+    # sns.heatmap(df1, annot=True, fmt=".1f").pivot(index="model_a_devs",columns="model_u_devs",values="val_accuracies")
+    # plt.show()
 
 
 correlate_model_indicators()
 create3dCorrelations()
+create_heatmap()
 
 # correlate_model_indicators_check()
