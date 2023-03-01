@@ -19,6 +19,7 @@ import statsmodels.formula.api as smf
 import seaborn as sns
 import scipy
 import pandas.util.testing as tm
+from matplotlib.patches import Rectangle
 
 
 
@@ -930,23 +931,56 @@ def plotModelIndicators():
     
 
 def plot_model_indicators_good_models():
+    x_labels=[]
+    y_labels = []
+    for i in range(6):
+        x_labels.append(round(-1.02+(0.02*i),2))
+
+    for i in range(8):
+        y_labels.append(0.999+(0.001*i))
+    print(x_labels)
+    print(y_labels)
+    plt.rcParams.update({'font.size':11})
     _, df = getReLUModels()
     df1 = df.loc[df['avg validation losses']<1e-6]
     df2 = df.loc[df['average first point of failure (2000 tokens)']>700]
 
     df3 = df.nsmallest(5, 'avg validation losses')
     df4 = df.nlargest(5,'average first point of failure (2000 tokens)')
+    # df5=df3.copy()
+    # df5[df5==df4]
     print(df3)
+    print(df3['average first point of failure (2000 tokens)'])
+    print(df3['avg validation losses'])
     print(df4)
+    print(df4['average first point of failure (2000 tokens)'])
+    print(df4['avg validation losses'])
     # annotations = []
     # for i in range(len(df3)):
     #     annotation = '('+df3['average validaion']
     fig, ax=plt.subplots()
     plt.plot(df3['ab_ratios'],df3['u_values'],'o',label='Models')
     # plt.text(df3['ab_ratios']+0.3, df3['u_values']+0.3, df3[''])
+    plt.plot(-1,1,'x', color='r',label='Correct Model')
+    # plt.plot(df5['ab_ratios'], df5['u_values'],'^', label='Common Models')
+    rect = Rectangle((-1.02,0.9995), 0.04, 0.001, linewidth=1, edgecolor='r', fill=False, facecolor='w')
+    ax.add_patch(rect)
     plt.xlabel('AB Ratio')
     plt.ylabel('U Value')
-    plt.legend()
+    plt.axvline(x=-1, color='g')
+    plt.axhline(y=1, color='g')
+    # plt.xticks(x_labels)
+    # plt.yticks(y_labels)
+
+    # ax.set_xticklabels(x_labels)
+    # ax.set_yticklabels(y_labels)
+    # ax.set_xticks(x_labels)
+    # ax.set_yticks(y_labels)
+    plt.plot(df3['ab_ratios'].iloc[1], df3['u_values'].iloc[1],'D',color='m')
+    plt.plot(df4['ab_ratios'].iloc[0], df4['u_values'].iloc[0], 'D',color='m',label='Common Models')
+    ax.set_xticks(x_labels)
+    ax.set_yticks(y_labels)
+    plt.legend(loc='upper left')
 
     annotations = []
     for i in range(len(df3)):
@@ -955,27 +989,53 @@ def plot_model_indicators_good_models():
     # for i in value(len(df3)):
     #     ax.annotate(df3['avg validation losses'][i], (df3['ab_ratios'][i],df3['u_values'][i]))
 
+    # plt.plot(-1, 1, 'x', color='r', label='Correct Model')
     print(annotations)
 
     for i, txt in enumerate(annotations):
         ax.annotate(txt, (df3['ab_ratios'].iloc[i],df3['u_values'].iloc[i]))
-
+    plt.subplots_adjust(left=0.15, right=0.8)
     plt.savefig(relu_prefix_2+'INDICATORS_scatter_plots_best_5_models_selected_by_avg_val_loss.png')
     plt.show()
     plt.close()
 
+
+    x_labels=[]
+    y_labels = []
+    for i in range(6):
+        x_labels.append(round(-1.02+(0.02*i),2))
+
+    for i in range(8):
+        y_labels.append(0.999+(0.001*i))
+
     fig, ax = plt.subplots()
     plt.plot(df4['ab_ratios'], df4['u_values'], 'o', label='Models')
-
+    plt.plot(-1,1,'x', color='r',label='Correct Model')
+    # plt.plot(df5['ab_ratios'], df5['u_values'], '^', label='Common Models')
+    rect = Rectangle((-1.02, 0.9995), 0.04, 0.001, linewidth=1, edgecolor='r', fill=False, facecolor='w')
+    ax.add_patch(rect)
     plt.xlabel('AB Ratio')
     plt.ylabel('U Value')
-    plt.legend()
+    plt.plot(df3['ab_ratios'].iloc[1], df3['u_values'].iloc[1],'D',color='m')
+    plt.plot(df4['ab_ratios'].iloc[0], df4['u_values'].iloc[0], 'D',color='m',label='Common Models')
+    # plt.xticks(x_labels)
+    # plt.yticks(y_labels)
+    # ax.set_xticks(x_labels)
+    # ax.set_yticks(y_labels)
+    # ax.set_xticklabels(x_labels)
+    # ax.set_yticklabels(y_labels)
+    plt.axvline(x=-1, color='g')
+    plt.axhline(y=1, color='g')
+    ax.set_xticks(x_labels)
+    ax.set_yticks(y_labels)
+    plt.legend(loc='upper left')
 
     annotations = []
     for i in range(len(df4)):
         annotation = '(' + str(round(df4['avg validation losses'].iloc[i], 8)) + ', ' + str(
             round(df4['average first point of failure (2000 tokens)'].iloc[i], 2)) + ')'
         annotations.append(annotation)
+
     # for i in value(len(df3)):
     #     ax.annotate(df3['avg validation losses'][i], (df3['ab_ratios'][i],df3['u_values'][i]))
 
@@ -983,7 +1043,7 @@ def plot_model_indicators_good_models():
 
     for i, txt in enumerate(annotations):
         ax.annotate(txt, (df4['ab_ratios'].iloc[i], df4['u_values'].iloc[i]))
-
+    plt.subplots_adjust(left=0.15, right=0.8)
     plt.savefig(relu_prefix_2 + 'INDICATORS_scatter_plots_best_5_models_selected_by_fpf.png')
     plt.show()
     plt.close()
