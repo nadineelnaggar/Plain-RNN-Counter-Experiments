@@ -359,10 +359,10 @@ with open(file_name, 'w') as f:
 # with open(train_log, 'w') as f:
 #     f.write('\n')
 
-with open(test_log, 'w') as f:
-    f.write('\n')
-with open(long_test_log, 'w') as f:
-    f.write('\n')
+# with open(test_log, 'w') as f:
+#     f.write('\n')
+# with open(long_test_log, 'w') as f:
+#     f.write('\n')
 
 # def encode_batch(sentences, labels, lengths, batch_size):
 #
