@@ -883,3 +883,70 @@ class VanillaReLURNNCorrectInitialisation(nn.Module):
 
         return Y_hat_out.to(device)
         # return torch.tensor([Y_hat2])
+
+
+class VanillaReLURNNCorrectInitialisationWithBias(nn.Module):
+    def __init__(self, input_size, hidden_size, num_layers, batch_size, output_size, output_activation='Sigmoid', rnn_input_weight=[1,-1], rnn_hidden_weight=[1]):
+        super(VanillaReLURNNCorrectInitialisationWithBias, self).__init__()
+        self.input_size = input_size
+        self.hidden_size = hidden_size
+        self.num_layers = num_layers
+        self.batch_size=batch_size
+        self.output_size = output_size
+        self.output_activation = output_activation
+        self.model_name = 'VanillaReLURNN'
+
+        self.vocab = {'<PAD>': 0, '(':1, ')':2}
+        # self.tags = {'<PAD>': 0, 'VB': 1, 'PRP': 2, 'RB': 3, 'JJ': 4, 'NNP': 5}r
+        self.tags = {'<PAD>':0, '0':1, '1':2}
+        self.nb_tags = len(self.vocab)-1
+        self.rnn = nn.RNN(input_size, hidden_size, num_layers=num_layers, nonlinearity='relu')
+        # self.lstm = nn.LSTM(input_size, hidden_size)
+        self.rnn.weight_ih_l0=nn.Parameter(torch.tensor([rnn_input_weight], dtype=torch.float32))
+        self.rnn.weight_hh_l0=nn.Parameter(torch.tensor([rnn_hidden_weight], dtype=torch.float32))
+        self.rnn.bias_ih=nn.Parameter(torch.tensor([0], dtype=torch.float32))
+        self.rnn.bias_hh = nn.Parameter(torch.tensor([0], dtype=torch.float32))
+        self.fc2 = nn.Linear(hidden_size, output_size)
+        self.fc2.weight=nn.Parameter(torch.tensor([[1],[1]],dtype=torch.float32))
+        self.fc2.bias = nn.Parameter(torch.tensor([1,-0.5], dtype=torch.float32))
+        self.sigmoid = nn.Sigmoid()
+
+    def forward(self, x, length):
+        x = pack_padded_sequence(x, length, batch_first=True)
+        # print(x)
+        h0 = self.init_hidden()
+
+        x, h0 = self.rnn(x, h0)
+        # print(x)
+        x, _ = pad_packed_sequence(x, batch_first=True)
+
+        x = x.contiguous()
+
+        x = x.view(-1, x.shape[2])
+
+        x = self.fc2(x)
+        # print(x)
+
+        x = self.sigmoid(x).view(-1, self.output_size)
+
+        return x
+
+    def init_hidden(self):
+        return torch.zeros(self.num_layers, self.batch_size, self.hidden_size).to(device)
+
+
+
+    def mask(self, Y_hat, Y, X_lengths):
+
+        Y_hat_out = torch.zeros(Y_hat.shape)
+
+        max_batch_length = max(X_lengths)
+
+
+        for i in range(self.batch_size):
+
+            Y_hat_out[i*max_batch_length:(i*max_batch_length+X_lengths[i])] = Y_hat[i*max_batch_length:(i*max_batch_length+X_lengths[i])]
+
+
+        return Y_hat_out.to(device)
+        # return torch.tensor([Y_hat2])
