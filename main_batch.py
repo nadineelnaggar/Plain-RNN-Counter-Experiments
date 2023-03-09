@@ -32,7 +32,7 @@ np.random.seed(seed)
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--model_name', type=str, help='input model name (VanillaLSTM, VanillaRNN, VanillaGRU)')
-parser.add_argument('--task', type=str, help='NextTokenPrediction, BinaryClassification, TernaryClassification')
+parser.add_argument('--task', type=str, help='NextTokenPrediction, BinaryClassification, TernaryClassification, NextTokenPredictionCrossEntropy')
 parser.add_argument('--feedback', type=str, help='EveryTimeStep, EndofSequence')
 parser.add_argument('--hidden_size', type=int, help='hidden size')
 parser.add_argument('--num_layers', type=int, help='number of layers', default=1)
@@ -45,6 +45,7 @@ parser.add_argument('--num_runs', type=int, help='number of training runs')
 parser.add_argument('--checkpoint_step', type=int, help='checkpoint step', default=0)
 parser.add_argument('--shuffle_dataset',type=bool,default=False)
 parser.add_argument('--output_size',type=int,default=2,help='how many output neurons, 1 or 2?')
+# parser.add_argument('--loss_function', type=str, default='MSELoss', help='MSELoss or BCELoss')
 
 
 
@@ -63,6 +64,8 @@ batch_size = args.batch_size
 lr_scheduler_step = args.lr_scheduler_step
 lr_scheduler_gamma = args.lr_scheduler_gamma
 output_size = args.output_size
+# loss_function=args.loss_function
+
 
 checkpoint_step = int(num_epochs/4)
 if args.checkpoint_step!=0:
@@ -506,7 +509,10 @@ def train(model, loader, sum_writer, run=0):
     start = time.time()
 
 
-    criterion = nn.MSELoss()
+    if task=='NextTokenPredictionCrossEntropy':
+        criterion=nn.BCELoss()
+    else:
+        criterion = nn.MSELoss()
     # learning_rate = args.learning_rate
     optimiser = optim.Adam(model.parameters(), lr=learning_rate)
     optimiser.zero_grad()
@@ -829,7 +835,10 @@ def validate_model(model, loader, dataset, run, epoch):
         log_file = train_validation_log
         dataset = 'Train Set'
         ds = train_dataset
-    criterion = nn.MSELoss()
+    if task=='NextTokenPredictionCrossEntropy':
+        criterion=nn.BCELoss()
+    else:
+        criterion = nn.MSELoss()
 
     total_loss = 0
     # losses = []
@@ -955,7 +964,10 @@ def validate_model_long(model, loader, dataset, run, epoch):
     dataset='Long Validation Set'
     ds = long_dataset
 
-    criterion = nn.MSELoss()
+    if task=='NextTokenPredictionCrossEntropy':
+        criterion=nn.BCELoss()
+    else:
+        criterion = nn.MSELoss()
 
     total_loss = 0
     # losses = []
