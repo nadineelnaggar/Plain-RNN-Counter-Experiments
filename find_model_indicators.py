@@ -336,12 +336,22 @@ def plotModelIndicators():
     print('len(u_values) = ',len(u_values))
 
 # def other():
-    plt.subplots()
-    plt.hist(ab_ratios, bins=100)
+    ylabels = [0, 1, 2, 3, 4, 5, 6,7,8,9,10,11,12]
+    fig, ax = plt.subplots()
+    # plt.subplots()
+    plt.hist(ab_ratios, bins=50)
+    ax.set_yticks(ylabels)
+    plt.xlabel('AB Ratios')
     plt.savefig(relu_prefix_2+'INDICATORS_histogram_ab_ratio.png')
     # plt.show()
-    plt.subplots()
-    plt.hist(u_values, bins=100)
+    # fig.close()
+    ylabels = [0, 1, 2, 3, 4, 5, 6,7,8,9,10,11,12]
+    fig, ax = plt.subplots()
+    # plt.subplots()
+    plt.hist(u_values, bins=50)
+    ax.set_yticks(ylabels)
+    plt.xlabel('U Values')
+
     plt.savefig(relu_prefix_2+'INDICATORS_histogram_u_values.png')
     # plt.show()
 
@@ -909,11 +919,13 @@ def plotModelIndicators():
     #
     # neg_log_fpfs = -1*np.log(fpfs)
     # res_euclidean_neg_log_fpf = stats.linregress(euclidean_distances)
-
-    plt.subplots()
-    plt.hist(euclidean_distances, bins=100)
+    ylabels=[0,1,2,3,4,5,6,7,8,9,10,11,12]
+    fig, ax = plt.subplots()
+    plt.hist(euclidean_distances, bins=50)
     plt.xlabel('Euclidean Distance')
+    ax.set_yticks(ylabels)
     plt.savefig(relu_prefix_2+'INDICATORS_histogram_euclidean_distances.png')
+    # fig.close()
 
 
 
@@ -1046,7 +1058,7 @@ def plot_model_indicators_good_models():
     plt.subplots_adjust(left=0.15, right=0.8)
     plt.savefig(relu_prefix_2 + 'INDICATORS_scatter_plots_best_5_models_selected_by_fpf.png')
     plt.show()
-    plt.close()
+    # plt.close()
 
 
 
@@ -1054,7 +1066,7 @@ def plot_model_indicators_good_models():
 plot_model_indicators_good_models()
 
 # extractModelIndicators()
-# plotModelIndicators()
+plotModelIndicators()
 
 
 def create_2DLinearRegression(par):
