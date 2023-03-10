@@ -383,6 +383,7 @@ def test_model(model, loader, dataset):
     criterion2=nn.BCELoss()
     total_bce_loss=0
 
+
     max_depths_correct_guesses = []
     timestep_depths_correct_guesses = []
     max_depths_incorrect_guesses = []
