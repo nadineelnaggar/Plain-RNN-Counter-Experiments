@@ -737,7 +737,7 @@ def main():
     if task == 'TernaryClassification':
         num_classes = 3
         output_activation = 'Softmax'
-    elif task == 'BinaryClassification' or task == 'NextTokenPrediction':
+    elif task == 'BinaryClassification' or task == 'NextTokenPrediction' or task=='NextTokenPredictionCrossEntropy':
         num_classes = 2
         output_activation = 'Sigmoid'
 
