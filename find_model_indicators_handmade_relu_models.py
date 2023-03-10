@@ -759,6 +759,24 @@ def create_heatmap():
     plt.savefig(prefix + 'INDICATORS_handmade_models_heatmap_val_loss.png')
     plt.show()
 
+    df1 = df[['model_u_weights', 'val_bce_losses']]
+    df1['ab_ratios'] = df['model_a_weights'] / df['model_b_weights']
+    x = pd.DataFrame(df1['ab_ratios'].unique())
+    heatmap_pt = pd.pivot_table(df1, values='val_bce_losses', index=['model_u_weights'], columns='ab_ratios')
+    fig, ax = plt.subplots()
+    sns.set()
+    ax = sns.heatmap(heatmap_pt, xticklabels=True, yticklabels=True)
+    ax.invert_yaxis()
+    # plt.xticks(rotation=90)
+    plt.xlabel('AB Ratio')
+    plt.ylabel('U Value')
+
+    plt.axvline(x=5.5, color='g')
+    plt.axhline(y=5.5, color='g')
+    plt.subplots_adjust(bottom=0.175, left=0.15)
+    plt.savefig(prefix + 'INDICATORS_handmade_models_heatmap_val_bce_loss.png')
+    plt.show()
+
 
 
     # plt.subplots()
