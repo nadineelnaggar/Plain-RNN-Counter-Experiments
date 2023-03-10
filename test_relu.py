@@ -307,6 +307,9 @@ def validate_model(model, loader):
     total_loss = 0
     # losses = []
 
+    criterion2 = nn.BCELoss()
+    total_bce_loss = 0
+
     # with open(log_file,'a') as f:
     #     f.write('////////////////////////////////////////\n')
     #     f.write('TEST '+dataset+'\n')
@@ -318,6 +321,8 @@ def validate_model(model, loader):
         output_seq = model.mask(output_seq, target_seq, length)
         loss = criterion(output_seq,target_seq)
         total_loss+=loss.item()
+        loss2=criterion2(output_seq,target_seq)
+        total_bce_loss+=loss2.item()
 
 
         output_seq = output_seq.view(batch_size, length[0], n_letters)
@@ -344,7 +349,8 @@ def validate_model(model, loader):
     #         f.write('val accuracy for run'+str(run)+' epoch '+str(epoch)+' = ' + str(accuracy)+'%, val loss = '+str(loss.item()/len(ds)) + '\n')
 
 
-    return accuracy, loss.item()/len(ds)
+    # return accuracy, loss.item()/len(ds)
+    return accuracy, total_loss/len(ds), total_bce_loss/len(ds)
 
 
 def test_model(model, loader, dataset):
@@ -374,6 +380,8 @@ def test_model(model, loader, dataset):
     criterion = nn.MSELoss()
     total_loss = 0
 
+    criterion2=nn.BCELoss()
+    total_bce_loss=0
 
     max_depths_correct_guesses = []
     timestep_depths_correct_guesses = []
@@ -391,7 +399,8 @@ def test_model(model, loader, dataset):
         output_seq = model.mask(output_seq, target_seq, length)
         loss = criterion(output_seq, target_seq)
         total_loss += loss.item()
-
+        loss2 = criterion2(output_seq, target_seq)
+        total_bce_loss += loss2.item()
 
 
         output_seq = output_seq.view(batch_size, length[0], n_letters)
@@ -438,7 +447,7 @@ def test_model(model, loader, dataset):
     avg_first_fail_point = sum_first_fail_points / (len(incorrect_guesses)+num_correct)
 
     # return accuracy, correct_guesses,correct_guesses_length, incorrect_guesses, incorrect_guesses_length, incorrect_guesses_first_fail,avg_first_fail_point, max_depth, timestep_depth
-    return accuracy, total_loss/len(ds), correct_guesses,correct_guesses_length, incorrect_guesses, incorrect_guesses_length, incorrect_guesses_first_fail,avg_first_fail_point, max_depths_correct_guesses, timestep_depths_correct_guesses, max_depths_incorrect_guesses, timestep_depths_incorrect_guesses
+    return accuracy, total_loss/len(ds), total_bce_loss/len(ds), correct_guesses,correct_guesses_length, incorrect_guesses, incorrect_guesses_length, incorrect_guesses_first_fail,avg_first_fail_point, max_depths_correct_guesses, timestep_depths_correct_guesses, max_depths_incorrect_guesses, timestep_depths_incorrect_guesses
 
 
 # def main2():
@@ -516,6 +525,7 @@ def main():
 
     test_accuracies = []
     test_losses = []
+    test_bce_losses=[]
     correct_guesses = []
     correct_guesses_lengths = []
     incorrect_guesses = []
@@ -531,6 +541,7 @@ def main():
 
     long_test_accuracies = []
     long_losses = []
+    long_bce_losses=[]
     long_correct = []
     long_correct_lengths = []
     long_incorrect = []
@@ -545,6 +556,7 @@ def main():
     
     zigzag_test_accuracies = []
     zigzag_losses = []
+    zigzag_bce_losses=[]
     zigzag_correct = []
     zigzag_correct_lengths = []
     zigzag_incorrect = []
@@ -621,7 +633,7 @@ def main():
         model=models[i].to(device)
         print('*******************************************************************')
         print('model ',i)
-        test_accuracy, test_loss, test_correct_guesses, test_correct_guesses_length, test_incorrect_guesses, test_incorrect_guesses_length, test_incorrect_guesses_first_fail, test_avg_first_fail_point, max_depth_correct, timestep_depth_correct, max_depth_incorrect, timestep_depth_incorrect = test_model(model, validation_loader, 'validation')
+        test_accuracy, test_loss, test_bce_loss, test_correct_guesses, test_correct_guesses_length, test_incorrect_guesses, test_incorrect_guesses_length, test_incorrect_guesses_first_fail, test_avg_first_fail_point, max_depth_correct, timestep_depth_correct, max_depth_incorrect, timestep_depth_incorrect = test_model(model, validation_loader, 'validation')
 
         print('validation test accuracy = ',test_accuracy)
         # print('avg fpf = ',test_avg_first_fail_point)
@@ -629,6 +641,7 @@ def main():
     
         test_accuracies.append(test_accuracy)
         test_losses.append(test_loss)
+        test_bce_losses.append(test_bce_loss)
         correct_guesses.append(test_correct_guesses)
         correct_guesses_lengths.append(test_correct_guesses_length)
         incorrect_guesses.append(test_incorrect_guesses)
@@ -640,7 +653,7 @@ def main():
         timestep_depths_correct_guesses.append(timestep_depth_correct)
         timestep_depths_incorrect_guesses.append(timestep_depth_incorrect)
     
-        long_accuracy, long_loss, long_correct_guesses, long_correct_guesses_length, long_incorrect_guesses, long_incorrect_guesses_length, long_incorrect_guesses_first_fail, long_avg_first_fail_point, long_max_depth_correct, long_timestep_depth_correct, long_max_depth_incorrect, long_timestep_depth_incorrect = test_model(model, long_loader, 'long')
+        long_accuracy, long_loss, long_bce_loss, long_correct_guesses, long_correct_guesses_length, long_incorrect_guesses, long_incorrect_guesses_length, long_incorrect_guesses_first_fail, long_avg_first_fail_point, long_max_depth_correct, long_timestep_depth_correct, long_max_depth_incorrect, long_timestep_depth_incorrect = test_model(model, long_loader, 'long')
         print('long accuracy = ',long_accuracy)
         # print('long correct guesses = ',long_correct_guesses)
         print('long fpf = ',long_avg_first_fail_point)
@@ -649,6 +662,7 @@ def main():
 
         long_test_accuracies.append(long_accuracy)
         long_losses.append(long_loss)
+        long_bce_losses.append(long_bce_loss)
         long_correct.append(long_correct_guesses)
         long_correct_lengths.append(long_correct_guesses_length)
         long_incorrect.append(long_incorrect_guesses)
@@ -661,7 +675,7 @@ def main():
         long_timestep_depths_incorrect_guesses.append(long_timestep_depth_incorrect)
 
 
-        zigzag_accuracy, zigzag_loss, zigzag_correct_guesses, zigzag_correct_guesses_length, zigzag_incorrect_guesses, zigzag_incorrect_guesses_length, zigzag_incorrect_guesses_first_fail, zigzag_avg_first_fail_point, zigzag_max_depth_correct, zigzag_timestep_depth_correct, zigzag_max_depth_incorrect, zigzag_timestep_depth_incorrect = test_model(model, zigzag_loader, 'zigzag')
+        zigzag_accuracy, zigzag_loss, zigzag_bce_loss, zigzag_correct_guesses, zigzag_correct_guesses_length, zigzag_incorrect_guesses, zigzag_incorrect_guesses_length, zigzag_incorrect_guesses_first_fail, zigzag_avg_first_fail_point, zigzag_max_depth_correct, zigzag_timestep_depth_correct, zigzag_max_depth_incorrect, zigzag_timestep_depth_incorrect = test_model(model, zigzag_loader, 'zigzag')
         print('zigzag accuracy = ',zigzag_accuracy)
         # print('zigzag correct guesses = ',zigzag_correct_guesses)
         print('zigzag fpf = ',zigzag_avg_first_fail_point)
@@ -669,6 +683,7 @@ def main():
         
         zigzag_test_accuracies.append(zigzag_accuracy)
         zigzag_losses.append(zigzag_loss)
+        zigzag_bce_losses.append(zigzag_bce_loss)
         zigzag_correct.append(zigzag_correct_guesses)
         zigzag_correct_lengths.append(zigzag_correct_guesses_length)
         zigzag_incorrect.append(zigzag_incorrect_guesses)
@@ -691,6 +706,7 @@ def main():
     df['model_euclidean_norms']=model_euclidean_norms
     df['val_accuracies'] = test_accuracies
     df['val_losses'] = test_losses
+    df['val_bce_losses']=test_bce_losses
     df['log_val_losses']=np.log(test_losses)
     df['neg_log_val_losses']= -1*np.log(test_losses)
     df['val_correct_guesses']=correct_guesses
@@ -705,6 +721,7 @@ def main():
     df['val_timestep_depths_incorrect_guesses']=timestep_depths_incorrect_guesses
     df['long_test_accuracies']=long_test_accuracies
     df['long_losses']=long_losses
+    df['long_bce_losses']=long_bce_losses
     df['log_long_losses']=np.log(long_losses)
     df['neg_log_long_losses'] = -1*np.log(long_losses)
     df['long_correct_guesses']=long_correct
@@ -719,6 +736,7 @@ def main():
     df['long_timestep_depths_incorrect_guesses']=long_timestep_depths_incorrect_guesses
     df['zigzag_test_accuracies'] = zigzag_test_accuracies
     df['zigzag_losses'] = zigzag_losses
+    df['zigzag_bce_losses']=zigzag_bce_losses
     df['log_zigzag_losses'] = np.log(zigzag_losses)
     df['neg_log_zigzag_losses'] = -1 * np.log(zigzag_losses)
     df['zigzag_correct_guesses'] = zigzag_correct
