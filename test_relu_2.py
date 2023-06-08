@@ -6,7 +6,7 @@ import pandas as pd
 from torch.nn.utils.rnn import pack_padded_sequence, pad_packed_sequence
 from Dyck_Generator_Suzgun_Batch import DyckLanguage
 import random
-from torch.utils.tensorboard import SummaryWriter
+# from torch.utils.tensorboard import SummaryWriter
 # from tensorboardX import SummaryWriter
 from torch.utils.data import Dataset, DataLoader
 from Dyck1_Datasets import NextTokenPredictionValidationDataset, NextTokenPredictionDataset1000tokens, \
@@ -489,6 +489,7 @@ def main():
     model_b_weights = []
     model_u_weights = []
     model_a_devs = []
+    model_b_devs = []
     model_u_devs = []
     # model_ab_ratios = []
     model_ab_ratio_devs_absolute = []
@@ -584,6 +585,7 @@ def main():
                 model_b_weights.append(model_b_weight)
                 model_u_weights.append(model_u_weight)
                 model_a_devs.append(devs_a[i])
+                model_b_devs.append(devs_b[k])
                 model_u_devs.append(devs_u[j])
                 model_ab_ratio = model_a_weight / model_b_weight
                 model_ab_ratio_dev = model_ab_ratio - -1
@@ -668,6 +670,7 @@ def main():
     df['model_u_weights'] = model_u_weights
     df['model_u_devs'] = model_u_devs
     df['model_a_devs'] = model_a_devs
+    df['model_b_devs'] = model_b_devs
     df['model_ab_ratios_devs_absolute'] = model_ab_ratio_devs_absolute
     df['model_ab_ratios_devs_signed'] = model_ab_ratio_devs_signed
     df['model_euclidean_norms'] = model_euclidean_norms
