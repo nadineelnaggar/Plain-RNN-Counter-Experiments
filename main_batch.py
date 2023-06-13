@@ -18,6 +18,8 @@ from torch.optim.lr_scheduler import StepLR
 import math
 import time
 
+from Semi_Dyck1_Datasets import SemiDyck1TrainDataset, SemiDyck1ValidationDataset, SemiDyck1TestDataset, SemiDyck1ShortTestDataset, SemiDyck1Dataset1000tokens, SemiDyck1Dataset2000tokens_zigzag
+
 
 
 """
@@ -32,7 +34,7 @@ np.random.seed(seed)
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--model_name', type=str, help='input model name (VanillaLSTM, VanillaRNN, VanillaGRU)')
-parser.add_argument('--task', type=str, help='NextTokenPrediction, BinaryClassification, TernaryClassification, NextTokenPredictionCrossEntropy')
+parser.add_argument('--task', type=str, help='NextTokenPrediction, BinaryClassification, TernaryClassification, NextTokenPredictionCrossEntropy, SemiDyck1MSE, SemiDyck1BCE')
 parser.add_argument('--feedback', type=str, help='EveryTimeStep, EndofSequence')
 parser.add_argument('--hidden_size', type=int, help='hidden size')
 parser.add_argument('--num_layers', type=int, help='number of layers', default=1)
@@ -46,6 +48,7 @@ parser.add_argument('--checkpoint_step', type=int, help='checkpoint step', defau
 parser.add_argument('--shuffle_dataset',type=bool,default=False)
 parser.add_argument('--output_size',type=int,default=2,help='how many output neurons, 1 or 2?')
 # parser.add_argument('--loss_function', type=str, default='MSELoss', help='MSELoss or BCELoss')
+parser.add_argument('--runtime',type=str,default='colab',help='colab or local or linux')
 
 
 
@@ -65,6 +68,7 @@ lr_scheduler_step = args.lr_scheduler_step
 lr_scheduler_gamma = args.lr_scheduler_gamma
 output_size = args.output_size
 # loss_function=args.loss_function
+runtime = args.runtime
 
 
 checkpoint_step = int(num_epochs/4)
@@ -123,9 +127,18 @@ long_size = 500
 
 Dyck = DyckLanguage(NUM_PAR, P_VAL, Q_VAL)
 
-
-
-path = "/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_"+str(task)+"/Minibatch_Training/"+model_name+"/"\
+if runtime=='colab':
+    path = "/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_"+str(task)+"/Minibatch_Training/"+model_name+"/"\
+           +str(batch_size)+"_batch_size/"+str(learning_rate)+"_learning_rate/"+str(num_epochs)+"_epochs/"\
+           +str(lr_scheduler_step)+"_lr_scheduler_step/"+str(lr_scheduler_gamma)+"_lr_scheduler_gamma/"\
+           +str(hidden_size)+"_hidden_units/"+str(num_runs)+"_runs/shuffle_"+str(shuffle_dataset)+"/"
+elif runtime=='local':
+    path = "/Users/nadineelnaggar/Google Drive/PhD/EXPT_LOGS/Dyck1_"+str(task)+"/Minibatch_Training/"+model_name+"/"\
+       +str(batch_size)+"_batch_size/"+str(learning_rate)+"_learning_rate/"+str(num_epochs)+"_epochs/"\
+       +str(lr_scheduler_step)+"_lr_scheduler_step/"+str(lr_scheduler_gamma)+"_lr_scheduler_gamma/"\
+       +str(hidden_size)+"_hidden_units/"+str(num_runs)+"_runs/shuffle_"+str(shuffle_dataset)+"/"
+elif runtime=='linux':
+    path = "/PhD/EXPT_LOGS/Dyck1_"+str(task)+"/Minibatch_Training/"+model_name+"/"\
        +str(batch_size)+"_batch_size/"+str(learning_rate)+"_learning_rate/"+str(num_epochs)+"_epochs/"\
        +str(lr_scheduler_step)+"_lr_scheduler_step/"+str(lr_scheduler_gamma)+"_lr_scheduler_gamma/"\
        +str(hidden_size)+"_hidden_units/"+str(num_runs)+"_runs/shuffle_"+str(shuffle_dataset)+"/"
@@ -247,6 +260,40 @@ def encode_batch(sentences, labels, lengths, batch_size):
     # print('labels tensor = ',labels_tensor)
     return sentence_tensor, labels_tensor, lengths_tensor
 
+def encode_batch_semiDyck1(sentences, labels, lengths, batch_size):
+
+    max_length = max(lengths)
+    # print(max_length)
+    sentence_tensor = torch.zeros(batch_size,max_length,len(vocab))
+
+    labels_tensor = torch.tensor([])
+    for i in range(batch_size):
+
+        sentence = sentences[i]
+        label = labels[i]
+        label_tensor = torch.tensor([])
+        for j in range(len(label)):
+            if label[j]=='1':
+                timestep_label_tensor = torch.tensor([[1,1]], dtype=torch.float32)
+            elif label[j]=='0':
+                timestep_label_tensor = torch.tensor([[1,0]],dtype=torch.float32)
+            label_tensor=torch.cat((label_tensor, timestep_label_tensor))
+        labels_tensor = torch.cat((labels_tensor, label_tensor))
+        # labels_tensor = torch.cat((labels_tensor,Dyck.batchToTensorSigmoid(labels,lengths,batch_size,max_length)))
+        if len(sentence)<max_length:
+            for index, char in enumerate(sentence):
+                pos = vocab.index(char)
+                sentence_tensor[i][index][pos] = 1
+        else:
+            for index, char in enumerate(sentence):
+                pos = vocab.index(char)
+                sentence_tensor[i][index][pos]=1
+    sentence_tensor.requires_grad_(True)
+    # lengths_tensor = torch.tensor(lengths, dtype=torch.long)
+    lengths_tensor = torch.tensor(lengths, dtype=torch.int64).cpu()
+    # print('labels tensor = ',labels_tensor)
+    return sentence_tensor, labels_tensor, lengths_tensor
+
 
 def collate_fn(batch):
 
@@ -259,19 +306,26 @@ def collate_fn(batch):
     labels.sort(key=len,reverse=True)
     lengths.sort(reverse=True)
 
-
-    # seq_tensor, labels_tensor, lengths_tensor = encode_batch(sentences, labels,lengths, batch_size=len(sentences))
-    seq_tensor, labels_tensor, lengths_tensor = encode_batch(sentences, labels, lengths, batch_size=batch_size)
+    if task =='SemiDyck1MSE' or task=='SemiDyck1BCE':
+        seq_tensor, labels_tensor, lengths_tensor = encode_batch_semiDyck1(sentences, labels, lengths, batch_size=batch_size)
+    else:
+        # seq_tensor, labels_tensor, lengths_tensor = encode_batch(sentences, labels,lengths, batch_size=len(sentences))
+        seq_tensor, labels_tensor, lengths_tensor = encode_batch(sentences, labels, lengths, batch_size=batch_size)
 
 
     # return seq_tensor.to(device), labels_tensor.to(device), lengths_tensor.to(device)
     return sentences, labels, seq_tensor.to(device), labels_tensor.to(device), lengths_tensor
 
-#
-train_dataset = NextTokenPredictionTrainDataset()
-test_dataset = NextTokenPredictionShortTestDataset()
-long_dataset = NextTokenPredictionLongTestDataset()
-validation_dataset = NextTokenPredictionValidationDataset()
+if task=='SemiDyck1MSE' or task=='SemiDyck1BCE':
+    train_dataset = SemiDyck1TrainDataset()
+    test_dataset = SemiDyck1ShortTestDataset()
+    long_dataset = SemiDyck1TestDataset()
+    validation_dataset = SemiDyck1ValidationDataset()
+else:
+    train_dataset = NextTokenPredictionTrainDataset()
+    test_dataset = NextTokenPredictionShortTestDataset()
+    long_dataset = NextTokenPredictionLongTestDataset()
+    validation_dataset = NextTokenPredictionValidationDataset()
 
 
 # train_dataset = NextTokenPredictionTrainDataset_SAMPLE()
@@ -350,7 +404,7 @@ def main():
     if task == 'TernaryClassification':
         num_classes = 3
         output_activation = 'Softmax'
-    elif task == 'BinaryClassification' or task == 'NextTokenPrediction' or task == 'NextTokenPredictionCrossEntropy':
+    elif task == 'BinaryClassification' or task == 'NextTokenPrediction' or task == 'NextTokenPredictionCrossEntropy' or task=='SemiDyck1MSE' or task=='SemiDyck1BCE':
         num_classes = 2
         output_activation = 'Sigmoid'
 
@@ -509,7 +563,7 @@ def train(model, loader, sum_writer, run=0):
     start = time.time()
 
 
-    if task=='NextTokenPredictionCrossEntropy':
+    if task=='NextTokenPredictionCrossEntropy' or task=='SemiDyck1BCE':
         criterion=nn.BCELoss()
     else:
         criterion = nn.MSELoss()
@@ -964,7 +1018,7 @@ def validate_model_long(model, loader, dataset, run, epoch):
     dataset='Long Validation Set'
     ds = long_dataset
 
-    if task=='NextTokenPredictionCrossEntropy':
+    if task=='NextTokenPredictionCrossEntropy' or task =='SemiDyck1BCE':
         criterion=nn.BCELoss()
     else:
         criterion = nn.MSELoss()
