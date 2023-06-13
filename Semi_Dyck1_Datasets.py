@@ -47,9 +47,9 @@ class SemiDyck1TrainDataset(Dataset):
 
         self.x_tensor = []
         self.y_tensor = []
-        for i in range(len(self.x)):
-            self.x_tensor.append(encode_sentence_onehot(self.x[i]))
-            self.y_tensor.append(Dyck.lineToTensorSigmoid(self.y[i], max_len=50))
+        # for i in range(len(self.x)):
+        #     self.x_tensor.append(encode_sentence_onehot(self.x[i]))
+        #     self.y_tensor.append(Dyck.lineToTensorSigmoid(self.y[i], max_len=50))
 
         self.lengths = self.lengths[:10000]
         self.n_samples = len(self.x)
