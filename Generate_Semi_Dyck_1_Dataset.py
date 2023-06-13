@@ -5,6 +5,7 @@ from collections import defaultdict
 import random
 from random import randint
 from random import random
+from random import shuffle
 import torch
 import torch.nn as nn
 from torch.nn.utils.rnn import pack_padded_sequence, pad_packed_sequence
@@ -224,13 +225,18 @@ def removeOpeningBracket(seqs):
         # print('original sequence = ',seq)
         # print('original sequence length = ',len(seq))
         open_bracket_indices = find(seq, '(')
+        # print('open bracket indices',open_bracket_indices)
         # print('open bracket indices = ',open_bracket_indices)
-        rand=randint(0, len(open_bracket_indices)-1)
+        if open_bracket_indices!=[]:
+            rand=randint(0, len(open_bracket_indices)-1)
+            # print(rand)
+            changed_index = open_bracket_indices[rand]
+            seq = seq[:changed_index] + '' + seq[changed_index + 1:]
         # print('rand = ',rand)
         # print('len(opening_bracket_indices) = ',len(open_bracket_indices))
-        changed_index = open_bracket_indices[rand]
+        # changed_index = open_bracket_indices[rand]
         # print('changed_index = ',changed_index)
-        seq = seq[:changed_index]+''+seq[changed_index+1:]
+        # seq = seq[:changed_index]+''+seq[changed_index+1:]
         # print('changed sequence = ',seq)
         # print('changed sequence length = ',len(seq))
         # print('number of opening brackets = ',seq.count('('))
@@ -388,9 +394,44 @@ def makeSemiDyck1Dataset(dataset_name):
     n_added = int(n_samples/4)
     n_removed = int(n_samples/4)
 
-    x_flipped = x[:n_flipped]
-    x_added = x[n_flipped:(n_flipped+n_added)]
-    x_removed = x[(n_flipped+n_added):(n_flipped+n_added+n_removed)]
+    # x_flipped = x[:n_flipped]
+    x_flipped = x
+    x_added_indices = []
+    x_removed_indices = []
+
+    x_flipped = flipOpeningBrackets(x_flipped)
+
+    # while(len(x_added_indices)<n_added):
+    #     rand_add = randint(0,len(x_flipped))
+    #     if rand_add not in x_added_indices and rand_add not in x_removed_indices:
+    #         x_added_indices.append(rand_add)
+    # while(len(x_removed_indices)<n_removed):
+    #     rand_remove = randint(0, len(x_flipped))
+    #     if rand_remove not in x_added_indices and rand_remove not in x_removed_indices:
+    #         x_removed_indices.append(rand_remove)
+
+    # x_added = []
+    # for i in range(len(x_added_indices)):
+    #     idx = x_added_indices[i]
+    #     added_seq = x_flipped[idx]
+    #     x_added.append(added_seq)
+    #     # x_flipped.remove(x_added[i])
+    # x_removed = []
+    # for i in range(len(x_removed_indices)):
+    #     idx = x_removed_indices[i]
+    #     removed_seq = x_flipped[idx]
+    #     x_removed.append(x_flipped[x_removed_indices[i]])
+    #     x_flipped.remove(x_removed[i])
+
+    print(x_flipped[0])
+    shuffle(x_flipped)
+    print(x_flipped[0])
+    x_added = x_flipped[:n_added]
+    x_removed = x_flipped[n_added:(n_added+n_removed)]
+    x_flipped = x_flipped[(n_added+n_removed):]
+
+    # x_added = x[n_flipped:(n_flipped+n_added)]
+    # x_removed = x[(n_flipped+n_added):(n_flipped+n_added+n_removed)]
     semiDyckFlipped = []
 
     # print('x_flipped = ',x_flipped)
@@ -403,7 +444,9 @@ def makeSemiDyck1Dataset(dataset_name):
     print('len(x_removed) = ', len(x_removed))
     # print('n_removed = ', n_removed)
     
-    x_flipped = flipOpeningBrackets(x_flipped)
+    # x_flipped = flipOpeningBrackets(x_flipped)
+
+
     x_added = addClosingBracket(x_added)
     x_removed = removeOpeningBracket(x_removed)
     semiDyckAdded = []
