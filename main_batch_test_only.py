@@ -17,6 +17,8 @@ from Dyck1_Datasets import NextTokenPredictionLongTestDataset, NextTokenPredicti
     NextTokenPredictionTrainDataset, NextTokenPredictionDataset102to500tokens,NextTokenPredictionDataset502to1000tokens, \
     NextTokenPredictionDataset990to1000tokens, NextTokenPredictionDataset2000tokens, \
     NextTokenPredictionDataset2000tokens_nested, NextTokenPredictionDataset2000tokens_zigzag, NextTokenPredictionDataset1000tokens
+from Semi_Dyck1_Datasets import SemiDyck1TrainDataset, SemiDyck1ValidationDataset, SemiDyck1ShortTestDataset, SemiDyck1TestDataset, SemiDyck1Dataset1000tokens, SemiDyck1Dataset2000tokens_zigzag
+
 
 seed = 10
 torch.manual_seed(seed)
@@ -40,7 +42,7 @@ Steps:
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--model_name', type=str, help='input model name (VanillaLSTM, VanillaRNN, VanillaGRU)')
-parser.add_argument('--task', type=str, help='NextTokenPrediction, BinaryClassification, TernaryClassification')
+parser.add_argument('--task', type=str, help='NextTokenPrediction, BinaryClassification, TernaryClassification, SemiDyck1MSE, SemiDyck1BCE')
 parser.add_argument('--feedback', type=str, help='EveryTimeStep, EndofSequence')
 parser.add_argument('--hidden_size', type=int, help='hidden size')
 parser.add_argument('--num_layers', type=int, help='number of layers', default=1)
