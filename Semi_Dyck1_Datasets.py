@@ -42,11 +42,11 @@ class SemiDyck1TrainDataset(Dataset):
                 self.y.append(label)
                 self.lengths.append(len(sentence))
 
-        self.x = self.x[:10000]
-        self.y = self.y[:10000]
-
-        self.x_tensor = []
-        self.y_tensor = []
+        # self.x = self.x[:10000]
+        # self.y = self.y[:10000]
+        #
+        # self.x_tensor = []
+        # self.y_tensor = []
         # for i in range(len(self.x)):
         #     self.x_tensor.append(encode_sentence_onehot(self.x[i]))
         #     self.y_tensor.append(Dyck.lineToTensorSigmoid(self.y[i], max_len=50))
@@ -87,9 +87,9 @@ class SemiDyck1ShortTestDataset(Dataset):
                 self.y.append(label)
                 self.lengths.append(len(sentence))
 
-        self.x = self.x[10000:15000]
-        self.y = self.y[10000:15000]
-        self.lengths = self.lengths[10000:15000]
+        # self.x = self.x[10000:15000]
+        # self.y = self.y[10000:15000]
+        # self.lengths = self.lengths[10000:15000]
         self.n_samples = len(self.x)
 
 
@@ -122,9 +122,9 @@ class SemiDyck1ValidationDataset(Dataset):
                 self.y.append(label)
                 self.lengths.append(sentence)
 
-        self.x = self.x[15000:]
-        self.y = self.y[15000:]
-        self.lengths = self.lengths[15000:]
+        # self.x = self.x[15000:]
+        # self.y = self.y[15000:]
+        # self.lengths = self.lengths[15000:]
         self.n_samples = len(self.x)
 
 
@@ -158,9 +158,9 @@ class SemiDyck1TestDataset(Dataset):
                 self.y.append(label)
                 self.lengths.append(len(sentence))
 
-        self.x = self.x[:5000]
-        self.y = self.y[:5000]
-        self.lengths = self.lengths[:5000]
+        # self.x = self.x[:5000]
+        # self.y = self.y[:5000]
+        # self.lengths = self.lengths[:5000]
         self.n_samples = len(self.x)
 
 
@@ -239,9 +239,9 @@ class SemiDyck1Dataset1000tokens(Dataset):
         max_depths = []
         timestep_depths = []
 
-        self.x = self.x[:100]
-        self.y = self.y[:100]
-        self.lengths = self.lengths[:100]
+        # self.x = self.x[:100]
+        # self.y = self.y[:100]
+        # self.lengths = self.lengths[:100]
 
 
 
