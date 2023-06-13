@@ -438,7 +438,7 @@ def makeSemiDyck1Dataset(dataset_name):
     
     if False not in semiDyckFlipped and False not in semiDyckAdded and False not in semiDyckRemoved:
         print('ALL SEMI DYCK-1 SEQUENCES CORRECT')
-    writeDatasetToFile(x_new, y_new, lengths_new, filename)
+    # writeDatasetToFile(x_new, y_new, lengths_new, filename)
     
     return x_new, y_new, lengths_new
 
