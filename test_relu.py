@@ -33,8 +33,13 @@ elif os.path.exists('/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_NextTokenPredict
 # excel_name_u_dev_models = prefix+'INDICATORS_handmade_models_u_dev_test.xlsx'
 # prefix='/Users/nadineelnaggar/Google Drive/PhD/EXPT_LOGS/Dyck1_NextTokenPrediction/Minibatch_Training/VanillaReLURNN/1_batch_size/0.01_learning_rate/30_epochs/50_lr_scheduler_step/1.0_lr_scheduler_gamma/1_hidden_units/20_runs/shuffle_True/'
 
-
+# initial_a_value=1
 initial_a_value = 1.02
+# initial_a_value=0.98
+# initial_a_value=0.7
+# initial_a_value=0.5
+# initial_a_value=1.4
+# initial_a_value=2
 b_factor = initial_a_value
 
 if initial_a_value==1 and b_factor==1:
