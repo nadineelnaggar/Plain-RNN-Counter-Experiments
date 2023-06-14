@@ -58,7 +58,7 @@ parser.add_argument('--shuffle_dataset',type=bool,default=False)
 parser.add_argument('--num_checkpoints', type=int,default=100, help='number of checkpoints we want to include if we dont need all of them (e.g., first 5 checkpoints only), stop after n checkpoints')
 # parser.add_argument('--dataset_type',type=str, default='nested',help='nested, zigzag or appended')
 parser.add_argument('--dataset_type',type=str, default='nested',help='nested, zigzag or concatenated')
-
+parser.add_argument('--runtime',type=str,default='colab',help='colab or local or linux')
 
 args = parser.parse_args()
 
@@ -76,6 +76,7 @@ lr_scheduler_gamma = args.lr_scheduler_gamma
 lr_scheduler_step = args.lr_scheduler_step
 num_checkpoints = args.num_checkpoints
 dataset_type = args.dataset_type
+runtime = args.runtime
 
 
 # best_run = args.best_run
@@ -164,7 +165,18 @@ Dyck = DyckLanguage(NUM_PAR, P_VAL, Q_VAL)
 #        +str(batch_size)+"_batch_size/"+str(learning_rate)+"_learning_rate/"+str(num_epochs)+"_epochs/"\
 #        +str(lr_scheduler_step)+"_lr_scheduler_step/"+str(lr_scheduler_gamma)+"_lr_scheduler_gamma/"
 
-path = "/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_"+str(task)+"/Minibatch_Training/"+model_name+"/"\
+if runtime=='colab':
+    path = "/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_"+str(task)+"/Minibatch_Training/"+model_name+"/"\
+           +str(batch_size)+"_batch_size/"+str(learning_rate)+"_learning_rate/"+str(num_epochs)+"_epochs/"\
+           +str(lr_scheduler_step)+"_lr_scheduler_step/"+str(lr_scheduler_gamma)+"_lr_scheduler_gamma/"\
+           +str(hidden_size)+"_hidden_units/"+str(num_runs)+"_runs/shuffle_"+str(shuffle_dataset)+"/"
+elif runtime=='local':
+    path = "/Users/nadineelnaggar/Google Drive/PhD/EXPT_LOGS/Dyck1_"+str(task)+"/Minibatch_Training/"+model_name+"/"\
+       +str(batch_size)+"_batch_size/"+str(learning_rate)+"_learning_rate/"+str(num_epochs)+"_epochs/"\
+       +str(lr_scheduler_step)+"_lr_scheduler_step/"+str(lr_scheduler_gamma)+"_lr_scheduler_gamma/"\
+       +str(hidden_size)+"_hidden_units/"+str(num_runs)+"_runs/shuffle_"+str(shuffle_dataset)+"/"
+elif runtime=='linux':
+    path = "EXPT_LOGS/Dyck1_"+str(task)+"/Minibatch_Training/"+model_name+"/"\
        +str(batch_size)+"_batch_size/"+str(learning_rate)+"_learning_rate/"+str(num_epochs)+"_epochs/"\
        +str(lr_scheduler_step)+"_lr_scheduler_step/"+str(lr_scheduler_gamma)+"_lr_scheduler_gamma/"\
        +str(hidden_size)+"_hidden_units/"+str(num_runs)+"_runs/shuffle_"+str(shuffle_dataset)+"/"
@@ -459,6 +471,39 @@ def encode_batch(sentences, labels, lengths, batch_size):
     # print('labels tensor = ',labels_tensor)
     return sentence_tensor, labels_tensor, lengths_tensor
 
+def encode_batch_semiDyck1(sentences, labels, lengths, batch_size):
+
+    max_length = max(lengths)
+    # print(max_length)
+    sentence_tensor = torch.zeros(batch_size,max_length,len(vocab))
+
+    labels_tensor = torch.tensor([])
+    for i in range(batch_size):
+
+        sentence = sentences[i]
+        label = labels[i]
+        label_tensor = torch.tensor([])
+        for j in range(len(label)):
+            if label[j]=='1':
+                timestep_label_tensor = torch.tensor([[1,1]], dtype=torch.float32)
+            elif label[j]=='0':
+                timestep_label_tensor = torch.tensor([[1,0]],dtype=torch.float32)
+            label_tensor=torch.cat((label_tensor, timestep_label_tensor))
+        labels_tensor = torch.cat((labels_tensor, label_tensor))
+        # labels_tensor = torch.cat((labels_tensor,Dyck.batchToTensorSigmoid(labels,lengths,batch_size,max_length)))
+        if len(sentence)<max_length:
+            for index, char in enumerate(sentence):
+                pos = vocab.index(char)
+                sentence_tensor[i][index][pos] = 1
+        else:
+            for index, char in enumerate(sentence):
+                pos = vocab.index(char)
+                sentence_tensor[i][index][pos]=1
+    sentence_tensor.requires_grad_(True)
+    # lengths_tensor = torch.tensor(lengths, dtype=torch.long)
+    lengths_tensor = torch.tensor(lengths, dtype=torch.int64).cpu()
+    # print('labels tensor = ',labels_tensor)
+    return sentence_tensor, labels_tensor, lengths_tensor
 
 def collate_fn(batch):
 
@@ -480,7 +525,11 @@ def collate_fn(batch):
 
 
     # seq_tensor, labels_tensor, lengths_tensor = encode_batch(sentences, labels,lengths, batch_size=len(sentences))
-    seq_tensor, labels_tensor, lengths_tensor = encode_batch(sentences, labels, lengths, batch_size=batch_size)
+    if task == 'SemiDyck1MSE' or task == 'SemiDyck1BCE':
+        seq_tensor, labels_tensor, lengths_tensor = encode_batch_semiDyck1(sentences, labels, lengths,
+                                                                           batch_size=batch_size)
+    else:
+        seq_tensor, labels_tensor, lengths_tensor = encode_batch(sentences, labels, lengths, batch_size=batch_size)
 
     # max_depths = []
     # timestep_depths = []
@@ -526,11 +575,17 @@ test_size = len(test_dataset)
 if dataset_type=='nested':
     test_dataset=NextTokenPredictionDataset2000tokens_nested()
 elif dataset_type=='zigzag':
-    test_dataset=NextTokenPredictionDataset2000tokens_zigzag()
+    if task=='SemiDyck1MSE' or task=='SemiDyck1BCE':
+        test_dataset=SemiDyck1Dataset2000tokens_zigzag
+    else:
+        test_dataset=NextTokenPredictionDataset2000tokens_zigzag()
 # elif dataset_type=='appended':
 elif dataset_type == 'concatenated':
     test_dataset=NextTokenPredictionDataset2000tokens()
 elif dataset_type == '1000token':
+    if task=='SemiDyck1MSE' or task=='SemiDyck1BCE':
+        test_dataset=SemiDyck1Dataset1000tokens
+    else:
     test_dataset=NextTokenPredictionDataset1000tokens()
 
 test_size=len(test_dataset)
@@ -739,7 +794,7 @@ def main():
     if task == 'TernaryClassification':
         num_classes = 3
         output_activation = 'Softmax'
-    elif task == 'BinaryClassification' or task == 'NextTokenPrediction' or task=='NextTokenPredictionCrossEntropy':
+    elif task == 'BinaryClassification' or task == 'NextTokenPrediction' or task=='NextTokenPredictionCrossEntropy' or task=='SemiDyck1MSE' or task=='SemiDyck1BCE':
         num_classes = 2
         output_activation = 'Sigmoid'
 
