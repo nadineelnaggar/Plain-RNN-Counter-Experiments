@@ -6,7 +6,7 @@ import pandas as pd
 from torch.nn.utils.rnn import pack_padded_sequence, pad_packed_sequence
 from Dyck_Generator_Suzgun_Batch import DyckLanguage
 import random
-from torch.utils.tensorboard import SummaryWriter
+# from torch.utils.tensorboard import SummaryWriter
 # from tensorboardX import SummaryWriter
 from torch.utils.data import Dataset, DataLoader
 from Dyck1_Datasets import NextTokenPredictionValidationDataset, NextTokenPredictionDataset1000tokens, NextTokenPredictionDataset2000tokens_zigzag
@@ -33,10 +33,27 @@ elif os.path.exists('/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_NextTokenPredict
 # excel_name_u_dev_models = prefix+'INDICATORS_handmade_models_u_dev_test.xlsx'
 # prefix='/Users/nadineelnaggar/Google Drive/PhD/EXPT_LOGS/Dyck1_NextTokenPrediction/Minibatch_Training/VanillaReLURNN/1_batch_size/0.01_learning_rate/30_epochs/50_lr_scheduler_step/1.0_lr_scheduler_gamma/1_hidden_units/20_runs/shuffle_True/'
 
-excel_name = prefix+'INDICATORS_handmade_models_test.xlsx'
+
+initial_a_value = 1.02
+b_factor = initial_a_value
+
+if initial_a_value==1 and b_factor==1:
+    excel_name = prefix+'INDICATORS_handmade_models_test.xlsx'
+elif initial_a_value==0.98 and b_factor==0.98:
+    excel_name = prefix+'INDICATORS_handmade_models_test1.xlsx'
+elif initial_a_value==1.02 and b_factor==1.02:
+    excel_name = prefix+'INDICATORS_handmade_models_test2.xlsx'
+elif initial_a_value==0.7 and b_factor==0.7:
+    excel_name = prefix+'INDICATORS_handmade_models_test3.xlsx'
+elif initial_a_value==0.5 and b_factor==0.5:
+    excel_name = prefix+'INDICATORS_handmade_models_test4.xlsx'
+elif initial_a_value==1.4 and b_factor==1.4:
+    excel_name = prefix+'INDICATORS_handmade_models_test5.xlsx'
+elif initial_a_value==2 and b_factor==2:
+    excel_name = prefix+'INDICATORS_handmade_models_test6.xlsx'
 
 class VanillaReLURNN__(nn.Module):
-    def __init__(self, input_size, hidden_size, num_layers, batch_size, output_size, output_activation='Sigmoid', rnn_input_weight=[1,-1], rnn_hidden_weight=[1]):
+    def __init__(self, input_size, hidden_size, num_layers, batch_size, output_size, output_activation='Sigmoid', rnn_input_weight=[1,-1], rnn_hidden_weight=[1], rnn_output_bias=-0.5):
         super(VanillaReLURNN__, self).__init__()
         self.input_size = input_size
         self.hidden_size = hidden_size
@@ -56,7 +73,8 @@ class VanillaReLURNN__(nn.Module):
         self.rnn.weight_hh_l0=nn.Parameter(torch.tensor([rnn_hidden_weight], dtype=torch.float32))
         self.fc2 = nn.Linear(hidden_size, output_size)
         self.fc2.weight=nn.Parameter(torch.tensor([[1],[1]],dtype=torch.float32))
-        self.fc2.bias = nn.Parameter(torch.tensor([1,-0.5], dtype=torch.float32))
+        # self.fc2.bias = nn.Parameter(torch.tensor([1,-0.5], dtype=torch.float32))
+        self.fc2.bias = nn.Parameter(torch.tensor([1, rnn_output_bias], dtype=torch.float32))
         self.sigmoid = nn.Sigmoid()
 
     def forward(self, x, length):
@@ -596,18 +614,20 @@ def main():
     # long_max_depths_incorrect = []
     # long_timestep_depths_incorrect = []
     
-
+    #original values of the a deviations and u deviations, data corresponds to (excel_name = prefix+'INDICATORS_handmade_models_test.xlsx)
     devs_a = [0.004, -0.004, 0.008, -0.008, 0.012, -0.012, 0.016, -0.016, 0.02, -0.02, 0]
-    # devs_a = []
     devs_u = [0.0001, -0.0001, 0.0002, -0.0002, 0.0003, -0.0003, 0.0004, -0.0004, 0.0005, -0.0005, 0]
+
+
+
     models = []
 
     for i in range(len(devs_a)):
         for j in range(len(devs_u)):
-            model_a_weight = 1+devs_a[i]
-            model_b_weight = -1
+            model_a_weight = initial_a_value+devs_a[i]
+            model_b_weight = -1*b_factor
             model_u_weight = 1+devs_u[j]
-            model_ = VanillaReLURNN__(input_size=2, hidden_size=1, output_size=2, num_layers=1, batch_size=1, output_activation='Sigmoid', rnn_input_weight=[model_a_weight,model_b_weight], rnn_hidden_weight=[model_u_weight])
+            model_ = VanillaReLURNN__(input_size=2, hidden_size=1, output_size=2, num_layers=1, batch_size=1, output_activation='Sigmoid', rnn_input_weight=[model_a_weight,model_b_weight], rnn_hidden_weight=[model_u_weight], rnn_output_bias=model_b_weight/2)
             models.append(model_)
             model_a_weights.append(model_a_weight)
             model_b_weights.append(model_b_weight)
