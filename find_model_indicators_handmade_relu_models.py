@@ -30,7 +30,66 @@ elif os.path.exists('/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_NextTokenPredict
 # excel_name_u_dev_models = prefix+'INDICATORS_handmade_models_u_dev_test.xlsx'
 # prefix='/Users/nadineelnaggar/Google Drive/PhD/EXPT_LOGS/Dyck1_NextTokenPrediction/Minibatch_Training/VanillaReLURNN/1_batch_size/0.01_learning_rate/30_epochs/50_lr_scheduler_step/1.0_lr_scheduler_gamma/1_hidden_units/20_runs/shuffle_True/'
 
-excel_name = prefix+'INDICATORS_handmade_models_test.xlsx'
+# excel_name = prefix+'INDICATORS_handmade_models_test.xlsx'
+
+# initial_a_value=1
+# initial_a_value = 1.02
+# initial_a_value=0.98
+# initial_a_value=0.7
+# initial_a_value=0.5
+# initial_a_value=1.4
+initial_a_value=2
+b_factor = initial_a_value
+
+if initial_a_value==1 and b_factor==1:
+    excel_name = prefix+'INDICATORS_handmade_models_test.xlsx'
+    val_loss_heatmap_bce = prefix + 'INDICATORS_handmade_models_heatmap_val_bce_loss.png'
+    heatmap_fpf = prefix+'INDICATORS_handmade_models_heatmap_fpf.png'
+    val_loss_heatmap_mse = prefix+'INDICATORS_handmade_models_heatmap_val_loss.png'
+    deviations_heatmap_fpf = prefix+'INDICATORS_handmade_models_heatmap_devs_fpf.png'
+    deviations_heatmap_val_loss_mse = prefix + 'INDICATORS_handmade_models_heatmap_devs_val_loss.png'
+elif initial_a_value==0.98 and b_factor==0.98:
+    excel_name = prefix+'INDICATORS_handmade_models_test1.xlsx'
+    val_loss_heatmap_bce = prefix + 'INDICATORS_handmade_models_heatmap_val_bce_loss1.png'
+    heatmap_fpf = prefix + 'INDICATORS_handmade_models_heatmap_fpf1.png'
+    val_loss_heatmap_mse = prefix + 'INDICATORS_handmade_models_heatmap_val_loss1.png'
+    deviations_heatmap_fpf = prefix+'INDICATORS_handmade_models_heatmap_devs_fpf1.png'
+    deviations_heatmap_val_loss_mse = prefix + 'INDICATORS_handmade_models_heatmap_devs_val_loss1.png'
+elif initial_a_value==1.02 and b_factor==1.02:
+    excel_name = prefix+'INDICATORS_handmade_models_test2.xlsx'
+    val_loss_heatmap_bce = prefix + 'INDICATORS_handmade_models_heatmap_val_bce_loss2.png'
+    heatmap_fpf = prefix + 'INDICATORS_handmade_models_heatmap_fpf2.png'
+    val_loss_heatmap_mse = prefix + 'INDICATORS_handmade_models_heatmap_val_loss2.png'
+    deviations_heatmap_fpf = prefix+'INDICATORS_handmade_models_heatmap_devs_fpf2.png'
+    deviations_heatmap_val_loss_mse = prefix + 'INDICATORS_handmade_models_heatmap_devs_val_loss2.png'
+elif initial_a_value==0.7 and b_factor==0.7:
+    excel_name = prefix+'INDICATORS_handmade_models_test3.xlsx'
+    val_loss_heatmap_bce = prefix + 'INDICATORS_handmade_models_heatmap_val_bce_loss3.png'
+    heatmap_fpf = prefix + 'INDICATORS_handmade_models_heatmap_fpf3.png'
+    val_loss_heatmap_mse = prefix + 'INDICATORS_handmade_models_heatmap_val_loss3.png'
+    deviations_heatmap_fpf = prefix+'INDICATORS_handmade_models_heatmap_devs_fpf3.png'
+    deviations_heatmap_val_loss_mse = prefix + 'INDICATORS_handmade_models_heatmap_devs_val_loss3.png'
+elif initial_a_value==0.5 and b_factor==0.5:
+    excel_name = prefix+'INDICATORS_handmade_models_test4.xlsx'
+    val_loss_heatmap_bce = prefix + 'INDICATORS_handmade_models_heatmap_val_bce_loss4.png'
+    heatmap_fpf = prefix + 'INDICATORS_handmade_models_heatmap_fpf4.png'
+    val_loss_heatmap_mse = prefix + 'INDICATORS_handmade_models_heatmap_val_loss4.png'
+    deviations_heatmap_fpf = prefix+'INDICATORS_handmade_models_heatmap_devs_fpf4.png'
+    deviations_heatmap_val_loss_mse = prefix + 'INDICATORS_handmade_models_heatmap_devs_val_loss4.png'
+elif initial_a_value==1.4 and b_factor==1.4:
+    excel_name = prefix+'INDICATORS_handmade_models_test5.xlsx'
+    val_loss_heatmap_bce = prefix + 'INDICATORS_handmade_models_heatmap_val_bce_loss5.png'
+    heatmap_fpf = prefix + 'INDICATORS_handmade_models_heatmap_fpf5.png'
+    val_loss_heatmap_mse = prefix + 'INDICATORS_handmade_models_heatmap_val_loss5.png'
+    deviations_heatmap_fpf = prefix+'INDICATORS_handmade_models_heatmap_devs_fpf5.png'
+    deviations_heatmap_val_loss_mse = prefix + 'INDICATORS_handmade_models_heatmap_devs_val_loss5.png'
+elif initial_a_value==2 and b_factor==2:
+    excel_name = prefix+'INDICATORS_handmade_models_test6.xlsx'
+    val_loss_heatmap_bce = prefix + 'INDICATORS_handmade_models_heatmap_val_bce_loss6.png'
+    heatmap_fpf = prefix + 'INDICATORS_handmade_models_heatmap_fpf6.png'
+    val_loss_heatmap_mse = prefix + 'INDICATORS_handmade_models_heatmap_val_loss6.png'
+    deviations_heatmap_fpf = prefix+'INDICATORS_handmade_models_heatmap_devs_fpf6.png'
+    deviations_heatmap_val_loss_mse = prefix + 'INDICATORS_handmade_models_heatmap_devs_val_loss6.png'
 
 
 df = pd.read_excel(excel_name, sheet_name='Sheet1')
@@ -697,7 +756,8 @@ def create_heatmap():
     # plt.xticks()
     # plt.yticks()
     plt.subplots_adjust(bottom=0.175, left=0.15)
-    plt.savefig(prefix + 'INDICATORS_handmade_models_heatmap_devs_val_loss.png')
+    # plt.savefig(prefix + 'INDICATORS_handmade_models_heatmap_devs_val_loss.png')
+    plt.savefig(deviations_heatmap_val_loss_mse)
     plt.show()
     # fig.close()
 
@@ -719,7 +779,8 @@ def create_heatmap():
     # plt.yticks()
     # plt.xticks(rotation=90)
     plt.subplots_adjust(bottom=0.175, left=0.15)
-    plt.savefig(prefix+'INDICATORS_handmade_models_heatmap_devs_fpf.png')
+    # plt.savefig(prefix+'INDICATORS_handmade_models_heatmap_devs_fpf.png')
+    plt.savefig(deviations_heatmap_fpf)
     plt.show()
 
     df1=df[['model_u_weights', 'long_avg_point_of_failure']]
@@ -738,7 +799,8 @@ def create_heatmap():
     plt.axvline(x=5.5, color='g')
     plt.axhline(y=5.5, color='g')
     plt.subplots_adjust(bottom=0.175, left=0.15)
-    plt.savefig(prefix + 'INDICATORS_handmade_models_heatmap_fpf.png')
+    # plt.savefig(prefix + 'INDICATORS_handmade_models_heatmap_fpf.png')
+    plt.savefig(heatmap_fpf)
     plt.show()
 
     df1=df[['model_u_weights', 'val_losses']]
@@ -756,7 +818,8 @@ def create_heatmap():
     plt.axvline(x=5.5, color='g')
     plt.axhline(y=5.5, color='g')
     plt.subplots_adjust(bottom=0.175, left=0.15)
-    plt.savefig(prefix + 'INDICATORS_handmade_models_heatmap_val_loss.png')
+    # plt.savefig(prefix + 'INDICATORS_handmade_models_heatmap_val_loss.png')
+    plt.savefig(val_loss_heatmap_mse)
     plt.show()
 
     df1 = df[['model_u_weights', 'val_bce_losses']]
@@ -774,7 +837,8 @@ def create_heatmap():
     plt.axvline(x=5.5, color='g')
     plt.axhline(y=5.5, color='g')
     plt.subplots_adjust(bottom=0.175, left=0.15)
-    plt.savefig(prefix + 'INDICATORS_handmade_models_heatmap_val_bce_loss.png')
+    # plt.savefig(prefix + 'INDICATORS_handmade_models_heatmap_val_bce_loss.png')
+    plt.savefig(val_loss_heatmap_bce)
     plt.show()
 
 
@@ -784,8 +848,8 @@ def create_heatmap():
     # plt.show()
 
 
-correlate_model_indicators()
-create3dCorrelations()
+# correlate_model_indicators()
+# create3dCorrelations()
 create_heatmap()
 
 # correlate_model_indicators_check()
