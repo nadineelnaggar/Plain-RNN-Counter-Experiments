@@ -586,7 +586,7 @@ elif dataset_type == '1000token':
     if task=='SemiDyck1MSE' or task=='SemiDyck1BCE':
         test_dataset=SemiDyck1Dataset1000tokens
     else:
-    test_dataset=NextTokenPredictionDataset1000tokens()
+        test_dataset=NextTokenPredictionDataset1000tokens()
 
 test_size=len(test_dataset)
 
