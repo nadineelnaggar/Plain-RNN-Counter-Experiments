@@ -588,7 +588,7 @@ elif dataset_type == '1000token':
     else:
         test_dataset=NextTokenPredictionDataset1000tokens()
 
-# test_size=len(test_dataset)
+test_size=len(test_dataset)
 
 # train_loader = DataLoader(train_dataset,batch_size=batch_size, shuffle=False, collate_fn=collate_fn)
 test_loader = DataLoader(test_dataset,batch_size=batch_size, shuffle=False, collate_fn=collate_fn)
