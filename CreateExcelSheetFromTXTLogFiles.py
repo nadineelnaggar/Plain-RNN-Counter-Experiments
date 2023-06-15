@@ -128,15 +128,39 @@ for c in range(len(configurations)):
         df = pd.DataFrame()
         start_index = i*30
         end_index = start_index+30
-        df['epoch'] = epochs[start_index:end_index]
-        df['Training accuracies'] = train_accs[start_index:end_index]
-        df['Average training losses'] = train_losses[start_index:end_index]
-        df['Train validation accuracies']=train_val_accs[start_index:end_index]
-        df['Average train validation losses']=train_val_losses[start_index:end_index]
-        df['Average validation losses']=val_losses[start_index:end_index]
-        df['Validation accuracies'] = val_accs[start_index:end_index]
-        df['Average long validation losses']=long_val_losses[start_index:end_index]
-        df['Long validation accuracies'] = long_val_accs[start_index:end_index]
+
+        run_epochs = epochs[start_index:end_index]
+        run_epochs.append(run_epochs[-1])
+        # print(run_epochs)
+        run_train_accs = train_accs[start_index:end_index]
+        run_train_accs.append(run_train_accs[-1])
+        run_train_losses = train_losses[start_index:end_index]
+        run_train_losses.append(run_train_losses[-1])
+        run_train_val_accs = train_val_accs[start_index:end_index]
+        run_train_val_accs.append(run_train_accs[-1])
+        run_train_val_losses = train_val_losses[start_index:end_index]
+        run_train_val_losses.append(run_train_val_losses[-1])
+        run_val_losses = val_losses[start_index:end_index]
+        run_val_losses.append(run_val_losses[-1])
+        run_val_accs = val_accs[start_index:end_index]
+        run_val_accs.append(run_val_accs[-1])
+        run_long_val_losses = long_val_losses[start_index:end_index]
+        run_long_val_losses.append(run_long_val_losses[-1])
+        run_long_val_accs = long_val_accs[start_index:end_index]
+        run_long_val_accs.append(run_long_val_accs[-1])
+        
+        
+
+
+        df['epoch'] =run_epochs
+        df['Training accuracies'] =run_train_accs
+        df['Average training losses'] =run_train_losses
+        df['Train validation accuracies']=run_train_val_accs
+        df['Average train validation losses']=run_train_val_losses
+        df['Average validation losses']=run_val_losses
+        df['Validation accuracies'] =run_val_accs
+        df['Average long validation losses']=run_long_val_losses
+        df['Long validation accuracies'] =run_long_val_accs
         train_dataframes.append(df)
 
 
