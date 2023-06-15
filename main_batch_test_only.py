@@ -576,7 +576,7 @@ if dataset_type=='nested':
     test_dataset=NextTokenPredictionDataset2000tokens_nested()
 elif dataset_type=='zigzag':
     if task=='SemiDyck1MSE' or task=='SemiDyck1BCE':
-        test_dataset=SemiDyck1Dataset2000tokens_zigzag
+        test_dataset=SemiDyck1Dataset2000tokens_zigzag()
     else:
         test_dataset=NextTokenPredictionDataset2000tokens_zigzag()
 # elif dataset_type=='appended':
@@ -584,7 +584,7 @@ elif dataset_type == 'concatenated':
     test_dataset=NextTokenPredictionDataset2000tokens()
 elif dataset_type == '1000token':
     if task=='SemiDyck1MSE' or task=='SemiDyck1BCE':
-        test_dataset=SemiDyck1Dataset1000tokens
+        test_dataset=SemiDyck1Dataset1000tokens()
     else:
         test_dataset=NextTokenPredictionDataset1000tokens()
 
