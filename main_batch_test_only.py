@@ -59,6 +59,7 @@ parser.add_argument('--num_checkpoints', type=int,default=100, help='number of c
 # parser.add_argument('--dataset_type',type=str, default='nested',help='nested, zigzag or appended')
 parser.add_argument('--dataset_type',type=str, default='nested',help='nested, zigzag or concatenated')
 parser.add_argument('--runtime',type=str,default='colab',help='colab or local or linux')
+parser.add_argument('--num_complete_runs', type=int, default=0, help='only used for cases when the number of completed runs is not the same as the number of intended runs')
 
 args = parser.parse_args()
 
@@ -77,6 +78,10 @@ lr_scheduler_step = args.lr_scheduler_step
 num_checkpoints = args.num_checkpoints
 dataset_type = args.dataset_type
 runtime = args.runtime
+num_complete_runs = args.num_complete_runs
+
+if num_complete_runs==0 or num_complete_runs==num_runs:
+    num_complete_runs=num_runs
 
 
 # best_run = args.best_run
@@ -618,12 +623,12 @@ def select_model(model_name, input_size, hidden_size, num_layers,batch_size, num
 
 def read_sheets():
     sheet_names = []
-    for i in range(num_runs):
+    for i in range(num_complete_runs):
         sheet_name = "run"+str(i)
         sheet_names.append(sheet_name)
     df = pd.read_excel(excel_name,sheet_name=sheet_names)
     dfs = []
-    for i in range(num_runs):
+    for i in range(num_complete_runs):
         dfs.append(df.get(sheet_names[i]))
     return dfs
 
@@ -869,7 +874,7 @@ def main():
 
 
 
-    for run in range(num_runs):
+    for run in range(num_complete_runs):
         df = dfs_read[run]
         losses_train = df['Average training losses']
         losses_train = losses_train.tolist()
