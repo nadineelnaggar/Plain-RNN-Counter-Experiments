@@ -142,23 +142,23 @@ if runtime=='colab':
     if task=='SemiDyck1MSE' or task=='SemiDyck1BCE':
         if task == 'SemiDyck1MSE':
             if model_name == 'VanillaReLURNN':
-                path = path+'EXPT_LOGS/ConvergedSemiDyckModels/MRI/'
+                path = path+'/home/aczy098/PycharmProjects/Plain-RNN-Counter-Experiments/EXPT_LOGS/ConvergedSemiDyckModels/MRI/'
             elif model_name == 'VanillaReLURNNCorrectInitialisation':
-                path = path+'EXPT_LOGS/ConvergedSemiDyckModels/MCI/'
+                path = path+'/home/aczy098/PycharmProjects/Plain-RNN-Counter-Experiments/EXPT_LOGS/ConvergedSemiDyckModels/MCI/'
 
             elif model_name == 'VanillaReLURNNCorrectInitialisationWithBias':
-                path = path+'EXPT_LOGS/ConvergedSemiDyckModels/MCB/'
+                path = path+'/home/aczy098/PycharmProjects/Plain-RNN-Counter-Experiments/EXPT_LOGS/ConvergedSemiDyckModels/MCB/'
         elif task == 'SemiDyck1BCE':
             if model_name == 'VanillaReLURNN':
-                path = path+'EXPT_LOGS/ConvergedSemiDyckModels/BRI/'
+                path = path+'/home/aczy098/PycharmProjects/Plain-RNN-Counter-Experiments/EXPT_LOGS/ConvergedSemiDyckModels/BRI/'
 
 
             elif model_name == 'VanillaReLURNNCorrectInitialisation':
-                path = path+'EXPT_LOGS/ConvergedSemiDyckModels/BCI/'
+                path = path+'/home/aczy098/PycharmProjects/Plain-RNN-Counter-Experiments/EXPT_LOGS/ConvergedSemiDyckModels/BCI/'
 
 
             elif model_name == 'VanillaReLURNNCorrectInitialisationWithBias':
-                path = path+'EXPT_LOGS/ConvergedSemiDyckModels/BCB/'
+                path = path+'/home/aczy098/PycharmProjects/Plain-RNN-Counter-Experiments/EXPT_LOGS/ConvergedSemiDyckModels/BCB/'
 
 # elif runtime=='local':
 #     path = "/Users/nadineelnaggar/Google Drive/PhD/EXPT_LOGS/Dyck1_"+str(task)+"/Minibatch_Training/"+model_name+"/"\
