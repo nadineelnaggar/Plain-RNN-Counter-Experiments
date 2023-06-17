@@ -68,20 +68,20 @@ task = args.task
 feedback = args.feedback
 hidden_size = args.hidden_size
 num_layers = args.num_layers
-learning_rate = args.learning_rate
-num_epochs = args.num_epochs
-num_runs = args.num_runs
+# learning_rate = args.learning_rate
+# num_epochs = args.num_epochs
+# num_runs = args.num_runs
 batch_size = args.batch_size
 # load_model = args.load_model
-lr_scheduler_gamma = args.lr_scheduler_gamma
-lr_scheduler_step = args.lr_scheduler_step
-num_checkpoints = args.num_checkpoints
+# lr_scheduler_gamma = args.lr_scheduler_gamma
+# lr_scheduler_step = args.lr_scheduler_step
+# num_checkpoints = args.num_checkpoints
 dataset_type = args.dataset_type
 runtime = args.runtime
 num_complete_runs = args.num_complete_runs
 
-if num_complete_runs==0 or num_complete_runs==num_runs:
-    num_complete_runs=num_runs
+# if num_complete_runs==0 or num_complete_runs==num_runs:
+#     num_complete_runs=num_runs
 
 
 # best_run = args.best_run
@@ -89,9 +89,9 @@ if num_complete_runs==0 or num_complete_runs==num_runs:
 # if best_run==-1:
 #     best_run = num_runs-1
 
-checkpoint_step = int(num_epochs/4)
-if args.checkpoint_step!=0:
-    checkpoint_step = args.checkpoint_step
+# checkpoint_step = int(num_epochs/4)
+# if args.checkpoint_step!=0:
+#     checkpoint_step = args.checkpoint_step
 
 shuffle_dataset = args.shuffle_dataset
 
