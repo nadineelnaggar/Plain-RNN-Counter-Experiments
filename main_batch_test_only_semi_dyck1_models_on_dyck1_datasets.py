@@ -194,20 +194,20 @@ print('feedback = ',feedback)
 print('hidden_size = ',hidden_size)
 print('batch_size = ',batch_size)
 print('num_layers = ',num_layers)
-print('learning_rate = ',learning_rate)
-print('num_epochs = ',num_epochs)
-print('num_runs = ',num_runs)
+# print('learning_rate = ',learning_rate)
+# print('num_epochs = ',num_epochs)
+# print('num_runs = ',num_runs)
 print('shuffle = ',shuffle_dataset)
 print('dataset_type = ',dataset_type)
 
 
 
 
-file_name = path+ 'Dyck1_' + task + '_' + str(
-        num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' +str(batch_size) +'_batch_size_'+'_' + str(
-        hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
-        num_epochs) + 'epochs_'+str(lr_scheduler_step)+"lr_scheduler_step_"+str(lr_scheduler_gamma)+"lr_scheduler_gamma_"+ str(num_runs)+'runs_INFERENCE' + '.txt'
-
+# file_name = path+ 'Dyck1_' + task + '_' + str(
+#         num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' +str(batch_size) +'_batch_size_'+'_' + str(
+#         hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
+#         num_epochs) + 'epochs_'+str(lr_scheduler_step)+"lr_scheduler_step_"+str(lr_scheduler_gamma)+"lr_scheduler_gamma_"+ str(num_runs)+'runs_INFERENCE' + '.txt'
+#
 
 # excel_name = path+ 'Dyck1_' + task + '_' + str(
 #         num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' +str(batch_size) +'_batch_size_'+'_' + str(
@@ -625,6 +625,8 @@ def main():
     #     f.write('\n')
 
     # dfs_read = read_sheets()
+
+
     test_accuracies = []
     runs = []
     correct_guesses = []
@@ -657,40 +659,31 @@ def main():
 
 
 
-    for run in range(num_complete_runs):
-        # df = dfs_read[run]
-        # losses_train = df['Average training losses']
-        # losses_train = losses_train.tolist()
-        # losses_val = df['Average validation losses']
-        # losses_val=losses_val.tolist()
-        # losses_long_val = df['Average long validation losses']
-        # losses_long_val = losses_long_val.tolist()
-        # runs.append(run)
-        checkpoint_count = 0
 
-        for checkpoint in range(len(checkpoints)):
-            checkpoint_model = select_model(model_name, input_size, hidden_size, num_layers, batch_size, num_classes,
-                                            output_activation)
-            # checkpoint_model.to(device)
-            checkpoint_path = checkpoints[checkpoint]
+    checkpoint_count = 0
 
-            checkpt = torch.load(checkpoint_path)
-            checkpoint_model.load_state_dict(checkpt['model_state_dict'])
-            checkpoint_model.to(device)
-            checkpoint_test_accuracy, checkpoint_correct_guesses, checkpoint_correct_guesses_length, checkpoint_incorrect_guesses, checkpoint_incorrect_guesses_length, checkpoint_incorrect_guesses_first_fail, checkpoint_avg_first_fail_point, checkpoint_max_depth_correct, checkpoint_timestep_depth_correct, checkpoint_max_depth_incorrect, checkpoint_timestep_depth_incorrect = test_model(
-                checkpoint_model, test_loader, 'short')
+    for checkpoint in range(len(checkpoints)):
+        checkpoint_model = select_model(model_name, input_size, hidden_size, num_layers, batch_size, num_classes,
+                                        output_activation)
+        # checkpoint_model.to(device)
+        checkpoint_path = checkpoints[checkpoint]
 
-            test_accuracies.append(checkpoint_test_accuracy)
-            correct_guesses.append(checkpoint_correct_guesses)
-            correct_guesses_lengths.append(checkpoint_correct_guesses_length)
-            incorrect_guesses.append(checkpoint_incorrect_guesses)
-            incorrect_guesses_lengths.append(checkpoint_incorrect_guesses_length)
-            incorrect_guesses_first_fail.append(checkpoint_incorrect_guesses_first_fail)
-            avg_point_of_failure_short.append(checkpoint_avg_first_fail_point)
-            max_depths_correct_guesses.append(checkpoint_max_depth_correct)
-            max_depths_incorrect_guesses.append(checkpoint_max_depth_incorrect)
-            timestep_depths_correct_guesses.append(checkpoint_timestep_depth_correct)
-            timestep_depths_incorrect_guesses.append(checkpoint_timestep_depth_incorrect)
+        checkpt = torch.load(checkpoint_path)
+        checkpoint_model.load_state_dict(checkpt['model_state_dict'])
+        checkpoint_model.to(device)
+        checkpoint_test_accuracy, checkpoint_correct_guesses, checkpoint_correct_guesses_length, checkpoint_incorrect_guesses, checkpoint_incorrect_guesses_length, checkpoint_incorrect_guesses_first_fail, checkpoint_avg_first_fail_point, checkpoint_max_depth_correct, checkpoint_timestep_depth_correct, checkpoint_max_depth_incorrect, checkpoint_timestep_depth_incorrect = test_model(checkpoint_model, test_loader, 'short')
+
+        test_accuracies.append(checkpoint_test_accuracy)
+        correct_guesses.append(checkpoint_correct_guesses)
+        correct_guesses_lengths.append(checkpoint_correct_guesses_length)
+        incorrect_guesses.append(checkpoint_incorrect_guesses)
+        incorrect_guesses_lengths.append(checkpoint_incorrect_guesses_length)
+        incorrect_guesses_first_fail.append(checkpoint_incorrect_guesses_first_fail)
+        avg_point_of_failure_short.append(checkpoint_avg_first_fail_point)
+        max_depths_correct_guesses.append(checkpoint_max_depth_correct)
+        max_depths_incorrect_guesses.append(checkpoint_max_depth_incorrect)
+        timestep_depths_correct_guesses.append(checkpoint_timestep_depth_correct)
+        timestep_depths_incorrect_guesses.append(checkpoint_timestep_depth_incorrect)
 
         # for epoch in range(num_epochs):
         #     if epoch%checkpoint_step==0 and checkpoint_count<=num_checkpoints:
