@@ -604,7 +604,7 @@ elif task=='NextTokenPrediction':
             path + 'Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaReLURNNCorrectInitialisation_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_10runs_CHECKPOINT_run8_epoch27.pth')
         checkpoints.append(
             path + 'Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaReLURNNCorrectInitialisation_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_10runs_CHECKPOINT_run9_epoch10.pth')
-    elif model_name=='CorrectInitialisationWithBias':
+    elif model_name=='VanillaReLURNNCorrectInitialisationWithBias':
         checkpoints.append(path+'Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaReLURNNCorrectInitialisationWithBias_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_10runs_CHECKPOINT_run0_epoch20.pth')
         checkpoints.append(
             path + 'Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaReLURNNCorrectInitialisationWithBias_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_10runs_CHECKPOINT_run1_epoch21.pth')
@@ -630,7 +630,7 @@ elif task=='NextTokenPredictionCrossEntropy':
     elif model_name=='VanillaReLURNNCorrectInitialisation':
         checkpoints.append(path+'Dyck1_NextTokenPredictionCrossEntropy_25_bracket_pairs_VanillaReLURNNCorrectInitialisation_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_2runs_CHECKPOINT_run0_epoch9.pth')
         checkpoints.append(path+'Dyck1_NextTokenPredictionCrossEntropy_25_bracket_pairs_VanillaReLURNNCorrectInitialisation_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_2runs_CHECKPOINT_run1_epoch19.pth')
-    elif model_name=='CorrectInitialisationWithBias':
+    elif model_name=='VanillaReLURNNCorrectInitialisationWithBias':
         checkpoints.append(path+'Dyck1_NextTokenPredictionCrossEntropy_25_bracket_pairs_VanillaReLURNNCorrectInitialisationWithBias_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_3runs_CHECKPOINT_run2_epoch15.pth')
 
 
