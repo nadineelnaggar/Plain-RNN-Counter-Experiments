@@ -1221,16 +1221,16 @@ def test_model(model, loader, dataset):
     #     dataset='short'
     #     log_file = test_log
     if dataset=='short':
-        log_file=test_log
+        # log_file=test_log
         ds = test_dataset
     # elif dataset=='long':
     #     log_file=long_test_log
     #     ds = long_dataset
 
 
-    with open(log_file,'a') as f:
-        f.write('////////////////////////////////////////\n')
-        f.write('TEST '+dataset+'\n')
+    # with open(log_file,'a') as f:
+    #     f.write('////////////////////////////////////////\n')
+    #     f.write('TEST '+dataset+'\n')
 
     # for i in range(len(X)):
     #     input_seq = Dyck.lineToTensor(X[i])
@@ -1307,8 +1307,8 @@ def test_model(model, loader, dataset):
                 max_depths_correct_guesses.append(max_depth)
                 timestep_depths_correct_guesses.append(timestep_depth)
 
-                with open(log_file, 'a') as f:
-                    f.write('CORRECT' + '\n')
+                # with open(log_file, 'a') as f:
+                #     f.write('CORRECT' + '\n')
             else:
                 incorrect_guesses.append(sentences[j])
                 for k in range(length[j]):
@@ -1320,8 +1320,8 @@ def test_model(model, loader, dataset):
                         timestep_depths_incorrect_guesses.append(timestep_depth)
                         break
 
-                with open(log_file, 'a') as f:
-                    f.write('INCORRECT' + '\n')
+                # with open(log_file, 'a') as f:
+                #     f.write('INCORRECT' + '\n')
 
         # if np.all(np.equal(out_np, target_np)) and (out_np.flatten() == target_np.flatten()).all():
         #     num_correct += 1
