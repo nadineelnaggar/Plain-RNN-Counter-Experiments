@@ -78,7 +78,7 @@ batch_size = args.batch_size
 # num_checkpoints = args.num_checkpoints
 dataset_type = args.dataset_type
 runtime = args.runtime
-num_complete_runs = args.num_complete_runs
+# num_complete_runs = args.num_complete_runs
 
 # if num_complete_runs==0 or num_complete_runs==num_runs:
 #     num_complete_runs=num_runs
