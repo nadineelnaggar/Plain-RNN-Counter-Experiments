@@ -188,6 +188,26 @@ elif runtime=='linux':
             elif model_name == 'VanillaReLURNNCorrectInitialisationWithBias':
                 path = '/home/aczy098/PycharmProjects/Plain-RNN-Counter-Experiments/EXPT_LOGS/ConvergedSemiDyck1Models/BCB/'
 
+    elif task=='NextTokenPrediction':
+        if model_name=="VanillaReLURNN":
+            path = '/home/aczy098/PycharmProjects/Plain-RNN-Counter-Experiments/EXPT_LOGS/ConvergedDyck1Models/MRI/'
+        elif model_name == 'VanillaReLURNNCorrectInitialisation':
+            path = '/home/aczy098/PycharmProjects/Plain-RNN-Counter-Experiments/EXPT_LOGS/ConvergedDyck1Models/MCI/'
+
+        elif model_name == 'VanillaReLURNNCorrectInitialisationWithBias':
+            path = '/home/aczy098/PycharmProjects/Plain-RNN-Counter-Experiments/EXPT_LOGS/ConvergedDyck1Models/MCB/'
+
+
+    elif task=='NextTokenPredictionCrossEntropy':
+        if model_name=="VanillaReLURNN":
+            path = '/home/aczy098/PycharmProjects/Plain-RNN-Counter-Experiments/EXPT_LOGS/ConvergedDyck1Models/BRI/'
+        elif model_name == 'VanillaReLURNNCorrectInitialisation':
+            path = '/home/aczy098/PycharmProjects/Plain-RNN-Counter-Experiments/EXPT_LOGS/ConvergedDyck1Models/BCI/'
+
+        elif model_name == 'VanillaReLURNNCorrectInitialisationWithBias':
+            path = '/home/aczy098/PycharmProjects/Plain-RNN-Counter-Experiments/EXPT_LOGS/ConvergedDyck1Models/BCB/'
+
+
 print('model_name = ',model_name)
 print('task = ',task)
 print('feedback = ',feedback)
@@ -550,6 +570,68 @@ elif task=='SemiDyck1BCE':
         checkpoints.append(
             path + 'Dyck1_SemiDyck1BCE_25_bracket_pairs_VanillaReLURNNCorrectInitialisationWithBias_Feedback_EveryTimestep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_20runs_CHECKPOINT_run15_epoch14.pth')
 
+elif task=='NextTokenPrediction':
+    if model_name=='VanillaReLURNN':
+        checkpoints.append(path+'Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaReLURNN_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_5runs_CHECKPOINT_run0_epoch23.pth')
+        checkpoints.append(path+'Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaReLURNN_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_5runs_CHECKPOINT_run3_epoch17.pth')
+        checkpoints.append(path+'Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaReLURNN_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_5runs_CHECKPOINT_run4_epoch16.pth')
+        checkpoints.append(path+'Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaReLURNN_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_20runs_CHECKPOINT_run4_epoch17.pth')
+        checkpoints.append(path+'Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaReLURNN_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_20runs_CHECKPOINT_run5_epoch17.pth')
+        checkpoints.append(path+'Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaReLURNN_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_20runs_CHECKPOINT_run8_epoch29.pth')
+        checkpoints.append(path+'Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaReLURNN_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_20runs_CHECKPOINT_run10_epoch13.pth')
+        checkpoints.append(path+'Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaReLURNN_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_20runs_CHECKPOINT_run12_epoch8.pth')
+        checkpoints.append(path+'Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaReLURNN_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_20runs_CHECKPOINT_run18_epoch26.pth')
+        checkpoints.append(path+'Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaReLURNN_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_50epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_10runs_CHECKPOINT_run4_epoch19.pth')
+        checkpoints.append(path+'Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaReLURNN_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_50epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_10runs_CHECKPOINT_run5_epoch22.pth')
+        checkpoints.append(path+'Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaReLURNN_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_50epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_10runs_CHECKPOINT_run8_epoch17.pth')
+    elif model_name=='VanillaReLURNNCorrectInitialisation':
+        checkpoints.append(path+'Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaReLURNNCorrectInitialisation_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_10runs_CHECKPOINT_run0_epoch19.pth')
+        checkpoints.append(
+            path + 'Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaReLURNNCorrectInitialisation_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_10runs_CHECKPOINT_run1_epoch23.pth')
+        checkpoints.append(
+            path + 'Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaReLURNNCorrectInitialisation_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_10runs_CHECKPOINT_run2_epoch10.pth')
+        checkpoints.append(
+            path + 'Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaReLURNNCorrectInitialisation_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_10runs_CHECKPOINT_run3_epoch16.pth')
+        checkpoints.append(
+            path + 'Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaReLURNNCorrectInitialisation_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_10runs_CHECKPOINT_run4_epoch16.pth')
+        checkpoints.append(
+            path + 'Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaReLURNNCorrectInitialisation_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_10runs_CHECKPOINT_run5_epoch20.pth')
+        checkpoints.append(
+            path + 'Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaReLURNNCorrectInitialisation_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_10runs_CHECKPOINT_run6_epoch27.pth')
+        checkpoints.append(
+            path + 'Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaReLURNNCorrectInitialisation_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_10runs_CHECKPOINT_run7_epoch8.pth')
+        checkpoints.append(
+            path + 'Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaReLURNNCorrectInitialisation_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_10runs_CHECKPOINT_run8_epoch27.pth')
+        checkpoints.append(
+            path + 'Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaReLURNNCorrectInitialisation_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_10runs_CHECKPOINT_run9_epoch10.pth')
+    elif model_name=='CorrectInitialisationWithBias':
+        checkpoints.append(path+'Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaReLURNNCorrectInitialisationWithBias_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_10runs_CHECKPOINT_run0_epoch20.pth')
+        checkpoints.append(
+            path + 'Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaReLURNNCorrectInitialisationWithBias_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_10runs_CHECKPOINT_run1_epoch21.pth')
+        checkpoints.append(
+            path + 'Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaReLURNNCorrectInitialisationWithBias_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_10runs_CHECKPOINT_run2_epoch21.pth')
+        checkpoints.append(
+            path + 'Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaReLURNNCorrectInitialisationWithBias_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_10runs_CHECKPOINT_run4_epoch11.pth')
+        checkpoints.append(
+            path + 'Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaReLURNNCorrectInitialisationWithBias_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_10runs_CHECKPOINT_run5_epoch6.pth')
+        checkpoints.append(
+            path + 'Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaReLURNNCorrectInitialisationWithBias_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_10runs_CHECKPOINT_run6_epoch24.pth')
+        checkpoints.append(
+            path + 'Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaReLURNNCorrectInitialisationWithBias_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_10runs_CHECKPOINT_run8_epoch5.pth')
+        checkpoints.append(
+            path + 'Dyck1_NextTokenPrediction_25_bracket_pairs_VanillaReLURNNCorrectInitialisationWithBias_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_10runs_CHECKPOINT_run9_epoch27.pth')
+elif task=='NextTokenPredictionCrossEntropy':
+    if model_name=='VanillaReLURNN':
+        checkpoints.append(path+'Dyck1_NextTokenPredictionCrossEntropy_25_bracket_pairs_VanillaReLURNN_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_5runs_CHECKPOINT_run0_epoch17.pth')
+        checkpoints.append(
+            path + 'Dyck1_NextTokenPredictionCrossEntropy_25_bracket_pairs_VanillaReLURNN_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_5runs_CHECKPOINT_run3_epoch19.pth')
+        checkpoints.append(
+            path + 'Dyck1_NextTokenPredictionCrossEntropy_25_bracket_pairs_VanillaReLURNN_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_5runs_CHECKPOINT_run4_epoch29.pth')
+    elif model_name=='VanillaReLURNNCorrectInitialisation':
+        checkpoints.append(path+'Dyck1_NextTokenPredictionCrossEntropy_25_bracket_pairs_VanillaReLURNNCorrectInitialisation_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_2runs_CHECKPOINT_run0_epoch9.pth')
+        checkpoints.append(path+'Dyck1_NextTokenPredictionCrossEntropy_25_bracket_pairs_VanillaReLURNNCorrectInitialisation_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_2runs_CHECKPOINT_run1_epoch19.pth')
+    elif model_name=='CorrectInitialisationWithBias':
+        checkpoints.append(path+'Dyck1_NextTokenPredictionCrossEntropy_25_bracket_pairs_VanillaReLURNNCorrectInitialisationWithBias_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_3runs_CHECKPOINT_run2_epoch15.pth')
 
 
 test_size=len(test_dataset)
