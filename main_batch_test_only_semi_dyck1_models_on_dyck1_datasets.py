@@ -138,20 +138,35 @@ Dyck = DyckLanguage(NUM_PAR, P_VAL, Q_VAL)
 
 
 if runtime=='colab':
-    path = "/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_"+str(task)+"/Minibatch_Training/"+model_name+"/"\
-           +str(batch_size)+"_batch_size/"+str(learning_rate)+"_learning_rate/"+str(num_epochs)+"_epochs/"\
-           +str(lr_scheduler_step)+"_lr_scheduler_step/"+str(lr_scheduler_gamma)+"_lr_scheduler_gamma/"\
-           +str(hidden_size)+"_hidden_units/"+str(num_runs)+"_runs/shuffle_"+str(shuffle_dataset)+"/"
+    path = "/content/drive/MyDrive/PhD/"
+    if task=='SemiDyck1MSE' or task=='SemiDyck1BCE':
+        if task == 'SemiDyck1MSE':
+            if model_name == 'VanillaReLURNN':
+                path = path+'EXPT_LOGS/ConvergedSemiDyckModels/MRI/'
+            elif model_name == 'VanillaReLURNNCorrectInitialisation':
+                path = path+'EXPT_LOGS/ConvergedSemiDyckModels/MCI/'
+
+            elif model_name == 'VanillaReLURNNCorrectInitialisationWithBias':
+                path = path+'EXPT_LOGS/ConvergedSemiDyckModels/MCB/'
+        elif task == 'SemiDyck1BCE':
+            if model_name == 'VanillaReLURNN':
+                path = path+'EXPT_LOGS/ConvergedSemiDyckModels/BRI/'
+
+
+            elif model_name == 'VanillaReLURNNCorrectInitialisation':
+                path = path+'EXPT_LOGS/ConvergedSemiDyckModels/BCI/'
+
+
+            elif model_name == 'VanillaReLURNNCorrectInitialisationWithBias':
+                path = path+'EXPT_LOGS/ConvergedSemiDyckModels/BCB/'
+
 # elif runtime=='local':
 #     path = "/Users/nadineelnaggar/Google Drive/PhD/EXPT_LOGS/Dyck1_"+str(task)+"/Minibatch_Training/"+model_name+"/"\
 #        +str(batch_size)+"_batch_size/"+str(learning_rate)+"_learning_rate/"+str(num_epochs)+"_epochs/"\
 #        +str(lr_scheduler_step)+"_lr_scheduler_step/"+str(lr_scheduler_gamma)+"_lr_scheduler_gamma/"\
 #        +str(hidden_size)+"_hidden_units/"+str(num_runs)+"_runs/shuffle_"+str(shuffle_dataset)+"/"
 elif runtime=='linux':
-    path = "EXPT_LOGS/Dyck1_"+str(task)+"/Minibatch_Training/"+model_name+"/"\
-       +str(batch_size)+"_batch_size/"+str(learning_rate)+"_learning_rate/"+str(num_epochs)+"_epochs/"\
-       +str(lr_scheduler_step)+"_lr_scheduler_step/"+str(lr_scheduler_gamma)+"_lr_scheduler_gamma/"\
-       +str(hidden_size)+"_hidden_units/"+str(num_runs)+"_runs/shuffle_"+str(shuffle_dataset)+"/"
+    path = ''
     if task=='SemiDyck1MSE' or task=='SemiDyck1BCE':
         if task == 'SemiDyck1MSE':
             if model_name == 'VanillaReLURNN':
