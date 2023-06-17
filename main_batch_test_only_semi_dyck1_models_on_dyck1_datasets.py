@@ -47,19 +47,19 @@ parser.add_argument('--feedback', type=str, help='EveryTimeStep, EndofSequence')
 parser.add_argument('--hidden_size', type=int, help='hidden size')
 parser.add_argument('--num_layers', type=int, help='number of layers', default=1)
 parser.add_argument('--batch_size', type=int, help='batch size', default=1)
-parser.add_argument('--learning_rate', type=float, help='learning rate')
-parser.add_argument('--lr_scheduler_step',type=int, help='number of epochs before reducing', default=100)
-parser.add_argument('--lr_scheduler_gamma',type=float, help='multiplication factor for lr scheduler', default=1.0)
-parser.add_argument('--num_epochs', type=int, help='number of training epochs')
-parser.add_argument('--num_runs', type=int, help='number of training runs')
-# parser.add_argument('--best_run',type=int,help='run with the lowest loss and highest accuracy',default=-1)
-parser.add_argument('--checkpoint_step', type=int, help='checkpoint step', default=0)
+# parser.add_argument('--learning_rate', type=float, help='learning rate')
+# parser.add_argument('--lr_scheduler_step',type=int, help='number of epochs before reducing', default=100)
+# parser.add_argument('--lr_scheduler_gamma',type=float, help='multiplication factor for lr scheduler', default=1.0)
+# parser.add_argument('--num_epochs', type=int, help='number of training epochs')
+# parser.add_argument('--num_runs', type=int, help='number of training runs')
+# # parser.add_argument('--best_run',type=int,help='run with the lowest loss and highest accuracy',default=-1)
+# parser.add_argument('--checkpoint_step', type=int, help='checkpoint step', default=0)
 parser.add_argument('--shuffle_dataset',type=bool,default=False)
-parser.add_argument('--num_checkpoints', type=int,default=100, help='number of checkpoints we want to include if we dont need all of them (e.g., first 5 checkpoints only), stop after n checkpoints')
+# parser.add_argument('--num_checkpoints', type=int,default=100, help='number of checkpoints we want to include if we dont need all of them (e.g., first 5 checkpoints only), stop after n checkpoints')
 # parser.add_argument('--dataset_type',type=str, default='nested',help='nested, zigzag or appended')
 parser.add_argument('--dataset_type',type=str, default='nested',help='nested, zigzag or concatenated')
 parser.add_argument('--runtime',type=str,default='colab',help='colab or local or linux')
-parser.add_argument('--num_complete_runs', type=int, default=0, help='only used for cases when the number of completed runs is not the same as the number of intended runs')
+# parser.add_argument('--num_complete_runs', type=int, default=0, help='only used for cases when the number of completed runs is not the same as the number of intended runs')
 
 args = parser.parse_args()
 
@@ -137,24 +137,41 @@ Dyck = DyckLanguage(NUM_PAR, P_VAL, Q_VAL)
 
 
 
-if runtime=='colab':
-    path = "/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_"+str(task)+"/Minibatch_Training/"+model_name+"/"\
-           +str(batch_size)+"_batch_size/"+str(learning_rate)+"_learning_rate/"+str(num_epochs)+"_epochs/"\
-           +str(lr_scheduler_step)+"_lr_scheduler_step/"+str(lr_scheduler_gamma)+"_lr_scheduler_gamma/"\
-           +str(hidden_size)+"_hidden_units/"+str(num_runs)+"_runs/shuffle_"+str(shuffle_dataset)+"/"
-elif runtime=='local':
-    path = "/Users/nadineelnaggar/Google Drive/PhD/EXPT_LOGS/Dyck1_"+str(task)+"/Minibatch_Training/"+model_name+"/"\
-       +str(batch_size)+"_batch_size/"+str(learning_rate)+"_learning_rate/"+str(num_epochs)+"_epochs/"\
-       +str(lr_scheduler_step)+"_lr_scheduler_step/"+str(lr_scheduler_gamma)+"_lr_scheduler_gamma/"\
-       +str(hidden_size)+"_hidden_units/"+str(num_runs)+"_runs/shuffle_"+str(shuffle_dataset)+"/"
-elif runtime=='linux':
+# if runtime=='colab':
+#     path = "/content/drive/MyDrive/PhD/EXPT_LOGS/Dyck1_"+str(task)+"/Minibatch_Training/"+model_name+"/"\
+#            +str(batch_size)+"_batch_size/"+str(learning_rate)+"_learning_rate/"+str(num_epochs)+"_epochs/"\
+#            +str(lr_scheduler_step)+"_lr_scheduler_step/"+str(lr_scheduler_gamma)+"_lr_scheduler_gamma/"\
+#            +str(hidden_size)+"_hidden_units/"+str(num_runs)+"_runs/shuffle_"+str(shuffle_dataset)+"/"
+# elif runtime=='local':
+#     path = "/Users/nadineelnaggar/Google Drive/PhD/EXPT_LOGS/Dyck1_"+str(task)+"/Minibatch_Training/"+model_name+"/"\
+#        +str(batch_size)+"_batch_size/"+str(learning_rate)+"_learning_rate/"+str(num_epochs)+"_epochs/"\
+#        +str(lr_scheduler_step)+"_lr_scheduler_step/"+str(lr_scheduler_gamma)+"_lr_scheduler_gamma/"\
+#        +str(hidden_size)+"_hidden_units/"+str(num_runs)+"_runs/shuffle_"+str(shuffle_dataset)+"/"
+if runtime=='linux':
     path = "EXPT_LOGS/Dyck1_"+str(task)+"/Minibatch_Training/"+model_name+"/"\
        +str(batch_size)+"_batch_size/"+str(learning_rate)+"_learning_rate/"+str(num_epochs)+"_epochs/"\
        +str(lr_scheduler_step)+"_lr_scheduler_step/"+str(lr_scheduler_gamma)+"_lr_scheduler_gamma/"\
        +str(hidden_size)+"_hidden_units/"+str(num_runs)+"_runs/shuffle_"+str(shuffle_dataset)+"/"
+    if task=='SemiDyck1MSE' or task=='SemiDyck1BCE':
+        if task == 'SemiDyck1MSE':
+            if model_name == 'VanillaReLURNN':
+                path = 'EXPT_LOGS/MRI/'
+            elif model_name == 'VanillaReLURNNCorrectInitialisation':
+                path = 'EXPT_LOGS/MCI/'
+
+            elif model_name == 'VanillaReLURNNCorrectInitialisationWithBias':
+                path = 'EXPT_LOGS/MCB/'
+        elif task == 'SemiDyck1BCE':
+            if model_name == 'VanillaReLURNN':
+                path = 'EXPT_LOGS/BRI/'
 
 
+            elif model_name == 'VanillaReLURNNCorrectInitialisation':
+                path = 'EXPT_LOGS/BCI/'
 
+
+            elif model_name == 'VanillaReLURNNCorrectInitialisationWithBias':
+                path = 'EXPT_LOGS/BCB/'
 
 print('model_name = ',model_name)
 print('task = ',task)
@@ -177,75 +194,60 @@ file_name = path+ 'Dyck1_' + task + '_' + str(
         num_epochs) + 'epochs_'+str(lr_scheduler_step)+"lr_scheduler_step_"+str(lr_scheduler_gamma)+"lr_scheduler_gamma_"+ str(num_runs)+'runs_INFERENCE' + '.txt'
 
 
-excel_name = path+ 'Dyck1_' + task + '_' + str(
-        num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' +str(batch_size) +'_batch_size_'+'_' + str(
-        hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
-        num_epochs) + 'epochs_'+str(lr_scheduler_step)+"lr_scheduler_step_"+str(lr_scheduler_gamma)+"lr_scheduler_gamma_"+ str(num_runs)+'runs' + '.xlsx'
-
-modelname = path+ 'Dyck1_' + task + '_' + str(
-        num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' +str(batch_size) +'_batch_size_'+'_' + str(
-        hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
-        num_epochs) + 'epochs_'+ str(num_runs)+'runs' + '_MODEL_'
-
-optimname = path+ 'Dyck1_' + task + '_' + str(
-        num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' +str(batch_size) +'_batch_size_'+'_' + str(
-        hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
-        num_epochs) + 'epochs_'+str(lr_scheduler_step)+"lr_scheduler_step_"+str(lr_scheduler_gamma)+"lr_scheduler_gamma_"+ str(num_runs)+'runs' + '_OPTIMISER.pth'
-test_log = path+ 'Dyck1_' + task + '_' + str(
-        num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' +str(batch_size) +'_batch_size_'+'_' + str(
-        hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
-        num_epochs) + 'epochs_'+str(lr_scheduler_step)+"lr_scheduler_step_"+str(lr_scheduler_gamma)+"lr_scheduler_gamma_"+ str(num_runs)+'runs_TEST_LOG_INFERENCE' + '.txt'
-long_test_log = path+ 'Dyck1_' + task + '_' + str(
-        num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' +str(batch_size) +'_batch_size_'+'_' + str(
-        hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
-        num_epochs) + 'epochs_'+str(lr_scheduler_step)+"lr_scheduler_step_"+str(lr_scheduler_gamma)+"lr_scheduler_gamma_"+ str(num_runs)+'runs_LONG_TEST_LOG_INFERENCE' + '.txt'
-
-
-plot_name = path+'Dyck1_' + task + '_' + str(
-        num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' +str(batch_size) +'_batch_size_'+'_' + str(
-        hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
-        num_epochs) + 'epochs_'+ str(num_runs)+'runs_'+str(checkpoint_step)+"checkpoint_step_"+str(num_checkpoints)+"checkpoints" + '_PLOT.png'
-
-checkpoint = path+ 'Dyck1_' + task + '_' + str(
-        num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' +str(batch_size) +'_batch_size_'+'_' + str(
-        hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
-        num_epochs) + 'epochs_'+str(lr_scheduler_step)+"lr_scheduler_step_"+str(lr_scheduler_gamma)+"lr_scheduler_gamma_"+ str(num_runs)+'runs' + '_CHECKPOINT_'
-
-
-
-prefix = path+'INFERENCE_'+dataset_type+'_'+str(checkpoint_step)+'checkpoint_step_upto'+str(num_checkpoints)+'checkpoints_'
-
-
-scatter_name_train = prefix+'TRAIN LOSS SCATTER PLOT.png'
-scatter_name_inverse_train = prefix+'INVERSE TRAIN LOSS SCATTER PLOT.png'
-scatter_name_log_train = prefix+'LOG TRAIN LOSS SCATTER PLOT.png'
-scatter_name_inverse_log_train = prefix+'INVERSE LOG TRAIN LOSS SCATTER PLOT.png'
-
-
-# scatter_name_validation = prefix+'VALIDATION LOSS SCATTER PLOT.png'
-# scatter_name_inverse_validation = prefix+'INVERSE VALIDATION LOSS SCATTER PLOT.png'
-# scatter_name_log_validation = prefix+'LOG VALIDATION LOSS SCATTER PLOT.png'
-# scatter_name_inverse_log_validation = prefix+'INVERSE LOG VALIDATION LOSS SCATTER PLOT.png'
+# excel_name = path+ 'Dyck1_' + task + '_' + str(
+#         num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' +str(batch_size) +'_batch_size_'+'_' + str(
+#         hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
+#         num_epochs) + 'epochs_'+str(lr_scheduler_step)+"lr_scheduler_step_"+str(lr_scheduler_gamma)+"lr_scheduler_gamma_"+ str(num_runs)+'runs' + '.xlsx'
+#
+# modelname = path+ 'Dyck1_' + task + '_' + str(
+#         num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' +str(batch_size) +'_batch_size_'+'_' + str(
+#         hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
+#         num_epochs) + 'epochs_'+ str(num_runs)+'runs' + '_MODEL_'
+#
+# optimname = path+ 'Dyck1_' + task + '_' + str(
+#         num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' +str(batch_size) +'_batch_size_'+'_' + str(
+#         hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
+#         num_epochs) + 'epochs_'+str(lr_scheduler_step)+"lr_scheduler_step_"+str(lr_scheduler_gamma)+"lr_scheduler_gamma_"+ str(num_runs)+'runs' + '_OPTIMISER.pth'
+# test_log = path+ 'Dyck1_' + task + '_' + str(
+#         num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' +str(batch_size) +'_batch_size_'+'_' + str(
+#         hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
+#         num_epochs) + 'epochs_'+str(lr_scheduler_step)+"lr_scheduler_step_"+str(lr_scheduler_gamma)+"lr_scheduler_gamma_"+ str(num_runs)+'runs_TEST_LOG_INFERENCE' + '.txt'
+# long_test_log = path+ 'Dyck1_' + task + '_' + str(
+#         num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' +str(batch_size) +'_batch_size_'+'_' + str(
+#         hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
+#         num_epochs) + 'epochs_'+str(lr_scheduler_step)+"lr_scheduler_step_"+str(lr_scheduler_gamma)+"lr_scheduler_gamma_"+ str(num_runs)+'runs_LONG_TEST_LOG_INFERENCE' + '.txt'
 #
 #
-# scatter_name_long_validation = prefix+'LONG VALIDATION LOSS SCATTER PLOT.png'
-# scatter_name_inverse_long_validation = prefix+'INVERSE LONG VALIDATION LOSS SCATTER PLOT.png'
-# scatter_name_log_long_validation = prefix+'LOG LONG VALIDATION LOSS SCATTER PLOT.png'
-# scatter_name_inverse_log_long_validation = prefix+'INVERSE LOG LONG VALIDATION LOSS SCATTER PLOT.png'
+# plot_name = path+'Dyck1_' + task + '_' + str(
+#         num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' +str(batch_size) +'_batch_size_'+'_' + str(
+#         hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
+#         num_epochs) + 'epochs_'+ str(num_runs)+'runs_'+str(checkpoint_step)+"checkpoint_step_"+str(num_checkpoints)+"checkpoints" + '_PLOT.png'
+#
+# checkpoint = path+ 'Dyck1_' + task + '_' + str(
+#         num_bracket_pairs) + '_bracket_pairs_' + model_name + '_Feedback_' + feedback + '_' +str(batch_size) +'_batch_size_'+'_' + str(
+#         hidden_size) + 'hidden_units_' + use_optimiser + '_lr=' + str(learning_rate) + '_' + str(
+#         num_epochs) + 'epochs_'+str(lr_scheduler_step)+"lr_scheduler_step_"+str(lr_scheduler_gamma)+"lr_scheduler_gamma_"+ str(num_runs)+'runs' + '_CHECKPOINT_'
+
+
+
+prefix = path+'INFERENCE_'+task+'_'+model_name+'_'+dataset_type+'_'
+
+
+
 
 
 excel_name_inference=prefix+'EXCEL INFERENCE.xlsx'
 
-with open(file_name, 'w') as f:
-    f.write('\n')
+# with open(file_name, 'w') as f:
+#     f.write('\n')
 
 # with open(train_log, 'w') as f:
 #     f.write('\n')
-
-with open(test_log, 'w') as f:
-    f.write('\n')
-with open(long_test_log, 'w') as f:
-    f.write('\n')
+#
+# with open(test_log, 'w') as f:
+#     f.write('\n')
+# with open(long_test_log, 'w') as f:
+#     f.write('\n')
 
 
 def encode_batch(sentences, labels, lengths, batch_size):
@@ -408,14 +410,14 @@ checkpoints = []
 
 if task=='SemiDyck1MSE':
     if model_name=='VanillaReLURNN':
-        path='EXPT_LOGS/MRI/'
+        # path='EXPT_LOGS/MRI/'
         checkpoints.append(path+'Dyck1_SemiDyck1MSE_25_bracket_pairs_VanillaReLURNN_Feedback_EveryTimestep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_10runs_CHECKPOINT_run8_epoch24.pth')
         checkpoints.append(path+'Dyck1_SemiDyck1MSE_25_bracket_pairs_VanillaReLURNN_Feedback_EveryTimestep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_20runs_CHECKPOINT_run5_epoch24.pth')
         checkpoints.append(path+'Dyck1_SemiDyck1MSE_25_bracket_pairs_VanillaReLURNN_Feedback_EveryTimestep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_20runs_CHECKPOINT_run8_epoch28.pth')
         checkpoints.append(path+'Dyck1_SemiDyck1MSE_25_bracket_pairs_VanillaReLURNN_Feedback_EveryTimestep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_20runs_CHECKPOINT_run10_epoch23.pth')
         checkpoints.append(path+'Dyck1_SemiDyck1MSE_25_bracket_pairs_VanillaReLURNN_Feedback_EveryTimestep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_20runs_CHECKPOINT_run12_epoch24.pth')
     elif model_name=='VanillaReLURNNCorrectInitialisation':
-        path='EXPT_LOGS/MCI/'
+        # path='EXPT_LOGS/MCI/'
         checkpoints.append(path+'Dyck1_SemiDyck1MSE_25_bracket_pairs_VanillaReLURNNCorrectInitialisation_Feedback_EveryTimestep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_20runs_CHECKPOINT_run0_epoch27.pth')
         checkpoints.append(path + 'Dyck1_SemiDyck1MSE_25_bracket_pairs_VanillaReLURNNCorrectInitialisation_Feedback_EveryTimestep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_20runs_CHECKPOINT_run1_epoch25.pth')
         checkpoints.append(path + 'Dyck1_SemiDyck1MSE_25_bracket_pairs_VanillaReLURNNCorrectInitialisation_Feedback_EveryTimestep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_20runs_CHECKPOINT_run2_epoch26.pth')
@@ -434,7 +436,7 @@ if task=='SemiDyck1MSE':
         checkpoints.append(path + 'Dyck1_SemiDyck1MSE_25_bracket_pairs_VanillaReLURNNCorrectInitialisation_Feedback_EveryTimestep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_20runs_CHECKPOINT_run15_epoch28.pth')
 
     elif model_name=='VanillaReLURNNCorrectInitialisationWithBias':
-        path='EXPT_LOGS/MCB/'
+        # path='EXPT_LOGS/MCB/'
         checkpoints.append(path+'Dyck1_SemiDyck1MSE_25_bracket_pairs_VanillaReLURNNCorrectInitialisationWithBias_Feedback_EveryTimestep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_20runs_CHECKPOINT_run0_epoch28.pth')
         checkpoints.append(
             path + 'Dyck1_SemiDyck1MSE_25_bracket_pairs_VanillaReLURNNCorrectInitialisationWithBias_Feedback_EveryTimestep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_20runs_CHECKPOINT_run1_epoch29.pth')
@@ -464,12 +466,12 @@ if task=='SemiDyck1MSE':
             path + 'Dyck1_SemiDyck1MSE_25_bracket_pairs_VanillaReLURNNCorrectInitialisationWithBias_Feedback_EveryTimestep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_20runs_CHECKPOINT_run14_epoch28.pth')
 elif task=='SemiDyck1BCE':
     if model_name=='VanillaReLURNN':
-        path='EXPT_LOGS/BRI/'
+        # path='EXPT_LOGS/BRI/'
         checkpoints.append(path+'Dyck1_SemiDyck1BCE_25_bracket_pairs_VanillaReLURNN_Feedback_EveryTimestep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_20runs_CHECKPOINT_run5_epoch6.pth')
 
 
     elif model_name=='VanillaReLURNNCorrectInitialisation':
-        path='EXPT_LOGS/BCI/'
+        # path='EXPT_LOGS/BCI/'
         checkpoints.append(path+'Dyck1_SemiDyck1BCE_25_bracket_pairs_VanillaReLURNNCorrectInitialisation_Feedback_EveryTimestep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_20runs_CHECKPOINT_run0_epoch25.pth')
         checkpoints.append(
             path + 'Dyck1_SemiDyck1BCE_25_bracket_pairs_VanillaReLURNNCorrectInitialisation_Feedback_EveryTimestep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_20runs_CHECKPOINT_run1_epoch26.pth')
@@ -500,7 +502,7 @@ elif task=='SemiDyck1BCE':
 
 
     elif model_name=='VanillaReLURNNCorrectInitialisationWithBias':
-        path='EXPT_LOGS/BCB/'
+        # path='EXPT_LOGS/BCB/'
         checkpoints.append(path+'Dyck1_SemiDyck1BCE_25_bracket_pairs_VanillaReLURNNCorrectInitialisationWithBias_Feedback_EveryTimestep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_20runs_CHECKPOINT_run0_epoch26.pth')
         checkpoints.append(
             path + 'Dyck1_SemiDyck1BCE_25_bracket_pairs_VanillaReLURNNCorrectInitialisationWithBias_Feedback_EveryTimestep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_20runs_CHECKPOINT_run1_epoch19.pth')
@@ -559,16 +561,16 @@ def select_model(model_name, input_size, hidden_size, num_layers,batch_size, num
     return selected_model.to(device)
     # return selected_model
 
-def read_sheets():
-    sheet_names = []
-    for i in range(num_complete_runs):
-        sheet_name = "run"+str(i)
-        sheet_names.append(sheet_name)
-    df = pd.read_excel(excel_name,sheet_name=sheet_names)
-    dfs = []
-    for i in range(num_complete_runs):
-        dfs.append(df.get(sheet_names[i]))
-    return dfs
+# def read_sheets():
+#     sheet_names = []
+#     for i in range(num_complete_runs):
+#         sheet_name = "run"+str(i)
+#         sheet_names.append(sheet_name)
+#     df = pd.read_excel(excel_name,sheet_name=sheet_names)
+#     dfs = []
+#     for i in range(num_complete_runs):
+#         dfs.append(df.get(sheet_names[i]))
+#     return dfs
 
 
 
