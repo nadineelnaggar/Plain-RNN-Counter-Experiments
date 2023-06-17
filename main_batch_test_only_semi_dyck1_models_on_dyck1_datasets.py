@@ -1333,8 +1333,8 @@ def test_model(model, loader, dataset):
 
 
     accuracy = num_correct / len(ds) * 100
-    with open(log_file, 'a') as f:
-        f.write('accuracy = ' + str(accuracy)+'%' + '\n')
+    # with open(log_file, 'a') as f:
+    #     f.write('accuracy = ' + str(accuracy)+'%' + '\n')
     print(''+dataset+' test accuracy = '+ str(accuracy)+'%')
     # avg_first_fail_point = sum_first_fail_points/len(incorrect_guesses)
     avg_first_fail_point = sum_first_fail_points / (len(incorrect_guesses)+num_correct)
