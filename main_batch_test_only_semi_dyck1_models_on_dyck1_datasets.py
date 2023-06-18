@@ -429,7 +429,7 @@ if task=='SemiDyck1MSE' or task=='SemiDyck1BCE':
         test_dataset=NextTokenPredictionValidationDataset()
     elif dataset_type=='long_test':
         test_dataset=NextTokenPredictionLongTestDataset()
-elif task=='NextTokenPrediction':
+elif task=='NextTokenPrediction' or task=='NextTokenPredictionCrossEntropy':
     if dataset_type=='1000token':
         test_dataset=SemiDyck1Dataset1000tokens()
     elif dataset_type=='zigzag':
