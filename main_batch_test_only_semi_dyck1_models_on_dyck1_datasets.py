@@ -627,11 +627,38 @@ elif task=='NextTokenPredictionCrossEntropy':
             path + 'Dyck1_NextTokenPredictionCrossEntropy_25_bracket_pairs_VanillaReLURNN_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_5runs_CHECKPOINT_run3_epoch19.pth')
         checkpoints.append(
             path + 'Dyck1_NextTokenPredictionCrossEntropy_25_bracket_pairs_VanillaReLURNN_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_5runs_CHECKPOINT_run4_epoch29.pth')
+        checkpoints.append(path+'Dyck1_NextTokenPredictionCrossEntropy_25_bracket_pairs_VanillaReLURNN_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_5runs_CHECKPOINT_run0_epoch29.pth')
+        checkpoints.append(
+            path + 'Dyck1_NextTokenPredictionCrossEntropy_25_bracket_pairs_VanillaReLURNN_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_5runs_CHECKPOINT_run3_epoch27.pth')
+        checkpoints.append(
+            path + 'Dyck1_NextTokenPredictionCrossEntropy_25_bracket_pairs_VanillaReLURNN_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_5runs_CHECKPOINT_run4_epoch15.pth')
     elif model_name=='VanillaReLURNNCorrectInitialisation':
         checkpoints.append(path+'Dyck1_NextTokenPredictionCrossEntropy_25_bracket_pairs_VanillaReLURNNCorrectInitialisation_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_2runs_CHECKPOINT_run0_epoch9.pth')
         checkpoints.append(path+'Dyck1_NextTokenPredictionCrossEntropy_25_bracket_pairs_VanillaReLURNNCorrectInitialisation_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_2runs_CHECKPOINT_run1_epoch19.pth')
+        checkpoints.append(path+'Dyck1_NextTokenPredictionCrossEntropy_25_bracket_pairs_VanillaReLURNNCorrectInitialisation_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_8runs_CHECKPOINT_run0_epoch21.pth')
+        checkpoints.append(
+            path + 'Dyck1_NextTokenPredictionCrossEntropy_25_bracket_pairs_VanillaReLURNNCorrectInitialisation_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_8runs_CHECKPOINT_run1_epoch21.pth')
+        checkpoints.append(
+            path + 'Dyck1_NextTokenPredictionCrossEntropy_25_bracket_pairs_VanillaReLURNNCorrectInitialisation_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_8runs_CHECKPOINT_run2_epoch3.pth')
+        checkpoints.append(
+            path + 'Dyck1_NextTokenPredictionCrossEntropy_25_bracket_pairs_VanillaReLURNNCorrectInitialisation_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_8runs_CHECKPOINT_run3_epoch12.pth')
+        checkpoints.append(
+            path + 'Dyck1_NextTokenPredictionCrossEntropy_25_bracket_pairs_VanillaReLURNNCorrectInitialisation_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_8runs_CHECKPOINT_run4_epoch27.pth')
+        checkpoints.append(
+            path + 'Dyck1_NextTokenPredictionCrossEntropy_25_bracket_pairs_VanillaReLURNNCorrectInitialisation_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_8runs_CHECKPOINT_run5_epoch10.pth')
+        checkpoints.append(
+            path + 'Dyck1_NextTokenPredictionCrossEntropy_25_bracket_pairs_VanillaReLURNNCorrectInitialisation_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_8runs_CHECKPOINT_run6_epoch20.pth')
+        checkpoints.append(
+            path + 'Dyck1_NextTokenPredictionCrossEntropy_25_bracket_pairs_VanillaReLURNNCorrectInitialisation_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_8runs_CHECKPOINT_run7_epoch29.pth')
+
     elif model_name=='VanillaReLURNNCorrectInitialisationWithBias':
         checkpoints.append(path+'Dyck1_NextTokenPredictionCrossEntropy_25_bracket_pairs_VanillaReLURNNCorrectInitialisationWithBias_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_3runs_CHECKPOINT_run2_epoch15.pth')
+        checkpoints.append(path+'Dyck1_NextTokenPredictionCrossEntropy_25_bracket_pairs_VanillaReLURNNCorrectInitialisationWithBias_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_7runs_CHECKPOINT_run1_epoch6.pth')
+        checkpoints.append(path+'Dyck1_NextTokenPredictionCrossEntropy_25_bracket_pairs_VanillaReLURNNCorrectInitialisationWithBias_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_7runs_CHECKPOINT_run2_epoch25.pth')
+        checkpoints.append(path+'Dyck1_NextTokenPredictionCrossEntropy_25_bracket_pairs_VanillaReLURNNCorrectInitialisationWithBias_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_7runs_CHECKPOINT_run3_epoch4.pth')
+        checkpoints.append(path+'Dyck1_NextTokenPredictionCrossEntropy_25_bracket_pairs_VanillaReLURNNCorrectInitialisationWithBias_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_7runs_CHECKPOINT_run4_epoch17.pth')
+        checkpoints.append(path+'Dyck1_NextTokenPredictionCrossEntropy_25_bracket_pairs_VanillaReLURNNCorrectInitialisationWithBias_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_7runs_CHECKPOINT_run5_epoch23.pth')
+        checkpoints.append(path+'Dyck1_NextTokenPredictionCrossEntropy_25_bracket_pairs_VanillaReLURNNCorrectInitialisationWithBias_Feedback_EveryTimeStep_1_batch_size__1hidden_units_Adam_lr=0.01_30epochs_50lr_scheduler_step_1.0lr_scheduler_gamma_7runs_CHECKPOINT_run0_epoch27.pth')
 
 
 test_size=len(test_dataset)
