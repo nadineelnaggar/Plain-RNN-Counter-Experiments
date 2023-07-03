@@ -230,10 +230,14 @@ class SemiDyck1Dataset1000tokens(Dataset):
                 line = line.split(",")
                 sentence = line[0].strip()
                 label = line[1].strip()
-                if len(sentence)==1000:
-                    self.x.append(sentence)
-                    self.y.append(label)
-                    self.lengths.append(len(sentence))
+                # if len(sentence)==1000:
+                #     self.x.append(sentence)
+                #     self.y.append(label)
+                #     self.lengths.append(len(sentence))
+
+                self.x.append(sentence)
+                self.y.append(label)
+                self.lengths.append(len(sentence))
 
 
         max_depths = []
